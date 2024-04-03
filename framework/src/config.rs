@@ -653,7 +653,7 @@ impl UncConfig {
             },
             network_config: NetworkConfig::new(
                 config.network,
-                network_key_pair.secret_key,
+                network_key_pair.private_key,
                 validator_signer.clone(),
                 config.archive,
             )?,
@@ -1329,7 +1329,7 @@ impl From<NodeKeyFile> for KeyFile {
             .try_into()
             .unwrap(),
             public_key: this.public_key,
-            secret_key: this.secret_key,
+            private_key: this.secret_key,
         }
     }
 }
