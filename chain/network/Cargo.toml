@@ -1,0 +1,91 @@
+[package]
+name = "unc-network"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[build-dependencies]
+anyhow.workspace = true
+protobuf-codegen.workspace = true
+
+[dependencies]
+async-trait.workspace = true
+actix.workspace = true
+anyhow.workspace = true
+arc-swap.workspace = true
+assert_matches.workspace = true
+borsh.workspace = true
+bytes.workspace = true
+bytesize.workspace = true
+chrono.workspace = true
+crossbeam-channel.workspace = true
+derive_more.workspace = true
+futures-util.workspace = true
+futures.workspace = true
+im.workspace = true
+itertools.workspace = true
+lru.workspace = true
+once_cell.workspace = true
+opentelemetry.workspace = true
+parking_lot.workspace = true
+pin-project.workspace = true
+protobuf.workspace = true
+rand.workspace = true
+rand_xorshift.workspace = true
+rayon.workspace = true
+serde.workspace = true
+smart-default.workspace = true
+strum.workspace = true
+stun.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+tokio-util.workspace = true
+tracing.workspace = true
+time.workspace = true
+
+unc-async.workspace = true
+unc-fmt.workspace = true
+unc-o11y.workspace = true
+unc-crypto.workspace = true
+unc-performance-metrics.workspace = true
+unc-performance-metrics-macros.workspace = true
+unc-primitives.workspace = true
+unc-stable-hasher.workspace = true
+unc-store.workspace = true
+
+[dev-dependencies]
+criterion.workspace = true
+pretty_assertions.workspace = true
+tempfile.workspace = true
+rlimit.workspace = true
+turn.workspace = true
+webrtc-util.workspace = true
+
+[features]
+nightly_protocol = [
+  "unc-async/nightly_protocol",
+  "unc-fmt/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "unc-store/nightly_protocol",
+]
+nightly = [
+  "nightly_protocol",
+  "unc-async/nightly",
+  "unc-fmt/nightly",
+  "unc-o11y/nightly",
+  "unc-primitives/nightly",
+  "unc-store/nightly",
+]
+performance_stats = [
+    "unc-performance-metrics/performance_stats",
+]
+test_features = []

@@ -1,0 +1,131 @@
+[package]
+name = "uncd"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[[bin]]
+path = "src/main.rs"
+name = "uncd"
+
+[dependencies]
+actix.workspace = true
+anyhow.workspace = true
+clap.workspace = true
+futures.workspace = true
+once_cell.workspace = true
+openssl-probe.workspace = true
+opentelemetry.workspace = true
+rayon.workspace = true
+rlimit.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+shell-escape.workspace = true
+thiserror.workspace = true
+tikv-jemallocator.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+yansi.workspace = true
+
+framework.workspace = true
+unc-amend-genesis.workspace = true
+unc-chain-configs.workspace = true
+unc-client.workspace = true
+unc-cold-store-tool.workspace = true
+unc-config-utils.workspace = true
+unc-crypto.workspace = true
+unc-database-tool.workspace = true
+unc-dyn-configs.workspace = true
+unc-epoch-sync-tool = { workspace = true, optional = true }
+unc-flat-storage.workspace = true
+unc-fork-network.workspace = true
+unc-jsonrpc-primitives.workspace = true
+unc-mirror.workspace = true
+unc-network.workspace = true
+unc-o11y.workspace = true
+unc-performance-metrics.workspace = true
+unc-ping.workspace = true
+unc-primitives.workspace = true
+unc-state-parts.workspace = true
+unc-state-parts-dump-check.workspace = true
+unc-state-viewer.workspace = true
+unc-store.workspace = true
+unc-undo-block.workspace = true
+
+[build-dependencies]
+anyhow.workspace = true
+rustc_version = "0.4"
+
+[features]
+default = ["json_rpc", "calimero_zero_storage"]
+
+performance_stats = ["framework/performance_stats"]
+c_memory_stats = ["framework/c_memory_stats"]
+test_features = ["framework/test_features"]
+expensive_tests = ["framework/expensive_tests"]
+no_cache = ["framework/no_cache"]
+json_rpc = ["framework/json_rpc"]
+protocol_feature_fix_staking_threshold = ["framework/protocol_feature_fix_staking_threshold"]
+serialize_all_state_changes = ["framework/serialize_all_state_changes"]
+new_epoch_sync = ["framework/new_epoch_sync", "dep:unc-epoch-sync-tool"]
+
+nightly = [
+  "nightly_protocol",
+  "protocol_feature_fix_staking_threshold",
+  "serialize_all_state_changes",
+  "unc-chain-configs/nightly",
+  "unc-client/nightly",
+  "unc-database-tool/nightly",
+  "unc-dyn-configs/nightly",
+  "unc-fork-network/nightly",
+  "unc-jsonrpc-primitives/nightly",
+  "unc-mirror/nightly",
+  "unc-network/nightly",
+  "unc-o11y/nightly",
+  "unc-ping/nightly",
+  "unc-primitives/nightly",
+  "unc-state-parts-dump-check/nightly",
+  "unc-state-parts/nightly",
+  "unc-store/nightly",
+  "unc-undo-block/nightly",
+  "framework/nightly",
+]
+nightly_protocol = [
+  "unc-chain-configs/nightly_protocol",
+  "unc-client/nightly_protocol",
+  "unc-database-tool/nightly_protocol",
+  "unc-dyn-configs/nightly_protocol",
+  "unc-fork-network/nightly_protocol",
+  "unc-jsonrpc-primitives/nightly_protocol",
+  "unc-mirror/nightly_protocol",
+  "unc-network/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-ping/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "unc-state-parts-dump-check/nightly_protocol",
+  "unc-state-parts/nightly_protocol",
+  "unc-store/nightly_protocol",
+  "unc-undo-block/nightly_protocol",
+  "framework/nightly_protocol",
+]
+
+calimero_zero_storage = [
+  "unc-primitives/calimero_zero_storage",
+]
+
+# Compile with option to emit a detailed trace of IO operations and their
+# results that can be replayed on the estimator. To produce the output, compile
+# with this flag and then enable it at runtime with `--record-io-trace=path` option.
+io_trace = ["unc-store/io_trace", "unc-o11y/io_trace", "framework/io_trace"]
+
+sandbox = ["framework/sandbox"]
+
+[package.metadata.workspaces]
+independent = true

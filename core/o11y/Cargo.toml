@@ -1,0 +1,56 @@
+[package]
+name = "unc-o11y"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description = "Observability helpers for the unc codebase"
+repository.workspace = true
+license.workspace = true
+publish = true
+
+[lints]
+workspace = true
+
+[dependencies]
+unc-crypto.workspace = true
+unc-fmt.workspace = true
+unc-primitives-core.workspace = true
+
+actix.workspace = true
+base64.workspace = true
+clap.workspace = true
+once_cell.workspace = true
+opentelemetry.workspace = true
+opentelemetry-otlp.workspace = true
+opentelemetry-semantic-conventions.workspace = true
+prometheus.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+strum.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-appender.workspace = true
+tracing-opentelemetry.workspace = true
+tracing-subscriber.workspace = true
+
+[dev-dependencies]
+bencher.workspace = true
+itoa.workspace = true
+smartstring.workspace = true
+
+[features]
+nightly_protocol = [
+  "unc-fmt/nightly_protocol",
+  "unc-primitives-core/nightly_protocol",
+]
+nightly = [
+  "nightly_protocol",
+  "unc-fmt/nightly",
+  "unc-primitives-core/nightly",
+]
+io_trace = []
+
+[[bench]]
+name = "metrics"
+harness = false

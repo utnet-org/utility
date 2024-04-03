@@ -1,0 +1,24 @@
+[package]
+name = "unc-fmt"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description = "Helpers for pretty formatting."
+repository.workspace = true
+license.workspace = true
+publish = true
+
+[lints]
+workspace = true
+
+[dependencies]
+unc-primitives-core.workspace = true
+
+[features]
+nightly = [
+  "nightly_protocol",
+  "unc-primitives-core/nightly",
+]
+nightly_protocol = [
+  "unc-primitives-core/nightly_protocol",
+]

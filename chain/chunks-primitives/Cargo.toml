@@ -1,0 +1,16 @@
+[package]
+name = "unc-chunks-primitives"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description = "This crate hosts UNC chunks-related error types"
+repository.workspace = true
+license.workspace = true
+publish = true
+
+[lints]
+workspace = true
+
+[dependencies]
+unc-chain-primitives.workspace = true
+unc-primitives.workspace = true

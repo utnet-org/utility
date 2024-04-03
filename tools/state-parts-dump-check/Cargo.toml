@@ -1,0 +1,51 @@
+[package]
+name = "unc-state-parts-dump-check"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+actix-web.workspace = true
+actix.workspace = true
+anyhow.workspace = true
+borsh.workspace = true
+clap.workspace = true
+cloud-storage.workspace = true
+unc-primitives.workspace = true
+framework.workspace = true
+unc-store.workspace = true
+unc-client.workspace = true
+unc-jsonrpc.workspace = true
+unc-primitives-core.workspace = true
+unc-o11y.workspace = true
+once_cell.workspace = true
+reqwest.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+[features]
+nightly = [
+  "nightly_protocol",
+  "unc-client/nightly",
+  "unc-jsonrpc/nightly",
+  "unc-o11y/nightly",
+  "unc-primitives-core/nightly",
+  "unc-primitives/nightly",
+  "unc-store/nightly",
+  "framework/nightly",
+]
+nightly_protocol = [
+  "unc-client/nightly_protocol",
+  "unc-jsonrpc/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-primitives-core/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "unc-store/nightly_protocol",
+  "framework/nightly_protocol",
+]

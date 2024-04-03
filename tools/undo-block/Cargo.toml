@@ -1,0 +1,44 @@
+[package]
+name = "unc-undo-block"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+tracing.workspace = true
+chrono.workspace = true
+
+unc-chain.workspace = true
+unc-chain-configs.workspace = true
+unc-epoch-manager.workspace = true
+unc-store.workspace = true
+framework.workspace = true
+unc-primitives.workspace = true
+
+[features]
+nightly = [
+  "nightly_protocol",
+  "unc-chain-configs/nightly",
+  "unc-chain/nightly",
+  "unc-epoch-manager/nightly",
+  "unc-primitives/nightly",
+  "unc-store/nightly",
+  "framework/nightly",
+]
+nightly_protocol = [
+  "unc-chain-configs/nightly_protocol",
+  "unc-chain/nightly_protocol",
+  "unc-epoch-manager/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "unc-store/nightly_protocol",
+  "framework/nightly_protocol",
+]

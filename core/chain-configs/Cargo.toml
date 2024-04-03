@@ -1,0 +1,46 @@
+[package]
+name = "unc-chain-configs"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description = "This crate provides typed interfaces to the UNC Genesis and Chain Configs"
+repository.workspace = true
+license.workspace = true
+publish = true
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+bytesize.workspace = true
+chrono.workspace = true
+derive_more.workspace = true
+num-rational.workspace = true
+once_cell.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+smart-default.workspace = true
+tracing.workspace = true
+
+unc-crypto.workspace = true
+unc-o11y = { workspace = true, optional = true }
+unc-parameters.workspace = true
+unc-primitives.workspace = true
+unc-config-utils.workspace = true
+
+[features]
+nightly_protocol = [
+  "unc-o11y/nightly_protocol",
+  "unc-parameters/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+]
+nightly = [
+  "nightly_protocol",
+  "unc-o11y/nightly",
+  "unc-parameters/nightly",
+  "unc-primitives/nightly",
+]
+default = []
+metrics = ["unc-o11y"]

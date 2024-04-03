@@ -1,0 +1,178 @@
+[package]
+name = "framework"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+actix-rt.workspace = true
+actix-web.workspace = true
+actix.workspace = true
+anyhow.workspace = true
+awc.workspace = true
+borsh.workspace = true
+chrono.workspace = true
+cloud-storage.workspace = true
+dirs.workspace = true
+easy-ext.workspace = true
+futures.workspace = true
+hex.workspace = true
+hyper-tls.workspace = true
+hyper.workspace = true
+indicatif.workspace = true
+num-rational.workspace = true
+once_cell.workspace = true
+rand.workspace = true
+rayon.workspace = true
+regex.workspace = true
+reqwest.workspace = true
+rlimit.workspace = true
+rust-s3.workspace = true
+serde.workspace = true
+serde_ignored.workspace = true
+serde_json.workspace = true
+smart-default.workspace = true
+strum.workspace = true
+tempfile.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+xz2.workspace = true
+
+unc-async.workspace = true
+unc-chain.workspace = true
+unc-chain-configs = { workspace = true, features = ["metrics"] }
+unc-chunks.workspace = true
+unc-client.workspace = true
+unc-client-primitives.workspace = true
+unc-crypto.workspace = true
+unc-dyn-configs.workspace = true
+unc-epoch-manager.workspace = true
+unc-jsonrpc = { workspace = true, optional = true }
+unc-jsonrpc-primitives = { workspace = true, optional = true }
+unc-mainnet-res.workspace = true
+unc-network.workspace = true
+unc-o11y.workspace = true
+unc-performance-metrics.workspace = true
+unc-pool.workspace = true
+unc-parameters.workspace = true
+unc-primitives.workspace = true
+unc-store.workspace = true
+unc-telemetry.workspace = true
+unc-vm-runner.workspace = true
+node-runtime.workspace = true
+unc-config-utils.workspace = true
+
+[dev-dependencies]
+bencher.workspace = true
+primitive-types.workspace = true
+
+unc-actix-test-utils.workspace = true
+unc-jsonrpc-primitives.workspace = true
+testlib.workspace = true
+
+[[bench]]
+name = "store"
+harness = false
+
+[features]
+default = ["json_rpc", "calimero_zero_storage"]
+
+performance_stats = [
+  "unc-performance-metrics/performance_stats",
+]
+c_memory_stats = ["unc-performance-metrics/c_memory_stats"]
+test_features = [
+  "unc-client/test_features",
+  "unc-network/test_features",
+  "unc-store/test_features",
+  "unc-jsonrpc/test_features"
+]
+expensive_tests = [
+  "unc-client/expensive_tests",
+  "unc-epoch-manager/expensive_tests",
+  "unc-chain/expensive_tests",
+]
+no_cache = [
+  "node-runtime/no_cache",
+  "unc-store/no_cache",
+  "unc-chain/no_cache",
+  "unc-epoch-manager/no_cache",
+]
+json_rpc = ["unc-jsonrpc", "unc-jsonrpc-primitives"]
+protocol_feature_fix_staking_threshold = [
+  "unc-primitives/protocol_feature_fix_staking_threshold",
+  "unc-epoch-manager/protocol_feature_fix_staking_threshold",
+]
+protocol_feature_fix_contract_loading_cost = [
+  "unc-vm-runner/protocol_feature_fix_contract_loading_cost",
+]
+new_epoch_sync = [
+  "unc-client/new_epoch_sync"
+]
+
+serialize_all_state_changes = ["unc-store/serialize_all_state_changes"]
+nightly = [
+  "nightly_protocol",
+  "protocol_feature_fix_contract_loading_cost",
+  "protocol_feature_fix_staking_threshold",
+  "serialize_all_state_changes",
+  "unc-async/nightly",
+  "unc-chain-configs/nightly",
+  "unc-chain/nightly",
+  "unc-chunks/nightly",
+  "unc-client-primitives/nightly",
+  "unc-client/nightly",
+  "unc-dyn-configs/nightly",
+  "unc-epoch-manager/nightly",
+  "unc-jsonrpc-primitives/nightly",
+  "unc-jsonrpc/nightly",
+  "unc-mainnet-res/nightly",
+  "unc-network/nightly",
+  "unc-o11y/nightly",
+  "unc-parameters/nightly",
+  "unc-pool/nightly",
+  "unc-primitives/nightly",
+  "unc-store/nightly",
+  "unc-telemetry/nightly",
+  "unc-vm-runner/nightly",
+  "node-runtime/nightly",
+]
+nightly_protocol = [
+  "unc-async/nightly_protocol",
+  "unc-chain-configs/nightly_protocol",
+  "unc-chain/nightly_protocol",
+  "unc-chunks/nightly_protocol",
+  "unc-client-primitives/nightly_protocol",
+  "unc-client/nightly_protocol",
+  "unc-dyn-configs/nightly_protocol",
+  "unc-epoch-manager/nightly_protocol",
+  "unc-jsonrpc-primitives/nightly_protocol",
+  "unc-jsonrpc/nightly_protocol",
+  "unc-mainnet-res/nightly_protocol",
+  "unc-network/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-parameters/nightly_protocol",
+  "unc-pool/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "unc-store/nightly_protocol",
+  "unc-telemetry/nightly_protocol",
+  "unc-vm-runner/nightly_protocol",
+  "node-runtime/nightly_protocol",
+]
+
+sandbox = [
+  "unc-client/sandbox",
+  "node-runtime/sandbox",
+  "unc-jsonrpc/sandbox",
+]
+io_trace = ["unc-vm-runner/io_trace"]
+
+calimero_zero_storage = ["unc-primitives/calimero_zero_storage"]

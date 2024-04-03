@@ -1,0 +1,38 @@
+[package]
+name = "unc-vm-engine"
+version.workspace = true
+description = "Wasmer Engine abstraction"
+categories = ["wasm"]
+keywords = ["wasm", "webassembly", "engine"]
+authors = ["Wasmer Engineering Team <engineering@wasmer.io>", "Hello Inc <hello@unc.com>"]
+repository.workspace = true
+license = "MIT OR Apache-2.0 WITH LLVM-exception "
+readme = "README.md"
+edition = "2021"
+publish = true
+
+[lints]
+workspace = true
+
+[dependencies]
+backtrace.workspace = true
+enumset.workspace = true
+finite-wasm.workspace = true
+lazy_static.workspace = true
+memmap2.workspace = true
+more-asserts.workspace = true
+unc-vm-compiler.workspace = true
+unc-vm-types.workspace = true
+unc-vm-vm.workspace = true
+rkyv.workspace = true
+rustc-demangle.workspace = true
+region.workspace = true
+target-lexicon.workspace = true
+thiserror.workspace = true
+cfg-if.workspace = true
+tracing.workspace = true
+crossbeam-queue.workspace = true
+rustix = { workspace = true, features = ["param", "mm"] }
+
+[badges]
+maintenance = { status = "actively-developed" }

@@ -1,0 +1,26 @@
+[package]
+name = "speedy_sync"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+unc-store.workspace = true
+unc-chain-primitives.workspace = true
+unc-primitives.workspace = true
+framework.workspace = true
+unc-chain-configs.workspace = true
+unc-chain.workspace = true
+unc-epoch-manager.workspace = true
+
+borsh.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+clap.workspace = true

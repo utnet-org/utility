@@ -1,0 +1,39 @@
+[package]
+name = "unc-async"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+description = "This crate contains the async helpers specific for framework"
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+actix.workspace = true
+derive-enum-from-into.workspace = true
+derive_more.workspace = true
+futures.workspace = true
+once_cell.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+time.workspace = true
+tokio.workspace = true
+
+unc-primitives.workspace = true
+unc-o11y.workspace = true
+unc-performance-metrics.workspace = true
+
+[features]
+nightly = [
+  "nightly_protocol",
+  "unc-o11y/nightly",
+  "unc-primitives/nightly",
+]
+nightly_protocol = [
+  "unc-o11y/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+]

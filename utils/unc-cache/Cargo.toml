@@ -1,0 +1,23 @@
+[package]
+name = "unc-cache"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description = "do not use this, new versions can stop being published at literally any time"
+repository.workspace = true
+license.workspace = true
+publish = true
+
+[lints]
+workspace = true
+
+[dependencies]
+lru.workspace = true
+
+[dev-dependencies]
+bencher.workspace = true
+rand.workspace = true
+
+[[bench]]
+name = "cache"
+harness = false

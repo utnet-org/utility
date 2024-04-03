@@ -1,0 +1,24 @@
+[package]
+name = "unc-test-contracts"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+description = "A collection of smart-contract used in framework tests."
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+once_cell.workspace = true
+wat.workspace = true
+wasm-encoder.workspace = true
+wasm-smith.workspace = true
+rand = { workspace = true, features = ["small_rng"] }
+arbitrary.workspace = true
+
+[features]
+nightly = []

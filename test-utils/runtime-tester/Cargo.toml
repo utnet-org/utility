@@ -1,0 +1,37 @@
+[package]
+name = "runtime-tester"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+bolero.workspace = true
+cpu-time.workspace = true
+libfuzzer-sys.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tempfile.workspace = true
+tracing.workspace = true
+
+unc-chain.workspace = true
+unc-chain-configs.workspace = true
+unc-crypto.workspace = true
+unc-client.workspace = true
+unc-client-primitives.workspace = true
+unc-epoch-manager.workspace = true
+framework.workspace = true
+unc-parameters.workspace = true
+unc-primitives.workspace = true
+unc-store.workspace = true
+unc-o11y.workspace = true
+unc-test-contracts.workspace = true
+
+[dev-dependencies]
+testlib.workspace = true

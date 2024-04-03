@@ -1,0 +1,34 @@
+[package]
+name = "unc-vm-compiler"
+version.workspace = true
+description = "Base compiler abstraction for Wasmer WebAssembly runtime"
+categories = ["wasm", "no-std"]
+keywords = ["wasm", "webassembly", "compiler"]
+authors = ["Wasmer Engineering Team <engineering@wasmer.io>", "Hello Inc <hello@unc.com>"]
+repository.workspace = true
+license = "MIT OR Apache-2.0 WITH LLVM-exception"
+readme = "README.md"
+edition = "2021"
+publish = true
+
+[lints]
+workspace = true
+
+[dependencies]
+finite-wasm.workspace = true
+unc-vm-vm.workspace = true
+unc-vm-types.workspace = true
+wasmparser = { version = "0.99.0", default-features = false }
+target-lexicon.workspace = true
+enumset.workspace = true
+hashbrown = { workspace = true, optional = true }
+thiserror.workspace = true
+smallvec.workspace = true
+rkyv.workspace = true
+tracing.workspace = true
+
+[features]
+default = []
+
+[badges]
+maintenance = { status = "experimental" }

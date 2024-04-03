@@ -1,0 +1,18 @@
+[package]
+name = "unc-vm-test-generator"
+version.workspace = true
+edition = "2021"
+authors = ["Wasmer Engineering Team <engineering@wasmer.io>", "Hello Inc <hello@unc.com>"]
+publish = false
+license = "Apache-2.0 WITH LLVM-exception"
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+target-lexicon.workspace = true
+
+[features]
+test-dylib = []
+test-universal = []

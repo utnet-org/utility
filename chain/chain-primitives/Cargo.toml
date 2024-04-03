@@ -1,0 +1,23 @@
+[package]
+name = "unc-chain-primitives"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description = "This crate hosts UNC chain-related error types"
+repository.workspace = true
+license.workspace = true
+publish = true
+
+[lints]
+workspace = true
+
+[dependencies]
+chrono.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+
+unc-primitives.workspace = true
+unc-crypto.workspace = true
+
+[features]
+new_epoch_sync = []

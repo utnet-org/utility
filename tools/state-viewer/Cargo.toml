@@ -1,0 +1,85 @@
+[package]
+name = "state-viewer"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+actix.workspace = true
+anyhow.workspace = true
+borsh.workspace = true
+bytesize.workspace = true
+chrono.workspace = true
+clap.workspace = true
+cloud-storage.workspace = true
+itertools.workspace = true
+once_cell.workspace = true
+rand.workspace = true
+rayon.workspace = true
+redis.workspace = true
+regex.workspace = true
+reqwest.workspace = true
+rust-s3.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+strum.workspace = true
+tempfile.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+yansi.workspace = true
+
+unc-chain-configs.workspace = true
+unc-chain.workspace = true
+unc-client.workspace = true
+unc-crypto.workspace = true
+unc-epoch-manager.workspace = true
+unc-network.workspace = true
+unc-o11y.workspace = true
+unc-primitives-core.workspace = true
+unc-primitives.workspace = true
+unc-store.workspace = true
+unc-test-contracts.workspace = true
+framework.workspace = true
+node-runtime.workspace = true
+
+[dev-dependencies]
+unc-client.workspace = true
+testlib.workspace = true
+insta.workspace = true
+
+[features]
+sandbox = ["node-runtime/sandbox", "unc-chain/sandbox", "unc-client/sandbox"]
+nightly = [
+  "nightly_protocol",
+  "unc-chain-configs/nightly",
+  "unc-chain/nightly",
+  "unc-client/nightly",
+  "unc-epoch-manager/nightly",
+  "unc-network/nightly",
+  "unc-o11y/nightly",
+  "unc-primitives-core/nightly",
+  "unc-primitives/nightly",
+  "unc-store/nightly",
+  "framework/nightly",
+  "node-runtime/nightly",
+]
+nightly_protocol = [
+  "unc-chain-configs/nightly_protocol",
+  "unc-chain/nightly_protocol",
+  "unc-client/nightly_protocol",
+  "unc-epoch-manager/nightly_protocol",
+  "unc-network/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-primitives-core/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "unc-store/nightly_protocol",
+  "framework/nightly_protocol",
+  "node-runtime/nightly_protocol",
+]

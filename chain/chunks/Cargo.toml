@@ -1,0 +1,74 @@
+[package]
+name = "unc-chunks"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+actix.workspace = true
+borsh.workspace = true
+chrono.workspace = true
+derive_more.workspace = true
+derive-enum-from-into.workspace = true
+futures.workspace = true
+lru.workspace = true
+once_cell.workspace = true
+rand.workspace = true
+reed-solomon-erasure.workspace = true
+strum.workspace = true
+time.workspace = true
+tracing.workspace = true
+# itertools has collect_vec which is useful in quick debugging prints
+itertools.workspace = true
+
+unc-async.workspace = true
+unc-chain-configs.workspace = true
+unc-crypto.workspace = true
+unc-epoch-manager.workspace = true
+unc-primitives.workspace = true
+unc-chunks-primitives.workspace = true
+unc-store.workspace = true
+unc-network.workspace = true
+unc-o11y.workspace = true
+unc-chain.workspace = true
+unc-pool.workspace = true
+unc-performance-metrics.workspace = true
+unc-performance-metrics-macros.workspace = true
+
+[dev-dependencies]
+assert_matches.workspace = true
+
+[features]
+nightly_protocol = [
+  "unc-async/nightly_protocol",
+  "unc-chain-configs/nightly_protocol",
+  "unc-chain/nightly_protocol",
+  "unc-epoch-manager/nightly_protocol",
+  "unc-network/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-pool/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "unc-store/nightly_protocol",
+]
+nightly = [
+  "nightly_protocol",
+  "unc-async/nightly",
+  "unc-chain-configs/nightly",
+  "unc-chain/nightly",
+  "unc-epoch-manager/nightly",
+  "unc-network/nightly",
+  "unc-o11y/nightly",
+  "unc-pool/nightly",
+  "unc-primitives/nightly",
+  "unc-store/nightly",
+]
+byzantine_asserts = ["unc-chain/byzantine_asserts"]
+expensive_tests = []
+test_features = []

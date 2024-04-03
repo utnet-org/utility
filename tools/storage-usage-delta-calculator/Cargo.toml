@@ -1,0 +1,25 @@
+[package]
+name = "storage-usage-delta-calculator"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+
+unc-chain-configs.workspace = true
+unc-o11y.workspace = true
+unc-parameters.workspace = true
+unc-primitives.workspace = true
+unc-store.workspace = true
+node-runtime.workspace = true

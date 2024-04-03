@@ -1,0 +1,30 @@
+[package]
+name = "unc-jsonrpc-adversarial-primitives"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+serde.workspace = true
+
+unc-primitives.workspace = true
+unc-network.workspace = true
+
+[features]
+nightly_protocol = [
+  "unc-network/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+]
+nightly = [
+  "nightly_protocol",
+  "unc-network/nightly",
+  "unc-primitives/nightly",
+]
+test_features = ["unc-network/test_features"]

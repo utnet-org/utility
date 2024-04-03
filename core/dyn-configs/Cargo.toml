@@ -1,0 +1,39 @@
+[package]
+name = "unc-dyn-configs"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description = "Dynamic configure helpers for the unc codebase"
+repository.workspace = true
+license.workspace = true
+publish = true
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+once_cell.workspace = true
+prometheus.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+
+unc-chain-configs.workspace = true
+unc-o11y.workspace = true
+unc-primitives.workspace = true
+
+[features]
+nightly = [
+  "nightly_protocol",
+  "unc-chain-configs/nightly",
+  "unc-o11y/nightly",
+  "unc-primitives/nightly",
+]
+nightly_protocol = [
+  "unc-chain-configs/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+]

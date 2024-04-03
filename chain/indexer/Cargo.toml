@@ -1,0 +1,64 @@
+[package]
+name = "unc-indexer"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+actix.workspace = true
+anyhow.workspace = true
+async-recursion.workspace = true
+futures.workspace = true
+once_cell.workspace = true
+rocksdb.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+
+framework.workspace = true
+unc-client.workspace = true
+unc-chain-configs.workspace = true
+unc-dyn-configs.workspace = true
+unc-crypto.workspace = true
+unc-indexer-primitives.workspace = true
+unc-o11y.workspace = true
+unc-parameters.workspace = true
+unc-primitives.workspace = true
+unc-store.workspace = true
+node-runtime.workspace = true
+
+[features]
+nightly_protocol = [
+  "unc-chain-configs/nightly_protocol",
+  "unc-client/nightly_protocol",
+  "unc-dyn-configs/nightly_protocol",
+  "unc-indexer-primitives/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-parameters/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "unc-store/nightly_protocol",
+  "framework/nightly_protocol",
+  "node-runtime/nightly_protocol",
+]
+calimero_zero_storage = ["unc-primitives/calimero_zero_storage"]
+nightly = [
+  "nightly_protocol",
+  "unc-chain-configs/nightly",
+  "unc-client/nightly",
+  "unc-dyn-configs/nightly",
+  "unc-indexer-primitives/nightly",
+  "unc-o11y/nightly",
+  "unc-parameters/nightly",
+  "unc-primitives/nightly",
+  "unc-store/nightly",
+  "framework/nightly",
+  "node-runtime/nightly",
+]

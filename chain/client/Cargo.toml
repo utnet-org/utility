@@ -1,0 +1,116 @@
+[package]
+name = "unc-client"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+actix-rt.workspace = true
+actix.workspace = true
+anyhow.workspace = true
+async-trait.workspace = true
+borsh.workspace = true
+chrono.workspace = true
+cloud-storage.workspace = true
+derive_more.workspace = true
+futures.workspace = true
+itertools.workspace = true
+lru.workspace = true
+num-rational.workspace = true
+once_cell.workspace = true
+percent-encoding.workspace = true
+rand.workspace = true
+rayon.workspace = true
+reed-solomon-erasure.workspace = true
+regex.workspace = true
+reqwest.workspace = true
+rust-s3.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+strum.workspace = true
+sysinfo.workspace = true
+tempfile.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+yansi.workspace = true
+
+unc-async.workspace = true
+unc-chain-configs.workspace = true
+unc-chain-primitives.workspace = true
+unc-chain.workspace = true
+unc-chunks.workspace = true
+unc-client-primitives.workspace = true
+unc-crypto.workspace = true
+unc-dyn-configs.workspace = true
+unc-epoch-manager.workspace = true
+unc-network.workspace = true
+unc-o11y.workspace = true
+unc-performance-metrics-macros.workspace = true
+unc-performance-metrics.workspace = true
+unc-pool.workspace = true
+unc-parameters.workspace = true
+unc-primitives.workspace = true
+unc-store.workspace = true
+unc-telemetry.workspace = true
+
+[dev-dependencies]
+assert_matches.workspace = true
+unc-actix-test-utils.workspace = true
+
+[features]
+# if enabled, we assert in most situations that are impossible unless some byzantine behavior is observed.
+byzantine_asserts = ["unc-chain/byzantine_asserts"]
+expensive_tests = []
+test_features = [
+  "unc-network/test_features",
+  "unc-chain/test_features",
+  "unc-chunks/test_features",
+]
+nightly_protocol = [
+  "unc-async/nightly_protocol",
+  "unc-chain-configs/nightly_protocol",
+  "unc-chain/nightly_protocol",
+  "unc-chunks/nightly_protocol",
+  "unc-client-primitives/nightly_protocol",
+  "unc-dyn-configs/nightly_protocol",
+  "unc-epoch-manager/nightly_protocol",
+  "unc-network/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-parameters/nightly_protocol",
+  "unc-pool/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "unc-store/nightly_protocol",
+  "unc-telemetry/nightly_protocol",
+]
+nightly = [
+  "nightly_protocol",
+  "unc-async/nightly",
+  "unc-chain-configs/nightly",
+  "unc-chain/nightly",
+  "unc-chunks/nightly",
+  "unc-client-primitives/nightly",
+  "unc-dyn-configs/nightly",
+  "unc-epoch-manager/nightly",
+  "unc-network/nightly",
+  "unc-o11y/nightly",
+  "unc-parameters/nightly",
+  "unc-pool/nightly",
+  "unc-primitives/nightly",
+  "unc-store/nightly",
+  "unc-telemetry/nightly",
+]
+sandbox = [
+  "unc-client-primitives/sandbox",
+  "unc-chain/sandbox",
+]
+new_epoch_sync = [
+  "unc-chain/new_epoch_sync"
+]

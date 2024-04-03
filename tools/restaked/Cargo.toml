@@ -1,0 +1,27 @@
+[package]
+name = "restaked"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+clap.workspace = true
+tokio.workspace = true
+
+unc-crypto.workspace = true
+unc-primitives.workspace = true
+unc-jsonrpc-client.workspace = true
+framework.workspace = true
+unc-o11y.workspace = true
+
+integration-tests.workspace = true
+
+[features]
+test_features = ["integration-tests/test_features"]

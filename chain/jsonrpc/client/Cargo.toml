@@ -1,0 +1,33 @@
+[package]
+name = "unc-jsonrpc-client"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+actix-http.workspace = true
+awc.workspace = true
+futures.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+unc-jsonrpc-primitives.workspace = true
+unc-primitives.workspace = true
+
+[features]
+nightly = [
+  "nightly_protocol",
+  "unc-jsonrpc-primitives/nightly",
+  "unc-primitives/nightly",
+]
+nightly_protocol = [
+  "unc-jsonrpc-primitives/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+]

@@ -1,0 +1,38 @@
+[package]
+name = "unc-vm-compiler-singlepass"
+version.workspace = true
+description = "Singlepass compiler for Wasmer WebAssembly runtime"
+categories = ["wasm"]
+keywords = ["wasm", "webassembly", "compiler", "singlepass"]
+authors = ["Wasmer Engineering Team <engineering@wasmer.io>", "Hello Inc <hello@unc.com>"]
+repository.workspace = true
+license = "MIT"
+readme = "README.md"
+edition = "2021"
+publish = true
+
+[lints]
+workspace = true
+
+[dependencies]
+finite-wasm.workspace = true
+unc-vm-compiler.workspace = true
+unc-vm-vm.workspace = true
+unc-vm-types.workspace = true
+dynasm.workspace = true
+dynasmrt.workspace = true
+enumset.workspace = true
+hashbrown = { workspace = true, optional = true }
+lazy_static.workspace = true
+memoffset.workspace = true
+more-asserts.workspace = true
+rayon.workspace = true
+smallvec.workspace = true
+strum.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+target-lexicon.workspace = true
+
+[badges]
+maintenance = { status = "actively-developed" }

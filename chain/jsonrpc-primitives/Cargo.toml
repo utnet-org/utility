@@ -1,0 +1,40 @@
+[package]
+name = "unc-jsonrpc-primitives"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description = "This crate hosts structures for the UNC JSON RPC Requests, Responses and Error types"
+repository.workspace = true
+license.workspace = true
+publish = true
+
+[lints]
+workspace = true
+
+[dependencies]
+arbitrary.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+unc-crypto.workspace = true
+unc-primitives.workspace = true
+unc-chain-configs.workspace = true
+unc-rpc-error-macro.workspace = true
+unc-client-primitives = { workspace = true, optional = true }
+
+[features]
+nightly_protocol = [
+  "unc-chain-configs/nightly_protocol",
+  "unc-client-primitives/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+]
+nightly = [
+  "nightly_protocol",
+  "unc-chain-configs/nightly",
+  "unc-client-primitives/nightly",
+  "unc-primitives/nightly",
+]
+full = ["debug_types"]
+debug_types = ["unc-client-primitives"]
+test_features = []

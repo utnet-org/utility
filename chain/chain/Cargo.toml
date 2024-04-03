@@ -1,0 +1,87 @@
+[package]
+name = "unc-chain"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+actix.workspace = true
+assert_matches.workspace = true
+borsh.workspace = true
+bytesize.workspace = true
+chrono.workspace = true
+crossbeam-channel.workspace = true
+enum-map.workspace = true
+itertools.workspace = true
+itoa.workspace = true
+lru.workspace = true
+num-rational.workspace = true
+once_cell.workspace = true
+rand.workspace = true
+rand_chacha.workspace = true
+rayon.workspace = true
+strum.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+yansi.workspace = true
+
+unc-async.workspace = true
+unc-cache.workspace = true
+unc-chain-configs.workspace = true
+unc-chain-primitives.workspace = true
+unc-client-primitives.workspace = true
+unc-crypto.workspace = true
+unc-epoch-manager.workspace = true
+unc-network.workspace = true
+unc-o11y.workspace = true
+unc-performance-metrics.workspace = true
+unc-performance-metrics-macros.workspace = true
+unc-pool.workspace = true
+unc-primitives.workspace = true
+unc-store.workspace = true
+
+[dev-dependencies]
+insta.workspace = true
+assert_matches.workspace = true
+
+[features]
+# if enabled, we assert in most situations that are impossible unless some byzantine behavior is observed.
+byzantine_asserts = []
+expensive_tests = []
+test_features = []
+no_cache = ["unc-store/no_cache"]
+new_epoch_sync = ["unc-store/new_epoch_sync", "unc-primitives/new_epoch_sync", "unc-epoch-manager/new_epoch_sync", "unc-chain-primitives/new_epoch_sync"]
+
+protocol_feature_reject_blocks_with_outdated_protocol_version = [
+  "unc-primitives/protocol_feature_reject_blocks_with_outdated_protocol_version",
+]
+
+nightly = [
+  "nightly_protocol",
+  "protocol_feature_reject_blocks_with_outdated_protocol_version",
+  "unc-async/nightly",
+  "unc-chain-configs/nightly",
+  "unc-client-primitives/nightly",
+  "unc-epoch-manager/nightly",
+  "unc-network/nightly",
+  "unc-o11y/nightly",
+  "unc-pool/nightly",
+  "unc-primitives/nightly",
+  "unc-store/nightly",
+]
+nightly_protocol = [
+  "unc-async/nightly_protocol",
+  "unc-chain-configs/nightly_protocol",
+  "unc-client-primitives/nightly_protocol",
+  "unc-epoch-manager/nightly_protocol",
+  "unc-network/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-pool/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "unc-store/nightly_protocol",
+]
+sandbox = ["unc-primitives/sandbox"]

@@ -1,0 +1,40 @@
+[package]
+name = "unc-client-primitives"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description = "This crate hosts UNC client-related error types"
+repository.workspace = true
+license.workspace = true
+publish = true
+
+[lints]
+workspace = true
+
+[dependencies]
+actix.workspace = true
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+strum.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+yansi.workspace = true
+
+unc-chain-primitives.workspace = true
+unc-chain-configs.workspace = true
+unc-chunks-primitives.workspace = true
+unc-crypto.workspace = true
+unc-primitives.workspace = true
+
+[features]
+nightly_protocol = [
+  "unc-chain-configs/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+]
+nightly = [
+  "nightly_protocol",
+  "unc-chain-configs/nightly",
+  "unc-primitives/nightly",
+]
+sandbox = []

@@ -1,0 +1,55 @@
+[package]
+name = "unc-epoch-manager"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+borsh.workspace = true
+chrono = { workspace = true, optional = true }
+num-rational.workspace = true
+primitive-types.workspace = true
+rand.workspace = true
+rand_hc.workspace = true
+serde_json.workspace = true
+smart-default.workspace = true
+tracing.workspace = true
+# itertools has collect_vec which is useful in quick debugging prints
+itertools.workspace = true
+
+unc-crypto.workspace = true
+unc-primitives.workspace = true
+unc-store.workspace = true
+unc-chain-configs.workspace = true
+unc-chain-primitives.workspace = true
+unc-cache.workspace = true
+protobuf.workspace = true
+num-bigint.workspace = true
+num-traits.workspace = true
+
+[features]
+expensive_tests = []
+protocol_feature_fix_staking_threshold = [
+  "unc-primitives/protocol_feature_fix_staking_threshold",
+]
+nightly = [
+  "nightly_protocol",
+  "protocol_feature_fix_staking_threshold",
+  "unc-chain-configs/nightly",
+  "unc-primitives/nightly",
+  "unc-store/nightly",
+]
+nightly_protocol = [
+  "unc-chain-configs/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "unc-store/nightly_protocol",
+]
+no_cache = []
+new_epoch_sync = ["unc-store/new_epoch_sync", "unc-primitives/new_epoch_sync"]

@@ -1,0 +1,478 @@
+name: CI
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+  merge_group:
+
+env:
+  CI_HACKS: 1
+
+# BE CAREFUL IF EDITING THIS FILE:
+# If you add/remove python tests from here, you should also update `check_pytests.py`’s list of GHA_TESTS
+# so that it stays in-sync, to make sure no tests are lost.
+
+jobs:
+  cargo_nextest:
+    name: "Cargo Nextest (${{matrix.name}})"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux
+            id: linux
+            os: ubuntu-latest
+            type: stable
+            runs_integ_tests: true
+            upload_profraws: true
+          - name: Linux Nightly
+            id: linux-nightly
+            os: ubuntu-latest
+            type: nightly
+            runs_integ_tests: true
+            upload_profraws: true
+          - name: MacOS
+            id: macos
+            os: macos-latest-xlarge
+            type: stable
+            runs_integ_tests: false
+            # TODO: Currently only computing linux coverage, because the MacOS runners
+            # have files at a different path and thus comes out duplicated.
+            upload_profraws: false
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      # Install all the required tools
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: just,cargo-nextest,cargo-llvm-cov
+
+      # Run the tests:
+      - run: mkdir -p coverage/profraw/{unit,integration,binaries}
+      # - Run the unit tests, retrieving the coverage information
+      - run: just codecov-ci "nextest-unit ${{ matrix.type }}"
+      - run: mv coverage/codecov/{new,unit-${{matrix.id}}}.json
+      - run: mv coverage/profraw/{new,unit/${{matrix.id}}}.tar.zst
+      # - Run the integration tests, retrieving the coverage information
+      - run: just codecov-ci "nextest-integration ${{ matrix.type }}"
+        if: matrix.runs_integ_tests
+      - run: mv coverage/codecov/{new,integration-${{matrix.id}}}.json
+        if: matrix.runs_integ_tests
+      - run: mv coverage/profraw/{new,integration/${{matrix.id}}}.tar.zst
+        if: matrix.runs_integ_tests
+      - run: mv coverage/profraw/{new,integration/${{matrix.id}}}.tar.zst
+        if: matrix.runs_integ_tests
+
+      # Cleanup the target directory, leaving only stuff interesting to llvm-cov, and tarball it
+      - run: just tar-bins-for-coverage-ci
+      - run: mv coverage/profraw/binaries/{new,${{matrix.id}}}.tar.zst
+
+      # Cleanup the target directory, leaving only stuff interesting to llvm-cov, and tarball it
+      - run: just tar-bins-for-coverage-ci
+      - run: mv coverage/profraw/binaries/{new,${{matrix.id}}}.tar.zst
+
+      # Upload the coverage
+      - uses: actions/upload-artifact@v3
+        if: matrix.upload_profraws
+        with:
+          name: coverage-profraw
+          path: coverage/profraw
+          retention-days: 2
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-codecov
+          path: coverage/codecov
+
+  protobuf_backward_compat:
+    name: "Protobuf Backward Compatibility"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bufbuild/buf-setup-action@1158f4fa81bc02e1ff62abcca6d516c9e24c77da
+      - uses: bufbuild/buf-breaking-action@a074e988ee34efcd4927079e79c611f428354c01
+        with:
+          against: "https://github.com/near/nearcore.git#${{github.event.pull_request.base.sha && format('ref={0}', github.event.pull_request.base.sha) || 'branch=master' }}"
+
+  py_backward_compat:
+    name: "Backward Compatibility"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+          cache: pip
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: cargo-llvm-cov
+      - run: pip3 install --user -r pytest/requirements.txt
+      - run: cargo llvm-cov show-env | grep -v RUSTFLAGS | tr -d "'" >> "$GITHUB_ENV"
+      - run: echo "RUSTC_WORKSPACE_WRAPPER=$PWD/scripts/coverage-wrapper-rustc" >> "$GITHUB_ENV"
+      - run: echo "CARGO=1" >> "$GITHUB_ENV"
+      - run: cargo build --locked --profile dev-release -p uncd --bin uncd
+      - run: echo "CURRENT_UNCD=$PWD/target/dev-release/uncd" >> "$GITHUB_ENV"
+      - run: cd pytest && python3 tests/sanity/backward_compatible.py
+      - run: mkdir -p coverage/codecov
+      - run: cargo llvm-cov report --profile dev-release --codecov --output-path coverage/codecov/py-backward-compat.json
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-codecov
+          path: coverage/codecov
+
+  py_db_migration:
+    name: "Database Migration"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+          cache: pip
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: cargo-llvm-cov
+      - run: pip3 install --user -r pytest/requirements.txt
+      - run: cargo llvm-cov show-env | grep -v RUSTFLAGS | tr -d "'" >> "$GITHUB_ENV"
+      - run: echo "RUSTC_WORKSPACE_WRAPPER=$PWD/scripts/coverage-wrapper-rustc" >> "$GITHUB_ENV"
+      - run: echo "CARGO=1" >> "$GITHUB_ENV"
+      - run: cargo build --locked --profile dev-release -p uncd --bin uncd
+      - run: echo "CURRENT_UNCD=$PWD/target/dev-release/uncd" >> "$GITHUB_ENV"
+      - run: echo "UNC_ROOT=$PWD" >> "$GITHUB_ENV"
+      - run: cd pytest && python3 tests/sanity/db_migration.py
+      - run: mkdir -p coverage/codecov
+      - run: cargo llvm-cov report --profile dev-release --codecov --output-path coverage/codecov/py-db-migration.json
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-codecov
+          path: coverage/codecov
+
+  py_sanity_checks:
+    name: "Sanity Checks"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+          cache: pip
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: cargo-llvm-cov
+      - run: pip3 install --user -r pytest/requirements.txt
+      # This is the only job that uses `--features nightly` so we build this in-line instead of a
+      # separate job like done with the regular uncd.
+      - run: cargo llvm-cov show-env | grep -v RUSTFLAGS | tr -d "'" >> "$GITHUB_ENV"
+      - run: echo "RUSTC_WORKSPACE_WRAPPER=$PWD/scripts/coverage-wrapper-rustc" >> "$GITHUB_ENV"
+      - run: echo "CARGO=1" >> "$GITHUB_ENV"
+      - run: cargo build --profile dev-release -p uncd --bin uncd --features nightly
+      # Note: We're not running spin_up_cluster.py for non-nightly
+      # because spinning up non-nightly clusters is already covered
+      # by other steps in the CI, e.g. upgradable.
+      - run: python3 pytest/tests/sanity/spin_up_cluster.py
+        env:
+          UNC_ROOT: "target/dev-release"
+      - run: mkdir -p coverage/codecov
+      - run: cargo llvm-cov report --profile dev-release --codecov --output-path coverage/codecov/py-sanity-checks.json
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-codecov
+          path: coverage/codecov
+
+  py_genesis_check:
+    name: "Genesis Changes"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+          cache: pip
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: cargo-llvm-cov
+      - run: pip3 install --user -r pytest/requirements.txt
+      - run: cargo llvm-cov show-env | grep -v RUSTFLAGS | tr -d "'" >> "$GITHUB_ENV"
+      - run: echo "RUSTC_WORKSPACE_WRAPPER=$PWD/scripts/coverage-wrapper-rustc" >> "$GITHUB_ENV"
+      - run: echo "CARGO=1" >> "$GITHUB_ENV"
+      - run: cargo build --locked --profile dev-release -p uncd --bin uncd
+      - run: echo "CURRENT_UNCD=$PWD/target/dev-release/uncd" >> "$GITHUB_ENV"
+      - run: python3 scripts/state/update_res.py check
+      - run: mkdir -p coverage/codecov
+      - run: cargo llvm-cov report --profile dev-release --codecov --output-path coverage/codecov/py-genesis-check.json
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-codecov
+          path: coverage/codecov
+
+  py_style_check:
+    name: "Style"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: just
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+          cache: pip
+      - run: pip3 install --user -r pytest/requirements.txt
+      - run: just python-style-checks
+
+  py_upgradability:
+    name: "Upgradability"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+          cache: pip
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: cargo-llvm-cov
+      - run: pip3 install --user -r pytest/requirements.txt
+      - run: cargo llvm-cov show-env | grep -v RUSTFLAGS | tr -d "'" >> "$GITHUB_ENV"
+      - run: echo "RUSTC_WORKSPACE_WRAPPER=$PWD/scripts/coverage-wrapper-rustc" >> "$GITHUB_ENV"
+      - run: echo "CARGO=1" >> "$GITHUB_ENV"
+      - run: cargo build --locked --profile dev-release -p uncd --bin uncd
+      - run: echo "CURRENT_UNCD=$PWD/target/dev-release/uncd" >> "$GITHUB_ENV"
+      - run: cd pytest && python3 tests/sanity/upgradable.py
+      - run: mkdir -p coverage/codecov
+      - run: cargo llvm-cov report --profile dev-release --codecov --output-path coverage/codecov/py-upgradability.json
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-codecov
+          path: coverage/codecov
+
+  rpc_error_schema:
+    name: "RPC Schema"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: just
+      - run: just check-rpc-errors-schema
+
+  lychee_checks:
+    name: "Lychee Lints"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lycheeverse/lychee-action@2ac9f030ccdea0033e2510a23a67da2a2da98492
+        with:
+          fail: true
+
+  check_fmt:
+    name: "Cargo Fmt"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: just
+      - run: just check-cargo-fmt
+
+  check_clippy:
+    name: "Cargo Clippy"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: just
+      - run: just check-cargo-clippy
+
+  doctests:
+    name: "Rust Doctests"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: just
+      - run: just doctests
+
+  check_cargo_deny:
+    name: "Cargo Deny"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: just,cargo-deny
+      - run: just check-cargo-deny
+
+  check_themis:
+    name: "Themis"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: just
+      - run: just check-themis
+
+  check_non_default:
+    name: "Non-default Configuration Builds"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: just
+      - run: just check-non-default
+
+  check_udeps:
+    name: "Unused Dependencies"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: just,cargo-udeps
+      - run: just check-cargo-udeps
+
+  cargo_audit:
+    name: "Cargo Audit"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: cargo-audit
+      - run: cargo audit -D warnings
+
+  generate_coverage:
+    name: "Generate Coverage Artifact"
+    runs-on: ubuntu-latest
+    needs:
+      - cargo_nextest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - type: unit
+            profraws: unit
+          - type: integration
+            profraws: unit integration
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1000 # have enough history to find the merge-base between PR and master
+      - uses: actions/download-artifact@v3
+        with:
+          name: coverage-profraw
+          path: coverage/profraw
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: cargo-llvm-cov
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+          cache: pip
+      - run: pip3 install --user diff-cover
+      - run: for f in coverage/profraw/binaries/*.tar.zst; do tar -x --zstd -f $f; done
+      - name: Retrieve the profraws used to generate this coverage (${{matrix.profraws}})
+        run: |
+          for profile in ${{matrix.profraws}}; do
+            for f in coverage/profraw/$profile/*.tar.zst; do
+              tar -x --zstd -C target/ -f $f
+            done
+          done
+      - run: cargo llvm-cov show-env | grep -v RUSTFLAGS | tr -d "'" >> "$GITHUB_ENV"
+      - run: mkdir -p coverage/lcov coverage/html
+      - run: cargo llvm-cov report --profile dev-release --lcov --output-path coverage/lcov/${{matrix.type}}.lcov
+      - run: cargo llvm-cov report --profile dev-release --html --hide-instantiations --output-dir coverage/html/${{matrix.type}}-full
+      - run: git fetch origin master
+      - run: diff-cover --compare-branch=origin/master --html-report coverage/html/${{matrix.type}}-diff.html coverage/lcov/${{matrix.type}}.lcov
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-lcov
+          path: coverage/lcov
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-html
+          path: coverage/html
+
+  upload_coverage:
+    name: "Upload Coverage"
+    runs-on: ubuntu-latest
+    needs:
+      - cargo_nextest
+      - py_backward_compat
+      - py_db_migration
+      - py_sanity_checks
+      - py_genesis_check
+      - py_upgradability
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v3
+        with:
+          name: coverage-codecov
+      # Keep the number of uploads here in sync with codecov.yml’s after_n_build value
+      # codecov will send a comment only after having receidev this number of uploads.
+      - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d
+        with:
+          files: unit-linux.json
+          fail_ci_if_error: true
+          flags: unittests,linux
+      - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d
+        with:
+          files: unit-linux-nightly.json
+          fail_ci_if_error: true
+          flags: unittests,linux-nightly
+      - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d
+        with:
+          files: unit-macos.json
+          fail_ci_if_error: true
+          flags: unittests,macos
+      - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d
+        with:
+          files: integration-linux.json
+          fail_ci_if_error: true
+          flags: integration-tests,linux
+      - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d
+        with:
+          files: integration-linux-nightly.json
+          fail_ci_if_error: true
+          flags: integration-tests,linux-nightly
+      # - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d
+      #   with:
+      #     files: integration-macos.json
+      #     fail_ci_if_error: true
+      #     flags: integration-tests,macos
+      - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d
+        with:
+          files: py-backward-compat.json
+          fail_ci_if_error: true
+          flags: pytests,backward-compatibility,linux
+      - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d
+        with:
+          files: py-db-migration.json
+          fail_ci_if_error: true
+          flags: pytests,db-migration,linux
+      - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d
+        with:
+          files: py-sanity-checks.json
+          fail_ci_if_error: true
+          flags: pytests,sanity-checks,linux
+      - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d
+        with:
+          files: py-genesis-check.json
+          fail_ci_if_error: true
+          flags: pytests,genesis-check,linux
+      - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d
+        with:
+          files: py-upgradability.json
+          fail_ci_if_error: true
+          flags: pytests,upgradability,linux

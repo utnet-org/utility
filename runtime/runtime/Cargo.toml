@@ -1,0 +1,84 @@
+[package]
+name = "node-runtime"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+borsh.workspace = true
+hex.workspace = true
+num-bigint.workspace = true
+num-rational.workspace = true
+num-traits.workspace = true
+once_cell.workspace = true
+rand.workspace = true
+rayon.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+
+unc-chain-configs.workspace = true
+unc-crypto.workspace = true
+unc-o11y.workspace = true
+unc-parameters.workspace = true
+unc-primitives.workspace = true
+unc-primitives-core.workspace = true
+unc-store.workspace = true
+unc-vm-runner.workspace = true
+unc-wallet-contract.workspace = true
+base64 = "0.21.7"
+bincode = "1.3.3"
+
+[features]
+nightly = [
+  "nightly_protocol",
+  "unc-chain-configs/nightly",
+  "unc-o11y/nightly",
+  "unc-parameters/nightly",
+  "unc-primitives-core/nightly",
+  "unc-primitives/nightly",
+  "unc-store/nightly",
+  "unc-vm-runner/nightly",
+  "unc-wallet-contract/nightly",
+]
+default = []
+nightly_protocol = [
+  "unc-chain-configs/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-parameters/nightly_protocol",
+  "unc-primitives-core/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "unc-store/nightly_protocol",
+  "unc-vm-runner/nightly_protocol",
+  "unc-wallet-contract/nightly_protocol",
+]
+no_cpu_compatibility_checks = ["unc-vm-runner/no_cpu_compatibility_checks"]
+
+no_cache = [
+  "unc-vm-runner/no_cache",
+  "unc-store/no_cache",
+]
+
+sandbox = ["unc-vm-runner/sandbox"]
+
+[dev-dependencies]
+assert_matches.workspace = true
+enum-map.workspace = true
+indicatif.workspace = true
+rayon.workspace = true
+serde_json.workspace = true
+tempfile.workspace = true
+
+unc-chain-configs.workspace = true
+unc-store = { workspace = true, features = ["test_features"] }
+unc-test-contracts.workspace = true
+testlib.workspace = true

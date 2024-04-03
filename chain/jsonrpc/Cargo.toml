@@ -1,0 +1,74 @@
+[package]
+name = "unc-jsonrpc"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+actix-cors.workspace = true
+actix-web.workspace = true
+actix.workspace = true
+bs58.workspace = true
+easy-ext.workspace = true
+futures.workspace = true
+hex.workspace = true
+once_cell.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_with.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+unc-chain-configs.workspace = true
+unc-client-primitives.workspace = true
+unc-primitives.workspace = true
+unc-client.workspace = true
+unc-network.workspace = true
+unc-o11y.workspace = true
+unc-jsonrpc-client.workspace = true
+unc-jsonrpc-primitives.workspace = true
+unc-jsonrpc-adversarial-primitives = { workspace = true, optional = true }
+unc-rpc-error-macro.workspace = true
+
+[features]
+dump_errors_schema = ["unc-rpc-error-macro/dump_errors_schema"]
+test_features = [
+  "unc-client/test_features",
+  "unc-network/test_features",
+  "unc-jsonrpc-primitives/test_features",
+  "unc-jsonrpc-adversarial-primitives/test_features",
+]
+nightly = [
+  "nightly_protocol",
+  "unc-chain-configs/nightly",
+  "unc-client-primitives/nightly",
+  "unc-client/nightly",
+  "unc-jsonrpc-adversarial-primitives/nightly",
+  "unc-jsonrpc-client/nightly",
+  "unc-jsonrpc-primitives/nightly",
+  "unc-network/nightly",
+  "unc-o11y/nightly",
+  "unc-primitives/nightly",
+]
+nightly_protocol = [
+  "unc-chain-configs/nightly_protocol",
+  "unc-client-primitives/nightly_protocol",
+  "unc-client/nightly_protocol",
+  "unc-jsonrpc-adversarial-primitives/nightly_protocol",
+  "unc-jsonrpc-client/nightly_protocol",
+  "unc-jsonrpc-primitives/nightly_protocol",
+  "unc-network/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+]
+sandbox = [
+  "unc-client/sandbox",
+]

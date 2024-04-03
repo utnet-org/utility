@@ -1,0 +1,47 @@
+[package]
+name = "unc-state-parts"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+chrono.workspace = true
+clap.workspace = true
+once_cell.workspace = true
+sha2 = "0.10.6"
+tokio.workspace = true
+tracing.workspace = true
+
+unc-async.workspace = true
+unc-jsonrpc.workspace = true
+unc-network.workspace = true
+unc-o11y.workspace = true
+unc-ping.workspace = true
+unc-primitives.workspace = true
+
+[features]
+nightly = [
+  "nightly_protocol",
+  "unc-async/nightly",
+  "unc-jsonrpc/nightly",
+  "unc-network/nightly",
+  "unc-o11y/nightly",
+  "unc-ping/nightly",
+  "unc-primitives/nightly",
+]
+nightly_protocol = [
+  "unc-async/nightly_protocol",
+  "unc-jsonrpc/nightly_protocol",
+  "unc-network/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-ping/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+]

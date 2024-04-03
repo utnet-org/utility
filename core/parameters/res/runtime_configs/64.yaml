@@ -1,0 +1,2 @@
+# Implements NEP-492, disallowing all top-level accounts.
+min_allowed_top_level_account_length: { old: 0, new: 0 }

@@ -1,0 +1,32 @@
+[package]
+name = "unc-pool"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+borsh.workspace = true
+once_cell.workspace = true
+rand.workspace = true
+
+unc-crypto.workspace = true
+unc-o11y.workspace = true
+unc-primitives.workspace = true
+
+[features]
+nightly = [
+  "nightly_protocol",
+  "unc-o11y/nightly",
+  "unc-primitives/nightly",
+]
+nightly_protocol = [
+  "unc-o11y/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+]

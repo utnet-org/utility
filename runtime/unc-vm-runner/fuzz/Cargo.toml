@@ -1,0 +1,38 @@
+[package]
+name = "unc-vm-runner-fuzz"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[package.metadata]
+cargo-fuzz = true
+
+[lints]
+workspace = true
+
+[dependencies]
+arbitrary.workspace = true
+libfuzzer-sys.workspace = true
+wasm-smith.workspace = true
+wasmprinter.workspace = true
+
+unc-parameters.workspace = true
+unc-primitives.workspace = true
+unc-test-contracts.workspace = true
+unc-vm-runner.workspace = true
+
+[[bin]]
+name = "runner"
+path = "fuzz_targets/runner.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "diffrunner"
+path = "fuzz_targets/diffrunner.rs"
+test = false
+doc = false

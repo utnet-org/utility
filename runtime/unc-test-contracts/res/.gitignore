@@ -1,0 +1,3 @@
+*.wasm
+!test_contract_ts.wasm
+!unc_evm.wasm

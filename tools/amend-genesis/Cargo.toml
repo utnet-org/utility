@@ -1,0 +1,34 @@
+[package]
+name = "unc-amend-genesis"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+borsh.workspace = true
+clap.workspace = true
+num-rational.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tempfile.workspace = true
+tracing.workspace = true
+
+unc-chain.workspace = true
+unc-chain-configs.workspace = true
+unc-crypto.workspace = true
+unc-epoch-manager.workspace = true
+unc-network.workspace = true
+unc-primitives.workspace = true
+unc-primitives-core.workspace = true
+unc-store.workspace = true
+unc-test-contracts.workspace = true
+framework.workspace = true
+node-runtime.workspace = true

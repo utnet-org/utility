@@ -1,0 +1,41 @@
+[package]
+name = "testlib"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+once_cell.workspace = true
+
+unc-chain-configs.workspace = true
+unc-chain.workspace = true
+unc-crypto.workspace = true
+unc-parameters.workspace = true
+unc-primitives.workspace = true
+unc-test-contracts.workspace = true
+node-runtime.workspace = true
+
+[features]
+nightly_protocol = [
+  "unc-chain-configs/nightly_protocol",
+  "unc-chain/nightly_protocol",
+  "unc-parameters/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "node-runtime/nightly_protocol",
+]
+nightly = [
+  "nightly_protocol",
+  "unc-chain-configs/nightly",
+  "unc-chain/nightly",
+  "unc-parameters/nightly",
+  "unc-primitives/nightly",
+  "node-runtime/nightly",
+]
+default = []

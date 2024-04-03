@@ -1,0 +1,38 @@
+[package]
+name = "chainsync-loadtest"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[[bin]]
+path = "src/main.rs"
+name = "chainsync-loadtest"
+
+[dependencies]
+actix.workspace = true
+anyhow.workspace = true
+async-trait.workspace = true
+clap.workspace = true
+dirs.workspace = true
+futures.workspace = true
+log.workspace = true
+openssl-probe.workspace = true
+parking_lot.workspace = true
+rand.workspace = true
+tokio.workspace = true
+
+unc-async.workspace = true
+unc-chain-configs.workspace = true
+unc-crypto.workspace = true
+unc-primitives.workspace = true
+unc-store.workspace = true
+framework.workspace = true
+unc-network.workspace = true
+unc-o11y.workspace = true

@@ -1,0 +1,147 @@
+[package]
+name = "integration-tests"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+actix-rt.workspace = true
+actix.workspace = true
+anyhow.workspace = true
+borsh.workspace = true
+chrono.workspace = true
+clap.workspace = true
+futures.workspace = true
+hex.workspace = true
+itertools.workspace = true
+once_cell.workspace = true
+parking_lot.workspace = true
+primitive-types.workspace = true
+rand.workspace = true
+rlp.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+smart-default.workspace = true
+stdx.workspace = true
+strum.workspace = true
+tempfile.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+wat.workspace = true
+
+unc-actix-test-utils.workspace = true
+unc-async.workspace = true
+unc-chain.workspace = true
+unc-chain-configs.workspace = true
+unc-chunks.workspace = true
+unc-client.workspace = true
+unc-client-primitives.workspace = true
+unc-crypto.workspace = true
+unc-epoch-manager.workspace = true
+unc-fmt.workspace = true
+unc-jsonrpc.workspace = true
+unc-jsonrpc-client.workspace = true
+unc-jsonrpc-primitives.workspace = true
+unc-network.workspace = true
+unc-parameters.workspace = true
+unc-primitives.workspace = true
+unc-primitives-core.workspace = true
+unc-store.workspace = true
+unc-o11y.workspace = true
+unc-telemetry.workspace = true
+unc-test-contracts.workspace = true
+unc-performance-metrics.workspace = true
+unc-undo-block.workspace = true
+unc-vm-runner.workspace = true
+unc-wallet-contract.workspace = true
+framework.workspace = true
+node-runtime.workspace = true
+testlib.workspace = true
+
+[dev-dependencies]
+assert_matches.workspace = true
+insta.workspace = true
+
+[features]
+performance_stats = [
+  "framework/performance_stats",
+  "unc-network/performance_stats",
+]
+expensive_tests = []
+test_features = ["framework/test_features", "unc-store/test_features"]
+protocol_feature_fix_contract_loading_cost = [
+  "framework/protocol_feature_fix_contract_loading_cost",
+]
+protocol_feature_reject_blocks_with_outdated_protocol_version = [
+  "unc-primitives/protocol_feature_reject_blocks_with_outdated_protocol_version",
+  "unc-chain/protocol_feature_reject_blocks_with_outdated_protocol_version",
+]
+
+nightly = [
+  "nightly_protocol",
+  "protocol_feature_fix_contract_loading_cost",
+  "protocol_feature_reject_blocks_with_outdated_protocol_version",
+  "unc-actix-test-utils/nightly",
+  "unc-async/nightly",
+  "unc-chain-configs/nightly",
+  "unc-chain/nightly",
+  "unc-chunks/nightly",
+  "unc-client-primitives/nightly",
+  "unc-client/nightly",
+  "unc-epoch-manager/nightly",
+  "unc-fmt/nightly",
+  "unc-jsonrpc-client/nightly",
+  "unc-jsonrpc-primitives/nightly",
+  "unc-jsonrpc/nightly",
+  "unc-network/nightly",
+  "unc-o11y/nightly",
+  "unc-parameters/nightly",
+  "unc-primitives-core/nightly",
+  "unc-primitives/nightly",
+  "unc-store/nightly",
+  "unc-telemetry/nightly",
+  "unc-undo-block/nightly",
+  "unc-vm-runner/nightly",
+  "unc-wallet-contract/nightly",
+  "framework/nightly",
+  "node-runtime/nightly",
+  "testlib/nightly",
+]
+nightly_protocol = [
+  "unc-actix-test-utils/nightly_protocol",
+  "unc-async/nightly_protocol",
+  "unc-chain-configs/nightly_protocol",
+  "unc-chain/nightly_protocol",
+  "unc-chunks/nightly_protocol",
+  "unc-client-primitives/nightly_protocol",
+  "unc-client/nightly_protocol",
+  "unc-epoch-manager/nightly_protocol",
+  "unc-fmt/nightly_protocol",
+  "unc-jsonrpc-client/nightly_protocol",
+  "unc-jsonrpc-primitives/nightly_protocol",
+  "unc-jsonrpc/nightly_protocol",
+  "unc-network/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-parameters/nightly_protocol",
+  "unc-primitives-core/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "unc-store/nightly_protocol",
+  "unc-telemetry/nightly_protocol",
+  "unc-undo-block/nightly_protocol",
+  "unc-vm-runner/nightly_protocol",
+  "unc-wallet-contract/nightly_protocol",
+  "framework/nightly_protocol",
+  "node-runtime/nightly_protocol",
+  "testlib/nightly_protocol",
+]
+sandbox = ["unc-chain/sandbox", "node-runtime/sandbox", "unc-client/sandbox"]
+no_cache = ["framework/no_cache"]
+calimero_zero_storage = []
+new_epoch_sync = ["framework/new_epoch_sync"]

@@ -1,0 +1,132 @@
+[package]
+name = "unc-vm-runner"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description = "This crate implements the specification of the interface that unc blockchain exposes to the smart contracts."
+repository.workspace = true
+license.workspace = true
+categories = ["wasm"]
+publish = true
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow = { workspace = true, optional = true }
+base64.workspace = true
+bn.workspace = true
+borsh.workspace = true
+ed25519-dalek.workspace = true
+enum-map.workspace = true
+finite-wasm = { workspace = true, features = ["instrument"] }
+loupe.workspace = true
+memoffset.workspace = true
+num-rational.workspace = true
+once_cell.workspace = true
+parity-wasm.workspace = true
+prefix-sum-vec.workspace = true
+ripemd.workspace = true
+serde_repr.workspace = true
+serde_with.workspace = true
+serde.workspace = true
+sha2.workspace = true
+sha3.workspace = true
+stdx.workspace = true
+strum.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+wasm-encoder.workspace = true
+wasmparser.workspace = true
+wasmtime = { workspace = true, optional = true }
+
+unc-crypto.workspace = true
+unc-primitives-core.workspace = true
+unc-parameters.workspace = true
+
+# Old versions of pwasm-utils we need to preserve backwards compatibility under
+# old protocol versions.
+pwasm-utils_12.workspace = true
+parity-wasm_41.workspace = true
+
+[target.'cfg(target_arch = "x86_64")'.dependencies]
+wasmer-runtime = { workspace = true, optional = true }
+wasmer-runtime-core = { workspace = true, optional = true }
+wasmer-compiler = { workspace = true, optional = true }
+wasmer-compiler-singlepass = { workspace = true, optional = true }
+wasmer-engine = { workspace = true, optional = true }
+wasmer-engine-universal = { workspace = true, optional = true }
+wasmer-types = { workspace = true, optional = true }
+wasmer-vm = { workspace = true, optional = true }
+unc-vm-compiler = { workspace = true, optional = true }
+unc-vm-compiler-singlepass = { workspace = true, optional = true }
+unc-vm-engine = { workspace = true, optional = true }
+unc-vm-types = { workspace = true, optional = true }
+unc-vm-vm = { workspace = true, optional = true }
+
+[dev-dependencies]
+arbitrary.workspace = true
+assert_matches.workspace = true
+bolero.workspace = true
+expect-test.workspace = true
+hex.workspace = true
+unc-test-contracts.workspace = true
+rand.workspace = true
+serde_json = { workspace = true, features = ["preserve_order"] }
+wasm-smith.workspace = true
+wasmprinter.workspace = true
+wat.workspace = true
+
+[features]
+nightly_protocol = [
+  "unc-parameters/nightly_protocol",
+  "unc-primitives-core/nightly_protocol",
+]
+# all vms enabled for now
+default = [
+  "wasmer0_vm",
+  "wasmtime_vm",
+  "wasmer2_vm",
+  "unc_vm",
+]
+wasmer0_vm = [ "wasmer-runtime", "wasmer-runtime-core" ]
+wasmtime_vm = [ "wasmtime", "anyhow"]
+wasmer2_vm = [
+    "wasmer-compiler",
+    "wasmer-compiler-singlepass",
+    "wasmer-engine",
+    "wasmer-engine-universal",
+    "wasmer-types",
+    "wasmer-vm"
+]
+unc_vm = [
+    "unc-vm-compiler",
+    "unc-vm-compiler-singlepass",
+    "unc-vm-engine",
+    "unc-vm-types",
+    "unc-vm-vm"
+]
+
+no_cpu_compatibility_checks = []
+
+no_cache = []
+
+protocol_feature_fix_contract_loading_cost = [
+    "unc-primitives-core/protocol_feature_fix_contract_loading_cost",
+]
+
+nightly = [
+  "nightly_protocol",
+  "protocol_feature_fix_contract_loading_cost",
+  "unc-parameters/nightly",
+  "unc-primitives-core/nightly",
+]
+sandbox = []
+io_trace = []
+
+# Use this feature to enable counting of fees and costs applied.
+costs_counting = []
+
+[package.metadata.cargo-udeps.ignore]
+# `no_cache` feature leads to an unused `cached` crate
+normal = ["cached"]

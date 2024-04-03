@@ -1,0 +1,84 @@
+[package]
+name = "unc-mirror"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+actix.workspace = true
+anyhow.workspace = true
+async-trait.workspace = true
+borsh.workspace = true
+bs58.workspace = true
+clap.workspace = true
+ed25519-dalek.workspace = true
+hex.workspace = true
+hkdf.workspace = true
+once_cell.workspace = true
+openssl-probe.workspace = true
+rand_core.workspace = true
+rocksdb.workspace = true
+secp256k1.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+strum.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+
+framework.workspace = true
+unc-chain-configs.workspace = true
+unc-chain.workspace = true
+unc-chain-primitives.workspace = true
+unc-client.workspace = true
+unc-client-primitives.workspace = true
+unc-epoch-manager.workspace = true
+unc-indexer-primitives.workspace = true
+unc-indexer.workspace = true
+unc-network.workspace = true
+unc-primitives.workspace = true
+unc-primitives-core.workspace = true
+unc-o11y.workspace = true
+unc-store.workspace = true
+unc-crypto.workspace = true
+
+[features]
+nightly = [
+  "nightly_protocol",
+  "unc-chain-configs/nightly",
+  "unc-chain/nightly",
+  "unc-client-primitives/nightly",
+  "unc-client/nightly",
+  "unc-epoch-manager/nightly",
+  "unc-indexer-primitives/nightly",
+  "unc-indexer/nightly",
+  "unc-network/nightly",
+  "unc-o11y/nightly",
+  "unc-primitives-core/nightly",
+  "unc-primitives/nightly",
+  "unc-store/nightly",
+  "framework/nightly",
+]
+nightly_protocol = [
+  "unc-chain-configs/nightly_protocol",
+  "unc-chain/nightly_protocol",
+  "unc-client-primitives/nightly_protocol",
+  "unc-client/nightly_protocol",
+  "unc-epoch-manager/nightly_protocol",
+  "unc-indexer-primitives/nightly_protocol",
+  "unc-indexer/nightly_protocol",
+  "unc-network/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-primitives-core/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "unc-store/nightly_protocol",
+  "framework/nightly_protocol",
+]

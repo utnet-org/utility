@@ -1,0 +1,97 @@
+[package]
+name = "runtime-params-estimator"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "runtime-params-estimator"
+required-features = ["costs_counting"]
+
+[dependencies]
+anyhow.workspace = true
+borsh.workspace = true
+bs58.workspace = true
+bytesize.workspace = true
+cfg-if.workspace = true
+chrono.workspace = true
+clap.workspace = true
+enum-map.workspace = true
+hex.workspace = true
+indicatif.workspace = true
+libc.workspace = true
+num-rational.workspace = true
+num-traits.workspace = true
+rand.workspace = true
+rand_xorshift.workspace = true
+rocksdb.workspace = true
+serde_json.workspace = true
+tempfile.workspace = true
+tracing-span-tree.workspace = true
+tracing-subscriber.workspace = true
+tracing.workspace = true
+wat.workspace = true
+
+genesis-populate.workspace = true
+unc-chain-configs.workspace = true
+unc-crypto.workspace = true
+unc-fmt.workspace = true
+unc-o11y.workspace = true
+unc-parameters = { workspace = true, features = ["clap"] }
+unc-primitives.workspace = true
+unc-store.workspace = true
+unc-test-contracts.workspace = true
+unc-vm-runner.workspace = true
+framework.workspace = true
+node-runtime.workspace = true
+
+[dev-dependencies]
+insta.workspace = true
+
+[features]
+default = ["costs_counting"]
+costs_counting = ["unc-vm-runner/costs_counting"]
+# Required feature for proper config, but can't be enabled by default because it is leaked to other release crates.
+required = [
+  "costs_counting",
+  "unc-vm-runner/no_cpu_compatibility_checks",
+  "no_cache",
+]
+no_cache = [
+  "node-runtime/no_cache",
+  "unc-store/no_cache",
+]
+nightly = [
+  "nightly_protocol",
+  "genesis-populate/nightly",
+  "unc-chain-configs/nightly",
+  "unc-fmt/nightly",
+  "unc-o11y/nightly",
+  "unc-parameters/nightly",
+  "unc-primitives/nightly",
+  "unc-store/nightly",
+  "unc-vm-runner/nightly",
+  "framework/nightly",
+  "node-runtime/nightly",
+]
+nightly_protocol = [
+  "genesis-populate/nightly_protocol",
+  "unc-chain-configs/nightly_protocol",
+  "unc-fmt/nightly_protocol",
+  "unc-o11y/nightly_protocol",
+  "unc-parameters/nightly_protocol",
+  "unc-primitives/nightly_protocol",
+  "unc-store/nightly_protocol",
+  "unc-vm-runner/nightly_protocol",
+  "framework/nightly_protocol",
+  "node-runtime/nightly_protocol",
+]
+sandbox = ["node-runtime/sandbox"]
+io_trace = ["unc-store/io_trace", "unc-o11y/io_trace", "unc-vm-runner/io_trace"]

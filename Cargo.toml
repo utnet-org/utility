@@ -1,0 +1,423 @@
+[workspace.package]
+version = "0.0.0" # managed by cargo-workspaces, see below
+authors = ["Hello Inc <hello@unc.com>"]
+edition = "2021"
+rust-version = "1.77.1"
+repository = "https://github.com/utnet-org/utility"
+license = "MIT OR Apache-2.0"
+
+[workspace.metadata.workspaces]
+# Shared version of all public crates in the workspace.
+# This is only used for crates that are not stable.
+# Most crates are not stable on purpose, as maintaining API compatibility is a
+# significant developer time expense. Please think thoroughly before adding
+# anything to the list of stable crates.
+version = "0.7.0"
+exclude = ["uncd"]
+
+[workspace]
+resolver = "2"
+members = [
+    "chain/chain",
+    "chain/chunks",
+    "chain/client",
+    "chain/client-primitives",
+    "chain/epoch-manager",
+    "chain/indexer",
+    "chain/indexer-primitives",
+    "chain/jsonrpc",
+    "chain/jsonrpc-adversarial-primitives",
+    "chain/jsonrpc-primitives",
+    "chain/jsonrpc/client",
+    "chain/jsonrpc/fuzz",
+    "chain/jsonrpc/jsonrpc-tests",
+    "chain/network",
+    "chain/pool",
+    "chain/telemetry",
+    "core/async",
+    "core/chain-configs",
+    "core/crypto",
+    "core/dyn-configs",
+    "core/o11y",
+    "core/parameters",
+    "core/primitives",
+    "core/primitives-core",
+    "core/store",
+    "framework",
+    "genesis-tools/genesis-csv-to-json",
+    "genesis-tools/genesis-populate",
+    "genesis-tools/keypair-generator",
+    "integration-tests",
+    "runtime/unc-vm/test-api",
+    "runtime/unc-vm/compiler",
+    "runtime/unc-vm/compiler-singlepass",
+    "runtime/unc-vm/engine",
+    "runtime/unc-vm/vm",
+    "runtime/unc-vm/types",
+    "runtime/unc-vm/wast",
+    "runtime/unc-vm/compiler-test-derive",
+    "runtime/unc-vm-runner",
+    "runtime/unc-vm-runner/fuzz",
+    "runtime/unc-wallet-contract",
+    "runtime/runtime",
+    "runtime/runtime-params-estimator",
+    "runtime/runtime-params-estimator/estimator-warehouse",
+    "test-utils/actix-test-utils",
+    "test-utils/runtime-tester",
+    "test-utils/runtime-tester/fuzz",
+    "test-utils/store-validator",
+    "test-utils/testlib",
+    "test-utils/style",
+    "tools/database",
+    "tools/chainsync-loadtest",
+    "tools/fork-network",
+    "tools/indexer/example",
+    "tools/mirror",
+    "tools/mock-node",
+    "tools/ping",
+    "tools/restaked",
+    "tools/rpctypegen/core",
+    "tools/rpctypegen/macro",
+    "tools/speedy_sync",
+    "tools/state-parts",
+    "tools/state-parts-dump-check",
+    "tools/state-viewer",
+    "tools/storage-usage-delta-calculator",
+    "tools/themis",
+    "tools/undo-block",
+    "utils/config",
+    "utils/fmt",
+    "utils/mainnet-res",
+    "utils/unc-cache",
+    "utils/stdx",
+    "uncd",
+]
+
+[workspace.lints.rust]
+warnings = "deny"
+
+[workspace.lints.clippy]
+all = { level = "allow", priority = -100 }
+correctness = { level = "deny", priority = -50 }
+suspicious = { level = "deny", priority = -50 }
+perf = { level = "deny", priority = -50 }
+# overrides clippy::perf = "deny": https://github.com/rust-lang/rust-clippy/issues/8111
+single_char_pattern = "allow"
+clone_on_copy = "deny"
+derivable_impls = "deny"
+redundant_clone = "deny"
+len_zero = "deny"
+
+
+[workspace.dependencies]
+actix = "0.13.0"
+actix-cors = "0.6.1"
+actix-http = "3.3"
+actix-rt = "2"
+actix-web = "4.1"
+anyhow = "1.0.62"
+arbitrary = { version = "1.2.3", features = ["derive"] }
+arc-swap = "1.5"
+assert_matches = "1.5.0"
+async-recursion = "1.0.4"
+async-trait = "0.1.58"
+awc = { version = "3", features = ["openssl"] }
+backtrace = "0.3"
+base64 = "0.21"
+bencher = "0.1.5"
+bitflags = "1.2"
+blake2 = "0.9.1"
+bn = { package = "zeropool-bn", version = "0.5.11", default-features = false }
+bolero = { version = "0.10.0", git = "https://github.com/Ekleog-NEAR/bolero", rev = "56da8e6d1d018519a30b36d85d3a53fe35a42eaf", features = ["arbitrary"] }
+borsh = { version = "1.0.0", features = ["derive", "rc"] }
+bs58 = "0.4"
+bytes = "1"
+bytesize = { version = "1.1", features = ["serde"] }
+c2-chacha = "0.3"
+cargo_metadata = "0.14.1"
+cc = "1.0"
+cfg-if = "1.0"
+chrono = { version = "0.4.19", features = ["serde"] }
+clap = { version = "4.2.0", features = ["derive", "env", "string"] }
+cloud-storage = "0.11.1"
+conqueue = "0.4.0"
+cpu-time = "1.0"
+criterion = { version = "0.5.1", default_features = false, features = ["html_reports", "cargo_bench_support"] }
+crossbeam = "0.8"
+crossbeam-channel = "0.5.8"
+crossbeam-queue = "0.3.8"
+csv = "1.2.1"
+curve25519-dalek = { version = "4.1.1", default-features = false, features = ["alloc", "precomputed-tables", "rand_core"] }
+derive-enum-from-into = "0.1.1"
+derive_more = "0.99.9"
+dirs = "4"
+dynasm = "2.0"
+dynasmrt = "2.0"
+easy-ext = "0.2"
+ed25519-dalek = { version = "2.1.0", default-features = false, features = ["hazmat", "rand_core"] }
+elastic-array = "0.11"
+enum-map = "2.1.0"
+enumset = "1.0"
+expect-test = "1.3.0"
+finite-wasm = "0.5.0"
+flate2 = "1.0.22"
+fs2 = "0.4"
+futures = "0.3.5"
+futures-util = "0.3"
+genesis-populate = { path = "genesis-tools/genesis-populate" }
+hashbrown = "0.14.2"
+hex = { version = "0.4.2", features = ["serde"] }
+hex-literal = "0.2"
+hkdf = "0.12.3"
+hyper = { version = "0.14", features = ["full"] }
+hyper-tls = "0.5.0"
+im = "15"
+indexmap = "1.6"
+indicatif = { version = "0.15.0", features = ["with_rayon"] }
+insta = { version = "1.34.0", features = ["json", "yaml", "redactions"] }
+integration-tests = { path = "integration-tests" }
+itertools = "0.10.0"
+itoa = "1.0"
+json_comments = "0.2.1"
+lazy_static = "1.4"
+leb128 = "0.2"
+libc = "0.2.81"
+libfuzzer-sys = { version = "0.4", features = ["arbitrary-derive"] }
+log = "0.4"
+loupe = "0.1"
+lru = "0.7.2"
+memmap2 = "0.5"
+memoffset = "0.8"
+more-asserts = "0.2"
+unc-account-id = { version = "0.1.0", features = ["internal_unstable", "serde", "borsh"] }
+unc-actix-test-utils = { path = "test-utils/actix-test-utils" }
+unc-amend-genesis = { path = "tools/amend-genesis" }
+unc-database-tool= { path = "tools/database" }
+unc-async = { path = "core/async" }
+unc-cache = { path = "utils/unc-cache" }
+unc-chain = { path = "chain/chain" }
+unc-chain-configs = { path = "core/chain-configs" }
+unc-chain-primitives = { path = "chain/chain-primitives" }
+unc-chunks = { path = "chain/chunks" }
+unc-chunks-primitives = { path = "chain/chunks-primitives" }
+unc-client = { path = "chain/client" }
+unc-client-primitives = { path = "chain/client-primitives" }
+unc-cold-store-tool = { path = "tools/cold-store", package = "cold-store-tool" }
+unc-config-utils = { path = "utils/config" }
+framework = { path = "framework" }
+unc-crypto = { path = "core/crypto" }
+unc-dyn-configs = { path = "core/dyn-configs" }
+unc-epoch-manager = { path = "chain/epoch-manager" }
+unc-epoch-sync-tool = { path = "tools/epoch-sync"}
+unc-flat-storage = { path = "tools/flat-storage" }
+unc-fork-network = { path = "tools/fork-network" }
+unc-fmt = { path = "utils/fmt" }
+unc-indexer = { path = "chain/indexer" }
+unc-indexer-primitives = { path = "chain/indexer-primitives" }
+unc-jsonrpc = { path = "chain/jsonrpc" }
+unc-jsonrpc-adversarial-primitives = { path = "chain/jsonrpc-adversarial-primitives" }
+unc-jsonrpc-client = { path = "chain/jsonrpc/client" }
+unc-jsonrpc-primitives = { path = "chain/jsonrpc-primitives", features = ["full"] }
+unc-jsonrpc-tests = { path = "chain/jsonrpc/jsonrpc-tests" }
+unc-mainnet-res = { path = "utils/mainnet-res" }
+unc-mirror = { path = "tools/mirror" }
+unc-network = { path = "chain/network" }
+unc-o11y = { path = "core/o11y" }
+unc-parameters = { path = "core/parameters" }
+unc-performance-metrics = { path = "utils/unc-performance-metrics" }
+unc-performance-metrics-macros = { path = "utils/unc-performance-metrics-macros" }
+unc-ping = { path = "tools/ping" }
+unc-pool = { path = "chain/pool" }
+unc-primitives = { path = "core/primitives" }
+unc-primitives-core = { path = "core/primitives-core" }
+unc-rpc-error-core = { path = "tools/rpctypegen/core" }
+unc-rpc-error-macro = { path = "tools/rpctypegen/macro" }
+unc-stable-hasher = { path = "utils/unc-stable-hasher" }
+unc-state-parts = { path = "tools/state-parts" }
+unc-state-parts-dump-check = { path = "tools/state-parts-dump-check" }
+unc-state-viewer = { path = "tools/state-viewer", package = "state-viewer" }
+unc-store = { path = "core/store" }
+unc-telemetry = { path = "chain/telemetry" }
+unc-test-contracts = { path = "runtime/unc-test-contracts" }
+unc-undo-block = { path = "tools/undo-block" }
+unc-vm-test-api = { path = "runtime/unc-vm/test-api" }
+unc-vm-compiler = { path = "runtime/unc-vm/compiler" }
+unc-vm-compiler-singlepass = { path = "runtime/unc-vm/compiler-singlepass" }
+unc-vm-compiler-test-derive = { path = "runtime/unc-vm/compiler-test-derive" }
+unc-vm-engine = { path = "runtime/unc-vm/engine" }
+unc-vm-engine-universal = { path = "runtime/unc-vm/engine-universal" }
+unc-vm-runner = { path = "runtime/unc-vm-runner" }
+unc-vm-test-generator = { path = "runtime/unc-vm/test-generator" }
+unc-vm-types = { path = "runtime/unc-vm/types" }
+unc-vm-vm = { path = "runtime/unc-vm/vm" }
+unc-vm-wast = { path = "runtime/unc-vm/wast" }
+unc-wallet-contract = { path = "runtime/unc-wallet-contract" }
+nix = "0.24"
+node-runtime = { path = "runtime/runtime" }
+num-bigint = "0.3"
+num_cpus = "1.11"
+num-rational = { version = "0.3.1", features = ["serde"] }
+num-traits = "0.2.15"
+once_cell = "1.13.1"
+openssl = { version = "0.10.60", features = ["vendored"] }
+openssl-probe = "0.1.4"
+opentelemetry = { version = "0.17.0", features = ["rt-tokio", "trace"] }
+opentelemetry-otlp = "0.10.0"
+opentelemetry-semantic-conventions = "0.9.0"
+paperclip = { version = "0.8.0", features = ["actix4"] }
+parity-wasm = { version = "0.42", default-features = false }
+parity-wasm_41 = { package = "parity-wasm", version = "0.41" }
+parking_lot = "0.12.1"
+percent-encoding = "2.2.0"
+pin-project = "1.0"
+prefix-sum-vec = "0.1.2"
+pretty_assertions = "1.2"
+primitive-types = { version = "0.10", default-features = false }
+proc-macro2 = "1.0.64"
+prometheus = "0.13.1"
+protobuf = "3.0.1"
+protobuf-codegen = "3.0.1"
+pwasm-utils_12 = { package = "pwasm-utils", version = "0.12" }
+quote = "1.0"
+rand = "0.8.5"
+rand_chacha = "0.3.1"
+rand_core = "0.5"
+rand_hc = "0.3.1"
+rand_xorshift = "0.3"
+rayon = "1.5"
+redis = "0.23.0"
+reed-solomon-erasure = "4"
+regex = "1.7.1"
+region = "3.0"
+reqwest = { version = "0.11.14", features = ["blocking"] }
+ripemd = "0.1.1"
+rkyv = "0.7.31"
+rlimit = "0.7"
+rlp = "0.5.2"
+rocksdb = { version = "0.21.0", default-features = false, features = ["snappy", "lz4", "zstd", "zlib", "jemalloc"] }
+runtime-tester = { path = "test-utils/runtime-tester" }
+rusqlite = { version = "0.29.0", features = ["bundled", "chrono", "functions"] }
+rustc-demangle = "0.1"
+rust-s3 = { version = "0.32.3", features = ["blocking"] }
+rustix = "0.37"
+rsa = { version = "0.9.6", features = ["sha2", "getrandom"] }
+rsa-export = '0.3.3'
+secp256k1 = { version = "0.27.0", features = ["recovery", "rand-std"] }
+semver = "1.0.4"
+serde = { version = "1.0.136", features = ["alloc", "derive", "rc"] }
+serde_ignored = "0.1"
+serde_json = "1.0.68"
+serde_repr = "0.1.8"
+serde_with = { version = "3.0", features = ["base64"] }
+serde_yaml = "0.9"
+serial_test = "0.5"
+sha2 = "0.10"
+sha3 = "0.10"
+shell-escape = "0.1.5"
+smallvec = "1.6"
+smart-default = "0.6"
+smartstring = "1.0.1"
+strum = { version = "0.24", features = ["derive"] }
+stun = "0.4"
+subtle = "2.2"
+syn = { version = "2.0.4", features = ["extra-traits", "full"] }
+sysinfo = "0.24.5"
+tar = "0.4.38"
+target-lexicon = { version = "0.12.2", default-features = false }
+tempfile = "3.3"
+testlib = { path = "test-utils/testlib" }
+test-log = { version = "0.2", default-features = false, features = ["trace"] }
+thiserror = "1.0.30"
+tikv-jemallocator = "0.5.0"
+time = { version = "0.3.9", features = ["parsing", "serde"] }
+tokio = { version = "1.28", features = [
+    "fs",
+    "macros",
+    "net",
+    "rt-multi-thread",
+    "sync",
+    "time",
+] }
+tokio-stream = { version = "0.1.2", features = ["net"] }
+tokio-util = { version = "0.7.1", features = ["codec", "io"] }
+toml = "0.5.8"
+tqdm = "0.4.4"
+tracing = { version = "0.1.36", features = ["std"] }
+tracing-appender = "0.2.2"
+tracing-opentelemetry = "0.17.0"
+tracing-span-tree = "0.1"
+tracing-subscriber = { version = "0.3.15", features = ["env-filter", "fmt", "registry", "std"] }
+trybuild = "1.0.11"
+turn = "0.6"
+validator = "0.12"
+wasm-encoder = "0.27.0"
+wasmer-compiler = { package = "wasmer-compiler-near", version = "=2.4.1" }
+wasmer-compiler-singlepass = { package = "wasmer-compiler-singlepass-near", version = "=2.4.1" }
+wasmer-engine = { package = "wasmer-engine-near", version = "=2.4.1" }
+wasmer-engine-universal = { package = "wasmer-engine-universal-near", version = "=2.4.1", features = ["compiler"] }
+wasmer-runtime = { version = "0.18.0", package = "wasmer-runtime-near", features = ["default-backend-singlepass"], default-features = false }
+wasmer-runtime-core = { version = "0.18.2", package = "wasmer-runtime-core-near" }
+wasmer-types = { package = "wasmer-types-near", version = "=2.4.1" }
+wasmer-vm = { package = "wasmer-vm-near", version = "=2.4.1" }
+wasmparser = "0.78" # TODO: unify at least the versions of wasmparser we have in our codebase
+wasmprinter = "0.2"
+wasm-smith = "0.10"
+wasmtime = { version = "14.0.4", default-features = false, features = ["cranelift"] }
+wast = "40.0"
+wat = "1.0.40"
+webrtc-util = "0.7"
+winapi = { version = "0.3", features = ["winbase", "memoryapi", "errhandlingapi", "winnt", "impl-default"] }
+xshell = "0.2.1"
+xz2 = "0.1.6"
+yansi = "0.5.1"
+
+stdx = { package = "unc-stdx", path = "utils/stdx" }
+
+[patch.crates-io]
+
+# Note that "bench" profile inherits from "release" profile and
+# "test" profile inherits from "dev" profile.
+# https://doc.rust-lang.org/cargo/reference/profiles.html#test
+
+[profile.dev]
+panic = 'abort'
+
+[profile.release]
+overflow-checks = true
+panic = 'abort'
+lto = "fat"
+codegen-units = 1
+
+# A much faster to compile version of `release`, for development use.
+[profile.dev-release]
+inherits = "release"
+lto = false
+codegen-units = 16
+debug-assertions = true
+
+# Used for fuzzing, LTO is ill-supported as of 2023-09 and so should not be enabled.
+[profile.fuzz]
+inherits = "dev"
+opt-level = 3
+incremental = false
+codegen-units = 1
+
+# Compile some dependencies with optimizations to speed up tests.
+[profile.dev.package.hex]
+opt-level = 3
+[profile.dev.package.rand]
+opt-level = 3
+[profile.dev.package.bs58]
+opt-level = 3
+[profile.dev.package.sha2]
+opt-level = 3
+[profile.dev.package.curve25519-dalek]
+opt-level = 3
+[profile.dev.package.unsafe-libyaml]
+opt-level = 3
+[profile.dev.package.hashbrown]
+opt-level = 3
+[profile.dev.package.dynasmrt]
+opt-level = 3
+[profile.dev.package."*"]
+opt-level = 1

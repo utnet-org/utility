@@ -1,0 +1,27 @@
+[package]
+name = "unc-flat-storage"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+borsh.workspace = true
+clap.workspace = true
+rayon.workspace = true
+tqdm.workspace = true
+tracing.workspace = true
+
+unc-chain.workspace = true
+unc-chain-configs.workspace = true
+unc-epoch-manager.workspace = true
+unc-primitives.workspace = true
+unc-store.workspace = true
+framework.workspace = true

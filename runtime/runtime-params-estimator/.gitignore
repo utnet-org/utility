@@ -1,0 +1,4 @@
+unc-sdk-rs/
+core-contracts/
+test-contract/res/stable_*
+test-contract/res/nightly_*
