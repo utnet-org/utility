@@ -254,7 +254,7 @@ pub fn publishable_has_license_file(workspace: &Workspace) -> anyhow::Result<()>
     Ok(())
 }
 
-const EXPECTED_LICENSE: &str = "MIT OR Apache-2.0";
+const EXPECTED_LICENSE: &str = "GPL-2.0-or-later";
 
 /// Ensure all non-private crates use the the same expected license
 pub fn publishable_has_unified_license(workspace: &Workspace) -> anyhow::Result<()> {

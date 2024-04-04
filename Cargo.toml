@@ -4,7 +4,7 @@ authors = ["Hello Inc <hello@unc.com>"]
 edition = "2021"
 rust-version = "1.77.1"
 repository = "https://github.com/utnet-org/utility"
-license = "MIT OR Apache-2.0"
+license = "GPL-2.0-or-later"
 
 [workspace.metadata.workspaces]
 # Shared version of all public crates in the workspace.
@@ -128,13 +128,13 @@ bencher = "0.1.5"
 bitflags = "1.2"
 blake2 = "0.9.1"
 bn = { package = "zeropool-bn", version = "0.5.11", default-features = false }
-bolero = { version = "0.10.0", git = "https://github.com/Ekleog-NEAR/bolero", rev = "56da8e6d1d018519a30b36d85d3a53fe35a42eaf", features = ["arbitrary"] }
+bolero = { version = "0.10.1", features = ["arbitrary"] }
 borsh = { version = "1.0.0", features = ["derive", "rc"] }
 bs58 = "0.4"
 bytes = "1"
 bytesize = { version = "1.1", features = ["serde"] }
 c2-chacha = "0.3"
-cargo_metadata = "0.14.1"
+cargo_metadata = "0.18.1"
 cc = "1.0"
 cfg-if = "1.0"
 chrono = { version = "0.4.19", features = ["serde"] }
@@ -176,7 +176,7 @@ indexmap = "1.6"
 indicatif = { version = "0.15.0", features = ["with_rayon"] }
 insta = { version = "1.34.0", features = ["json", "yaml", "redactions"] }
 integration-tests = { path = "integration-tests" }
-itertools = "0.10.0"
+itertools = "0.12.1"
 itoa = "1.0"
 json_comments = "0.2.1"
 lazy_static = "1.4"
@@ -289,16 +289,16 @@ redis = "0.23.0"
 reed-solomon-erasure = "4"
 regex = "1.7.1"
 region = "3.0"
-reqwest = { version = "0.11.14", features = ["blocking"] }
+reqwest = { version = "0.12.2", features = ["blocking"] }
 ripemd = "0.1.1"
 rkyv = "0.7.31"
 rlimit = "0.7"
 rlp = "0.5.2"
 rocksdb = { version = "0.21.0", default-features = false, features = ["snappy", "lz4", "zstd", "zlib", "jemalloc"] }
 runtime-tester = { path = "test-utils/runtime-tester" }
-rusqlite = { version = "0.29.0", features = ["bundled", "chrono", "functions"] }
+rusqlite = { version = "0.31.0", features = ["bundled", "chrono", "functions"] }
 rustc-demangle = "0.1"
-rust-s3 = { version = "0.32.3", features = ["blocking"] }
+rust-s3 = { version = "0.33.0", features = ["blocking"] }
 rustix = "0.37"
 rsa = { version = "0.9.6", features = ["sha2", "getrandom"] }
 rsa-export = '0.3.3'
@@ -340,7 +340,7 @@ tokio = { version = "1.28", features = [
 ] }
 tokio-stream = { version = "0.1.2", features = ["net"] }
 tokio-util = { version = "0.7.1", features = ["codec", "io"] }
-toml = "0.5.8"
+toml = "0.8.12"
 tqdm = "0.4.4"
 tracing = { version = "0.1.36", features = ["std"] }
 tracing-appender = "0.2.2"
