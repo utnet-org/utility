@@ -7713,7 +7713,7 @@ dependencies = [
  "wasmer-runtime-near",
  "wasmer-types-near",
  "wasmer-vm-near",
- "wasmparser 0.78.2",
+ "wasmparser 0.99.0",
  "wasmprinter",
  "wasmtime",
  "wat",

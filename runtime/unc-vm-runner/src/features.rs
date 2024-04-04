@@ -75,9 +75,6 @@ impl From<WasmFeatures> for wasmparser::WasmFeatures {
         //
         // /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\
         wasmparser::WasmFeatures {
-            deterministic_only: false,
-
-            module_linking: false, // old version of component model
             reference_types: REFERENCE_TYPES,
             multi_value: MULTI_VALUE,
             bulk_memory: BULK_MEMORY,
@@ -87,6 +84,14 @@ impl From<WasmFeatures> for wasmparser::WasmFeatures {
             multi_memory: MULTI_MEMORY,
             exceptions: EXCEPTIONS,
             memory64: MEMORY64,
+            mutable_global: true,
+            saturating_float_to_int: SATURATING_FLOAT_TO_INT,
+            sign_extension: false,
+            relaxed_simd: RELAXED_SIMD,
+            floats: false,
+            extended_const: EXTENDED_COST,
+            component_model: COMPONENT_MODEL,
+            memory_control: MEMORY_CONTROL,
         }
     }
 }

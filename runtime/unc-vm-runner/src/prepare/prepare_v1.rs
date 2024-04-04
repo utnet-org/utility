@@ -160,9 +160,8 @@ fn wasmparser_decode(
     code: &[u8],
     features: crate::features::WasmFeatures,
 ) -> Result<(Option<u64>, Option<u64>), wasmparser::BinaryReaderError> {
-    use wasmparser::{ImportSectionEntryType, ValidPayload};
-    let mut validator = wasmparser::Validator::new();
-    validator.wasm_features(features.into());
+    use wasmparser::{TypeRef, ValidPayload, FuncValidatorAllocations};
+    let mut validator = wasmparser::Validator::new_with_features(features.into());
     let mut function_count = Some(0u64);
     let mut local_count = Some(0u64);
     for payload in wasmparser::Parser::new(0).parse_all(code) {
@@ -170,27 +169,27 @@ fn wasmparser_decode(
 
         // The validator does not output `ValidPayload::Func` for imported functions.
         if let wasmparser::Payload::ImportSection(ref import_section_reader) = payload {
-            let mut import_section_reader = import_section_reader.clone();
-            for _ in 0..import_section_reader.get_count() {
-                match import_section_reader.read()?.ty {
-                    ImportSectionEntryType::Function(_) => {
+            let import_section_reader = import_section_reader.clone();
+            for import in import_section_reader {
+                match import?.ty {
+                    TypeRef::Func(_) => {
                         function_count = function_count.and_then(|f| f.checked_add(1))
                     }
-                    ImportSectionEntryType::Table(_)
-                    | ImportSectionEntryType::Memory(_)
-                    | ImportSectionEntryType::Event(_)
-                    | ImportSectionEntryType::Global(_)
-                    | ImportSectionEntryType::Module(_)
-                    | ImportSectionEntryType::Instance(_) => {}
+                    TypeRef::Table(_)
+                    | TypeRef::Memory(_)
+                    |TypeRef::Tag(_)
+                    | TypeRef::Global(_) => {}
                 }
             }
         }
 
         match validator.payload(&payload)? {
             ValidPayload::Ok => (),
-            ValidPayload::Submodule(_) => panic!("submodules are not reachable (not enabled)"),
-            ValidPayload::Func(mut validator, body) => {
+            ValidPayload::Func(func, body) => {
+                let allocs = FuncValidatorAllocations::default();
+                let mut validator = func.into_validator(allocs);
                 validator.validate(&body)?;
+
                 function_count = function_count.and_then(|f| f.checked_add(1));
                 // Count the global number of local variables.
                 let mut local_reader = body.get_locals_reader()?;
@@ -199,6 +198,7 @@ fn wasmparser_decode(
                     local_count = local_count.and_then(|l| l.checked_add(count.into()));
                 }
             }
+            _ => {}
         }
     }
     Ok((function_count, local_count))
