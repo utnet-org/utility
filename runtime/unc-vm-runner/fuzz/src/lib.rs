@@ -1,5 +1,5 @@
 use core::fmt;
-use unc_vm_runner::internal::wasmparser::{Export, ExternalKind, Parser, Payload, TypeDef};
+use unc_vm_runner::internal::wasmparser::{Export, ExternalKind, Parser, Payload};
 use unc_vm_runner::logic::VMContext;
 use unc_vm_runner::ContractCode;
 
@@ -13,12 +13,10 @@ pub fn find_entry_point(contract: &ContractCode) -> Option<String> {
             Ok(Payload::TypeSection(rdr)) => tys.extend(rdr),
             Ok(Payload::ExportSection(rdr)) => {
                 for export in rdr {
-                    if let Ok(Export { field, kind: ExternalKind::Function, index }) = export {
-                        if let Some(&Ok(ty_index)) = fns.get(index as usize) {
-                            if let Some(Ok(TypeDef::Func(func_type))) = tys.get(ty_index as usize) {
-                                if func_type.params.is_empty() && func_type.returns.is_empty() {
-                                    return Some(field.to_string());
-                                }
+                    if let Ok(Export { name, kind: ExternalKind::Func, index }) = export {
+                        if let Some(&Ok(_ty_index)) = fns.get(index as usize) {
+                            if name == "entry_point" {
+                                return Some(name.to_string());
                             }
                         }
                     }

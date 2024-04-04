@@ -152,7 +152,7 @@ pub fn has_unified_rust_edition(workspace: &Workspace) -> anyhow::Result<()> {
         .filter(|pkg| pkg.parsed.edition != *most_common_edition)
         .map(|pkg| Outlier {
             path: pkg.parsed.manifest_path.clone(),
-            found: Some(pkg.parsed.edition.clone()),
+            found: Some(pkg.parsed.edition.to_string()),
             extra: None,
         })
         .collect::<Vec<_>>();
@@ -161,7 +161,7 @@ pub fn has_unified_rust_edition(workspace: &Workspace) -> anyhow::Result<()> {
         bail!(ComplianceError {
             msg: "These packages have an unexpected rust edition".to_string(),
             expected: Some(Expected {
-                value: most_common_edition.clone(),
+                value: most_common_edition.to_string(),
                 reason: Some(format!("used by {} other packages in the workspace", n_compliant)),
             }),
             outliers,

@@ -27,7 +27,7 @@ rkyv.workspace = true
 thiserror.workspace = true
 tracing.workspace = true
 unc-vm-types.workspace = true
-wasmparser = "0.99.0"
+wasmparser.workspace = true
 
 [target.'cfg(target_os = "windows")'.dependencies]
 winapi.workspace = true
