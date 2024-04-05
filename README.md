@@ -62,7 +62,7 @@ The easiest way to join the network, is by using the `make release` command, whi
 ./target/release/uncd --home ~/.unc  init --chain-id testnet --download-genesis --download-config
 
 # download snapshot data （optional）
-## install rclone
+## install rclone 1.66.0 or beyond
 ```sh
 # Mac 
 $ brew install rclone
@@ -74,19 +74,18 @@ $ mkdir -p ~/.config/rclone
 $ touch ~/.config/rclone/rclone.conf
 
 ## rclone config
-[unc_aws]
+[unc_cf]
 type = s3
-provider = AWS
-download_url = https://unc-oss.s3.us-west-1.amazonaws.com
-region = us-west-1
+provider = Cloudflare
+endpoint= https://ec9b597fa02615ca6a0e62b7ff35d0cc.r2.cloudflarestorage.com
+access_key_id = 2ff213c3730df215a7cc56e28914092e
+secret_access_key = b28609e3869b43339c1267b59cf25aa5deff4097737d3848e1491e0729c3ff6c
 acl = public-read
-server_side_encryption = AES256
-storage_class = STANDARD
 
 ## download data
-$ rclone copy --no-check-certificate unc_aws:unc-oss/latest ./
+$ rclone copy --no-check-certificate unc_cf:unc/latest ./
 $ latest=$(cat latest)
-$ rclone copy --no-check-certificate --progress --transfers=6  unc_aws:unc-oss/${latest:?} ~/.unc/data
+$ rclone copy --no-check-certificate --progress --transfers=6  unc_cf:unc/${latest:?} ~/.unc/data
 
 # node run
 $ ./target/release/uncd --home ~/.unc  run
