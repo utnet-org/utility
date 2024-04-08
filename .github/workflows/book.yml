@@ -12,7 +12,7 @@ on:
 jobs:
   book:
     name: Book
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       MDBOOK_VERSION: '0.4.21'
     steps:
@@ -30,7 +30,7 @@ jobs:
 
   deploy:
     name: Deploy
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: write
     needs: book

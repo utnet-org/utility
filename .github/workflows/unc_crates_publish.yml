@@ -12,7 +12,7 @@ on:
 jobs:
   publish-cargo-crates:
     name: "Publish unc-workspaces on crates.io https://crates.io/crates/unc-workspaces"
-    runs-on: "ubuntu-latest"
+    runs-on: "self-hosted"
     #environment: deploy
     permissions:
       contents: write # required for crates push

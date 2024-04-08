@@ -25,13 +25,13 @@ jobs:
         include:
           - name: Linux
             id: linux
-            os: ubuntu-latest
+            os: self-hosted
             type: stable
             runs_integ_tests: true
             upload_profraws: true
           - name: Linux Nightly
             id: linux-nightly
-            os: ubuntu-latest
+            os: self-hosted
             type: nightly
             runs_integ_tests: true
             upload_profraws: true
@@ -90,17 +90,17 @@ jobs:
 
   protobuf_backward_compat:
     name: "Protobuf Backward Compatibility"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: bufbuild/buf-setup-action@1158f4fa81bc02e1ff62abcca6d516c9e24c77da
       - uses: bufbuild/buf-breaking-action@a074e988ee34efcd4927079e79c611f428354c01
         with:
-          against: "https://github.com/unet.org/utility.git#${{github.event.pull_request.base.sha && format('ref={0}', github.event.pull_request.base.sha) || 'branch=master' }}"
+          against: "https://github.com/utnet-org/utility.git#${{github.event.pull_request.base.sha && format('ref={0}', github.event.pull_request.base.sha) || 'branch=master' }}"
 
   py_backward_compat:
     name: "Backward Compatibility"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
@@ -126,7 +126,7 @@ jobs:
 
   py_db_migration:
     name: "Database Migration"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
@@ -153,7 +153,7 @@ jobs:
 
   py_sanity_checks:
     name: "Sanity Checks"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       fail-fast: false
     timeout-minutes: 90
@@ -188,7 +188,7 @@ jobs:
 
   py_genesis_check:
     name: "Genesis Changes"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
@@ -214,7 +214,7 @@ jobs:
 
   py_style_check:
     name: "Style"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
@@ -229,7 +229,7 @@ jobs:
 
   py_upgradability:
     name: "Upgradability"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
@@ -255,7 +255,7 @@ jobs:
 
   rpc_error_schema:
     name: "RPC Schema"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
@@ -265,7 +265,7 @@ jobs:
 
   lychee_checks:
     name: "Lychee Lints"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: lycheeverse/lychee-action@2ac9f030ccdea0033e2510a23a67da2a2da98492
@@ -274,7 +274,7 @@ jobs:
 
   check_fmt:
     name: "Cargo Fmt"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
@@ -284,7 +284,7 @@ jobs:
 
   check_clippy:
     name: "Cargo Clippy"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
@@ -294,7 +294,7 @@ jobs:
 
   doctests:
     name: "Rust Doctests"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
@@ -304,7 +304,7 @@ jobs:
 
   check_cargo_deny:
     name: "Cargo Deny"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
@@ -314,7 +314,7 @@ jobs:
 
   check_themis:
     name: "Themis"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
@@ -324,7 +324,7 @@ jobs:
 
   check_non_default:
     name: "Non-default Configuration Builds"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
@@ -334,7 +334,7 @@ jobs:
 
   check_udeps:
     name: "Unused Dependencies"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
@@ -344,7 +344,7 @@ jobs:
 
   cargo_audit:
     name: "Cargo Audit"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
@@ -354,7 +354,7 @@ jobs:
 
   generate_coverage:
     name: "Generate Coverage Artifact"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs:
       - cargo_nextest
     strategy:
@@ -406,7 +406,7 @@ jobs:
 
   upload_coverage:
     name: "Upload Coverage"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs:
       - cargo_nextest
       - py_backward_compat
