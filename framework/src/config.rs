@@ -1302,7 +1302,7 @@ pub fn download_config(url: &str, path: &Path) -> Result<(), FileDownloadError> 
 struct NodeKeyFile {
     account_id: String,
     public_key: PublicKey,
-    secret_key: unc_crypto::SecretKey,
+    private_key: unc_crypto::SecretKey,
 }
 
 impl NodeKeyFile {
@@ -1329,7 +1329,7 @@ impl From<NodeKeyFile> for KeyFile {
             .try_into()
             .unwrap(),
             public_key: this.public_key,
-            private_key: this.secret_key,
+            private_key: this.private_key,
         }
     }
 }
