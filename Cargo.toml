@@ -1,5 +1,5 @@
 [workspace.package]
-version = "0.0.0" # managed by cargo-workspaces, see below
+version = "0.7.1" # managed by cargo-workspaces, see below
 authors = ["Hello Inc <hello@unc.com>"]
 edition = "2021"
 rust-version = "1.77.1"
@@ -194,45 +194,45 @@ unc-actix-test-utils = { path = "test-utils/actix-test-utils" }
 unc-amend-genesis = { path = "tools/amend-genesis" }
 unc-database-tool= { path = "tools/database" }
 unc-async = { path = "core/async" }
-unc-cache = { path = "utils/unc-cache" }
+unc-cache = { path = "utils/unc-cache", version = "0.7.1" }
 unc-chain = { path = "chain/chain" }
-unc-chain-configs = { path = "core/chain-configs" }
-unc-chain-primitives = { path = "chain/chain-primitives" }
+unc-chain-configs = { path = "core/chain-configs", version = "0.7.1" }
+unc-chain-primitives = { path = "chain/chain-primitives", version = "0.7.1" }
 unc-chunks = { path = "chain/chunks" }
-unc-chunks-primitives = { path = "chain/chunks-primitives" }
+unc-chunks-primitives = { path = "chain/chunks-primitives", version = "0.7.1" }
 unc-client = { path = "chain/client" }
-unc-client-primitives = { path = "chain/client-primitives" }
+unc-client-primitives = { path = "chain/client-primitives", version = "0.7.1" }
 unc-cold-store-tool = { path = "tools/cold-store", package = "cold-store-tool" }
-unc-config-utils = { path = "utils/config" }
+unc-config-utils = { path = "utils/config", version = "0.7.1" }
 framework = { path = "framework" }
-unc-crypto = { path = "core/crypto" }
-unc-dyn-configs = { path = "core/dyn-configs" }
+unc-crypto = { path = "core/crypto", version = "0.7.1" }
+unc-dyn-configs = { path = "core/dyn-configs", version = "0.7.1" }
 unc-epoch-manager = { path = "chain/epoch-manager" }
 unc-epoch-sync-tool = { path = "tools/epoch-sync"}
 unc-flat-storage = { path = "tools/flat-storage" }
 unc-fork-network = { path = "tools/fork-network" }
-unc-fmt = { path = "utils/fmt" }
+unc-fmt = { path = "utils/fmt", version = "0.7.1" }
 unc-indexer = { path = "chain/indexer" }
-unc-indexer-primitives = { path = "chain/indexer-primitives" }
+unc-indexer-primitives = { path = "chain/indexer-primitives", version = "0.7.1" }
 unc-jsonrpc = { path = "chain/jsonrpc" }
 unc-jsonrpc-adversarial-primitives = { path = "chain/jsonrpc-adversarial-primitives" }
 unc-jsonrpc-client = { path = "chain/jsonrpc/client" }
-unc-jsonrpc-primitives = { path = "chain/jsonrpc-primitives", features = ["full"] }
+unc-jsonrpc-primitives = { path = "chain/jsonrpc-primitives", features = ["full"], version = "0.7.1" }
 unc-jsonrpc-tests = { path = "chain/jsonrpc/jsonrpc-tests" }
 unc-mainnet-res = { path = "utils/mainnet-res" }
 unc-mirror = { path = "tools/mirror" }
 unc-network = { path = "chain/network" }
-unc-o11y = { path = "core/o11y" }
-unc-parameters = { path = "core/parameters" }
+unc-o11y = { path = "core/o11y", version = "0.7.1" }
+unc-parameters = { path = "core/parameters", version = "0.7.1" }
 unc-performance-metrics = { path = "utils/unc-performance-metrics" }
 unc-performance-metrics-macros = { path = "utils/unc-performance-metrics-macros" }
 unc-ping = { path = "tools/ping" }
 unc-pool = { path = "chain/pool" }
-unc-primitives = { path = "core/primitives" }
-unc-primitives-core = { path = "core/primitives-core" }
-unc-rpc-error-core = { path = "tools/rpctypegen/core" }
-unc-rpc-error-macro = { path = "tools/rpctypegen/macro" }
-unc-stable-hasher = { path = "utils/unc-stable-hasher" }
+unc-primitives = { path = "core/primitives", version = "0.7.1" }
+unc-primitives-core = { path = "core/primitives-core", version = "0.7.1" }
+unc-rpc-error-core = { path = "tools/rpctypegen/core", version = "0.7.1" }
+unc-rpc-error-macro = { path = "tools/rpctypegen/macro", version = "0.7.1" }
+unc-stable-hasher = { path = "utils/unc-stable-hasher", version = "0.7.1" }
 unc-state-parts = { path = "tools/state-parts" }
 unc-state-parts-dump-check = { path = "tools/state-parts-dump-check" }
 unc-state-viewer = { path = "tools/state-viewer", package = "state-viewer" }
@@ -241,15 +241,15 @@ unc-telemetry = { path = "chain/telemetry" }
 unc-test-contracts = { path = "runtime/unc-test-contracts" }
 unc-undo-block = { path = "tools/undo-block" }
 unc-vm-test-api = { path = "runtime/unc-vm/test-api" }
-unc-vm-compiler = { path = "runtime/unc-vm/compiler" }
-unc-vm-compiler-singlepass = { path = "runtime/unc-vm/compiler-singlepass" }
+unc-vm-compiler = { path = "runtime/unc-vm/compiler", version = "0.7.1" }
+unc-vm-compiler-singlepass = { path = "runtime/unc-vm/compiler-singlepass", version = "0.7.1" }
 unc-vm-compiler-test-derive = { path = "runtime/unc-vm/compiler-test-derive" }
-unc-vm-engine = { path = "runtime/unc-vm/engine" }
+unc-vm-engine = { path = "runtime/unc-vm/engine", version = "0.7.1" }
 unc-vm-engine-universal = { path = "runtime/unc-vm/engine-universal" }
-unc-vm-runner = { path = "runtime/unc-vm-runner" }
+unc-vm-runner = { path = "runtime/unc-vm-runner", version = "0.7.1" }
 unc-vm-test-generator = { path = "runtime/unc-vm/test-generator" }
-unc-vm-types = { path = "runtime/unc-vm/types" }
-unc-vm-vm = { path = "runtime/unc-vm/vm" }
+unc-vm-types = { path = "runtime/unc-vm/types", version = "0.7.1" }
+unc-vm-vm = { path = "runtime/unc-vm/vm", version = "0.7.1" }
 unc-vm-wast = { path = "runtime/unc-vm/wast" }
 unc-wallet-contract = { path = "runtime/unc-wallet-contract" }
 nix = "0.24"
@@ -351,14 +351,14 @@ trybuild = "1.0.11"
 turn = "0.6"
 validator = "0.12"
 wasm-encoder = "0.27.0"
-wasmer-compiler = { package = "wasmer-compiler-near", version = "=2.4.1" }
-wasmer-compiler-singlepass = { package = "wasmer-compiler-singlepass-near", version = "=2.4.1" }
-wasmer-engine = { package = "wasmer-engine-near", version = "=2.4.1" }
-wasmer-engine-universal = { package = "wasmer-engine-universal-near", version = "=2.4.1", features = ["compiler"] }
-wasmer-runtime = { version = "0.18.0", package = "wasmer-runtime-near", features = ["default-backend-singlepass"], default-features = false }
-wasmer-runtime-core = { version = "0.18.2", package = "wasmer-runtime-core-near" }
-wasmer-types = { package = "wasmer-types-near", version = "=2.4.1" }
-wasmer-vm = { package = "wasmer-vm-near", version = "=2.4.1" }
+wasmer-runtime = { version = "0.18.0", package = "wasmer-runtime-unc1", features = ["default-backend-singlepass"], default-features = false }
+wasmer-runtime-core = { version = "0.18.2", package = "wasmer-runtime-core-unc1" }
+wasmer-types = { package = "wasmer-types-unc", version = "=2.4.1" }
+wasmer-vm = { package = "wasmer-vm-unc", version = "=2.4.1" }
+wasmer-compiler = { package = "wasmer-compiler-unc", version = "=2.4.1" }
+wasmer-compiler-singlepass = { package = "wasmer-compiler-singlepass-unc", version = "=2.4.1" }
+wasmer-engine = { package = "wasmer-engine-unc", version = "=2.4.1" }
+wasmer-engine-universal = { package = "wasmer-engine-universal-unc", version = "=2.4.1", features = ["compiler"] }
 wasmparser = "0.99"
 wasmprinter = "0.2"
 wasm-smith = "0.10"
@@ -371,7 +371,7 @@ xshell = "0.2.1"
 xz2 = "0.1.6"
 yansi = "0.5.1"
 
-stdx = { package = "unc-stdx", path = "utils/stdx" }
+stdx = { package = "unc-stdx", path = "utils/stdx", version = "0.7.1" }
 
 [patch.crates-io]
 
