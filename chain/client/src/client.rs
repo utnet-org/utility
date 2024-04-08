@@ -747,10 +747,14 @@ impl Client {
 
         let next_epoch_id = self.epoch_manager.get_next_epoch_id_from_prev_block(&prev_hash)?;
 
-        let minted_amount = if self.epoch_manager.is_next_block_epoch_start(&prev_hash)? {
-            Some(self.epoch_manager.get_epoch_minted_amount(&next_epoch_id)?)
-        } else {
-            None
+        // let minted_amount = if self.epoch_manager.is_next_block_epoch_start(&prev_hash)? {
+        //     Some(self.epoch_manager.get_epoch_minted_amount(&next_epoch_id)?)
+        // } else {
+        //     None
+        // };
+        let minted_amount = match self.epoch_manager.get_block_info(&prev_hash) {
+            Ok(block_info) => Some(block_info.minted_amount()),
+            Err(_) => None,
         };
 
         let epoch_sync_data_hash = if self.epoch_manager.is_next_block_epoch_start(&prev_hash)? {

@@ -2016,10 +2016,14 @@ impl Chain {
             byzantine_assert!(false);
             return Err(Error::InvalidGasPrice);
         }
-        let minted_amount = if self.epoch_manager.is_next_block_epoch_start(&prev_hash)? {
-            Some(self.epoch_manager.get_epoch_minted_amount(header.next_epoch_id())?)
-        } else {
-            None
+        // let minted_amount = if self.epoch_manager.get_block_info(&prev_hash)? {
+        //     Some(self.epoch_manager.get_epoch_minted_amount(header.next_epoch_id())?)
+        // } else {
+        //     None
+        // };
+        let minted_amount = match self.epoch_manager.get_block_info(&prev_hash) {
+            Ok(block_info) => Some(block_info.minted_amount()),
+            Err(_) => None,
         };
 
         if !block.verify_total_supply(prev.total_supply(), minted_amount) {
