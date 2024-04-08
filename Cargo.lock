@@ -1079,7 +1079,7 @@ checksum = "fd16c4719339c4530435d38e511904438d07cce7950afa3718a84ac36c10e89e"
 
 [[package]]
 name = "chainsync-loadtest"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "anyhow",
@@ -1238,7 +1238,7 @@ dependencies = [
 
 [[package]]
 name = "cold-store-tool"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "borsh 1.3.1",
@@ -2044,7 +2044,7 @@ dependencies = [
 
 [[package]]
 name = "estimator-warehouse"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "chrono",
@@ -2172,7 +2172,7 @@ dependencies = [
 
 [[package]]
 name = "framework"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "actix-rt",
@@ -2384,7 +2384,7 @@ dependencies = [
 
 [[package]]
 name = "genesis-csv-to-json"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "chrono",
  "clap",
@@ -2401,7 +2401,7 @@ dependencies = [
 
 [[package]]
 name = "genesis-populate"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "borsh 1.3.1",
  "clap",
@@ -2870,7 +2870,7 @@ checksum = "206ca75c9c03ba3d4ace2460e57b189f39f43de612c2f85836e65c929701bb2d"
 
 [[package]]
 name = "indexer-example"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "anyhow",
@@ -2945,7 +2945,7 @@ dependencies = [
 
 [[package]]
 name = "integration-tests"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "actix-rt",
@@ -3103,7 +3103,7 @@ dependencies = [
 
 [[package]]
 name = "keypair-generator"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "clap",
  "framework",
@@ -3480,7 +3480,7 @@ dependencies = [
 
 [[package]]
 name = "mock-node"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "actix-rt",
@@ -3571,7 +3571,7 @@ dependencies = [
 
 [[package]]
 name = "node-runtime"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "assert_matches",
  "base64 0.21.7",
@@ -4821,7 +4821,7 @@ dependencies = [
 
 [[package]]
 name = "restaked"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "clap",
  "framework",
@@ -4972,7 +4972,7 @@ dependencies = [
 
 [[package]]
 name = "runtime-params-estimator"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "borsh 1.3.1",
@@ -5013,7 +5013,7 @@ dependencies = [
 
 [[package]]
 name = "runtime-tester"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "bolero",
  "cpu-time",
@@ -5039,7 +5039,7 @@ dependencies = [
 
 [[package]]
 name = "runtime-tester-fuzz"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "libfuzzer-sys",
  "runtime-tester",
@@ -5681,7 +5681,7 @@ dependencies = [
 
 [[package]]
 name = "speedy_sync"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "borsh 1.3.1",
  "clap",
@@ -5726,7 +5726,7 @@ checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
 
 [[package]]
 name = "state-viewer"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "anyhow",
@@ -5775,7 +5775,7 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 
 [[package]]
 name = "storage-usage-delta-calculator"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "node-runtime",
@@ -5791,7 +5791,7 @@ dependencies = [
 
 [[package]]
 name = "store-validator"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "clap",
  "framework",
@@ -6008,7 +6008,7 @@ dependencies = [
 
 [[package]]
 name = "testlib"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "node-runtime",
  "once_cell",
@@ -6022,7 +6022,7 @@ dependencies = [
 
 [[package]]
 name = "themis"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "cargo_metadata",
@@ -6582,7 +6582,7 @@ dependencies = [
 
 [[package]]
 name = "unc-actix-test-utils"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix-rt",
  "futures",
@@ -6592,7 +6592,7 @@ dependencies = [
 
 [[package]]
 name = "unc-amend-genesis"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "borsh 1.3.1",
@@ -6617,7 +6617,7 @@ dependencies = [
 
 [[package]]
 name = "unc-async"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "derive-enum-from-into",
@@ -6635,7 +6635,7 @@ dependencies = [
 
 [[package]]
 name = "unc-cache"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "bencher",
  "lru",
@@ -6644,7 +6644,7 @@ dependencies = [
 
 [[package]]
 name = "unc-chain"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "assert_matches",
@@ -6684,7 +6684,7 @@ dependencies = [
 
 [[package]]
 name = "unc-chain-configs"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "bytesize",
@@ -6706,7 +6706,7 @@ dependencies = [
 
 [[package]]
 name = "unc-chain-primitives"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "chrono",
  "thiserror",
@@ -6717,7 +6717,7 @@ dependencies = [
 
 [[package]]
 name = "unc-chunks"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "assert_matches",
@@ -6751,7 +6751,7 @@ dependencies = [
 
 [[package]]
 name = "unc-chunks-primitives"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "unc-chain-primitives",
  "unc-primitives",
@@ -6759,7 +6759,7 @@ dependencies = [
 
 [[package]]
 name = "unc-client"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "actix-rt",
@@ -6814,7 +6814,7 @@ dependencies = [
 
 [[package]]
 name = "unc-client-primitives"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "chrono",
@@ -6833,7 +6833,7 @@ dependencies = [
 
 [[package]]
 name = "unc-config-utils"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "json_comments",
@@ -6843,7 +6843,7 @@ dependencies = [
 
 [[package]]
 name = "unc-crypto"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "blake2",
  "bolero",
@@ -6874,7 +6874,7 @@ dependencies = [
 
 [[package]]
 name = "unc-database-tool"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "borsh 1.3.1",
@@ -6895,7 +6895,7 @@ dependencies = [
 
 [[package]]
 name = "unc-dyn-configs"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "once_cell",
@@ -6912,7 +6912,7 @@ dependencies = [
 
 [[package]]
 name = "unc-epoch-manager"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "borsh 1.3.1",
  "chrono",
@@ -6937,7 +6937,7 @@ dependencies = [
 
 [[package]]
 name = "unc-epoch-sync-tool"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -6952,7 +6952,7 @@ dependencies = [
 
 [[package]]
 name = "unc-flat-storage"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "borsh 1.3.1",
@@ -6970,14 +6970,14 @@ dependencies = [
 
 [[package]]
 name = "unc-fmt"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "unc-primitives-core",
 ]
 
 [[package]]
 name = "unc-fork-network"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "anyhow",
@@ -7003,7 +7003,7 @@ dependencies = [
 
 [[package]]
 name = "unc-indexer"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "anyhow",
@@ -7030,7 +7030,7 @@ dependencies = [
 
 [[package]]
 name = "unc-indexer-primitives"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "serde",
  "serde_json",
@@ -7039,7 +7039,7 @@ dependencies = [
 
 [[package]]
 name = "unc-jsonrpc"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "actix-cors",
@@ -7069,7 +7069,7 @@ dependencies = [
 
 [[package]]
 name = "unc-jsonrpc-adversarial-primitives"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "serde",
  "unc-network",
@@ -7078,7 +7078,7 @@ dependencies = [
 
 [[package]]
 name = "unc-jsonrpc-client"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix-http",
  "awc",
@@ -7091,7 +7091,7 @@ dependencies = [
 
 [[package]]
 name = "unc-jsonrpc-fuzz"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "arbitrary",
@@ -7109,7 +7109,7 @@ dependencies = [
 
 [[package]]
 name = "unc-jsonrpc-primitives"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "arbitrary",
  "serde",
@@ -7124,7 +7124,7 @@ dependencies = [
 
 [[package]]
 name = "unc-jsonrpc-tests"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "awc",
@@ -7147,7 +7147,7 @@ dependencies = [
 
 [[package]]
 name = "unc-mainnet-res"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "serde_json",
  "unc-account-id",
@@ -7157,7 +7157,7 @@ dependencies = [
 
 [[package]]
 name = "unc-mirror"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "anyhow",
@@ -7199,7 +7199,7 @@ dependencies = [
 
 [[package]]
 name = "unc-network"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "anyhow",
@@ -7255,7 +7255,7 @@ dependencies = [
 
 [[package]]
 name = "unc-o11y"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "base64 0.21.7",
@@ -7284,7 +7284,7 @@ dependencies = [
 
 [[package]]
 name = "unc-parameters"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "assert_matches",
  "borsh 1.3.1",
@@ -7303,7 +7303,7 @@ dependencies = [
 
 [[package]]
 name = "unc-performance-metrics"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "bitflags 1.3.2",
@@ -7320,7 +7320,7 @@ dependencies = [
 
 [[package]]
 name = "unc-performance-metrics-macros"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "quote",
  "syn 2.0.52",
@@ -7328,7 +7328,7 @@ dependencies = [
 
 [[package]]
 name = "unc-ping"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix-web",
  "anyhow",
@@ -7347,7 +7347,7 @@ dependencies = [
 
 [[package]]
 name = "unc-pool"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "borsh 1.3.1",
  "once_cell",
@@ -7359,7 +7359,7 @@ dependencies = [
 
 [[package]]
 name = "unc-primitives"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "arbitrary",
  "assert_matches",
@@ -7402,7 +7402,7 @@ dependencies = [
 
 [[package]]
 name = "unc-primitives-core"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "arbitrary",
  "base64 0.21.7",
@@ -7424,7 +7424,7 @@ dependencies = [
 
 [[package]]
 name = "unc-rpc-error-core"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "quote",
  "serde",
@@ -7434,7 +7434,7 @@ dependencies = [
 
 [[package]]
 name = "unc-rpc-error-macro"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "fs2",
  "serde",
@@ -7445,11 +7445,11 @@ dependencies = [
 
 [[package]]
 name = "unc-stable-hasher"
-version = "0.7.1"
+version = "0.0.0"
 
 [[package]]
 name = "unc-state-parts"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "chrono",
@@ -7468,7 +7468,7 @@ dependencies = [
 
 [[package]]
 name = "unc-state-parts-dump-check"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "actix-web",
@@ -7491,11 +7491,11 @@ dependencies = [
 
 [[package]]
 name = "unc-stdx"
-version = "0.7.1"
+version = "0.0.0"
 
 [[package]]
 name = "unc-store"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "actix-rt",
@@ -7541,7 +7541,7 @@ dependencies = [
 
 [[package]]
 name = "unc-telemetry"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "awc",
@@ -7559,7 +7559,7 @@ dependencies = [
 
 [[package]]
 name = "unc-test-contracts"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "arbitrary",
  "once_cell",
@@ -7571,7 +7571,7 @@ dependencies = [
 
 [[package]]
 name = "unc-undo-block"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "chrono",
@@ -7587,7 +7587,7 @@ dependencies = [
 
 [[package]]
 name = "unc-vm-compiler"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "enumset",
  "finite-wasm",
@@ -7604,7 +7604,7 @@ dependencies = [
 
 [[package]]
 name = "unc-vm-compiler-singlepass"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "dynasm 2.0.0",
  "dynasmrt 2.0.0",
@@ -7626,7 +7626,7 @@ dependencies = [
 
 [[package]]
 name = "unc-vm-compiler-test-derive"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "pretty_assertions",
  "proc-macro2",
@@ -7637,7 +7637,7 @@ dependencies = [
 
 [[package]]
 name = "unc-vm-engine"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "backtrace",
  "cfg-if 1.0.0",
@@ -7661,7 +7661,7 @@ dependencies = [
 
 [[package]]
 name = "unc-vm-runner"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "arbitrary",
@@ -7705,14 +7705,14 @@ dependencies = [
  "unc-vm-vm",
  "wasm-encoder 0.27.0",
  "wasm-smith",
- "wasmer-compiler-singlepass-unc",
- "wasmer-compiler-unc",
- "wasmer-engine-unc",
- "wasmer-engine-universal-unc",
- "wasmer-runtime-core-unc1",
- "wasmer-runtime-unc1",
- "wasmer-types-unc",
- "wasmer-vm-unc",
+ "wasmer-compiler-near",
+ "wasmer-compiler-singlepass-near",
+ "wasmer-engine-near",
+ "wasmer-engine-universal-near",
+ "wasmer-runtime-core-near",
+ "wasmer-runtime-near",
+ "wasmer-types-near",
+ "wasmer-vm-near",
  "wasmparser 0.99.0",
  "wasmprinter",
  "wasmtime",
@@ -7722,7 +7722,7 @@ dependencies = [
 
 [[package]]
 name = "unc-vm-runner-fuzz"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "arbitrary",
  "libfuzzer-sys",
@@ -7736,7 +7736,7 @@ dependencies = [
 
 [[package]]
 name = "unc-vm-test-api"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "cfg-if 1.0.0",
@@ -7765,7 +7765,7 @@ dependencies = [
 
 [[package]]
 name = "unc-vm-test-generator"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "target-lexicon 0.12.14",
@@ -7773,7 +7773,7 @@ dependencies = [
 
 [[package]]
 name = "unc-vm-types"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "bolero",
  "indexmap 1.9.3",
@@ -7784,7 +7784,7 @@ dependencies = [
 
 [[package]]
 name = "unc-vm-vm"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "backtrace",
  "cc",
@@ -7805,7 +7805,7 @@ dependencies = [
 
 [[package]]
 name = "unc-vm-wast"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "tempfile",
@@ -7816,7 +7816,7 @@ dependencies = [
 
 [[package]]
 name = "unc-wallet-contract"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "unc-primitives-core",
@@ -7825,7 +7825,7 @@ dependencies = [
 
 [[package]]
 name = "uncd"
-version = "0.7.1"
+version = "0.0.0"
 dependencies = [
  "actix",
  "anyhow",
@@ -8124,10 +8124,26 @@ dependencies = [
 ]
 
 [[package]]
-name = "wasmer-compiler-singlepass-unc"
+name = "wasmer-compiler-near"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4e05c76a9b9efad7c6ba34d5ce658e40f004a078ff8401dfce6a1a35e081d840"
+checksum = "46fdae7245128f284476e6db9653ef0a15b011975091bcd7f9d7303132409662"
+dependencies = [
+ "enumset",
+ "rkyv",
+ "smallvec",
+ "target-lexicon 0.12.14",
+ "thiserror",
+ "wasmer-types-near",
+ "wasmer-vm-near",
+ "wasmparser 0.78.2",
+]
+
+[[package]]
+name = "wasmer-compiler-singlepass-near"
+version = "2.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ac4af0e438015585eb27b2c6f6869c58c540bfe27408b686b1778470bf301050"
 dependencies = [
  "byteorder",
  "dynasm 1.2.3",
@@ -8137,32 +8153,16 @@ dependencies = [
  "more-asserts",
  "rayon",
  "smallvec",
- "wasmer-compiler-unc",
- "wasmer-types-unc",
- "wasmer-vm-unc",
+ "wasmer-compiler-near",
+ "wasmer-types-near",
+ "wasmer-vm-near",
 ]
 
 [[package]]
-name = "wasmer-compiler-unc"
+name = "wasmer-engine-near"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec54ccd0861cb5cb2787c603a803e5b6c0fa39a7ac2cd6139a1c6625d1812166"
-dependencies = [
- "enumset",
- "rkyv",
- "smallvec",
- "target-lexicon 0.12.14",
- "thiserror",
- "wasmer-types-unc",
- "wasmer-vm-unc",
- "wasmparser 0.78.2",
-]
-
-[[package]]
-name = "wasmer-engine-unc"
-version = "2.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "55135ec4a06d10c3f31bcef71d2b03973863ba6aaefa6e2d4c628a0636aeea87"
+checksum = "4048411cabb2c94c7d8d11d9d0282cc6b15308b61ebc1e122c40e89865ebb5c5"
 dependencies = [
  "backtrace",
  "enumset",
@@ -8172,16 +8172,16 @@ dependencies = [
  "rustc-demangle",
  "target-lexicon 0.12.14",
  "thiserror",
- "wasmer-compiler-unc",
- "wasmer-types-unc",
- "wasmer-vm-unc",
+ "wasmer-compiler-near",
+ "wasmer-types-near",
+ "wasmer-vm-near",
 ]
 
 [[package]]
-name = "wasmer-engine-universal-unc"
+name = "wasmer-engine-universal-near"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "64fceb42551eed759d1f4038f48ca8281262baaf460c21d97e8b5a1c5a2b44fe"
+checksum = "c5f31c3d2850ac7957406d3c9581d9435ea8126a26478709fa7e931b6f562b4d"
 dependencies = [
  "cfg-if 1.0.0",
  "enumset",
@@ -8189,18 +8189,18 @@ dependencies = [
  "region",
  "rkyv",
  "thiserror",
- "wasmer-compiler-unc",
- "wasmer-engine-unc",
- "wasmer-types-unc",
- "wasmer-vm-unc",
+ "wasmer-compiler-near",
+ "wasmer-engine-near",
+ "wasmer-types-near",
+ "wasmer-vm-near",
  "winapi",
 ]
 
 [[package]]
-name = "wasmer-runtime-core-unc"
-version = "0.18.2"
+name = "wasmer-runtime-core-near"
+version = "0.18.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "382557bed90c0f6a3298ce03d4b7d71c9b7bb8e5f46665ba36799a5009c87cf0"
+checksum = "5a3fac37da3c625e98708c5dd92d3f642aaf700fd077168d3d0fff277ec6a165"
 dependencies = [
  "bincode",
  "blake3",
@@ -8227,54 +8227,24 @@ dependencies = [
 ]
 
 [[package]]
-name = "wasmer-runtime-core-unc1"
-version = "0.18.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f26ee840507b5a8d2e9da17e6402a4d3b79a13e4e32339e80a1d61baab54df87"
-dependencies = [
- "bincode",
- "blake3",
- "borsh 0.9.3",
- "cc",
- "digest 0.8.1",
- "errno 0.2.8",
- "hex",
- "indexmap 1.9.3",
- "lazy_static",
- "libc",
- "nix 0.15.0",
- "page_size",
- "parking_lot 0.10.2",
- "rustc_version 0.2.3",
- "serde",
- "serde-bench",
- "serde_bytes",
- "serde_derive",
- "smallvec",
- "target-lexicon 0.10.0",
- "wasmparser 0.51.4",
- "winapi",
-]
-
-[[package]]
-name = "wasmer-runtime-unc1"
+name = "wasmer-runtime-near"
 version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e0db024fdeaca3a8fd4cdbe4e93454441a634df1df29edf1b85f207f7271531d"
+checksum = "158e6fff11e5e1ef805af50637374d5bd43d92017beafa18992cdf7f3f7ae3e4"
 dependencies = [
  "lazy_static",
  "memmap",
  "serde",
  "serde_derive",
- "wasmer-runtime-core-unc",
- "wasmer-singlepass-backend-unc",
+ "wasmer-runtime-core-near",
+ "wasmer-singlepass-backend-near",
 ]
 
 [[package]]
-name = "wasmer-singlepass-backend-unc"
-version = "0.18.0"
+name = "wasmer-singlepass-backend-near"
+version = "0.18.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "39455ded10e6001baed992ceaa5bc845496a69e35c11a5ffcd70f3d677aaf858"
+checksum = "5f6edd0ba6c0bcf9b279186d4dbe81649dda3e5ef38f586865943de4dcd653f8"
 dependencies = [
  "bincode",
  "borsh 0.9.3",
@@ -8287,14 +8257,14 @@ dependencies = [
  "serde",
  "serde_derive",
  "smallvec",
- "wasmer-runtime-core-unc",
+ "wasmer-runtime-core-near",
 ]
 
 [[package]]
-name = "wasmer-types-unc"
+name = "wasmer-types-near"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e6f294e74463ee366e5fc24edbca40e85f7fce5804fe578a07767dd10e86a612"
+checksum = "1ba154adffb0fbd33f5dabd3788a1744d846b43e6e090d44269c7ee8fa5743e4"
 dependencies = [
  "indexmap 1.9.3",
  "rkyv",
@@ -8302,10 +8272,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "wasmer-vm-unc"
+name = "wasmer-vm-near"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "152e239026649d21d21efbac3fe3a8b9296b17dc7b04e288e4aa5c7ffb224a23"
+checksum = "70a5585596f6e9915d606de944aece51626736fb1191aefb5b2ef108c6f7604a"
 dependencies = [
  "backtrace",
  "cc",
@@ -8317,7 +8287,7 @@ dependencies = [
  "region",
  "rkyv",
  "thiserror",
- "wasmer-types-unc",
+ "wasmer-types-near",
  "winapi",
 ]
 
