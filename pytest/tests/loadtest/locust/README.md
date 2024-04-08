@@ -28,12 +28,12 @@ For a local test setup, this works just fine.
 KEY=~/.unc/localnet/node0/validator_key.json
 ```
 
-For a quick demo, you can also run a localnet using [nearup](https://github.com/unc/nearup).
+For a quick demo, you can also run a localnet using [uncd](https://github.com/unc/uncd).
 ```sh
-nearup run localnet --binary-path ../framework/target/release/ --num-nodes 4 --num-shards 4 --override
+uncd run localnet --binary-path ../framework/target/release/ --num-nodes 4 --num-shards 4 --override
 ```
 
-Then to actually run it, this is the command. (Update ports and IP according to your localnet, nearup will print it.)
+Then to actually run it, this is the command. (Update ports and IP according to your localnet, uncd will print it.)
 ```sh
 cd pytest/tests/loadtest/locust/
 locust -H 127.0.0.1:3030 \

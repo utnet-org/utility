@@ -82,14 +82,14 @@ def prompt_setup_flags(args):
         args.genesis_protocol_version = int(sys.stdin.readline().strip())
 
 
-def start_neard_runner(node):
-    cmd_utils.run_in_background(node, f'/home/ubuntu/uncd-runner/venv/bin/python /home/ubuntu/uncd-runner/neard_runner.py ' \
+def start_uncd_runner(node):
+    cmd_utils.run_in_background(node, f'/home/ubuntu/uncd-runner/venv/bin/python /home/ubuntu/uncd-runner/uncd_runner.py ' \
         '--home /home/ubuntu/uncd-runner --uncd-home /home/ubuntu/.unc ' \
         '--uncd-logs /home/ubuntu/uncd-logs --port 3000', 'uncd-runner.txt')
 
 
-def upload_neard_runner(node):
-    node.machine.upload('tests/mocknet/helpers/neard_runner.py',
+def upload_uncd_runner(node):
+    node.machine.upload('tests/mocknet/helpers/uncd_runner.py',
                         '/home/ubuntu/uncd-runner',
                         switch_user='ubuntu')
     node.machine.upload('tests/mocknet/helpers/requirements.txt',
@@ -97,8 +97,8 @@ def upload_neard_runner(node):
                         switch_user='ubuntu')
 
 
-def init_neard_runner(node, config, remove_home_dir=False):
-    stop_neard_runner(node)
+def init_uncd_runner(node, config, remove_home_dir=False):
+    stop_uncd_runner(node)
     cmd_utils.init_node(node)
     if remove_home_dir:
         cmd_utils.run_cmd(
@@ -107,48 +107,48 @@ def init_neard_runner(node, config, remove_home_dir=False):
         )
     else:
         cmd_utils.run_cmd(node, 'mkdir -p /home/ubuntu/uncd-runner')
-    upload_neard_runner(node)
+    upload_uncd_runner(node)
     mocknet.upload_json(node, '/home/ubuntu/uncd-runner/config.json', config)
     cmd = 'cd /home/ubuntu/uncd-runner && python3 -m virtualenv venv -p $(which python3)' \
     ' && ./venv/bin/pip install -r requirements.txt'
     cmd_utils.run_cmd(node, cmd)
-    start_neard_runner(node)
+    start_uncd_runner(node)
 
 
-def stop_neard_runner(node):
+def stop_uncd_runner(node):
     # it's probably fine for now, but this is very heavy handed/not precise
     node.machine.run('kill $(ps -C python -o pid=)')
 
 
 def prompt_init_flags(args):
-    if args.neard_binary_url is None:
+    if args.uncd_binary_url is None:
         print('uncd binary URL?: ')
-        args.neard_binary_url = sys.stdin.readline().strip()
-        assert len(args.neard_binary_url) > 0
+        args.uncd_binary_url = sys.stdin.readline().strip()
+        assert len(args.uncd_binary_url) > 0
 
-    if args.neard_upgrade_binary_url is None:
+    if args.uncd_upgrade_binary_url is None:
         print(
             'add a second uncd binary URL to upgrade to mid-test? enter nothing here to skip: '
         )
         url = sys.stdin.readline().strip()
         if len(url) > 0:
-            args.neard_upgrade_binary_url = url
+            args.uncd_upgrade_binary_url = url
 
 
-def init_neard_runners(args, traffic_generator, nodes, remove_home_dir=False):
+def init_uncd_runners(args, traffic_generator, nodes, remove_home_dir=False):
     prompt_init_flags(args)
-    if args.neard_upgrade_binary_url is None:
+    if args.uncd_upgrade_binary_url is None:
         configs = [{
             "is_traffic_generator": False,
             "binaries": [{
-                "url": args.neard_binary_url,
+                "url": args.uncd_binary_url,
                 "epoch_height": 0
             }]
         }] * len(nodes)
         traffic_generator_config = {
             "is_traffic_generator": True,
             "binaries": [{
-                "url": args.neard_binary_url,
+                "url": args.uncd_binary_url,
                 "epoch_height": 0
             }]
         }
@@ -162,10 +162,10 @@ def init_neard_runners(args, traffic_generator, nodes, remove_home_dir=False):
                 "is_traffic_generator":
                     False,
                 "binaries": [{
-                    "url": args.neard_binary_url,
+                    "url": args.uncd_binary_url,
                     "epoch_height": 0
                 }, {
-                    "url": args.neard_upgrade_binary_url,
+                    "url": args.uncd_upgrade_binary_url,
                     "epoch_height": random.randint(1, 4)
                 }]
             })
@@ -173,19 +173,19 @@ def init_neard_runners(args, traffic_generator, nodes, remove_home_dir=False):
             "is_traffic_generator":
                 True,
             "binaries": [{
-                "url": args.neard_upgrade_binary_url,
+                "url": args.uncd_upgrade_binary_url,
                 "epoch_height": 0
             }]
         }
 
-    init_neard_runner(traffic_generator, traffic_generator_config,
+    init_uncd_runner(traffic_generator, traffic_generator_config,
                       remove_home_dir)
-    pmap(lambda x: init_neard_runner(x[0], x[1], remove_home_dir),
+    pmap(lambda x: init_uncd_runner(x[0], x[1], remove_home_dir),
          zip(nodes, configs))
 
 
 def init_cmd(args, traffic_generator, nodes):
-    init_neard_runners(args, traffic_generator, nodes, remove_home_dir=False)
+    init_uncd_runners(args, traffic_generator, nodes, remove_home_dir=False)
 
 
 def hard_reset_cmd(args, traffic_generator, nodes):
@@ -198,17 +198,17 @@ def hard_reset_cmd(args, traffic_generator, nodes):
     if sys.stdin.readline().strip() != 'yes':
         return
     all_nodes = nodes + [traffic_generator]
-    pmap(stop_neard_runner, all_nodes)
+    pmap(stop_uncd_runner, all_nodes)
     mocknet.stop_nodes(all_nodes)
-    init_neard_runners(args, traffic_generator, nodes, remove_home_dir=True)
+    init_uncd_runners(args, traffic_generator, nodes, remove_home_dir=True)
 
 
 def restart_cmd(args, traffic_generator, nodes):
     all_nodes = nodes + [traffic_generator]
-    pmap(stop_neard_runner, all_nodes)
+    pmap(stop_uncd_runner, all_nodes)
     if args.upload_program:
-        pmap(upload_neard_runner, all_nodes)
-    pmap(start_neard_runner, all_nodes)
+        pmap(upload_uncd_runner, all_nodes)
+    pmap(start_uncd_runner, all_nodes)
 
 
 # returns boot nodes and validators we want for the new test network
@@ -257,7 +257,7 @@ def new_test(args, traffic_generator, nodes):
     all_nodes = nodes + [traffic_generator]
 
     logger.info(f'resetting/initializing home dirs')
-    test_keys = pmap(neard_runner_new_test, all_nodes)
+    test_keys = pmap(uncd_runner_new_test, all_nodes)
 
     validators, boot_nodes = get_network_nodes(
         zip([n.machine.ip for n in all_nodes], test_keys), args.num_validators)
@@ -267,14 +267,14 @@ Then running uncd amend-genesis on all nodes, and starting uncd to compute genes
 state roots. This will take a few hours. Run `status` to check if the nodes are \
 ready. After they're ready, you can run `start-traffic`""".format(validators))
     pmap(
-        lambda node: neard_runner_network_init(
+        lambda node: uncd_runner_network_init(
             node, validators, boot_nodes, args.epoch_length, args.num_seats,
             args.genesis_protocol_version), all_nodes)
 
 
 def status_cmd(args, traffic_generator, nodes):
     all_nodes = nodes + [traffic_generator]
-    statuses = pmap(neard_runner_ready, all_nodes)
+    statuses = pmap(uncd_runner_ready, all_nodes)
     num_ready = 0
     not_ready = []
     for ready, node in zip(statuses, all_nodes):
@@ -297,21 +297,21 @@ def reset_cmd(args, traffic_generator, nodes):
         if sys.stdin.readline().strip() != 'yes':
             sys.exit()
     all_nodes = nodes + [traffic_generator]
-    pmap(neard_runner_reset, all_nodes)
+    pmap(uncd_runner_reset, all_nodes)
     logger.info(
         'Data dir reset in progress. Run the `status` command to see when this is finished. Until it is finished, uncd runners may not respond to HTTP requests.'
     )
 
 
 def stop_nodes_cmd(args, traffic_generator, nodes):
-    pmap(neard_runner_stop, nodes + [traffic_generator])
+    pmap(uncd_runner_stop, nodes + [traffic_generator])
 
 
 def stop_traffic_cmd(args, traffic_generator, nodes):
-    neard_runner_stop(traffic_generator)
+    uncd_runner_stop(traffic_generator)
 
 
-def neard_runner_jsonrpc(node, method, params=[]):
+def uncd_runner_jsonrpc(node, method, params=[]):
     body = {
         'method': method,
         'params': params,
@@ -333,21 +333,21 @@ def neard_runner_jsonrpc(node, method, params=[]):
     return response['result']
 
 
-def neard_runner_start(node):
-    neard_runner_jsonrpc(node, 'start')
+def uncd_runner_start(node):
+    uncd_runner_jsonrpc(node, 'start')
 
 
-def neard_runner_stop(node):
-    neard_runner_jsonrpc(node, 'stop')
+def uncd_runner_stop(node):
+    uncd_runner_jsonrpc(node, 'stop')
 
 
-def neard_runner_new_test(node):
-    return neard_runner_jsonrpc(node, 'new_test')
+def uncd_runner_new_test(node):
+    return uncd_runner_jsonrpc(node, 'new_test')
 
 
-def neard_runner_network_init(node, validators, boot_nodes, epoch_length,
+def uncd_runner_network_init(node, validators, boot_nodes, epoch_length,
                               num_seats, protocol_version):
-    return neard_runner_jsonrpc(node,
+    return uncd_runner_jsonrpc(node,
                                 'network_init',
                                 params={
                                     'validators': validators,
@@ -358,8 +358,8 @@ def neard_runner_network_init(node, validators, boot_nodes, epoch_length,
                                 })
 
 
-def neard_update_config(node, key_value):
-    return neard_runner_jsonrpc(
+def uncd_update_config(node, key_value):
+    return uncd_runner_jsonrpc(
         node,
         'update_config',
         params={
@@ -371,7 +371,7 @@ def neard_update_config(node, key_value):
 def update_config_cmd(args, traffic_generator, nodes):
     nodes = nodes + [traffic_generator]
     results = pmap(
-        lambda node: neard_update_config(
+        lambda node: uncd_update_config(
             node,
             args.set,
         ),
@@ -382,48 +382,48 @@ def update_config_cmd(args, traffic_generator, nodes):
         return
 
 
-def neard_runner_ready(node):
-    return neard_runner_jsonrpc(node, 'ready')
+def uncd_runner_ready(node):
+    return uncd_runner_jsonrpc(node, 'ready')
 
 
-def neard_runner_reset(node):
-    return neard_runner_jsonrpc(node, 'reset')
+def uncd_runner_reset(node):
+    return uncd_runner_jsonrpc(node, 'reset')
 
 
 def start_nodes_cmd(args, traffic_generator, nodes):
-    if not all(pmap(neard_runner_ready, nodes)):
+    if not all(pmap(uncd_runner_ready, nodes)):
         logger.warn(
             'not all nodes are ready to start yet. Run the `status` command to check their statuses'
         )
         return
-    pmap(neard_runner_start, nodes)
+    pmap(uncd_runner_start, nodes)
     pmap(wait_node_up, nodes)
 
 
 def start_traffic_cmd(args, traffic_generator, nodes):
-    if not all(pmap(neard_runner_ready, nodes + [traffic_generator])):
+    if not all(pmap(uncd_runner_ready, nodes + [traffic_generator])):
         logger.warn(
             'not all nodes are ready to start yet. Run the `status` command to check their statuses'
         )
         return
-    pmap(neard_runner_start, nodes)
+    pmap(uncd_runner_start, nodes)
     logger.info("waiting for validators to be up")
     pmap(wait_node_up, nodes)
     logger.info(
         "waiting a bit after validators started before starting traffic")
     time.sleep(10)
-    neard_runner_start(traffic_generator)
+    uncd_runner_start(traffic_generator)
     logger.info(
         f'test running. to check the traffic sent, try running "curl http://{traffic_generator.machine.ip}:3030/metrics | grep mirror"'
     )
 
 
-def neard_runner_update_binaries(node):
-    neard_runner_jsonrpc(node, 'update_binaries')
+def uncd_runner_update_binaries(node):
+    uncd_runner_jsonrpc(node, 'update_binaries')
 
 
 def update_binaries_cmd(args, traffic_generator, nodes):
-    pmap(neard_runner_update_binaries, nodes + [traffic_generator])
+    pmap(uncd_runner_update_binaries, nodes + [traffic_generator])
 
 
 if __name__ == '__main__':

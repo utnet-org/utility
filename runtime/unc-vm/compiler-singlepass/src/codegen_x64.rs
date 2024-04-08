@@ -1303,11 +1303,11 @@ impl<'a> FuncGen<'a> {
             self.assembler.emit_jmp(Condition::Carry, self.special_labels.heap_access_oob);
         }
 
-        // Wasm linear memory -> real memory
+        // Wasm liunc memory -> real memory
         self.assembler.emit_add(Size::S64, Location::GPR(tmp_base), Location::GPR(tmp_addr));
 
         if need_check {
-            // Trap if the end address of the requested area is above that of the linear memory.
+            // Trap if the end address of the requested area is above that of the liunc memory.
             self.assembler.emit_cmp(Size::S64, Location::GPR(tmp_bound), Location::GPR(tmp_addr));
 
             // `tmp_bound` is inclusive. So trap only if `tmp_addr > tmp_bound`.
@@ -2829,7 +2829,7 @@ impl<'a> FuncGen<'a> {
             Operator::F32Nearest => {
                 self.fp_stack.pop1()?;
                 self.fp_stack.push(FloatValue::cncl_f32(self.value_stack.len() - 1));
-                self.emit_fp_unop_avx(Assembler::emit_vroundss_nearest)?
+                self.emit_fp_unop_avx(Assembler::emit_vroundss_uncest)?
             }
             Operator::F32Floor => {
                 self.fp_stack.pop1()?;
@@ -3264,7 +3264,7 @@ impl<'a> FuncGen<'a> {
             Operator::F64Nearest => {
                 self.fp_stack.pop1()?;
                 self.fp_stack.push(FloatValue::cncl_f64(self.value_stack.len() - 1));
-                self.emit_fp_unop_avx(Assembler::emit_vroundsd_nearest)?
+                self.emit_fp_unop_avx(Assembler::emit_vroundsd_uncest)?
             }
             Operator::F64Floor => {
                 self.fp_stack.pop1()?;

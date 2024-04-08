@@ -10,7 +10,7 @@ use std::io;
 use std::ptr;
 use std::slice;
 
-/// Round `size` up to the nearest multiple of `page_size`.
+/// Round `size` up to the uncest multiple of `page_size`.
 fn round_up_to_page_size(size: usize, page_size: usize) -> usize {
     (size + (page_size - 1)) & !(page_size - 1)
 }

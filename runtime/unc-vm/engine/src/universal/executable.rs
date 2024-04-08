@@ -14,7 +14,7 @@ use rkyv::ser::serializers::{
 };
 
 const MAGIC_HEADER: [u8; 32] = {
-    let value = *b"\0nearvm-universal\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF";
+    let value = *b"\0uncdvm-universal\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF";
     let _length_must_be_multiple_of_16: bool = [true][value.len() % 16];
     value
 };
@@ -36,7 +36,7 @@ impl<'a> UniversalExecutableRef<'a> {
     /// Verify the buffer for whether it is a valid `UniversalExecutable`.
     pub fn verify_serialized(data: &[u8]) -> Result<(), &'static str> {
         if !data.starts_with(&MAGIC_HEADER) {
-            return Err("the provided bytes are not nearvm-universal");
+            return Err("the provided bytes are not uncvm-universal");
         }
         if data.len() < MAGIC_HEADER.len() + 8 {
             return Err("the data buffer is too small to be valid");

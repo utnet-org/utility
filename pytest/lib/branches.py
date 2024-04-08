@@ -63,7 +63,7 @@ class Executables(typing.NamedTuple):
     def node_config(self) -> typing.Dict[str, typing.Any]:
         return {
             'local': True,
-            'neard_root': self.root,
+            'uncd_root': self.root,
             'binary_name': self.uncd.name
         }
 
@@ -103,12 +103,12 @@ def escaped(branch):
 
 def _compile_current(branch: str) -> Executables:
     """Compile current branch."""
-    prebuilt_neard = os.environ.get("CURRENT_UNCD")
-    if prebuilt_neard is not None:
+    prebuilt_uncd = os.environ.get("CURRENT_UNCD")
+    if prebuilt_uncd is not None:
         logger.info(
-            f'Using `CURRENT_UNCD={prebuilt_neard}` uncd for branch {branch}')
+            f'Using `CURRENT_UNCD={prebuilt_uncd}` uncd for branch {branch}')
         try:
-            path = pathlib.Path(prebuilt_neard).resolve()
+            path = pathlib.Path(prebuilt_uncd).resolve()
             return Executables(path.parent, path)
         except OSError as e:
             logger.exception('Could not use `CURRENT_UNCD`, will build…')

@@ -70,7 +70,7 @@ def main(argv):
     assert all_node_pks
     assert node_ips
 
-    mocknet.neard_amend_genesis(
+    mocknet.uncd_amend_genesis(
         uncd=uncd,
         validator_keys=validator_keys,
         genesis_filename_in=genesis_filename_in,

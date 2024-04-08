@@ -159,7 +159,7 @@ fn is_valid_kind_archive(kind: DbKind, archive: bool) -> bool {
 ///
 /// ```ignore
 /// let store = NodeStorage::opener(&unc_config.config.store)
-///     .home(neard_home_dir)
+///     .home(uncd_home_dir)
 ///     .open();
 /// ```
 pub struct StoreOpener<'a> {

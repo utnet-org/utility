@@ -54,7 +54,7 @@ def save_genesis_with_new_key_pair(genesis_path, key_pair, output_path):
 def prompt_to_launch_localnet(hint_dir):
     print('New genesis ready.')
     print('Please launch your localnet node now.')
-    print('Hint: nearup run localnet --home %s --num-nodes 1' % hint_dir)
+    print('Hint: uncd run localnet --home %s --num-nodes 1' % hint_dir)
 
 
 def convert_snack_case_to_camel_case(s):

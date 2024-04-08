@@ -500,7 +500,7 @@ def compress_and_upload(nodes, src_filename, dst_filename):
          nodes)
 
 
-def redownload_neard(nodes, binary_url):
+def redownload_uncd(nodes, binary_url):
     pmap(
         lambda node: node.machine.
         run('sudo -u ubuntu -i',
@@ -510,7 +510,7 @@ def redownload_neard(nodes, binary_url):
 
 # Check /home/ubuntu/uncd.upgrade to see whether the amend-genesis command is
 # available. Returns the path to the uncd binary or throws an exception.
-def neard_amend_genesis_path(node):
+def uncd_amend_genesis_path(node):
     r = node.machine.run(
         '/home/ubuntu/uncd.upgrade amend-genesis --help',
         stdout=subprocess.DEVNULL,
@@ -548,7 +548,7 @@ def create_and_upload_genesis(
     config_filename_in = f'/home/ubuntu/.unc/{chain_id_in}-genesis/config.json'
     stamp = time.strftime('%Y%m%d-%H%M%S', time.gmtime())
     done_filename = f'/home/ubuntu/genesis_update_done_{stamp}.txt'
-    uncd = neard_amend_genesis_path(validator_nodes[1])
+    uncd = uncd_amend_genesis_path(validator_nodes[1])
     pmap(
         lambda node: start_genesis_updater(
             node=node,
@@ -718,7 +718,7 @@ def extra_genesis_records(validator_keys, rpc_node_names, node_pks,
     return records, validators
 
 
-def neard_amend_genesis(uncd, validator_keys, genesis_filename_in,
+def uncd_amend_genesis(uncd, validator_keys, genesis_filename_in,
                         records_filename_in, out_dir, rpc_node_names, chain_id,
                         epoch_length, node_pks, increasing_pledges, num_seats,
                         single_shard):
@@ -1080,19 +1080,19 @@ def clear_data(nodes):
     pmap(lambda node: node.machine.run('rm -rf /home/ubuntu/.unc/data'), nodes)
 
 
-def neard_start_script(node, upgrade_schedule=None, epoch_height=None):
+def uncd_start_script(node, upgrade_schedule=None, epoch_height=None):
     if upgrade_schedule and upgrade_schedule.get(node.instance_name,
                                                  0) <= epoch_height:
-        neard_binary = '/home/ubuntu/uncd.upgrade'
+        uncd_binary = '/home/ubuntu/uncd.upgrade'
     else:
-        neard_binary = '/home/ubuntu/uncd'
+        uncd_binary = '/home/ubuntu/uncd'
     return '''
         sudo mv /home/ubuntu/unc.log /home/ubuntu/unc.log.1 2>/dev/null
         sudo mv /home/ubuntu/unc.upgrade.log /home/ubuntu/unc.upgrade.log.1 2>/dev/null
         sudo rm -rf /home/ubuntu/.unc/data
         tmux new -s unc -d bash
-        tmux send-keys -t unc 'RUST_BACKTRACE=full RUST_LOG=debug,actix_web=info {neard_binary} run 2>&1 | tee -a {neard_binary}.log' C-m
-    '''.format(neard_binary=shlex.quote(neard_binary))
+        tmux send-keys -t unc 'RUST_BACKTRACE=full RUST_LOG=debug,actix_web=info {uncd_binary} run 2>&1 | tee -a {uncd_binary}.log' C-m
+    '''.format(uncd_binary=shlex.quote(uncd_binary))
 
 
 def start_node(node, upgrade_schedule=None):
@@ -1107,7 +1107,7 @@ def start_node(node, upgrade_schedule=None):
             break
         start_process = m.run(
             'sudo -u ubuntu -i',
-            input=neard_start_script(
+            input=uncd_start_script(
                 node,
                 upgrade_schedule=upgrade_schedule,
                 epoch_height=0,
@@ -1413,14 +1413,14 @@ def get_epoch_height(rpc_nodes, prev_epoch_height):
     return max_height
 
 
-def neard_restart_script(node):
-    neard_binary = '/home/ubuntu/uncd.upgrade'
+def uncd_restart_script(node):
+    uncd_binary = '/home/ubuntu/uncd.upgrade'
     return '''
         tmux send-keys -t unc C-c
         sudo mv /home/ubuntu/unc.log /home/ubuntu/unc.log.1 2>/dev/null
         sudo mv /home/ubuntu/unc.upgrade.log /home/ubuntu/unc.upgrade.log.1 2>/dev/null
-        tmux send-keys -t unc 'RUST_BACKTRACE=full RUST_LOG=debug,actix_web=info {neard_binary} run 2>&1 | tee -a {neard_binary}.log' C-m
-    '''.format(neard_binary=shlex.quote(neard_binary))
+        tmux send-keys -t unc 'RUST_BACKTRACE=full RUST_LOG=debug,actix_web=info {uncd_binary} run 2>&1 | tee -a {uncd_binary}.log' C-m
+    '''.format(uncd_binary=shlex.quote(uncd_binary))
 
 
 def upgrade_node(node):
@@ -1430,7 +1430,7 @@ def upgrade_node(node):
     while attempt < 3:
         start_process = node.machine.run(
             'sudo -u ubuntu -i',
-            input=neard_restart_script(node),
+            input=uncd_restart_script(node),
         )
         if start_process.returncode == 0:
             success = True

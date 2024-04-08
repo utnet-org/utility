@@ -554,7 +554,7 @@ pub unsafe fn ed25519_verify_16kib_64() {
 #[repr(C)]
 struct MultiexpElem([u8; 64], [u8; 32]);
 
-// Function to measure `alt_bn128_g1_multiexp_base` and `alt_bn128_g1_multiexp_sublinear`. Also measures `base`, `write_register_base`,
+// Function to measure `alt_bn128_g1_multiexp_base` and `alt_bn128_g1_multiexp_subliunc`. Also measures `base`, `write_register_base`,
 // and `write_register_byte`. However `g1_multiexp` computation is more expensive than register writing
 // so we are okay overcharging it.
 // Compute g1_multiexp on 1 element 10 times.
@@ -573,7 +573,7 @@ pub unsafe fn alt_bn128_g1_multiexp_1_10() {
         );
     }
 }
-// Function to measure `alt_bn128_g1_multiexp_base` and `alt_bn128_g1_multiexp_sublinear`. Also measures `base`, `write_register_base`,
+// Function to measure `alt_bn128_g1_multiexp_base` and `alt_bn128_g1_multiexp_subliunc`. Also measures `base`, `write_register_base`,
 // and `write_register_byte`. However `g1_multiexp` computation is more expensive than register writing
 // so we are okay overcharging it.
 // Compute g1_multiexp on 10 elements 10 times.
@@ -682,7 +682,7 @@ pub unsafe fn alt_bn128_pairing_check_1_10() {
         );
     }
 }
-// Function to measure `alt_bn128_g1_multiexp_base` and `alt_bn128_g1_multiexp_sublinear`. Also measures `base`, `write_register_base`,
+// Function to measure `alt_bn128_g1_multiexp_base` and `alt_bn128_g1_multiexp_subliunc`. Also measures `base`, `write_register_base`,
 // and `write_register_byte`. However `g1_multiexp` computation is more expensive than register writing
 // so we are okay overcharging it.
 // Compute pairing_check on 10 elements 10 times.
@@ -827,7 +827,7 @@ storage_bench!(key, 10, value, 10240, 1000, storage_has_key_10b_key_10kib_value_
 // Function to measure `promise_and_base`.
 #[no_mangle]
 pub unsafe fn promise_and_100k() {
-    let account = b"alice_near";
+    let account = b"alice_unc";
     let id0 = promise_batch_create(account.len() as _, account.as_ptr() as _);
     let id1 = promise_batch_create(account.len() as _, account.as_ptr() as _);
     let ids = [id0, id1];
@@ -839,7 +839,7 @@ pub unsafe fn promise_and_100k() {
 // Function to measure `promise_and_per_promise`.
 #[no_mangle]
 pub unsafe fn promise_and_100k_on_1k_and() {
-    let account = b"alice_near";
+    let account = b"alice_unc";
     let mut ids = [0u64; 1000];
     for i in 0..1000 {
         ids[i] = promise_batch_create(account.len() as _, account.as_ptr() as _);
@@ -852,7 +852,7 @@ pub unsafe fn promise_and_100k_on_1k_and() {
 // Function to measure `promise_return`.
 #[no_mangle]
 pub unsafe fn promise_return_100k() {
-    let account = b"alice_near";
+    let account = b"alice_unc";
     let id = promise_batch_create(account.len() as _, account.as_ptr() as _);
     for _ in 0..100_000 {
         promise_return(id);

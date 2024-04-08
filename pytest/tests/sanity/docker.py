@@ -190,16 +190,16 @@ def main():
     logger.info("Build the container")
     run(('make', 'DOCKER_TAG=' + _DOCKER_IMAGE_TAG, 'docker-framework'))
     try:
-        dot_near = pathlib.Path.home() / '.unc'
+        dot_unc = pathlib.Path.home() / '.unc'
 
         logger.info("Initialise local network nodes config.")
         cmd = f'uncd --home /home/unc localnet --v {NUM_NODES} --prefix test'
-        docker_run(cmd, volume=(dot_near, '/home/unc'), network=True)
+        docker_run(cmd, volume=(dot_unc, '/home/unc'), network=True)
 
         # Start all the nodes
         for ordinal in range(NUM_NODES):
             logger.info(f'Starting node {ordinal}')
-            node = DockerNode(ordinal, dot_near / f'test{ordinal}')
+            node = DockerNode(ordinal, dot_unc / f'test{ordinal}')
             node.start(boot_node=nodes)
             nodes.append(node)
 

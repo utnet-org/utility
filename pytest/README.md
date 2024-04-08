@@ -54,7 +54,7 @@ Prerequisites:
 
 Steps:
 
-1. Choose or upload a unc binary here: https://console.cloud.google.com/storage/browser/nearprotocol_unc_release?project=unc-core
+1. Choose or upload a unc binary here: https://console.cloud.google.com/storage/browser/unc_release?project=utility
 2. Fill the binary filename in remote.json.  Modify zones as needed,
    they’ll be used in round-robin manner.
 3. `unc_PYTEST_CONFIG=remote.json python tests/...`

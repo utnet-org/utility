@@ -182,11 +182,11 @@ pub(crate) trait Emitter {
     fn emit_vsqrtss(&mut self, src1: XMM, src2: XMMOrMemory, dst: XMM);
     fn emit_vsqrtsd(&mut self, src1: XMM, src2: XMMOrMemory, dst: XMM);
 
-    fn emit_vroundss_nearest(&mut self, src1: XMM, src2: XMMOrMemory, dst: XMM);
+    fn emit_vroundss_uncest(&mut self, src1: XMM, src2: XMMOrMemory, dst: XMM);
     fn emit_vroundss_floor(&mut self, src1: XMM, src2: XMMOrMemory, dst: XMM);
     fn emit_vroundss_ceil(&mut self, src1: XMM, src2: XMMOrMemory, dst: XMM);
     fn emit_vroundss_trunc(&mut self, src1: XMM, src2: XMMOrMemory, dst: XMM);
-    fn emit_vroundsd_nearest(&mut self, src1: XMM, src2: XMMOrMemory, dst: XMM);
+    fn emit_vroundsd_uncest(&mut self, src1: XMM, src2: XMMOrMemory, dst: XMM);
     fn emit_vroundsd_floor(&mut self, src1: XMM, src2: XMMOrMemory, dst: XMM);
     fn emit_vroundsd_ceil(&mut self, src1: XMM, src2: XMMOrMemory, dst: XMM);
     fn emit_vroundsd_trunc(&mut self, src1: XMM, src2: XMMOrMemory, dst: XMM);
@@ -1285,11 +1285,11 @@ impl Emitter for Assembler {
     avx_fn!(vcvtss2sd, emit_vcvtss2sd);
     avx_fn!(vcvtsd2ss, emit_vcvtsd2ss);
 
-    avx_round_fn!(vroundss, emit_vroundss_nearest, 0);
+    avx_round_fn!(vroundss, emit_vroundss_uncest, 0);
     avx_round_fn!(vroundss, emit_vroundss_floor, 1);
     avx_round_fn!(vroundss, emit_vroundss_ceil, 2);
     avx_round_fn!(vroundss, emit_vroundss_trunc, 3);
-    avx_round_fn!(vroundsd, emit_vroundsd_nearest, 0);
+    avx_round_fn!(vroundsd, emit_vroundsd_uncest, 0);
     avx_round_fn!(vroundsd, emit_vroundsd_floor, 1);
     avx_round_fn!(vroundsd, emit_vroundsd_ceil, 2);
     avx_round_fn!(vroundsd, emit_vroundsd_trunc, 3);

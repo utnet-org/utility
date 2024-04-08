@@ -257,7 +257,7 @@ def load_test_contract(
 def user_name():
     username = os.getlogin()
     if username == 'root':  # digitalocean
-        username = gcloud.list()[0].username.replace('_nearprotocol_com', '')
+        username = gcloud.list()[0].username.replace('_unc_com', '')
     return username
 
 
@@ -273,7 +273,7 @@ def collect_gcloud_config(num_nodes):
             host = gcloud.get(f'pytest-node-{user_name()}-{i}')
             for filename in ('config.json', 'signer0_key.json',
                              'validator_key.json', 'node_key.json'):
-                host.download(f'/home/bowen_nearprotocol_com/.unc/{filename}',
+                host.download(f'/home/unc_com/.unc/{filename}',
                               str(node_dir))
         with open(node_dir / 'signer0_key.json') as f:
             key = json.load(f)

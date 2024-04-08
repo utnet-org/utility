@@ -26,7 +26,7 @@
   (func (export "f32.ceil") (param $x f32) (result f32) (f32.ceil (local.get $x)))
   (func (export "f32.floor") (param $x f32) (result f32) (f32.floor (local.get $x)))
   (func (export "f32.trunc") (param $x f32) (result f32) (f32.trunc (local.get $x)))
-  (func (export "f32.nearest") (param $x f32) (result f32) (f32.nearest (local.get $x)))
+  (func (export "f32.uncest") (param $x f32) (result f32) (f32.uncest (local.get $x)))
   (func (export "f32.min") (param $x f32) (param $y f32) (result f32) (f32.min (local.get $x) (local.get $y)))
   (func (export "f32.max") (param $x f32) (param $y f32) (result f32) (f32.max (local.get $x) (local.get $y)))
 
@@ -41,7 +41,7 @@
   (func (export "f64.ceil") (param $x f64) (result f64) (f64.ceil (local.get $x)))
   (func (export "f64.floor") (param $x f64) (result f64) (f64.floor (local.get $x)))
   (func (export "f64.trunc") (param $x f64) (result f64) (f64.trunc (local.get $x)))
-  (func (export "f64.nearest") (param $x f64) (result f64) (f64.nearest (local.get $x)))
+  (func (export "f64.uncest") (param $x f64) (result f64) (f64.uncest (local.get $x)))
   (func (export "f64.min") (param $x f64) (param $y f64) (result f64) (f64.min (local.get $x) (local.get $y)))
   (func (export "f64.max") (param $x f64) (param $y f64) (result f64) (f64.max (local.get $x) (local.get $y)))
 )
@@ -650,29 +650,29 @@
 (assert_return (invoke "f64.trunc" (f64.const -0x1.fffffffffffffp+51)) (f64.const -0x1.ffffffffffffep+51))
 (assert_return (invoke "f64.trunc" (f64.const 0x1.fffffffffffffp+51)) (f64.const 0x1.ffffffffffffep+51))
 
-;; Test that nearest isn't implemented naively.
-;; http://blog.frama-c.com/index.php?post/2013/05/02/nearbyintf1
-;; http://blog.frama-c.com/index.php?post/2013/05/04/nearbyintf3
-(assert_return (invoke "f32.nearest" (f32.const 0x1.000002p+23)) (f32.const 0x1.000002p+23))
-(assert_return (invoke "f32.nearest" (f32.const 0x1.000004p+23)) (f32.const 0x1.000004p+23))
-(assert_return (invoke "f32.nearest" (f32.const 0x1.fffffep-2)) (f32.const 0.0))
-(assert_return (invoke "f32.nearest" (f32.const 0x1.fffffep+47)) (f32.const 0x1.fffffep+47))
-(assert_return (invoke "f64.nearest" (f64.const 0x1.0000000000001p+52)) (f64.const 0x1.0000000000001p+52))
-(assert_return (invoke "f64.nearest" (f64.const 0x1.0000000000002p+52)) (f64.const 0x1.0000000000002p+52))
-(assert_return (invoke "f64.nearest" (f64.const 0x1.fffffffffffffp-2)) (f64.const 0.0))
-(assert_return (invoke "f64.nearest" (f64.const 0x1.fffffffffffffp+105)) (f64.const 0x1.fffffffffffffp+105))
+;; Test that uncest isn't implemented naively.
+;; http://blog.frama-c.com/index.php?post/2013/05/02/uncbyintf1
+;; http://blog.frama-c.com/index.php?post/2013/05/04/uncbyintf3
+(assert_return (invoke "f32.uncest" (f32.const 0x1.000002p+23)) (f32.const 0x1.000002p+23))
+(assert_return (invoke "f32.uncest" (f32.const 0x1.000004p+23)) (f32.const 0x1.000004p+23))
+(assert_return (invoke "f32.uncest" (f32.const 0x1.fffffep-2)) (f32.const 0.0))
+(assert_return (invoke "f32.uncest" (f32.const 0x1.fffffep+47)) (f32.const 0x1.fffffep+47))
+(assert_return (invoke "f64.uncest" (f64.const 0x1.0000000000001p+52)) (f64.const 0x1.0000000000001p+52))
+(assert_return (invoke "f64.uncest" (f64.const 0x1.0000000000002p+52)) (f64.const 0x1.0000000000002p+52))
+(assert_return (invoke "f64.uncest" (f64.const 0x1.fffffffffffffp-2)) (f64.const 0.0))
+(assert_return (invoke "f64.uncest" (f64.const 0x1.fffffffffffffp+105)) (f64.const 0x1.fffffffffffffp+105))
 
 ;; Nearest should not round halfway cases away from zero (as C's round(3) does)
 ;; or up (as JS's Math.round does).
-(assert_return (invoke "f32.nearest" (f32.const 4.5)) (f32.const 4.0))
-(assert_return (invoke "f32.nearest" (f32.const -4.5)) (f32.const -4.0))
-(assert_return (invoke "f32.nearest" (f32.const -3.5)) (f32.const -4.0))
-(assert_return (invoke "f64.nearest" (f64.const 4.5)) (f64.const 4.0))
-(assert_return (invoke "f64.nearest" (f64.const -4.5)) (f64.const -4.0))
-(assert_return (invoke "f64.nearest" (f64.const -3.5)) (f64.const -4.0))
+(assert_return (invoke "f32.uncest" (f32.const 4.5)) (f32.const 4.0))
+(assert_return (invoke "f32.uncest" (f32.const -4.5)) (f32.const -4.0))
+(assert_return (invoke "f32.uncest" (f32.const -3.5)) (f32.const -4.0))
+(assert_return (invoke "f64.uncest" (f64.const 4.5)) (f64.const 4.0))
+(assert_return (invoke "f64.uncest" (f64.const -4.5)) (f64.const -4.0))
+(assert_return (invoke "f64.uncest" (f64.const -3.5)) (f64.const -4.0))
 
-;; Test the maximum and minimum value for which nearest is not an identity operator.
-(assert_return (invoke "f32.nearest" (f32.const -0x1.fffffep+22)) (f32.const -0x1p+23))
-(assert_return (invoke "f32.nearest" (f32.const 0x1.fffffep+22)) (f32.const 0x1p+23))
-(assert_return (invoke "f64.nearest" (f64.const -0x1.fffffffffffffp+51)) (f64.const -0x1p+52))
-(assert_return (invoke "f64.nearest" (f64.const 0x1.fffffffffffffp+51)) (f64.const 0x1p+52))
+;; Test the maximum and minimum value for which uncest is not an identity operator.
+(assert_return (invoke "f32.uncest" (f32.const -0x1.fffffep+22)) (f32.const -0x1p+23))
+(assert_return (invoke "f32.uncest" (f32.const 0x1.fffffep+22)) (f32.const 0x1p+23))
+(assert_return (invoke "f64.uncest" (f64.const -0x1.fffffffffffffp+51)) (f64.const -0x1p+52))
+(assert_return (invoke "f64.uncest" (f64.const 0x1.fffffffffffffp+51)) (f64.const 0x1p+52))

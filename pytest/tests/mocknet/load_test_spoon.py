@@ -17,7 +17,7 @@ You can run multiple tests in parallel, use `--pattern` to disambiguate.
 Configure the desirable generated load with the `--max-tps` flag, or disable load altogether with `--skip-load`.
 
 Example from the recent loadtest run:
-1) terraform apply -var="chain_id=mainnet" -var="size=big" -var="override_chain_id=rc3-22" -var="neard_binary_url=https://s3.us-west-1.amazonaws.com/build.utility.com/framework/Linux/1.23.0/1eaa01d6abc76757b2ef50a1a127f98576b750c4/uncd" -var="upgrade_neard_binary_url=https://unc-protocol-public.s3.ca-central-1.amazonaws.com/mocknet/uncd.rc3-22"
+1) terraform apply -var="chain_id=mainnet" -var="size=big" -var="override_chain_id=rc3-22" -var="uncd_binary_url=https://s3.us-west-1.amazonaws.com/build.utility.com/framework/Linux/1.23.0/1eaa01d6abc76757b2ef50a1a127f98576b750c4/uncd" -var="upgrade_uncd_binary_url=https://unc-protocol-public.s3.ca-central-1.amazonaws.com/mocknet/uncd.rc3-22"
 2) python3 tests/mocknet/load_test_spoon.py --chain-id=mainnet-spoon --pattern=rc3-22 --epoch-length=1000 --num-nodes=120 --max-tps=100 --script=add_and_delete --increasing-pledges=1 --progressive-upgrade --num-seats=100
 
 Things to look out for when running the test:
@@ -295,8 +295,8 @@ class LoadTestSpoon:
         )
         logger.info('Starting transaction spamming scripts -- done.')
 
-    def __check_neard_and_helper_are_running(self):
-        neard_running = mocknet.is_binary_running_all_nodes(
+    def __check_uncd_and_helper_are_running(self):
+        uncd_running = mocknet.is_binary_running_all_nodes(
             'uncd',
             self.all_nodes,
         )
@@ -306,13 +306,13 @@ class LoadTestSpoon:
         )
 
         logger.debug(
-            f'uncd is running on {neard_running.count(True)}/{len(neard_running)} nodes'
+            f'uncd is running on {uncd_running.count(True)}/{len(uncd_running)} nodes'
         )
         logger.debug(
             f'helper is running on {helper_running.count(True)}/{len(helper_running)} validator nodes'
         )
 
-        for node, is_running in zip(self.all_nodes, neard_running):
+        for node, is_running in zip(self.all_nodes, uncd_running):
             if not is_running:
                 raise Exception(
                     'The uncd process is not running on some of the nodes! '
@@ -330,7 +330,7 @@ class LoadTestSpoon:
 
         start_time = time.monotonic()
         while True:
-            self.__check_neard_and_helper_are_running()
+            self.__check_uncd_and_helper_are_running()
 
             now = time.monotonic()
             remaining_time = self.contract_deploy_time + start_time - now
@@ -351,7 +351,7 @@ class LoadTestSpoon:
         prev_epoch_height = initial_epoch_height
         start_time = time.monotonic()
         while True:
-            self.__check_neard_and_helper_are_running()
+            self.__check_uncd_and_helper_are_running()
 
             epoch_height = mocknet.get_epoch_height(
                 self.rpc_nodes,
