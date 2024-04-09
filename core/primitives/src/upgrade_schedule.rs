@@ -11,7 +11,7 @@ pub struct ProtocolUpgradeVotingSchedule {
 
 impl Default for ProtocolUpgradeVotingSchedule {
     fn default() -> Self {
-        Self { timestamp: DateTime::<Utc>::from_naive_utc_and_offset(Default::default(), Utc) }
+        Self { timestamp: DateTime::<Utc>::from_timestamp(chrono::Utc::now().timestamp(), 0).unwrap() }
     }
 }
 
@@ -41,10 +41,10 @@ impl ProtocolUpgradeVotingSchedule {
         }
 
         Ok(Self {
-            timestamp: DateTime::<Utc>::from_naive_utc_and_offset(
-                NaiveDateTime::parse_from_str(s, "%Y-%m-%d %H:%M:%S")?,
-                Utc,
-            ),
+            timestamp: DateTime::<Utc>::from_timestamp(
+                NaiveDateTime::parse_from_str(s, "%Y-%m-%d %H:%M:%S")?.and_utc().timestamp(),
+                0,
+            ).unwrap(),
         })
     }
 }
