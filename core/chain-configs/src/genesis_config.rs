@@ -96,8 +96,6 @@ pub struct GenesisConfig {
     pub num_block_producer_seats_per_shard: Vec<NumSeats>,
     /// Expected number of hidden validators per shard.
     pub avg_hidden_validator_seats_per_shard: Vec<NumSeats>,
-    /// Enable dynamic re-sharding.
-    pub dynamic_resharding: bool,
     /// Threshold of pledge that needs to indicate that they ready for upgrade.
     #[serde(default = "default_protocol_upgrade_pledge_threshold")]
     #[default(Rational32::new(8, 10))]
@@ -204,7 +202,7 @@ impl From<&GenesisConfig> for EpochConfig {
             online_max_threshold: config.online_max_threshold,
             protocol_upgrade_pledge_threshold: config.protocol_upgrade_pledge_threshold,
             minimum_pledge_divisor: config.minimum_pledge_divisor,
-            shard_layout: config.shard_layout.clone(),
+            shard_layout: ShardLayout::v0_single_shard(),
             validator_selection_config: unc_primitives::epoch_manager::ValidatorSelectionConfig {
                 num_chunk_only_producer_seats: config.num_chunk_only_producer_seats,
                 minimum_validators_per_shard: config.minimum_validators_per_shard,
@@ -734,8 +732,6 @@ pub struct ProtocolConfigView {
     pub num_block_producer_seats_per_shard: Vec<NumSeats>,
     /// Expected number of hidden validators per shard.
     pub avg_hidden_validator_seats_per_shard: Vec<NumSeats>,
-    /// Enable dynamic re-sharding.
-    pub dynamic_resharding: bool,
     /// Threshold of pledge that needs to indicate that they ready for upgrade.
     pub protocol_upgrade_pledge_threshold: Rational32,
     /// Epoch length counted in block heights.
@@ -806,7 +802,6 @@ impl From<ProtocolConfig> for ProtocolConfigView {
             num_block_producer_seats_per_shard: genesis_config.num_block_producer_seats_per_shard,
             avg_hidden_validator_seats_per_shard: genesis_config
                 .avg_hidden_validator_seats_per_shard,
-            dynamic_resharding: genesis_config.dynamic_resharding,
             protocol_upgrade_pledge_threshold: genesis_config.protocol_upgrade_pledge_threshold,
             epoch_length: genesis_config.epoch_length,
             gas_limit: genesis_config.gas_limit,
@@ -1012,7 +1007,6 @@ mod test {
               "avg_hidden_validator_seats_per_shard": [
                 0
               ],
-              "dynamic_resharding": false,
               "protocol_upgrade_pledge_threshold": [
                 4,
                 5
@@ -1057,12 +1051,6 @@ mod test {
               "protocol_treasury_account": "test.unc",
               "fishermen_threshold": "10000000000000000000000000",
               "minimum_pledge_divisor": 10,
-              "shard_layout": {
-                "V0": {
-                  "num_shards": 1,
-                  "version": 0
-                }
-              },
               "num_chunk_only_producer_seats": 300,
               "minimum_validators_per_shard": 1,
               "max_kickout_pledge_perc": 100,
@@ -1137,7 +1125,6 @@ mod test {
               "avg_hidden_validator_seats_per_shard": [
                 0
               ],
-              "dynamic_resharding": false,
               "protocol_upgrade_pledge_threshold": [
                 4,
                 5
@@ -1182,12 +1169,6 @@ mod test {
               "protocol_treasury_account": "test.unc",
               "fishermen_threshold": "10000000000000000000000000",
               "minimum_pledge_divisor": 10,
-              "shard_layout": {
-                "V0": {
-                  "num_shards": 1,
-                  "version": 0
-                }
-              },
               "num_chunk_only_producer_seats": 300,
               "minimum_validators_per_shard": 1,
               "max_kickout_pledge_perc": 100,

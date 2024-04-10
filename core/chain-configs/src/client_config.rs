@@ -292,7 +292,7 @@ pub fn default_enable_multiline_logging() -> Option<bool> {
 }
 
 pub fn default_produce_chunk_add_transactions_time_limit() -> Option<Duration> {
-    Some(Duration::from_millis(200 * 30))
+    Some(Duration::from_millis(1000))
 }
 
 /// ClientConfig where some fields can be updated at runtime.

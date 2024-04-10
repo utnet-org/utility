@@ -594,7 +594,6 @@ mod test {
                     framework::config::NUM_BLOCK_PRODUCER_SEATS,
                 ),
                 avg_hidden_validator_seats_per_shard: (0..num_shards).map(|_| 0).collect(),
-                dynamic_resharding: false,
                 protocol_upgrade_pledge_threshold:
                     framework::config::PROTOCOL_UPGRADE_STAKE_THRESHOLD,
                 epoch_length: 1000,

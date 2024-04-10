@@ -84,7 +84,7 @@ pub const MAINNET_MAX_BLOCK_PRODUCTION_DELAY: u64 = 3_000 * 30;
 pub const TESTNET_MAX_BLOCK_PRODUCTION_DELAY: u64 = 2_500 * 30;
 
 /// Maximum time until skipping the previous block is ms.
-pub const MAX_BLOCK_WAIT_DELAY: u64 = 6_000 * 30;
+pub const MAX_BLOCK_WAIT_DELAY: u64 = 6_000 * 10;
 
 /// Horizon at which instead of fetching block, fetch full state.
 const BLOCK_FETCH_HORIZON: BlockHeightDelta = 50;
@@ -509,7 +509,6 @@ impl Genesis {
             num_block_producer_seats: num_validator_seats,
             num_block_producer_seats_per_shard: num_validator_seats_per_shard.clone(),
             avg_hidden_validator_seats_per_shard: vec![0; num_validator_seats_per_shard.len()],
-            dynamic_resharding: false,
             protocol_upgrade_pledge_threshold: PROTOCOL_UPGRADE_STAKE_THRESHOLD,
             epoch_length: FAST_EPOCH_LENGTH,
             gas_limit: INITIAL_GAS_LIMIT,
@@ -1063,19 +1062,7 @@ pub fn init_configs(
                 CryptoHash::default(),
             );
             add_protocol_account(&mut records);
-            let shards = if num_shards > 1 {
-                ShardLayout::v1(
-                    (1..num_shards)
-                        .map(|f| {
-                            AccountId::from_str(format!("shard{f}.test.unc").as_str()).unwrap()
-                        })
-                        .collect(),
-                    None,
-                    1,
-                )
-            } else {
-                ShardLayout::v0_single_shard()
-            };
+            let shards = ShardLayout::v0_single_shard();
 
             let genesis_config = GenesisConfig {
                 protocol_version: PROTOCOL_VERSION,
@@ -1088,7 +1075,6 @@ pub fn init_configs(
                     NUM_BLOCK_PRODUCER_SEATS,
                 ),
                 avg_hidden_validator_seats_per_shard: (0..num_shards).map(|_| 0).collect(),
-                dynamic_resharding: false,
                 protocol_upgrade_pledge_threshold: PROTOCOL_UPGRADE_STAKE_THRESHOLD,
                 epoch_length: if fast { FAST_EPOCH_LENGTH } else { EXPECTED_EPOCH_LENGTH },
                 gas_limit: INITIAL_GAS_LIMIT,
