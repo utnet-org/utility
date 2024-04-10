@@ -42,7 +42,6 @@ use std::fs;
 use std::fs::File;
 use std::io::{Read, Write};
 use std::path::Path;
-use std::str::FromStr;
 use std::sync::Arc;
 use std::time::Duration;
 #[cfg(test)]
@@ -158,7 +157,7 @@ pub const MAX_INFLATION_RATE: Rational32 = Rational32::new_raw(1, 20);
 pub const PROTOCOL_UPGRADE_STAKE_THRESHOLD: Rational32 = Rational32::new_raw(4, 5);
 
 fn default_doomslug_step_period() -> Duration {
-    Duration::from_millis(100 * 30)
+    Duration::from_millis(300)
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Clone, Debug)]
