@@ -54,7 +54,7 @@ fn start_nodes(
     for (i, unc_config) in unc_configs.into_iter().enumerate() {
         let dir = temp_dir.join(format!("node{i}"));
         std::fs::create_dir(&dir).unwrap();
-        let framework::NearNode { client, view_client, arbiters, .. } =
+        let framework::UncNode { client, view_client, arbiters, .. } =
             start_with_config(&dir, unc_config).expect("start_with_config");
         res.push((client, view_client, arbiters))
     }

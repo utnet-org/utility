@@ -45,7 +45,7 @@ fn sync_state_nodes() {
         unc1.client_config.min_num_peers = 0;
         run_actix(async move {
             let dir1 = tempfile::Builder::new().prefix("sync_nodes_1").tempdir().unwrap();
-            let framework::NearNode { view_client: view_client1, .. } =
+            let framework::UncNode { view_client: view_client1, .. } =
                 start_with_config(dir1.path(), unc1).expect("start_with_config");
 
             let view_client2_holder = Arc::new(RwLock::new(None));
@@ -79,7 +79,7 @@ fn sync_state_nodes() {
                                             .prefix("sync_nodes_2")
                                             .tempdir()
                                             .unwrap();
-                                        let framework::NearNode {
+                                        let framework::UncNode {
                                             view_client: view_client2,
                                             arbiters,
                                             ..
@@ -179,7 +179,7 @@ fn sync_state_nodes_multishard() {
                 unc1.client_config.max_block_production_delay;
 
             let dir1 = tempfile::Builder::new().prefix("sync_nodes_1").tempdir().unwrap();
-            let framework::NearNode { view_client: view_client1, .. } =
+            let framework::UncNode { view_client: view_client1, .. } =
                 start_with_config(dir1.path(), unc1).expect("start_with_config");
 
             let dir3 = tempfile::Builder::new().prefix("sync_nodes_3").tempdir().unwrap();
@@ -226,7 +226,7 @@ fn sync_state_nodes_multishard() {
                                             .prefix("sync_nodes_2")
                                             .tempdir()
                                             .unwrap();
-                                        let framework::NearNode {
+                                        let framework::UncNode {
                                             view_client: view_client2,
                                             arbiters,
                                             ..
@@ -310,7 +310,7 @@ fn sync_empty_state() {
             unc1.client_config.max_block_production_delay = Duration::from_millis(400);
 
             let dir1 = tempfile::Builder::new().prefix("sync_nodes_1").tempdir().unwrap();
-            let framework::NearNode { view_client: view_client1, .. } =
+            let framework::UncNode { view_client: view_client1, .. } =
                 start_with_config(dir1.path(), unc1).expect("start_with_config");
             let dir2 = Arc::new(tempfile::Builder::new().prefix("sync_nodes_2").tempdir().unwrap());
 
@@ -348,7 +348,7 @@ fn sync_empty_state() {
                                         unc2.client_config.block_fetch_horizon =
                                             block_fetch_horizon;
 
-                                        let framework::NearNode {
+                                        let framework::UncNode {
                                             view_client: view_client2,
                                             arbiters,
                                             ..
@@ -446,7 +446,7 @@ fn sync_state_dump() {
             unc1.config.store.state_snapshot_compaction_enabled = false;
 
             let dir1 = tempfile::Builder::new().prefix("sync_nodes_1").tempdir().unwrap();
-            let framework::NearNode {
+            let framework::UncNode {
                 view_client: view_client1,
                 state_sync_dump_handle: _state_sync_dump_handle,
                 ..
@@ -491,7 +491,7 @@ fn sync_state_dump() {
                                         num_concurrent_requests_during_catchup: 1,
                                     });
 
-                                let framework::NearNode {
+                                let framework::UncNode {
                                     view_client: view_client2, arbiters, ..
                                 } = start_with_config(dir2.path(), unc2)
                                     .expect("start_with_config");
@@ -725,7 +725,7 @@ fn test_state_sync_headers() {
             unc1.config.store.state_snapshot_enabled = true;
             unc1.config.store.state_snapshot_compaction_enabled = false;
 
-            let framework::NearNode { view_client: view_client1, .. } =
+            let framework::UncNode { view_client: view_client1, .. } =
                 start_with_config(dir1.path(), unc1).expect("start_with_config");
 
             // First we need to find sync_hash. That is done in 3 steps:
@@ -938,7 +938,7 @@ fn test_state_sync_headers_no_tracked_shards() {
             unc2.config.state_sync_enabled = false;
             unc2.client_config.state_sync_enabled = false;
 
-            let framework::NearNode { view_client: view_client2, .. } =
+            let framework::UncNode { view_client: view_client2, .. } =
                 start_with_config(dir2.path(), unc2).expect("start_with_config");
 
             // First we need to find sync_hash. That is done in 3 steps:

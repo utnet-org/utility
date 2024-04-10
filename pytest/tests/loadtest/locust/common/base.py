@@ -225,7 +225,7 @@ class AddFullAccessKey(Transaction):
         return self.sender
 
 
-class NearNodeProxy:
+class UncNodeProxy:
     """
     Wrapper around a RPC node connection that tracks requests on locust.
     """
@@ -482,7 +482,7 @@ class NearUser(User):
     def __init__(self, environment):
         super().__init__(environment)
         assert self.host is not None, "unc user requires the RPC node address"
-        self.node = NearNodeProxy(environment)
+        self.node = UncNodeProxy(environment)
         self.id = NearUser.get_next_id()
         user_suffix = f"{self.id}_run{environment.parsed_options.run_id}"
         self.account_id = NearUser.generate_account_id(
@@ -705,7 +705,7 @@ def init_account_generator(parsed_options):
 
 # called once per process before user initialization
 def do_on_locust_init(environment):
-    node = NearNodeProxy(environment)
+    node = UncNodeProxy(environment)
 
     master_funding_key = key.Key.from_json_file(
         environment.parsed_options.funding_key)

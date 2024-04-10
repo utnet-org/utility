@@ -108,7 +108,7 @@ impl Indexer {
         let unc_config =
             framework::config::load_config(&indexer_config.home_dir, genesis_validation_mode)
                 .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
-        let framework::NearNode { client, view_client, .. } =
+        let framework::UncNode { client, view_client, .. } =
             framework::start_with_config(&indexer_config.home_dir, unc_config.clone())
                 .with_context(|| "start_with_config")?;
         Ok(Self { view_client, client, unc_config, indexer_config })

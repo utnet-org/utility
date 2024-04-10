@@ -1,6 +1,6 @@
 import typing
 from common.ft import FTContract, InitFTAccount
-from common.base import Account, NearNodeProxy, NearUser, FunctionCall, MultiFunctionCall, INIT_DONE
+from common.base import Account, UncNodeProxy, NearUser, FunctionCall, MultiFunctionCall, INIT_DONE
 import locust
 import sys
 import pathlib
@@ -21,7 +21,7 @@ class SweatContract(FTContract):
         super().__init__(main_account, oracle_account, code)
         self.oracle = oracle_account
 
-    def init_contract(self, node: NearNodeProxy):
+    def init_contract(self, node: UncNodeProxy):
         node.send_tx_retry(InitSweat(self.account), "init sweat")
         # Unlike FT initialization that starts with a total supply and assigns
         # it to the user, the sweat main account doesn't start with tokens. We
@@ -32,7 +32,7 @@ class SweatContract(FTContract):
         self.register_oracle(node, self.oracle.key.account_id)
         self.top_up(node, self.ft_distributor.key.account_id)
 
-    def top_up(self, node: NearNodeProxy, receiver_id: str):
+    def top_up(self, node: UncNodeProxy, receiver_id: str):
         """
         Adds a large amount of tokens to an account.
         Note: This should only be called on the master runner, as it requires
@@ -43,7 +43,7 @@ class SweatContract(FTContract):
             SweatMint(self.account, receiver_id, 1_000_000_000_000),
             "top up sweat")
 
-    def register_oracle(self, node: NearNodeProxy, oracle_id: str):
+    def register_oracle(self, node: UncNodeProxy, oracle_id: str):
         """
         Register an account as oracle to give it the power to mint tokens for steps.
         """
@@ -140,7 +140,7 @@ class SweatMintBatch(MultiFunctionCall):
 @events.init.add_listener
 def on_locust_init(environment, **kwargs):
     INIT_DONE.wait()
-    node = NearNodeProxy(environment)
+    node = UncNodeProxy(environment)
     worker_id = getattr(environment.runner, "worker_index", "_master")
     run_id = environment.parsed_options.run_id
 

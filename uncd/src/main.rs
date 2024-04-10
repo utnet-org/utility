@@ -1,6 +1,6 @@
 mod cli;
 
-use self::cli::NeardCmd;
+use self::cli::UncdCmd;
 use anyhow::Context;
 use unc_primitives::version::{Version, PROTOCOL_VERSION};
 use unc_store::metadata::DB_VERSION;
@@ -64,5 +64,5 @@ fn main() -> anyhow::Result<()> {
         "couldn't set the file descriptor limit to {FD_LIMIT}, hard limit = {hard}"
     ))?;
 
-    NeardCmd::parse_and_run()
+    UncdCmd::parse_and_run()
 }

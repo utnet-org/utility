@@ -158,7 +158,7 @@ fn test_continuous_epoch_sync_info_population_on_header_sync() {
 
         run_actix(async move {
             // Start first node
-            let framework::NearNode { client: client1, .. } =
+            let framework::UncNode { client: client1, .. } =
                 start_with_config(dir1_path, unc1).expect("start_with_config");
 
             // Generate 4 epochs + 10 blocks
@@ -173,7 +173,7 @@ fn test_continuous_epoch_sync_info_population_on_header_sync() {
             }
 
             // Start second node
-            let framework::NearNode { view_client: view_client2, .. } =
+            let framework::UncNode { view_client: view_client2, .. } =
                 start_with_config(dir2_path, unc2).expect("start_with_config");
 
             // Wait for second node's headers to sync.

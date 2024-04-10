@@ -8,7 +8,7 @@ from locust import events
 sys.path.append(str(pathlib.Path(__file__).resolve().parents[4] / 'lib'))
 
 import key
-from common.base import Account, Deploy, NearNodeProxy, NearUser, FunctionCall, INIT_DONE
+from common.base import Account, Deploy, UncNodeProxy, NearUser, FunctionCall, INIT_DONE
 
 
 class FTContract:
@@ -22,7 +22,7 @@ class FTContract:
         self.registered_users = []
         self.code = code
 
-    def install(self, node: NearNodeProxy, parent: Account):
+    def install(self, node: UncNodeProxy, parent: Account):
         """
         Deploy and initialize the contract on chain.
         The account is created if it doesn't exist yet.
@@ -35,7 +35,7 @@ class FTContract:
                                "deploy ft")
             self.init_contract(node)
 
-    def init_contract(self, node: NearNodeProxy):
+    def init_contract(self, node: UncNodeProxy):
         node.send_tx_retry(InitFT(self.account), "init ft")
 
     def register_user(self, user: NearUser):
@@ -48,7 +48,7 @@ class FTContract:
                            locust_name="FT Funding")
         self.registered_users.append(user.account_id)
 
-    def register_passive_user(self, node: NearNodeProxy, account: Account):
+    def register_passive_user(self, node: UncNodeProxy, account: Account):
         """
         Passive users are only used as receiver, not as signer.
         """
@@ -71,7 +71,7 @@ class FTContract:
 
     def create_passive_users(self,
                              num: int,
-                             node: NearNodeProxy,
+                             node: UncNodeProxy,
                              parent: Account,
                              max_account_id_len=64):
         """
@@ -161,7 +161,7 @@ class InitFTAccount(FunctionCall):
 @events.init.add_listener
 def on_locust_init(environment, **kwargs):
     INIT_DONE.wait()
-    node = NearNodeProxy(environment)
+    node = UncNodeProxy(environment)
     ft_contract_code = environment.parsed_options.fungible_token_wasm
     num_ft_contracts = environment.parsed_options.num_ft_contracts
     funding_account = NearUser.funding_account

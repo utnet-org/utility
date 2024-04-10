@@ -12,7 +12,7 @@ import transaction
 
 from account import TGAS, UNC_BASE
 import key
-from common.base import Account, Deploy, NearNodeProxy, Transaction, FunctionCall, INIT_DONE
+from common.base import Account, Deploy, UncNodeProxy, Transaction, FunctionCall, INIT_DONE
 from locust import events, runners
 from transaction import create_function_call_action
 
@@ -269,7 +269,7 @@ def on_locust_init(environment, **kwargs):
         contract_key = key.Key.from_seed_testonly(environment.social_account_id)
         social_account = Account(contract_key)
 
-        node = NearNodeProxy(environment)
+        node = UncNodeProxy(environment)
         existed = node.prepare_account(social_account, funding_account, 50000,
                                        "create contract account")
         if not existed:

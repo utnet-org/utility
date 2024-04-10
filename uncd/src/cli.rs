@@ -42,14 +42,14 @@ use tracing::{debug, error, info, warn};
 #[derive(clap::Parser)]
 #[clap(version = crate::UNCD_VERSION_STRING.as_str())]
 #[clap(subcommand_required = true, arg_required_else_help = true)]
-pub(super) struct NeardCmd {
+pub(super) struct UncdCmd {
     #[clap(flatten)]
-    opts: NeardOpts,
+    opts: UncdOpts,
     #[clap(subcommand)]
-    subcmd: NeardSubCommand,
+    subcmd: UncdSubCommand,
 }
 
-impl NeardCmd {
+impl UncdCmd {
     pub(super) fn parse_and_run() -> anyhow::Result<()> {
         let uncd_cmd: Self = clap::Parser::parse();
 
@@ -88,54 +88,54 @@ impl NeardCmd {
         };
 
         match uncd_cmd.subcmd {
-            NeardSubCommand::Init(cmd) => cmd.run(&home_dir)?,
-            NeardSubCommand::Localnet(cmd) => cmd.run(&home_dir),
-            NeardSubCommand::Run(cmd) => cmd.run(
+            UncdSubCommand::Init(cmd) => cmd.run(&home_dir)?,
+            UncdSubCommand::Localnet(cmd) => cmd.run(&home_dir),
+            UncdSubCommand::Run(cmd) => cmd.run(
                 &home_dir,
                 genesis_validation,
                 uncd_cmd.opts.verbose_target(),
                 &uncd_cmd.opts.o11y,
             ),
 
-            NeardSubCommand::StateViewer(cmd) => {
+            UncdSubCommand::StateViewer(cmd) => {
                 let mode = if cmd.readwrite { Mode::ReadWrite } else { Mode::ReadOnly };
                 cmd.subcmd.run(&home_dir, genesis_validation, mode, cmd.store_temperature);
             }
 
-            NeardSubCommand::RecompressStorage(cmd) => {
+            UncdSubCommand::RecompressStorage(cmd) => {
                 cmd.run(&home_dir);
             }
-            NeardSubCommand::VerifyProof(cmd) => {
+            UncdSubCommand::VerifyProof(cmd) => {
                 cmd.run();
             }
-            NeardSubCommand::Ping(cmd) => {
+            UncdSubCommand::Ping(cmd) => {
                 cmd.run()?;
             }
-            NeardSubCommand::Mirror(cmd) => {
+            UncdSubCommand::Mirror(cmd) => {
                 cmd.run()?;
             }
-            NeardSubCommand::AmendGenesis(cmd) => {
+            UncdSubCommand::AmendGenesis(cmd) => {
                 cmd.run()?;
             }
-            NeardSubCommand::ColdStore(cmd) => {
+            UncdSubCommand::ColdStore(cmd) => {
                 cmd.run(&home_dir)?;
             }
-            NeardSubCommand::StateParts(cmd) => {
+            UncdSubCommand::StateParts(cmd) => {
                 cmd.run()?;
             }
-            NeardSubCommand::FlatStorage(cmd) => {
+            UncdSubCommand::FlatStorage(cmd) => {
                 cmd.run(&home_dir, genesis_validation)?;
             }
-            NeardSubCommand::ValidateConfig(cmd) => {
+            UncdSubCommand::ValidateConfig(cmd) => {
                 cmd.run(&home_dir)?;
             }
-            NeardSubCommand::UndoBlock(cmd) => {
+            UncdSubCommand::UndoBlock(cmd) => {
                 cmd.run(&home_dir, genesis_validation)?;
             }
-            NeardSubCommand::Database(cmd) => {
+            UncdSubCommand::Database(cmd) => {
                 cmd.run(&home_dir)?;
             }
-            NeardSubCommand::ForkNetwork(cmd) => {
+            UncdSubCommand::ForkNetwork(cmd) => {
                 cmd.run(
                     &home_dir,
                     genesis_validation,
@@ -143,11 +143,11 @@ impl NeardCmd {
                     &uncd_cmd.opts.o11y,
                 )?;
             }
-            NeardSubCommand::StatePartsDumpCheck(cmd) => {
+            UncdSubCommand::StatePartsDumpCheck(cmd) => {
                 cmd.run()?;
             }
             #[cfg(feature = "new_epoch_sync")]
-            NeardSubCommand::EpochSync(cmd) => {
+            UncdSubCommand::EpochSync(cmd) => {
                 cmd.run(&home_dir)?;
             }
         };
@@ -172,7 +172,7 @@ pub(super) struct StateViewerCommand {
 }
 
 #[derive(clap::Parser, Debug)]
-struct NeardOpts {
+struct UncdOpts {
     /// Sets verbose logging for the given target, or for all targets if no
     /// target is given.
     #[clap(long, name = "target")]
@@ -189,7 +189,7 @@ struct NeardOpts {
     o11y: unc_o11y::Options,
 }
 
-impl NeardOpts {
+impl UncdOpts {
     // TODO(nikurt): Delete in 1.38 or later.
     pub fn verbose_target(&self) -> Option<&str> {
         self.verbose.as_ref().map(|inner| {
@@ -200,7 +200,7 @@ impl NeardOpts {
 }
 
 #[derive(clap::Parser)]
-pub(super) enum NeardSubCommand {
+pub(super) enum UncdSubCommand {
     /// Initializes UNC configuration
     Init(InitCmd),
     /// Runs UNC node
@@ -551,7 +551,7 @@ impl RunCmd {
                 UpdateableConfigLoader::new(updateable_configs.clone(), tx_config_update);
             let config_updater = ConfigUpdater::new(rx_config_update);
 
-            let framework::NearNode {
+            let framework::UncNode {
                 rpc_servers,
                 cold_store_loop_handle,
                 state_sync_dump_handle,
@@ -847,14 +847,14 @@ impl ValidateConfigCommand {
 
 #[cfg(test)]
 mod tests {
-    use super::{CryptoHash, NeardCmd, NeardSubCommand, VerifyProofError, VerifyProofSubCommand};
+    use super::{CryptoHash, UncdCmd, UncdSubCommand, VerifyProofError, VerifyProofSubCommand};
     use clap::Parser;
     use std::str::FromStr;
 
     #[test]
     fn optional_values() {
-        let cmd = NeardCmd::parse_from(&["test", "init", "--chain-id=testid", "--fast"]);
-        if let NeardSubCommand::Init(scmd) = cmd.subcmd {
+        let cmd = UncdCmd::parse_from(&["test", "init", "--chain-id=testid", "--fast"]);
+        if let UncdSubCommand::Init(scmd) = cmd.subcmd {
             assert_eq!(scmd.chain_id, Some("testid".to_string()));
             assert!(scmd.fast);
         } else {
@@ -864,7 +864,7 @@ mod tests {
 
     #[test]
     fn equal_no_value_syntax() {
-        assert!(NeardCmd::try_parse_from(&[
+        assert!(UncdCmd::try_parse_from(&[
             "test",
             "init",
             // * This line currently fails to be parsed (= without a value)

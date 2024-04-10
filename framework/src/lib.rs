@@ -201,7 +201,7 @@ fn get_split_store(config: &UncConfig, storage: &NodeStorage) -> anyhow::Result<
     Ok(storage.get_split_store())
 }
 
-pub struct NearNode {
+pub struct UncNode {
     pub client: Addr<ClientActor>,
     pub view_client: Addr<ViewClientActor>,
     pub arbiters: Vec<ArbiterHandle>,
@@ -219,7 +219,7 @@ pub struct NearNode {
     pub resharding_handle: ReshardingHandle,
 }
 
-pub fn start_with_config(home_dir: &Path, config: UncConfig) -> anyhow::Result<NearNode> {
+pub fn start_with_config(home_dir: &Path, config: UncConfig) -> anyhow::Result<UncNode> {
     start_with_config_and_synchronization(home_dir, config, None, None)
 }
 
@@ -230,7 +230,7 @@ pub fn start_with_config_and_synchronization(
     // `ClientActor` gets dropped.
     shutdown_signal: Option<broadcast::Sender<()>>,
     config_updater: Option<ConfigUpdater>,
-) -> anyhow::Result<NearNode> {
+) -> anyhow::Result<UncNode> {
     let storage = open_storage(home_dir, &mut config)?;
     let db_metrics_arbiter = if config.client_config.enable_statistics_export {
         let period = config.client_config.log_summary_period;
@@ -423,7 +423,7 @@ pub fn start_with_config_and_synchronization(
         arbiters.push(db_metrics_arbiter);
     }
 
-    Ok(NearNode {
+    Ok(UncNode {
         client: client_actor,
         view_client,
         rpc_servers,

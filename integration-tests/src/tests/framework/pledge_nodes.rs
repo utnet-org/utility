@@ -85,7 +85,7 @@ fn init_test_staking(
         .enumerate()
         .map(|(i, config)| {
             let genesis_hash = genesis_hash(&config.genesis);
-            let framework::NearNode { client, view_client, .. } =
+            let framework::UncNode { client, view_client, .. } =
                 start_with_config(paths[i], config.clone()).expect("start_with_config");
             let account_id = format!("unc.{}", i).parse::<AccountId>().unwrap();
             let signer = Arc::new(InMemorySigner::from_seed(

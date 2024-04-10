@@ -76,7 +76,7 @@ def on_locust_init(environment, **kwargs):
     if isinstance(environment.runner, runners.WorkerRunner):
         return
 
-    node = base.NearNodeProxy(environment)
+    node = base.UncNodeProxy(environment)
     funding_account = base.NearUser.funding_account
     funding_account.refresh_nonce(node.node)
 

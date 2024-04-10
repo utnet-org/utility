@@ -321,7 +321,7 @@ mod tests {
         let dir = tempfile::Builder::new().prefix("test0").tempdir().unwrap();
         let path1 = dir.path();
         run_actix(async move {
-            let framework::NearNode { view_client, client, .. } =
+            let framework::UncNode { view_client, client, .. } =
                 start_with_config(path1, unc_config).expect("start_with_config");
 
             let view_client1 = view_client;

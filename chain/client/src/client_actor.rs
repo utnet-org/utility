@@ -1130,6 +1130,9 @@ impl ClientActor {
 
         self.try_process_unfinished_blocks();
 
+        #[cfg(feature = "sandbox")]
+        let mut delay = Duration::from_secs(1);
+        #[cfg(not(feature = "sandbox"))]
         let mut delay = Duration::from_secs(30);
         let now = Utc::now();
 

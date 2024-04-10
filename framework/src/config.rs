@@ -64,23 +64,46 @@ pub const UNC_BASE: Balance = 1_000_000_000_000_000_000_000_000;
 pub const MILLI_UNC: Balance = UNC_BASE / 1000;
 
 /// Block production tracking delay.
+#[cfg(not(feature = "sandbox"))]
 pub const BLOCK_PRODUCTION_TRACKING_DELAY: u64 = 100 * 30;
+#[cfg(feature = "sandbox")]
+pub const BLOCK_PRODUCTION_TRACKING_DELAY: u64 = 100;
 
 /// Expected block production time in ms.
+#[cfg(not(feature = "sandbox"))]
 pub const MIN_BLOCK_PRODUCTION_DELAY: u64 = 980 * 30;
+#[cfg(feature = "sandbox")]
+pub const MIN_BLOCK_PRODUCTION_DELAY: u64 = 980;
 
 /// Mainnet and testnet validators are configured with a different value due to
 /// performance values.
+#[cfg(not(feature = "sandbox"))]
 pub const MAINNET_MIN_BLOCK_PRODUCTION_DELAY: u64 = 1_300 * 30;
+#[cfg(feature = "sandbox")]
+pub const MAINNET_MIN_BLOCK_PRODUCTION_DELAY: u64 = 1_300;
+
+#[cfg(not(feature = "sandbox"))]
 pub const TESTNET_MIN_BLOCK_PRODUCTION_DELAY: u64 = 1_000 * 30;
+#[cfg(feature = "sandbox")]
+pub const TESTNET_MIN_BLOCK_PRODUCTION_DELAY: u64 = 1_000;
 
 /// Maximum time to delay block production without approvals is ms.
+#[cfg(not(feature = "sandbox"))]
 pub const MAX_BLOCK_PRODUCTION_DELAY: u64 = 2_000 * 30;
+#[cfg(feature = "sandbox")]
+pub const MAX_BLOCK_PRODUCTION_DELAY: u64 = 2_000;
 
 /// Mainnet and testnet validators are configured with a different value due to
 /// performance values.
+#[cfg(not(feature = "sandbox"))]
 pub const MAINNET_MAX_BLOCK_PRODUCTION_DELAY: u64 = 3_000 * 30;
+#[cfg(feature = "sandbox")]
+pub const MAINNET_MAX_BLOCK_PRODUCTION_DELAY: u64 = 3_000;
+
+#[cfg(not(feature = "sandbox"))]
 pub const TESTNET_MAX_BLOCK_PRODUCTION_DELAY: u64 = 2_500 * 30;
+#[cfg(feature = "sandbox")]
+pub const TESTNET_MAX_BLOCK_PRODUCTION_DELAY: u64 = 2_500;
 
 /// Maximum time until skipping the previous block is ms.
 pub const MAX_BLOCK_WAIT_DELAY: u64 = 6_000 * 10;
@@ -107,12 +130,23 @@ pub const BLOCK_PRODUCER_KICKOUT_THRESHOLD: u8 = 90;
 pub const CHUNK_PRODUCER_KICKOUT_THRESHOLD: u8 = 90;
 
 /// Fast mode constants for testing/developing.
+#[cfg(not(feature = "sandbox"))]
 pub const FAST_MIN_BLOCK_PRODUCTION_DELAY: u64 = 120 * 30;
+#[cfg(feature = "sandbox")]
+pub const FAST_MIN_BLOCK_PRODUCTION_DELAY: u64 = 120;
+
+#[cfg(not(feature = "sandbox"))]
 pub const FAST_MAX_BLOCK_PRODUCTION_DELAY: u64 = 500 * 30;
+#[cfg(feature = "sandbox")]
+pub const FAST_MAX_BLOCK_PRODUCTION_DELAY: u64 = 500;
+
 pub const FAST_EPOCH_LENGTH: BlockHeightDelta = 20;
 
 /// Expected number of blocks per year
+#[cfg(not(feature = "sandbox"))]
 pub const NUM_BLOCKS_PER_YEAR: u64 = 365 * 24 * 60 * 60 / 30;
+#[cfg(feature = "sandbox")]
+pub const NUM_BLOCKS_PER_YEAR: u64 = 365 * 24 * 60 * 60;
 
 /// Initial gas limit.
 pub const INITIAL_GAS_LIMIT: Gas = 1_000_000_000_000_000;
@@ -140,7 +174,7 @@ pub const GENESIS_CONFIG_FILENAME: &str = "genesis.json";
 pub const NODE_KEY_FILE: &str = "node_key.json";
 pub const VALIDATOR_KEY_FILE: &str = "validator_key.json";
 
-pub const NETWORK_TELEMETRY_URL: &str = "https://explorer.{}.unc.org/api/nodes";
+pub const NETWORK_TELEMETRY_URL: &str = "https://explorer.{}.utnet.org/api/nodes";
 
 /// The rate at which the gas price can be adjusted (alpha in the formula).
 /// The formula is
@@ -157,7 +191,7 @@ pub const MAX_INFLATION_RATE: Rational32 = Rational32::new_raw(1, 20);
 pub const PROTOCOL_UPGRADE_STAKE_THRESHOLD: Rational32 = Rational32::new_raw(4, 5);
 
 fn default_doomslug_step_period() -> Duration {
-    Duration::from_millis(300)
+    Duration::from_millis(200)
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Clone, Debug)]
