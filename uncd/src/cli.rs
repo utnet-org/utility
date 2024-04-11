@@ -289,7 +289,7 @@ pub(super) struct InitCmd {
     /// Download the verified UNC genesis file automatically.
     #[clap(long)]
     download_genesis: bool,
-    /// Download the verified UNC config file automatically.
+    /// Download the verified Utility config file automatically.
     #[clap(long)]
     download_config: bool,
     /// Makes block production fast (TESTING ONLY).

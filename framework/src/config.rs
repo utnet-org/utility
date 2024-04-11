@@ -73,7 +73,7 @@ pub const BLOCK_PRODUCTION_TRACKING_DELAY: u64 = 100;
 #[cfg(not(feature = "sandbox"))]
 pub const MIN_BLOCK_PRODUCTION_DELAY: u64 = 980 * 30;
 #[cfg(feature = "sandbox")]
-pub const MIN_BLOCK_PRODUCTION_DELAY: u64 = 980;
+pub const MIN_BLOCK_PRODUCTION_DELAY: u64 = 600;
 
 /// Mainnet and testnet validators are configured with a different value due to
 /// performance values.
@@ -106,7 +106,10 @@ pub const TESTNET_MAX_BLOCK_PRODUCTION_DELAY: u64 = 2_500 * 30;
 pub const TESTNET_MAX_BLOCK_PRODUCTION_DELAY: u64 = 2_500;
 
 /// Maximum time until skipping the previous block is ms.
+#[cfg(not(feature = "sandbox"))]
 pub const MAX_BLOCK_WAIT_DELAY: u64 = 6_000 * 10;
+#[cfg(feature = "sandbox")]
+pub const MAX_BLOCK_WAIT_DELAY: u64 = 6_000;
 
 /// Horizon at which instead of fetching block, fetch full state.
 const BLOCK_FETCH_HORIZON: BlockHeightDelta = 50;
@@ -115,7 +118,10 @@ const BLOCK_FETCH_HORIZON: BlockHeightDelta = 50;
 const BLOCK_HEADER_FETCH_HORIZON: BlockHeightDelta = 50;
 
 /// Time between check to perform catchup.
+#[cfg(not(feature = "sandbox"))]
 const CATCHUP_STEP_PERIOD: u64 = 100 * 30;
+#[cfg(feature = "sandbox")]
+const CATCHUP_STEP_PERIOD: u64 = 100;
 
 /// Time between checking to re-request chunks.
 const CHUNK_REQUEST_RETRY_PERIOD: u64 = 400;
@@ -191,7 +197,7 @@ pub const MAX_INFLATION_RATE: Rational32 = Rational32::new_raw(1, 20);
 pub const PROTOCOL_UPGRADE_STAKE_THRESHOLD: Rational32 = Rational32::new_raw(4, 5);
 
 fn default_doomslug_step_period() -> Duration {
-    Duration::from_millis(200)
+    Duration::from_millis(100)
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Clone, Debug)]
@@ -1468,6 +1474,7 @@ pub fn load_test_config(seed: &str, addr: tcp::ListenerAddr, genesis: Genesis) -
 
 #[test]
 fn test_init_config_localnet() {
+    use std::str::FromStr;
     // Check that we can initialize the config with multiple shards.
     let temp_dir = tempdir().unwrap();
     init_configs(
@@ -1524,6 +1531,7 @@ fn test_init_config_localnet() {
 // * Run the initialization again
 // * Check that the key files got created
 fn test_init_config_localnet_keep_config_create_node_key() {
+    use std::str::FromStr;
     let temp_dir = tempdir().unwrap();
     // Initialize all config and key files.
     init_configs(
