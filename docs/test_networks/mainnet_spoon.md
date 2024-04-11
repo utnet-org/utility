@@ -24,16 +24,16 @@ you have your node's home directory set up, run the following
 `state-viewer` command to generate a dump of the chain's state:
 
 ```shell
-$ uncd --home $unc_HOME_DIRECTORY view-state dump-state --stream
+$ uncd --home $UNC_HOME_DIRECTORY view-state dump-state --stream
 ```
 
 This command will take a while (possibly many hours) to run. But at the
 end you should have `genesis.json` and `records.json` files in
-`$unc_HOME_DIRECTORY/output`. This records file represents all of the
+`$UNC_HOME_DIRECTORY/output`. This records file represents all of the
 chain's current state, and is what we'll use to start our chain.
 
 From here, we need to make some changes to the `genesis.json` that was
-generated in `$unc_HOME_DIRECTORY/output`. To see why, note that the
+generated in `$UNC_HOME_DIRECTORY/output`. To see why, note that the
 validators field of this genesis file lists all the current mainnet
 validators and their keys. So that means if we were to try and start a
 test chain from the generated genesis and records files as-is, it
@@ -125,7 +125,7 @@ use the `uncd amend-genesis` command like so:
 
 ```shell
 # mkdir ~/unc-test-chain/
-$ uncd amend-genesis --genesis-file-in $unc_HOME_DIRECTORY/output/genesis.json --records-file-in $unc_HOME_DIRECTORY/output/records.json --validators ~/test-chain-scratch/validators.json --extra-records ~/test-chain-scratch/extra-records.json --chain-id $TEST_CHAIN_ID --records-file-out ~/unc-test-chain/records.json --genesis-file-out ~/unc-test-chain/genesis.json
+$ uncd amend-genesis --genesis-file-in $UNC_HOME_DIRECTORY/output/genesis.json --records-file-in $UNC_HOME_DIRECTORY/output/records.json --validators ~/test-chain-scratch/validators.json --extra-records ~/test-chain-scratch/extra-records.json --chain-id $TEST_CHAIN_ID --records-file-out ~/unc-test-chain/records.json --genesis-file-out ~/unc-test-chain/genesis.json
 ```
 
 ## Starting the network

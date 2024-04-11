@@ -53,7 +53,7 @@ pub mod state_sync;
 pub mod test_utils;
 
 pub fn get_default_home() -> PathBuf {
-    if let Ok(unc_home) = std::env::var("unc_HOME") {
+    if let Ok(unc_home) = std::env::var("UNC_HOME") {
         return unc_home.into();
     }
 

@@ -69,7 +69,7 @@ Then use [estimator-warehouse](../estimator-warehouse) to interact with the data
 The script running estimations can be configured to use where it should store the estimated data, where
 
 * SQLI_DB="/path/to/db.sqlite"
-* ESTIMATOR_unc_HOME="/path/to/unc/home"
+* ESTIMATOR_UNC_HOME="/path/to/unc/home"
   * Use this if a persistent unc state should be used. Useful for testing with large stores. But make sure the deployed test contracts are up-to-date.
 * REPO_UNDER_TEST="/path/to/another/repository"
   * If you want to run the estimator on a repository clone other than the current directory. Useful to run estimation on older commits, which do not have the continuous estimation scripts.
