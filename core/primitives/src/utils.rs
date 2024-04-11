@@ -469,20 +469,20 @@ where
     Serializable(object)
 }
 
-/// From `unc-account-id` version `1.0.0-alpha.2`, `is_implicit` returns true for ETH-implicit accounts.
-/// This function is a wrapper for `is_implicit` method so that we can easily differentiate its behavior
+/// From `unc-account-id` version `0.7.2`, `is_valid` returns true for ETH-implicit accounts.
+/// This function is a wrapper for `is_valid` method so that we can easily differentiate its behavior
 /// based on whether ETH-implicit accounts are enabled.
-pub fn account_is_implicit(account_id: &AccountId, eth_implicit_accounts_enabled: bool) -> bool {
-    if eth_implicit_accounts_enabled {
-        account_id.get_account_type().is_implicit()
+pub fn account_is_valid(account_id: &AccountId, eth_accounts_enabled: bool) -> bool {
+    if eth_accounts_enabled {
+        account_id.get_account_type().is_valid()
     } else {
-        account_id.get_account_type() == AccountType::NearImplicitAccount
+        account_id.get_account_type() == AccountType::UtilityAccount
     }
 }
 
 /// Returns hex-encoded copy of the public key.
-/// This is a UNC-implicit account ID which can be controlled by the corresponding ED25519 private key.
-pub fn derive_unc_implicit_account_id(public_key: &ED25519PublicKey) -> AccountId {
+/// This is a unc-implicit account ID which can be controlled by the corresponding ED25519 private key.
+pub fn derive_unc_account_id(public_key: &ED25519PublicKey) -> AccountId {
     hex::encode(public_key).parse().unwrap()
 }
 
@@ -500,11 +500,11 @@ mod tests {
     use unc_crypto::{KeyType, PublicKey};
 
     #[test]
-    fn test_derive_unc_implicit_account_id() {
+    fn test_derive_unc_account_id() {
         let public_key = PublicKey::from_seed(KeyType::ED25519, "test");
         let expected: AccountId =
             "bb4dc639b212e075a751685b26bdcea5920a504181ff2910e8549742127092a0".parse().unwrap();
-        let account_id = derive_unc_implicit_account_id(public_key.unwrap_as_ed25519());
+        let account_id = derive_unc_account_id(public_key.unwrap_as_ed25519());
         assert_eq!(account_id, expected);
     }
 

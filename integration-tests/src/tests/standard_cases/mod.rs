@@ -16,7 +16,7 @@ use unc_primitives::errors::{
 };
 use unc_primitives::hash::{hash, CryptoHash};
 use unc_primitives::types::{AccountId, Balance, TrieNodesCount};
-use unc_primitives::utils::{derive_eth_implicit_account_id, derive_unc_implicit_account_id};
+use unc_primitives::utils::{derive_eth_implicit_account_id, derive_unc_account_id};
 use unc_primitives::views::{
     AccessKeyView, AccountView, ExecutionMetadataView, FinalExecutionOutcomeView,
     FinalExecutionStatus,
@@ -338,15 +338,15 @@ pub fn transfer_tokens_to_implicit_account(node: impl Node, public_key: PublicKe
     let fee_helper = fee_helper(&node);
 
     let receiver_id = match public_key.key_type() {
-        KeyType::ED25519 => derive_unc_implicit_account_id(public_key.unwrap_as_ed25519()),
+        KeyType::ED25519 => derive_unc_account_id(public_key.unwrap_as_ed25519()),
         KeyType::SECP256K1 => derive_eth_implicit_account_id(public_key.unwrap_as_secp256k1()),
         KeyType::RSA2048 => panic!("RSA keys not supported"),
     };
 
     let transfer_cost = match receiver_id.get_account_type() {
-        AccountType::NearImplicitAccount => fee_helper.create_account_transfer_full_key_cost(),
-        AccountType::EthImplicitAccount => fee_helper.create_account_transfer_cost(),
-        AccountType::NamedAccount => std::panic!("must be implicit"),
+        AccountType::UtilityAccount => fee_helper.create_account_transfer_full_key_cost(),
+        AccountType::EthAccount => fee_helper.create_account_transfer_cost(),
+        AccountType::Reserved => std::panic!("must be implicit"),
     };
 
     let transaction_result =
@@ -371,14 +371,14 @@ pub fn transfer_tokens_to_implicit_account(node: impl Node, public_key: PublicKe
 
     let view_access_key = node_user.get_access_key(&receiver_id, &public_key);
     match receiver_id.get_account_type() {
-        AccountType::NearImplicitAccount => {
+        AccountType::UtilityAccount => {
             assert_eq!(view_access_key.unwrap(), AccessKey::full_access().into());
         }
-        AccountType::EthImplicitAccount => {
+        AccountType::EthAccount => {
             // A transfer to ETH-implicit address does not create access key.
             assert!(view_access_key.is_err());
         }
-        AccountType::NamedAccount => std::panic!("must be implicit"),
+        AccountType::Reserved => std::panic!("must be implicit"),
     }
 
     let transaction_result =
@@ -411,7 +411,7 @@ pub fn trying_to_create_implicit_account(node: impl Node, public_key: PublicKey)
     let fee_helper = fee_helper(&node);
 
     let receiver_id = match public_key.key_type() {
-        KeyType::ED25519 => derive_unc_implicit_account_id(public_key.unwrap_as_ed25519()),
+        KeyType::ED25519 => derive_unc_account_id(public_key.unwrap_as_ed25519()),
         KeyType::SECP256K1 => derive_eth_implicit_account_id(public_key.unwrap_as_secp256k1()),
         KeyType::RSA2048 => panic!("RSA keys not supported"),
     };
@@ -424,17 +424,17 @@ pub fn trying_to_create_implicit_account(node: impl Node, public_key: PublicKey)
     let add_access_key_fee = fee_helper.cfg().fee(ActionCosts::add_full_access_key).send_fee(false);
 
     let cost = match receiver_id.get_account_type() {
-        AccountType::NearImplicitAccount => {
+        AccountType::UtilityAccount => {
             fee_helper.create_account_transfer_full_key_cost_fail_on_create_account()
                 + fee_helper.gas_to_balance(create_account_fee + add_access_key_fee)
         }
-        AccountType::EthImplicitAccount => {
-            // This test uses `node_user.create_account` method that is normally used for NamedAccounts and should fail here.
+        AccountType::EthAccount => {
+            // This test uses `node_user.create_account` method that is normally used for Reserveds and should fail here.
             fee_helper.create_account_transfer_full_key_cost_fail_on_create_account()
                 // We add this fee analogously to the UNC-implicit match arm above (without `add_access_key_fee`).
                 + fee_helper.gas_to_balance(create_account_fee)
         }
-        AccountType::NamedAccount => std::panic!("must be implicit"),
+        AccountType::Reserved => std::panic!("must be implicit"),
     };
 
     assert_eq!(

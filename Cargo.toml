@@ -189,7 +189,7 @@ lru = "0.7.2"
 memmap2 = "0.5"
 memoffset = "0.8"
 more-asserts = "0.2"
-unc-account-id = { version = "0.1.0", features = ["internal_unstable", "serde", "borsh"] }
+unc-account-id = { version = "0.7.2", features = ["internal_unstable", "serde", "borsh"] }
 unc-actix-test-utils = { path = "test-utils/actix-test-utils" }
 unc-amend-genesis = { path = "tools/amend-genesis" }
 unc-database-tool= { path = "tools/database" }

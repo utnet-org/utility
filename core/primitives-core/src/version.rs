@@ -129,7 +129,7 @@ pub enum ProtocolFeature {
     /// Enables chunk validation which is introduced with stateless validation.
     /// NEP: https://github.com/Utility/UEPs/pull/509
     ChunkValidation,
-    EthImplicitAccounts,
+    EthAccounts,
 }
 
 impl ProtocolFeature {
@@ -185,7 +185,7 @@ impl ProtocolFeature {
             #[cfg(feature = "protocol_feature_reject_blocks_with_outdated_protocol_version")]
             ProtocolFeature::RejectBlocksWithOutdatedProtocolVersions => 132,
             ProtocolFeature::ChunkValidation => 137,
-            ProtocolFeature::EthImplicitAccounts => 138,
+            ProtocolFeature::EthAccounts => 138,
         }
     }
 }

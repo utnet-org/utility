@@ -158,7 +158,7 @@ pub enum Parameter {
     AltBn128,
     FunctionCallWeight,
     VmKind,
-    EthImplicitAccounts,
+    EthAccounts,
 
     ActionRegisterRSA2048Keys,
     ActionCreateRSA2048Challenge,

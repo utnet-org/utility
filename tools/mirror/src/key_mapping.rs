@@ -1,7 +1,7 @@
 use hkdf::Hkdf;
 use unc_crypto::{ED25519PublicKey, ED25519SecretKey, PublicKey, Secp256K1PublicKey, SecretKey};
 use unc_primitives::types::AccountId;
-use unc_primitives::utils::derive_unc_implicit_account_id;
+use unc_primitives::utils::derive_unc_account_id;
 use unc_primitives_core::account::id::AccountType;
 use sha2::Sha256;
 
@@ -106,14 +106,14 @@ pub fn map_account(
     secret: Option<&[u8; crate::secret::SECRET_LEN]>,
 ) -> AccountId {
     match account_id.get_account_type() {
-        AccountType::NearImplicitAccount => {
+        AccountType::UtilityAccount => {
             let public_key =
                 PublicKey::from_unc_implicit_account(account_id).expect("must be implicit");
             let mapped_key = map_key(&public_key, secret);
-            derive_unc_implicit_account_id(&mapped_key.public_key().unwrap_as_ed25519())
+            derive_unc_account_id(&mapped_key.public_key().unwrap_as_ed25519())
         }
         // TODO(eth-implicit) map to a new ETH address
-        AccountType::EthImplicitAccount => account_id.clone(),
-        AccountType::NamedAccount => account_id.clone(),
+        AccountType::EthAccount => account_id.clone(),
+        AccountType::Reserved => account_id.clone(),
     }
 }

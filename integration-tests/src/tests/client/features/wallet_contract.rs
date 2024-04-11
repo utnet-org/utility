@@ -69,7 +69,7 @@ fn view_request(env: &TestEnv, request: QueryRequest) -> QueryResponse {
 /// Tests that ETH-implicit account is created correctly, with Wallet Contract hash.
 #[test]
 fn test_eth_implicit_account_creation() {
-    if !checked_feature!("stable", EthImplicitAccounts, PROTOCOL_VERSION) {
+    if !checked_feature!("stable", EthAccounts, PROTOCOL_VERSION) {
         return;
     }
     let genesis = Genesis::test(vec!["test0".parse().unwrap(), "test1".parse().unwrap()], 1);
@@ -125,7 +125,7 @@ fn test_eth_implicit_account_creation() {
 /// Test that transactions from ETH-implicit accounts are rejected.
 #[test]
 fn test_transaction_from_eth_implicit_account_fail() {
-    if !checked_feature!("stable", EthImplicitAccounts, PROTOCOL_VERSION) {
+    if !checked_feature!("stable", EthAccounts, PROTOCOL_VERSION) {
         return;
     }
     let genesis = Genesis::test(vec!["test0".parse().unwrap(), "test1".parse().unwrap()], 1);
@@ -230,7 +230,7 @@ fn test_transaction_from_eth_implicit_account_fail() {
 /// the transaction is either authorized or unauthorized.
 /// The `authorized` parameter controls which case will be tested.
 fn meta_tx_call_wallet_contract(create_account: bool, authorized: bool) {
-    if !checked_feature!("stable", EthImplicitAccounts, PROTOCOL_VERSION) {
+    if !checked_feature!("stable", EthAccounts, PROTOCOL_VERSION) {
         return;
     }
     let genesis = Genesis::test(vec![alice_account(), bob_account(), carol_account()], 3);

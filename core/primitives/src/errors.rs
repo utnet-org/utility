@@ -437,13 +437,6 @@ pub enum ActionErrorKind {
     AccountAlreadyExists { account_id: AccountId },
     /// Happens when TX receiver_id doesn't exist (but action is not Action::CreateAccount)
     AccountDoesNotExist { account_id: AccountId },
-    /// A top-level account ID can only be created by registrar.
-    CreateAccountOnlyByRegistrar {
-        account_id: AccountId,
-        registrar_account_id: AccountId,
-        predecessor_id: AccountId,
-    },
-
     /// A newly created account must be under a namespace of the creator account
     CreateAccountNotAllowed { account_id: AccountId, predecessor_id: AccountId },
     /// Administrative actions like `DeployContract`, `Pledge`, `AddKey`, `DeleteKey`. can be proceed only if sender=receiver
@@ -492,7 +485,7 @@ pub enum ActionErrorKind {
     /// Also, see ETH-implicit account creation NEP: <https://github.com/Utility/UEPs/issues/518>.
     ///
     /// TODO(#8598): This error is named very poorly. A better name would be
-    /// `OnlyNamedAccountCreationAllowed`.
+    /// `OnlyReservedCreationAllowed`.
     OnlyImplicitAccountCreationAllowed { account_id: AccountId },
     /// Delete account whose state is large is temporarily banned.
     DeleteAccountWithLargeState { account_id: AccountId },
@@ -798,11 +791,6 @@ impl Display for ActionErrorKind {
                 f,
                 "Account {:?} tries to pledge {}, but has pledging {} and only has {}",
                 account_id, pledge, pledging, balance
-            ),
-            ActionErrorKind::CreateAccountOnlyByRegistrar { account_id, registrar_account_id, predecessor_id } => write!(
-                f,
-                "A top-level account ID {:?} can't be created by {:?}, short top-level account IDs can only be created by {:?}",
-                account_id, predecessor_id, registrar_account_id,
             ),
             ActionErrorKind::CreateAccountNotAllowed { account_id, predecessor_id } => write!(
                 f,

@@ -106,7 +106,7 @@ impl PublicKey {
     pub fn from_unc_implicit_account(
         account_id: &unc_account_id::AccountId,
     ) -> Result<Self, ImplicitPublicKeyError> {
-        if account_id.get_account_type() != AccountType::NearImplicitAccount {
+        if account_id.get_account_type() != AccountType::UtilityAccount {
             return Err(ImplicitPublicKeyError::AccountIsNotNearImplicit {
                 account_id: account_id.clone(),
             });

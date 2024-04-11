@@ -180,7 +180,7 @@ pub struct Config {
     /// Enable the `FunctionCallWeight` protocol feature.
     pub function_call_weight: bool,
 
-    /// Enable the `EthImplicitAccounts` protocol feature.
+    /// Enable the `EthAccounts` protocol feature.
     pub eth_implicit_accounts: bool,
 
     /// Describes limits for VM and Runtime.

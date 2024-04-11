@@ -338,11 +338,9 @@ impl Runtime {
             Action::CreateAccount(_) => {
                 action_create_account(
                     &apply_state.config.fees,
-                    &apply_state.config.account_creation_config,
                     account,
                     actor_id,
                     &receipt.receiver_id,
-                    &receipt.predecessor_id,
                     &mut result,
                 );
             }

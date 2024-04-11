@@ -7,7 +7,7 @@ use crate::receipt_manager::ReceiptManager;
 use crate::{metrics, ActionResult, ApplyState};
 
 use unc_crypto::PublicKey;
-use unc_parameters::{AccountCreationConfig, ActionCosts, RuntimeConfig, RuntimeFeesConfig};
+use unc_parameters::{ActionCosts, RuntimeConfig, RuntimeFeesConfig};
 use unc_primitives::account::{AccessKey, AccessKeyPermission, Account};
 use unc_primitives::action::delegate::{DelegateAction, SignedDelegateAction};
 use unc_primitives::checked_feature;
@@ -21,7 +21,7 @@ use unc_primitives::transaction::{
 };
 use unc_primitives::types::validator_power::ValidatorPower;
 use unc_primitives::types::{AccountId, BlockHeight, EpochInfoProvider, Gas, TrieCacheMode};
-use unc_primitives::utils::{account_is_implicit, create_random_seed};
+use unc_primitives::utils::{account_is_valid, create_random_seed};
 use unc_primitives::version::{
     ProtocolFeature, ProtocolVersion, DELETE_KEY_STORAGE_USAGE_PROTOCOL_VERSION,
 };
@@ -49,8 +49,8 @@ fn get_contract_code(
 ) -> Result<Option<Arc<ContractCode>>, StorageError> {
     let account_id = runtime_ext.account_id();
     let code_hash = account.code_hash();
-    if checked_feature!("stable", EthImplicitAccounts, protocol_version)
-        && account_id.get_account_type() == AccountType::EthImplicitAccount
+    if checked_feature!("stable", EthAccounts, protocol_version)
+        && account_id.get_account_type() == AccountType::EthAccount
     {
         assert!(code_hash == *wallet_contract_magic_bytes().hash());
         return Ok(Some(wallet_contract()));
@@ -405,40 +405,11 @@ pub(crate) fn action_transfer(
 
 pub(crate) fn action_create_account(
     fee_config: &RuntimeFeesConfig,
-    account_creation_config: &AccountCreationConfig,
     account: &mut Option<Account>,
     actor_id: &mut AccountId,
     account_id: &AccountId,
-    predecessor_id: &AccountId,
-    result: &mut ActionResult,
+    _result: &mut ActionResult,
 ) {
-    if account_id.is_top_level() {
-        if account_id.len() < account_creation_config.min_allowed_top_level_account_length as usize
-            && predecessor_id != &account_creation_config.registrar_account_id
-        {
-            // A short top-level account ID can only be created registrar account.
-            result.result = Err(ActionErrorKind::CreateAccountOnlyByRegistrar {
-                account_id: account_id.clone(),
-                registrar_account_id: account_creation_config.registrar_account_id.clone(),
-                predecessor_id: predecessor_id.clone(),
-            }
-            .into());
-            return;
-        } else {
-            // OK: Valid top-level Account ID
-        }
-    } else if !account_id.is_sub_account_of(predecessor_id) {
-        // The sub-account can only be created by its root account. E.g. `alice.unc` only by `unc`
-        result.result = Err(ActionErrorKind::CreateAccountNotAllowed {
-            account_id: account_id.clone(),
-            predecessor_id: predecessor_id.clone(),
-        }
-        .into());
-        return;
-    } else {
-        // OK: Valid sub-account ID by proper predecessor.
-    }
-
     *actor_id = account_id.clone();
     *account = Some(Account::new(
         0,
@@ -464,7 +435,7 @@ pub(crate) fn action_implicit_account_creation_transfer(
     *actor_id = account_id.clone();
 
     match account_id.get_account_type() {
-        AccountType::NearImplicitAccount => {
+        AccountType::UtilityAccount => {
             let mut access_key = AccessKey::full_access();
             // Set default nonce for newly created access key to avoid transaction hash collision.
             // See <https://github.com/utnet-org/utility/issues/3779>.
@@ -495,8 +466,8 @@ pub(crate) fn action_implicit_account_creation_transfer(
         }
         // Invariant: The `account_id` is implicit.
         // It holds because in the only calling site, we've checked the permissions before.
-        AccountType::EthImplicitAccount => {
-            if checked_feature!("stable", EthImplicitAccounts, current_protocol_version) {
+        AccountType::EthAccount => {
+            if checked_feature!("stable", EthAccounts, current_protocol_version) {
                 // We deploy "unc[wallet contract hash]" magic bytes as the contract code,
                 // to mark that this is a uncd-defined contract. It will not be used on a function call.
                 // Instead, uncd-defined Wallet Contract implementation will be used.
@@ -521,14 +492,14 @@ pub(crate) fn action_implicit_account_creation_transfer(
                 .ok();
             } else {
                 // This panic is unreachable as this is an implicit account creation transfer.
-                // `check_account_existence` would fail because in this protocol version `account_is_implicit`
+                // `check_account_existence` would fail because in this protocol version `account_is_valid`
                 // would return false for an account that is of the ETH-implicit type.
                 panic!("must be unc-implicit");
             }
         }
         // This panic is unreachable as this is an implicit account creation transfer.
-        // `check_account_existence` would fail because `account_is_implicit` would return false for a Named account.
-        AccountType::NamedAccount => panic!("must be implicit"),
+        // `check_account_existence` would fail because `account_is_valid` would return false for a Named account.
+        AccountType::Reserved => panic!("must be implicit"),
     }
 }
 
@@ -1094,7 +1065,7 @@ pub(crate) fn check_account_existence(
             } else {
                 // TODO: this should be `config.implicit_account_creation`.
                 if config.wasm_config.implicit_account_creation
-                    && account_is_implicit(account_id, config.wasm_config.eth_implicit_accounts)
+                    && account_is_valid(account_id, config.wasm_config.eth_implicit_accounts)
                 {
                     // If the account doesn't exist and it's implicit, then you
                     // should only be able to create it using single transfer action.
@@ -1116,7 +1087,7 @@ pub(crate) fn check_account_existence(
             if account.is_none() {
                 return if config.wasm_config.implicit_account_creation
                     && is_the_only_action
-                    && account_is_implicit(account_id, config.wasm_config.eth_implicit_accounts)
+                    && account_is_valid(account_id, config.wasm_config.eth_implicit_accounts)
                     && !is_refund
                 {
                     // OK. It's implicit account creation.
@@ -1188,14 +1159,9 @@ mod tests {
         let mut action_result = ActionResult::default();
         action_create_account(
             &RuntimeFeesConfig::test(),
-            &AccountCreationConfig {
-                min_allowed_top_level_account_length: length,
-                registrar_account_id: "registrar".parse().unwrap(),
-            },
             &mut account,
             &mut actor_id,
             &account_id,
-            &predecessor_id,
             &mut action_result,
         );
         if action_result.result.is_ok() {

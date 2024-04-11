@@ -18,7 +18,7 @@ use unc_primitives::shard_layout::ShardLayout;
 use unc_primitives::sharding::ChunkHash;
 use unc_primitives::transaction::SignedTransaction;
 use unc_primitives::types::{AccountId, BlockHeight};
-use unc_primitives::utils::derive_unc_implicit_account_id;
+use unc_primitives::utils::derive_unc_account_id;
 use unc_primitives::version::{ProtocolFeature, ProtocolVersion};
 use unc_primitives::views::FinalExecutionStatus;
 use framework::config::GenesisExt;
@@ -205,7 +205,7 @@ fn test_transaction_hash_collision_for_unc_implicit_account_fail() {
     let protocol_version = ProtocolFeature::AccessKeyNonceForImplicitAccounts.protocol_version();
     let secret_key = SecretKey::from_seed(KeyType::ED25519, "test");
     let public_key = secret_key.public_key();
-    let unc_implicit_account_id = derive_unc_implicit_account_id(public_key.unwrap_as_ed25519());
+    let unc_implicit_account_id = derive_unc_account_id(public_key.unwrap_as_ed25519());
     let unc_implicit_account_signer =
         InMemorySigner::from_secret_key(unc_implicit_account_id, secret_key);
     assert_matches!(
@@ -224,7 +224,7 @@ fn test_transaction_hash_collision_for_unc_implicit_account_ok() {
         ProtocolFeature::AccessKeyNonceForImplicitAccounts.protocol_version() - 1;
     let secret_key = SecretKey::from_seed(KeyType::ED25519, "test");
     let public_key = secret_key.public_key();
-    let unc_implicit_account_id = derive_unc_implicit_account_id(public_key.unwrap_as_ed25519());
+    let unc_implicit_account_id = derive_unc_account_id(public_key.unwrap_as_ed25519());
     let unc_implicit_account_signer =
         InMemorySigner::from_secret_key(unc_implicit_account_id, secret_key);
     assert_matches!(

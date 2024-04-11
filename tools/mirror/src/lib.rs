@@ -991,7 +991,7 @@ impl<T: ChainAccess> TxMirror<T> {
                 }
                 Action::Transfer(_) => {
                     // TODO(eth-implicit) Change back to is_implicit() when ETH-implicit accounts are supported.
-                    if tx.receiver_id().get_account_type() == AccountType::NearImplicitAccount
+                    if tx.receiver_id().get_account_type() == AccountType::UtilityAccount
                         && source_actions.len() == 1
                     {
                         let target_account =
@@ -1005,7 +1005,7 @@ impl<T: ChainAccess> TxMirror<T> {
                                 )
                             })?
                         {
-                            if target_account.get_account_type() == AccountType::NearImplicitAccount
+                            if target_account.get_account_type() == AccountType::UtilityAccount
                             {
                                 let public_key =
                                     PublicKey::from_unc_implicit_account(&target_account)

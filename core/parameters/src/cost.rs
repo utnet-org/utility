@@ -523,17 +523,17 @@ pub fn transfer_exec_fee(
     match (implicit_account_creation_allowed, eth_implicit_accounts_enabled, receiver_account_type)
     {
         // Regular transfer to a named account.
-        (_, _, AccountType::NamedAccount) => transfer_fee,
+        (_, _, AccountType::Reserved) => transfer_fee,
         // No account will be created, just a regular transfer.
         (false, _, _) => transfer_fee,
         // No account will be created, just a regular transfer.
-        (true, false, AccountType::EthImplicitAccount) => transfer_fee,
+        (true, false, AccountType::EthAccount) => transfer_fee,
         // Extra fee for the CreateAccount.
-        (true, true, AccountType::EthImplicitAccount) => {
+        (true, true, AccountType::EthAccount) => {
             transfer_fee + cfg.fee(ActionCosts::create_account).exec_fee()
         }
         // Extra fees for the CreateAccount and AddFullAccessKey.
-        (true, _, AccountType::NearImplicitAccount) => {
+        (true, _, AccountType::UtilityAccount) => {
             transfer_fee
                 + cfg.fee(ActionCosts::create_account).exec_fee()
                 + cfg.fee(ActionCosts::add_full_access_key).exec_fee()
@@ -552,17 +552,17 @@ pub fn transfer_send_fee(
     match (implicit_account_creation_allowed, eth_implicit_accounts_enabled, receiver_account_type)
     {
         // Regular transfer to a named account.
-        (_, _, AccountType::NamedAccount) => transfer_fee,
+        (_, _, AccountType::Reserved) => transfer_fee,
         // No account will be created, just a regular transfer.
         (false, _, _) => transfer_fee,
         // No account will be created, just a regular transfer.
-        (true, false, AccountType::EthImplicitAccount) => transfer_fee,
+        (true, false, AccountType::EthAccount) => transfer_fee,
         // Extra fee for the CreateAccount.
-        (true, true, AccountType::EthImplicitAccount) => {
+        (true, true, AccountType::EthAccount) => {
             transfer_fee + cfg.fee(ActionCosts::create_account).send_fee(sender_is_receiver)
         }
         // Extra fees for the CreateAccount and AddFullAccessKey.
-        (true, _, AccountType::NearImplicitAccount) => {
+        (true, _, AccountType::UtilityAccount) => {
             transfer_fee
                 + cfg.fee(ActionCosts::create_account).send_fee(sender_is_receiver)
                 + cfg.fee(ActionCosts::add_full_access_key).send_fee(sender_is_receiver)
