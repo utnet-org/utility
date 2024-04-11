@@ -1065,7 +1065,7 @@ pub(crate) fn check_account_existence(
             } else {
                 // TODO: this should be `config.implicit_account_creation`.
                 if config.wasm_config.implicit_account_creation
-                    && account_is_valid(account_id, config.wasm_config.eth_implicit_accounts)
+                    && account_is_valid(account_id, config.wasm_config.eth_accounts)
                 {
                     // If the account doesn't exist and it's implicit, then you
                     // should only be able to create it using single transfer action.
@@ -1087,7 +1087,7 @@ pub(crate) fn check_account_existence(
             if account.is_none() {
                 return if config.wasm_config.implicit_account_creation
                     && is_the_only_action
-                    && account_is_valid(account_id, config.wasm_config.eth_implicit_accounts)
+                    && account_is_valid(account_id, config.wasm_config.eth_accounts)
                     && !is_refund
                 {
                     // OK. It's implicit account creation.

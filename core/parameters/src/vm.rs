@@ -181,7 +181,7 @@ pub struct Config {
     pub function_call_weight: bool,
 
     /// Enable the `EthAccounts` protocol feature.
-    pub eth_implicit_accounts: bool,
+    pub eth_accounts: bool,
 
     /// Describes limits for VM and Runtime.
     pub limit_config: LimitConfig,
