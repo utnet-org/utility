@@ -12,7 +12,7 @@ license = "GPL-2.0-or-later"
 # Most crates are not stable on purpose, as maintaining API compatibility is a
 # significant developer time expense. Please think thoroughly before adding
 # anything to the list of stable crates.
-version = "0.7.2"
+version = "0.7.3"
 exclude = ["uncd"]
 
 [workspace]
