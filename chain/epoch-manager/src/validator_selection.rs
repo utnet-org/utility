@@ -1,20 +1,23 @@
 use crate::shard_assignment::assign_shards;
-use unc_primitives::checked_feature;
-use unc_primitives::epoch_manager::epoch_info::EpochInfo;
-use unc_primitives::epoch_manager::{EpochConfig, RngSeed};
-use unc_primitives::errors::{BlockError, EpochError};
-use unc_primitives::types::validator_power::ValidatorPower;
-use unc_primitives::types::{AccountId, Balance, NumShards, Power, ProtocolVersion, ValidatorPledgeV1, ValidatorId, ValidatorKickoutReason, ValidatorPowerAndPledgeV1, ValidatorPowerV1};
-use unc_primitives::validator_mandates::{ValidatorMandates, ValidatorMandatesConfig};
 use num_rational::Ratio;
 use std::cmp::{self, Ordering};
 use std::collections::hash_map;
 use std::collections::{BTreeMap, BinaryHeap, HashMap, HashSet};
+use unc_primitives::checked_feature;
 use unc_primitives::epoch_manager::block_info::BlockInfo;
 use unc_primitives::epoch_manager::block_summary::BlockSummary;
+use unc_primitives::epoch_manager::epoch_info::EpochInfo;
+use unc_primitives::epoch_manager::{EpochConfig, RngSeed};
+use unc_primitives::errors::{BlockError, EpochError};
 use unc_primitives::hash::CryptoHash;
-use unc_primitives::types::validator_stake::ValidatorPledge;
+use unc_primitives::types::validator_power::ValidatorPower;
 use unc_primitives::types::validator_power_and_pledge::ValidatorPowerAndPledge;
+use unc_primitives::types::validator_stake::ValidatorPledge;
+use unc_primitives::types::{
+    AccountId, Balance, NumShards, Power, ProtocolVersion, ValidatorId, ValidatorKickoutReason,
+    ValidatorPledgeV1, ValidatorPowerAndPledgeV1, ValidatorPowerV1,
+};
+use unc_primitives::validator_mandates::{ValidatorMandates, ValidatorMandatesConfig};
 
 fn remove_duplicate_power_proposals(power_proposals: Vec<ValidatorPower>) -> Vec<ValidatorPower> {
     let mut unique_proposals_map: HashMap<_, _> = HashMap::new();
@@ -30,7 +33,9 @@ fn remove_duplicate_power_proposals(power_proposals: Vec<ValidatorPower>) -> Vec
     unique_proposals
 }
 
-fn remove_duplicate_pledge_proposals(pledge_proposals: Vec<ValidatorPledge>) -> Vec<ValidatorPledge> {
+fn remove_duplicate_pledge_proposals(
+    pledge_proposals: Vec<ValidatorPledge>,
+) -> Vec<ValidatorPledge> {
     let mut unique_proposals_map: HashMap<_, _> = HashMap::new();
 
     for proposal in pledge_proposals {
@@ -79,10 +84,7 @@ pub fn proposals_to_block_summary(
     let mut power_change = BTreeMap::new();
     let mut pledge_change = BTreeMap::new();
     let mut fishermen = vec![];
-    let (
-        power_proposals,
-        pledge_proposals
-    )  = proposals_with_rollover_block(
+    let (power_proposals, pledge_proposals) = proposals_with_rollover_block(
         power_proposals,
         pledge_proposals,
         prev_block_summary,
@@ -101,14 +103,12 @@ pub fn proposals_to_block_summary(
         min_pledge_ratio,
         next_version,
     );
-    let (
-            cp_power_proposals,
-            cp_pledge_proposals,
-            chunk_producers,
-            cp_pledge_threshold
-        ) = if checked_feature!("stable", ChunkOnlyProducers, next_version) {
-            let mut cp_power_proposals = order_power_proposals(power_proposals.clone().into_values());
-            let mut cp_pledge_proposals = order_pledge_proposals(pledge_proposals.clone().into_values());
+    let (cp_power_proposals, cp_pledge_proposals, chunk_producers, cp_pledge_threshold) =
+        if checked_feature!("stable", ChunkOnlyProducers, next_version) {
+            let mut cp_power_proposals =
+                order_power_proposals(power_proposals.clone().into_values());
+            let mut cp_pledge_proposals =
+                order_pledge_proposals(pledge_proposals.clone().into_values());
             let max_cp_selected = max_bp_selected
                 + (epoch_config.validator_selection_config.num_chunk_only_producer_seats as usize);
             let (chunk_producers, cp_pledge_treshold) = select_chunk_producers(
@@ -133,11 +133,11 @@ pub fn proposals_to_block_summary(
         let pledge = p.pledge();
         let account_id = p.account_id();
         let power = cp_power_map.get(&account_id.clone()).unwrap_or(&0);
-        let r_p = ValidatorPowerAndPledge::V1(ValidatorPowerAndPledgeV1{
-            account_id : account_id.clone(),
-            public_key : p.public_key().clone(),
-            power : power.clone(),
-            pledge : pledge.clone(),
+        let r_p = ValidatorPowerAndPledge::V1(ValidatorPowerAndPledgeV1 {
+            account_id: account_id.clone(),
+            public_key: p.public_key().clone(),
+            power: power.clone(),
+            pledge: pledge.clone(),
         });
         if pledge >= epoch_config.fishermen_threshold {
             fishermen.push(r_p);
@@ -151,7 +151,7 @@ pub fn proposals_to_block_summary(
                 let pledge_value = pledge;
                 validator_kickout.insert(
                     account_id,
-                    ValidatorKickoutReason::NotEnoughPledge { pledge : pledge_value, threshold },
+                    ValidatorKickoutReason::NotEnoughPledge { pledge: pledge_value, threshold },
                 );
             }
         }
@@ -179,17 +179,17 @@ pub fn proposals_to_block_summary(
             shard_ids.len() as NumShards,
             minimum_validators_per_shard,
         )
-            .map_err(|_| BlockError::NotEnoughValidators {
-                num_validators: num_chunk_producers as u64,
-                num_shards: shard_ids.len() as NumShards,
-            })?;
+        .map_err(|_| BlockError::NotEnoughValidators {
+            num_validators: num_chunk_producers as u64,
+            num_shards: shard_ids.len() as NumShards,
+        })?;
 
         let mut chunk_producers_settlement: Vec<Vec<ValidatorId>> =
             shard_assignment.iter().map(|vs| Vec::with_capacity(vs.len())).collect();
         let mut i = all_validators.len();
         // Here we assign validator ids to all chunk only validators
         for (shard_validators, shard_validator_ids) in
-        shard_assignment.into_iter().zip(chunk_producers_settlement.iter_mut())
+            shard_assignment.into_iter().zip(chunk_producers_settlement.iter_mut())
         {
             for validator in shard_validators {
                 debug_assert_eq!(i, all_validators.len());
@@ -258,8 +258,8 @@ pub fn proposals_to_block_summary(
         .enumerate()
         .map(|(index, s)| (s.account_id().clone(), index as ValidatorId))
         .collect::<HashMap<_, _>>();
-    let all_power_proposals= power_proposals.values().cloned().collect();
-    let all_pledge_proposals    = pledge_proposals.values().cloned().collect();
+    let all_power_proposals = power_proposals.values().cloned().collect();
+    let all_pledge_proposals = pledge_proposals.values().cloned().collect();
     Ok(BlockSummary::new(
         *this_block_hash,
         *last_block_hash,
@@ -336,12 +336,8 @@ pub fn proposals_to_epoch_info(
         min_pledge_ratio,
         last_version,
     );
-    let (
-        cp_power_proposals,
-        cp_pledge_proposals,
-        chunk_producers,
-        cp_pledge_threshold
-        ) = if checked_feature!("stable", ChunkOnlyProducers, next_version) {
+    let (cp_power_proposals, cp_pledge_proposals, chunk_producers, cp_pledge_threshold) =
+        if checked_feature!("stable", ChunkOnlyProducers, next_version) {
             let mut cp_power_proposals = order_power_proposals(power_proposals.into_values());
             let mut cp_pledge_proposals = order_pledge_proposals(pledge_proposals.into_values());
             let max_cp_selected = max_bp_selected
@@ -368,11 +364,11 @@ pub fn proposals_to_epoch_info(
         let pledge = p.pledge();
         let account_id = p.account_id();
         let power = cp_power_map.get(&account_id.clone()).unwrap_or(&0);
-        let r_p = ValidatorPowerAndPledge::V1(ValidatorPowerAndPledgeV1{
-            account_id : account_id.clone(),
-            public_key : p.public_key().clone(),
-            power : power.clone(),
-            pledge : pledge.clone(),
+        let r_p = ValidatorPowerAndPledge::V1(ValidatorPowerAndPledgeV1 {
+            account_id: account_id.clone(),
+            public_key: p.public_key().clone(),
+            power: power.clone(),
+            pledge: pledge.clone(),
         });
         if pledge >= epoch_config.fishermen_threshold {
             fishermen.push(r_p);
@@ -386,7 +382,7 @@ pub fn proposals_to_epoch_info(
                 let pledge_value = pledge;
                 validator_kickout.insert(
                     account_id,
-                    ValidatorKickoutReason::NotEnoughPledge { pledge : pledge_value, threshold },
+                    ValidatorKickoutReason::NotEnoughPledge { pledge: pledge_value, threshold },
                 );
             }
         }
@@ -406,75 +402,74 @@ pub fn proposals_to_epoch_info(
     }
 
     let chunk_producers_settlement = if checked_feature!("stable", ChunkOnlyProducers, next_version)
-        {
-            let minimum_validators_per_shard =
-                epoch_config.validator_selection_config.minimum_validators_per_shard as usize;
-            let shard_assignment = assign_shards(
-                chunk_producers,
-                shard_ids.len() as NumShards,
-                minimum_validators_per_shard,
-            )
-            .map_err(|_| EpochError::NotEnoughValidators {
-                num_validators: num_chunk_producers as u64,
-                num_shards: shard_ids.len() as NumShards,
-            })?;
+    {
+        let minimum_validators_per_shard =
+            epoch_config.validator_selection_config.minimum_validators_per_shard as usize;
+        let shard_assignment = assign_shards(
+            chunk_producers,
+            shard_ids.len() as NumShards,
+            minimum_validators_per_shard,
+        )
+        .map_err(|_| EpochError::NotEnoughValidators {
+            num_validators: num_chunk_producers as u64,
+            num_shards: shard_ids.len() as NumShards,
+        })?;
 
-            let mut chunk_producers_settlement: Vec<Vec<ValidatorId>> =
-                shard_assignment.iter().map(|vs| Vec::with_capacity(vs.len())).collect();
-            let mut i = all_validators.len();
-            // Here we assign validator ids to all chunk only validators
-            for (shard_validators, shard_validator_ids) in
-                shard_assignment.into_iter().zip(chunk_producers_settlement.iter_mut())
-            {
-                for validator in shard_validators {
-                    debug_assert_eq!(i, all_validators.len());
-                    match validator_to_index.entry(validator.account_id().clone()) {
-                        hash_map::Entry::Vacant(entry) => {
-                            let validator_id = i as ValidatorId;
-                            entry.insert(validator_id);
-                            shard_validator_ids.push(validator_id);
-                            all_validators.push(validator);
-                            i += 1;
-                        }
-                        // Validators which have an entry in the validator_to_index map
-                        // have already been inserted into `all_validators`.
-                        hash_map::Entry::Occupied(entry) => {
-                            let validator_id = *entry.get();
-                            shard_validator_ids.push(validator_id);
-                        }
+        let mut chunk_producers_settlement: Vec<Vec<ValidatorId>> =
+            shard_assignment.iter().map(|vs| Vec::with_capacity(vs.len())).collect();
+        let mut i = all_validators.len();
+        // Here we assign validator ids to all chunk only validators
+        for (shard_validators, shard_validator_ids) in
+            shard_assignment.into_iter().zip(chunk_producers_settlement.iter_mut())
+        {
+            for validator in shard_validators {
+                debug_assert_eq!(i, all_validators.len());
+                match validator_to_index.entry(validator.account_id().clone()) {
+                    hash_map::Entry::Vacant(entry) => {
+                        let validator_id = i as ValidatorId;
+                        entry.insert(validator_id);
+                        shard_validator_ids.push(validator_id);
+                        all_validators.push(validator);
+                        i += 1;
+                    }
+                    // Validators which have an entry in the validator_to_index map
+                    // have already been inserted into `all_validators`.
+                    hash_map::Entry::Occupied(entry) => {
+                        let validator_id = *entry.get();
+                        shard_validator_ids.push(validator_id);
                     }
                 }
             }
-            chunk_producers_settlement
-        } else {
-            if chunk_producers.is_empty() {
-                // All validators tried to unpledge?
-                return Err(EpochError::NotEnoughValidators {
-                    num_validators: 0u64,
-                    num_shards: shard_ids.len() as NumShards,
-                });
-            }
-            let mut id = 0usize;
-            // Here we assign validators to chunks (we try to keep number of shards assigned for
-            // each validator as even as possible). Note that in prod configuration number of seats
-            // per shard is the same as maximal number of block producers, so normally all
-            // validators would be assigned to all chunks
-            shard_ids
-                .iter()
-                .map(|&shard_id| shard_id as usize)
-                .map(|shard_id| {
-                    (0..epoch_config.num_block_producer_seats_per_shard[shard_id]
-                        .min(block_producers_settlement.len() as u64))
-                        .map(|_| {
-                            let res = block_producers_settlement[id];
-                            id = (id + 1) % block_producers_settlement.len();
-                            res
-                        })
-                        .collect()
-                })
-                .collect()
-        };
-
+        }
+        chunk_producers_settlement
+    } else {
+        if chunk_producers.is_empty() {
+            // All validators tried to unpledge?
+            return Err(EpochError::NotEnoughValidators {
+                num_validators: 0u64,
+                num_shards: shard_ids.len() as NumShards,
+            });
+        }
+        let mut id = 0usize;
+        // Here we assign validators to chunks (we try to keep number of shards assigned for
+        // each validator as even as possible). Note that in prod configuration number of seats
+        // per shard is the same as maximal number of block producers, so normally all
+        // validators would be assigned to all chunks
+        shard_ids
+            .iter()
+            .map(|&shard_id| shard_id as usize)
+            .map(|shard_id| {
+                (0..epoch_config.num_block_producer_seats_per_shard[shard_id]
+                    .min(block_producers_settlement.len() as u64))
+                    .map(|_| {
+                        let res = block_producers_settlement[id];
+                        id = (id + 1) % block_producers_settlement.len();
+                        res
+                    })
+                    .collect()
+            })
+            .collect()
+    };
 
     let validator_mandates = if checked_feature!("stable", ChunkValidation, next_version) {
         // TODO(#10014) determine required pledge per mandate instead of reusing seat price.
@@ -527,10 +522,7 @@ fn proposals_with_rollover_block(
     power_change: &mut BTreeMap<AccountId, Power>,
     pledge_change: &mut BTreeMap<AccountId, Balance>,
     fishermen: &mut Vec<ValidatorPowerAndPledge>,
-) -> (
-    HashMap<AccountId, ValidatorPower>,
-    HashMap<AccountId, ValidatorPledge>,
-){
+) -> (HashMap<AccountId, ValidatorPower>, HashMap<AccountId, ValidatorPledge>) {
     let mut power_proposals_by_account = HashMap::new();
     for p in power_proposals {
         let account_id = p.account_id();
@@ -556,15 +548,15 @@ fn proposals_with_rollover_block(
             pledge_change.insert(account_id, 0);
             continue;
         }
-        let r_f = ValidatorPledge::V1(ValidatorPledgeV1{
-            account_id : account_id.clone(),
-            public_key : r.public_key().clone(),
-            pledge : r.pledge().clone(),
+        let r_f = ValidatorPledge::V1(ValidatorPledgeV1 {
+            account_id: account_id.clone(),
+            public_key: r.public_key().clone(),
+            pledge: r.pledge().clone(),
         });
-        let r_p = ValidatorPower::V1(ValidatorPowerV1{
-            account_id : account_id.clone(),
-            public_key : r.public_key().clone(),
-            power : r.power().clone(),
+        let r_p = ValidatorPower::V1(ValidatorPowerV1 {
+            account_id: account_id.clone(),
+            public_key: r.public_key().clone(),
+            power: r.power().clone(),
         });
         // The reward will given to the validator in the next epoch,
         // so we need to add it to the balance but not pledge.
@@ -576,7 +568,6 @@ fn proposals_with_rollover_block(
 
         let p = power_proposals_by_account.entry(account_id).or_insert(r_p);
         power_change.insert(p.account_id().clone(), p.power());
-
     }
 
     for r in prev_block_summary.fishermen_iter() {
@@ -616,10 +607,7 @@ fn proposals_with_rollover(
     power_change: &mut BTreeMap<AccountId, Power>,
     pledge_change: &mut BTreeMap<AccountId, Balance>,
     fishermen: &mut Vec<ValidatorPowerAndPledge>,
-) -> (
-        HashMap<AccountId, ValidatorPower>,
-        HashMap<AccountId, ValidatorPledge>,
-){
+) -> (HashMap<AccountId, ValidatorPower>, HashMap<AccountId, ValidatorPledge>) {
     let mut power_proposals_by_account = HashMap::new();
     for p in power_proposals {
         let account_id = p.account_id();
@@ -645,17 +633,17 @@ fn proposals_with_rollover(
             pledge_change.insert(account_id, 0);
             continue;
         }
-        let r_f = ValidatorPledge::V1(ValidatorPledgeV1{
-            account_id : account_id.clone(),
-            public_key : r.public_key().clone(),
-            pledge : r.pledge().clone(),
+        let r_f = ValidatorPledge::V1(ValidatorPledgeV1 {
+            account_id: account_id.clone(),
+            public_key: r.public_key().clone(),
+            pledge: r.pledge().clone(),
         });
-        let r_p = ValidatorPower::V1(ValidatorPowerV1{
-            account_id : account_id.clone(),
-            public_key : r.public_key().clone(),
-            power : r.power().clone(),
+        let r_p = ValidatorPower::V1(ValidatorPowerV1 {
+            account_id: account_id.clone(),
+            public_key: r.public_key().clone(),
+            power: r.power().clone(),
         });
-        // The reward will given to the validator in the next epoch, 
+        // The reward will given to the validator in the next epoch,
         //  so we need to add it to the pledge but not power.
         let f = pledge_proposals_by_account.entry(account_id.clone()).or_insert(r_f);
         // if let Some(reward) = validator_reward.get(f.account_id()) {
@@ -665,7 +653,6 @@ fn proposals_with_rollover(
 
         let p = power_proposals_by_account.entry(account_id).or_insert(r_p);
         power_change.insert(p.account_id().clone(), p.power());
-
     }
 
     for r in prev_epoch_info.fishermen_iter() {
@@ -692,7 +679,7 @@ fn order_power_proposals<I: IntoIterator<Item = ValidatorPower>>(
     proposals.into_iter().map(OrderedValidatorPower).collect()
 }
 
-fn order_pledge_proposals<I:  IntoIterator<Item = ValidatorPledge>>(
+fn order_pledge_proposals<I: IntoIterator<Item = ValidatorPledge>>(
     proposals: I,
 ) -> BinaryHeap<OrderedValidatorPledge> {
     proposals.into_iter().map(OrderedValidatorPledge).collect()
@@ -704,7 +691,13 @@ fn select_block_producers(
     min_pledge_ratio: Ratio<u128>,
     protocol_version: ProtocolVersion,
 ) -> (Vec<ValidatorPowerAndPledge>, Balance) {
-    select_validators(bp_power_proposals, bp_pledge_proposals, max_num_selected, min_pledge_ratio, protocol_version)
+    select_validators(
+        bp_power_proposals,
+        bp_pledge_proposals,
+        max_num_selected,
+        min_pledge_ratio,
+        protocol_version,
+    )
 }
 
 fn select_chunk_producers(
@@ -744,7 +737,6 @@ fn create_power_map(heap: &BinaryHeap<OrderedValidatorPower>) -> HashMap<Account
     power_map
 }
 
-
 // Use the function with the appropriate account_id and store
 // Takes the top N proposals (by pledge), or fewer if there are not enough or the
 // next proposals is too small relative to the others. In the case where all N
@@ -765,14 +757,15 @@ fn select_validators(
         let p = pledge_proposals.pop().unwrap().0;
         let p_pledge = p.pledge();
         let power = power_map.get(&p.account_id().clone()).unwrap_or(&0);
-        let p_r = ValidatorPowerAndPledge::V1(ValidatorPowerAndPledgeV1{
-            account_id : p.account_id().clone(),
-            public_key : p.public_key().clone(),
-            power : power.clone(),
-            pledge : p_pledge.clone(),
+        let p_r = ValidatorPowerAndPledge::V1(ValidatorPowerAndPledgeV1 {
+            account_id: p.account_id().clone(),
+            public_key: p.public_key().clone(),
+            power: power.clone(),
+            pledge: p_pledge.clone(),
         });
         let total_pledge_with_p = total_pledge + p_pledge;
-        if total_pledge_with_p != 0 && Ratio::new(p_pledge, total_pledge_with_p) > min_pledge_ratio {
+        if total_pledge_with_p != 0 && Ratio::new(p_pledge, total_pledge_with_p) > min_pledge_ratio
+        {
             validators.push(p_r);
             total_pledge = total_pledge_with_p;
         } else {
@@ -847,6 +840,8 @@ impl Ord for OrderedValidatorPower {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test_utils::pledge;
+    use num_rational::Ratio;
     use unc_crypto::{KeyType, PublicKey};
     use unc_primitives::account::id::AccountIdRef;
     use unc_primitives::epoch_manager::epoch_info::{EpochInfo, EpochInfoV3};
@@ -856,8 +851,6 @@ mod tests {
     #[cfg(feature = "nightly")]
     use unc_primitives::validator_mandates::{AssignmentWeight, ValidatorMandatesAssignment};
     use unc_primitives::version::PROTOCOL_VERSION;
-    use num_rational::Ratio;
-    use crate::test_utils::pledge;
 
     #[test]
     fn test_validator_assignment_all_block_producers() {
@@ -867,8 +860,10 @@ mod tests {
         let epoch_config = create_epoch_config(2, 100, 0, Default::default());
         let prev_epoch_height = 7;
         let prev_epoch_info = create_prev_epoch_info(prev_epoch_height, &["test1", "test2"], &[]);
-        let power_proposals = create_power_proposals(&[("test1", 1000), ("test2", 2000), ("test3", 300)]);
-        let pledge_proposals = create_pledge_proposals(&[("test1", 1000), ("test2", 2000), ("test3", 300)]);
+        let power_proposals =
+            create_power_proposals(&[("test1", 1000), ("test2", 2000), ("test3", 300)]);
+        let pledge_proposals =
+            create_pledge_proposals(&[("test1", 1000), ("test2", 2000), ("test3", 300)]);
         let epoch_info = proposals_to_epoch_info(
             &epoch_config,
             [0; 32],
@@ -931,28 +926,30 @@ mod tests {
             ],
             &[],
         );
-        let pledge_proposals = create_pledge_proposals((2..(2 * num_bp_seats + num_cp_seats)).map(|i| {
-            (
-                format!("test{}", i),
-                2000u128 + (i as u128),
-                if i <= num_cp_seats {
-                    Proposal::ChunkOnlyProducer
-                } else {
-                    Proposal::BlockProducer
-                },
-            )
-        }));
-        let power_proposals = create_power_proposals((2..(2 * num_bp_seats + num_cp_seats)).map(|i| {
-            (
-                format!("test{}", i),
-                2000u128 + (i as u128),
-                if i <= num_cp_seats {
-                    Proposal::ChunkOnlyProducer
-                } else {
-                    Proposal::BlockProducer
-                },
-            )
-        }));
+        let pledge_proposals =
+            create_pledge_proposals((2..(2 * num_bp_seats + num_cp_seats)).map(|i| {
+                (
+                    format!("test{}", i),
+                    2000u128 + (i as u128),
+                    if i <= num_cp_seats {
+                        Proposal::ChunkOnlyProducer
+                    } else {
+                        Proposal::BlockProducer
+                    },
+                )
+            }));
+        let power_proposals =
+            create_power_proposals((2..(2 * num_bp_seats + num_cp_seats)).map(|i| {
+                (
+                    format!("test{}", i),
+                    2000u128 + (i as u128),
+                    if i <= num_cp_seats {
+                        Proposal::ChunkOnlyProducer
+                    } else {
+                        Proposal::BlockProducer
+                    },
+                )
+            }));
         let epoch_info = proposals_to_epoch_info(
             &epoch_config,
             [0; 32],
@@ -1067,10 +1064,18 @@ mod tests {
         );
         let prev_epoch_height = 7;
         let prev_epoch_info = create_prev_epoch_info(prev_epoch_height, &["test1", "test2"], &[]);
-        let power_proposals =
-            create_power_proposals(&[("test1", 1000), ("test2", 1000), ("test3", 1000), ("test4", 1000)]);
-        let pledge_proposals =
-            create_pledge_proposals(&[("test1", 1000), ("test2", 1000), ("test3", 1000), ("test4", 1000)]);
+        let power_proposals = create_power_proposals(&[
+            ("test1", 1000),
+            ("test2", 1000),
+            ("test3", 1000),
+            ("test4", 1000),
+        ]);
+        let pledge_proposals = create_pledge_proposals(&[
+            ("test1", 1000),
+            ("test2", 1000),
+            ("test3", 1000),
+            ("test4", 1000),
+        ]);
 
         let epoch_info = proposals_to_epoch_info(
             &epoch_config,
@@ -1482,9 +1487,9 @@ mod tests {
     }
 
     fn create_proposals<I, T>(ps: I) -> Vec<ValidatorPowerAndPledge>
-        where
-            T: IntoValidatorPledge,
-            I: IntoIterator<Item = T>,
+    where
+        T: IntoValidatorPledge,
+        I: IntoIterator<Item = T>,
     {
         ps.into_iter().map(IntoValidatorPledge::into_validator_pledge).collect()
     }
@@ -1497,9 +1502,9 @@ mod tests {
     }
 
     fn create_pledge_proposals<I, T>(ps: I) -> Vec<ValidatorPledge>
-        where
-            T: IntoValidatorPledge,
-            I: IntoIterator<Item = T>,
+    where
+        T: IntoValidatorPledge,
+        I: IntoIterator<Item = T>,
     {
         ps.into_iter().map(IntoValidatorPledge::into_validator_pledge).collect()
     }
@@ -1522,25 +1527,41 @@ mod tests {
 
     impl IntoValidatorPledge for (&str, Balance) {
         fn into_validator_pledge(self) -> ValidatorPledge {
-            ValidatorPledge::new(self.0.parse().unwrap(), PublicKey::empty(KeyType::ED25519), self.1)
+            ValidatorPledge::new(
+                self.0.parse().unwrap(),
+                PublicKey::empty(KeyType::ED25519),
+                self.1,
+            )
         }
     }
 
     impl IntoValidatorPledge for (String, Balance) {
         fn into_validator_pledge(self) -> ValidatorPledge {
-            ValidatorPledge::new(self.0.parse().unwrap(), PublicKey::empty(KeyType::ED25519), self.1)
+            ValidatorPledge::new(
+                self.0.parse().unwrap(),
+                PublicKey::empty(KeyType::ED25519),
+                self.1,
+            )
         }
     }
 
     impl IntoValidatorPledge for (&str, Balance, Proposal) {
         fn into_validator_pledge(self) -> ValidatorPledge {
-            ValidatorPledge::new(self.0.parse().unwrap(), PublicKey::empty(KeyType::ED25519), self.1)
+            ValidatorPledge::new(
+                self.0.parse().unwrap(),
+                PublicKey::empty(KeyType::ED25519),
+                self.1,
+            )
         }
     }
 
     impl IntoValidatorPledge for (String, Balance, Proposal) {
         fn into_validator_pledge(self) -> ValidatorPledge {
-            ValidatorPledge::new(self.0.parse().unwrap(), PublicKey::empty(KeyType::ED25519), self.1)
+            ValidatorPledge::new(
+                self.0.parse().unwrap(),
+                PublicKey::empty(KeyType::ED25519),
+                self.1,
+            )
         }
     }
 

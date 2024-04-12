@@ -1,3 +1,6 @@
+use std::fmt;
+use std::net::{SocketAddr, ToSocketAddrs};
+use std::str::FromStr;
 /// `network_protocol.rs` contains types which are part of network protocol.
 /// We need to maintain backward compatibility in network protocol.
 /// All changes to this file should be reviewed.
@@ -6,9 +9,6 @@
 use unc_primitives::block::GenesisId;
 use unc_primitives::network::PeerId;
 use unc_primitives::types::{AccountId, BlockHeight, ShardId};
-use std::fmt;
-use std::net::{SocketAddr, ToSocketAddrs};
-use std::str::FromStr;
 
 /// Peer information.
 #[derive(borsh::BorshSerialize, borsh::BorshDeserialize, Clone, Debug, Eq, PartialEq, Hash)]

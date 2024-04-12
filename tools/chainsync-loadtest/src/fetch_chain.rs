@@ -1,12 +1,12 @@
 use crate::network;
 use anyhow::Context;
 use log::info;
+use std::sync::atomic::Ordering;
+use std::sync::Arc;
 use unc_async::time;
 use unc_network::concurrency::ctx;
 use unc_network::concurrency::scope;
 use unc_primitives::hash::CryptoHash;
-use std::sync::atomic::Ordering;
-use std::sync::Arc;
 
 // run() fetches the chain (headers,blocks and chunks)
 // starting with block having hash = <start_block_hash> and

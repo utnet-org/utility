@@ -9,6 +9,11 @@ use crate::INDEXER;
 use crate::{AwaitForNodeSyncedEnum, IndexerConfig};
 use actix::Addr;
 use async_recursion::async_recursion;
+use rocksdb::DB;
+use std::time::Duration;
+use tokio::sync::mpsc;
+use tokio::time;
+use tracing::{debug, info};
 use unc_indexer_primitives::{
     IndexerChunkView, IndexerExecutionOutcomeWithOptionalReceipt,
     IndexerExecutionOutcomeWithReceipt, IndexerShard, IndexerTransactionWithOutcome,
@@ -17,11 +22,6 @@ use unc_indexer_primitives::{
 use unc_parameters::RuntimeConfig;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::views;
-use rocksdb::DB;
-use std::time::Duration;
-use tokio::sync::mpsc;
-use tokio::time;
-use tracing::{debug, info};
 
 mod errors;
 mod fetchers;

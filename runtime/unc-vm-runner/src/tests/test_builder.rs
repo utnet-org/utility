@@ -3,11 +3,11 @@ use crate::logic::{
 };
 use crate::runner::VMKindExt;
 use crate::ContractCode;
+use std::{collections::HashSet, fmt::Write, sync::Arc};
 use unc_parameters::vm::{ContractPrepareVersion, VMKind};
 use unc_parameters::{RuntimeConfig, RuntimeConfigStore, RuntimeFeesConfig};
 use unc_primitives_core::types::Gas;
 use unc_primitives_core::version::ProtocolFeature;
-use std::{collections::HashSet, fmt::Write, sync::Arc};
 
 pub(crate) fn test_builder() -> TestBuilder {
     let context = VMContext {

@@ -1,4 +1,3 @@
-use unc_async::time;
 /// The purpose of `TransferStats` is to keep track of transfer sizes in done in a period of 1 minute.
 /// And then; to provide a summary, the count and total size in bytes when requested.
 ///
@@ -15,6 +14,7 @@ use unc_async::time;
 /// println!("{}", ts.minute_stats(later));
 /// ```
 use std::collections::VecDeque;
+use unc_async::time;
 
 /// Defines how long should entries be tracked.
 const TRANSFER_STATS_INTERVAL: time::Duration = time::Duration::seconds(60);

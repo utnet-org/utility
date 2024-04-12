@@ -1,7 +1,7 @@
 use super::BlockInfo;
+use std::collections::HashMap;
 use unc_primitives::hash::{hash, CryptoHash};
 use unc_primitives::types::BlockHeight;
-use std::collections::HashMap;
 
 pub struct MockChain {
     height_to_hashes: HashMap<BlockHeight, CryptoHash>,

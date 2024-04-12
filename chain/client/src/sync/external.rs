@@ -1,11 +1,11 @@
 use crate::metrics;
 use futures::TryStreamExt;
-use unc_primitives::types::{EpochId, ShardId};
 use std::io::{Read, Write};
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::Duration;
 use std::time::Instant;
+use unc_primitives::types::{EpochId, ShardId};
 
 /// Connection to the external storage.
 #[derive(Clone)]
@@ -115,10 +115,10 @@ impl ExternalConnection {
                     std::fs::create_dir_all(parent_dir)?;
                 }
                 let mut file = std::fs::OpenOptions::new()
-                .write(true)
-                .create(true)
-                .truncate(true)
-                .open(&path)?;
+                    .write(true)
+                    .create(true)
+                    .truncate(true)
+                    .open(&path)?;
                 file.write_all(state_part)?;
                 tracing::debug!(target: "state_sync_dump", shard_id, part_length = state_part.len(), ?location, "Wrote a state part to a file");
                 Ok(())
@@ -335,8 +335,8 @@ mod test {
         get_num_parts_from_filename, get_part_id_from_filename, is_part_filename, part_filename,
         ExternalConnection,
     };
-    use unc_o11y::testonly::init_test_logger;
     use rand::distributions::{Alphanumeric, DistString};
+    use unc_o11y::testonly::init_test_logger;
 
     fn random_string(rand_len: usize) -> String {
         Alphanumeric.sample_string(&mut rand::thread_rng(), rand_len)

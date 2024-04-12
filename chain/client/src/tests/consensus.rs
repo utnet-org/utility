@@ -2,8 +2,8 @@ use std::collections::{BTreeMap, HashMap, HashSet};
 use std::sync::{Arc, RwLock, RwLockWriteGuard};
 
 use actix::System;
-use unc_chain::test_utils::ValidatorSchedule;
 use rand::{thread_rng, Rng};
+use unc_chain::test_utils::ValidatorSchedule;
 
 use crate::adapter::{BlockApproval, BlockResponse};
 use crate::test_utils::{setup_mock_all_validators, ActorHandlesForTesting};

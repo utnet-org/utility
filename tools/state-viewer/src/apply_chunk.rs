@@ -1,5 +1,9 @@
 use anyhow::{anyhow, Context};
 use borsh::BorshDeserialize;
+use rand::rngs::StdRng;
+use rand::seq::SliceRandom;
+use std::collections::{HashMap, HashSet};
+use std::sync::Arc;
 use unc_chain::chain::collect_receipts_from_response;
 use unc_chain::migrations::check_if_block_is_first_with_chunk_of_version;
 use unc_chain::types::{
@@ -19,10 +23,6 @@ use unc_primitives_core::hash::hash;
 use unc_primitives_core::types::Gas;
 use unc_store::DBCol;
 use unc_store::Store;
-use rand::rngs::StdRng;
-use rand::seq::SliceRandom;
-use std::collections::{HashMap, HashSet};
-use std::sync::Arc;
 
 // like ChainStoreUpdate::get_incoming_receipts_for_shard(), but for the case when we don't
 // know of a block containing the target chunk
@@ -480,6 +480,11 @@ pub(crate) fn apply_receipt(
 
 #[cfg(test)]
 mod test {
+    use framework::config::GenesisExt;
+    use framework::NightshadeRuntime;
+    use rand::rngs::StdRng;
+    use rand::SeedableRng;
+    use std::path::Path;
     use unc_chain::{ChainGenesis, ChainStore, ChainStoreAccess, Provenance};
     use unc_chain_configs::Genesis;
     use unc_client::test_utils::TestEnv;
@@ -492,11 +497,6 @@ mod test {
     use unc_primitives::utils::get_num_seats_per_shard;
     use unc_store::genesis::initialize_genesis_state;
     use unc_store::test_utils::create_test_store;
-    use framework::config::GenesisExt;
-    use framework::NightshadeRuntime;
-    use rand::rngs::StdRng;
-    use rand::SeedableRng;
-    use std::path::Path;
 
     fn send_txs(env: &mut TestEnv, signers: &[InMemorySigner], height: u64, hash: CryptoHash) {
         for (i, signer) in signers.iter().enumerate() {

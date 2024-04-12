@@ -1,8 +1,8 @@
 use crate::PartialStorage;
-use unc_primitives::challenge::PartialState;
-use unc_primitives::hash::CryptoHash;
 use std::collections::HashMap;
 use std::sync::Arc;
+use unc_primitives::challenge::PartialState;
+use unc_primitives::hash::CryptoHash;
 
 /// A simple struct to capture a state proof as it's being accumulated.
 pub struct TrieRecorder {
@@ -34,15 +34,15 @@ mod trie_recording_tests {
     };
     use crate::trie::mem::metrics::MEM_TRIE_NUM_LOOKUPS;
     use crate::{DBCol, Store, Trie};
+    use rand::{thread_rng, Rng};
+    use std::collections::{HashMap, HashSet};
+    use std::num::NonZeroU32;
     use unc_primitives::hash::{hash, CryptoHash};
     use unc_primitives::shard_layout::{get_block_shard_uid, get_block_shard_uid_rev, ShardUId};
     use unc_primitives::state::ValueRef;
     use unc_primitives::types::chunk_extra::ChunkExtra;
     use unc_primitives::types::StateRoot;
     use unc_vm_runner::logic::TrieNodesCount;
-    use rand::{thread_rng, Rng};
-    use std::collections::{HashMap, HashSet};
-    use std::num::NonZeroU32;
 
     const NUM_ITERATIONS_PER_TEST: usize = 100;
 

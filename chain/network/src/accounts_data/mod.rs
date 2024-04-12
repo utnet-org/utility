@@ -29,12 +29,12 @@ use crate::concurrency::arc_mutex::ArcMutex;
 use crate::network_protocol;
 use crate::network_protocol::{AccountData, SignedAccountData, VersionedAccountData};
 use crate::types::AccountKeys;
-use unc_async::time;
-use unc_crypto::PublicKey;
-use unc_primitives::validator_signer::ValidatorSigner;
 use rayon::iter::ParallelBridge;
 use std::collections::HashMap;
 use std::sync::Arc;
+use unc_async::time;
+use unc_crypto::PublicKey;
+use unc_primitives::validator_signer::ValidatorSigner;
 
 #[cfg(test)]
 mod tests;

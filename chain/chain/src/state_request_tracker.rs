@@ -1,12 +1,12 @@
 use crate::metrics;
 use crate::Chain;
 use lru::LruCache;
+use std::collections::HashMap;
 use unc_primitives::{
     hash::CryptoHash,
     types::ShardId,
     views::{PartElapsedTimeView, RequestedStatePartsView},
 };
-use std::collections::HashMap;
 
 const REQUESTED_STATE_PARTS_CACHE_SIZE: usize = 4;
 

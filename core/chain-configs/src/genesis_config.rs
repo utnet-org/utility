@@ -6,20 +6,6 @@
 use crate::genesis_validate::validate_genesis;
 use anyhow::Context;
 use chrono::{DateTime, Utc};
-use unc_config_utils::ValidationError;
-use unc_parameters::{RuntimeConfig, RuntimeConfigView};
-use unc_primitives::epoch_manager::EpochConfig;
-use unc_primitives::shard_layout::ShardLayout;
-use unc_primitives::types::StateRoot;
-use unc_primitives::{
-    hash::CryptoHash,
-    serialize::dec_format,
-    state_record::StateRecord,
-    types::{
-        AccountId, AccountInfo, Balance, BlockHeight, BlockHeightDelta, Gas, NumBlocks, NumSeats,
-    },
-    version::ProtocolVersion,
-};
 use num_rational::Rational32;
 use serde::de::{self, DeserializeSeed, IgnoredAny, MapAccess, SeqAccess, Visitor};
 use serde::{Deserialize, Deserializer, Serialize};
@@ -32,7 +18,21 @@ use std::fs::File;
 use std::io::{BufReader, Read};
 use std::path::{Path, PathBuf};
 use tracing::warn;
+use unc_config_utils::ValidationError;
+use unc_parameters::{RuntimeConfig, RuntimeConfigView};
+use unc_primitives::epoch_manager::EpochConfig;
+use unc_primitives::shard_layout::ShardLayout;
 use unc_primitives::types::validator_power_and_pledge::ValidatorPowerAndPledge;
+use unc_primitives::types::StateRoot;
+use unc_primitives::{
+    hash::CryptoHash,
+    serialize::dec_format,
+    state_record::StateRecord,
+    types::{
+        AccountId, AccountInfo, Balance, BlockHeight, BlockHeightDelta, Gas, NumBlocks, NumSeats,
+    },
+    version::ProtocolVersion,
+};
 
 const MAX_GAS_PRICE: Balance = 10_000_000_000_000_000_000_000;
 
@@ -538,11 +538,8 @@ impl Genesis {
 
         let json_str_without_comments = unc_config_utils::strip_comments_from_json_str(&json_str)
             .map_err(|e| ValidationError::GenesisFileError {
-                error_message: format!(
-                    "Failed to strip comments from genesis config file: {:?}",
-                    e
-                ),
-            })?;
+            error_message: format!("Failed to strip comments from genesis config file: {:?}", e),
+        })?;
 
         let genesis = serde_json::from_str::<Genesis>(&json_str_without_comments).map_err(|e| {
             ValidationError::GenesisFileError {
@@ -843,8 +840,8 @@ pub fn get_initial_supply(records: &[StateRecord]) -> Balance {
 mod test {
     use crate::genesis_config::RecordsProcessor;
     use crate::{Genesis, GenesisValidationMode};
-    use unc_primitives::state_record::StateRecord;
     use serde::Deserializer;
+    use unc_primitives::state_record::StateRecord;
 
     fn stream_records_from_json_str(genesis: &str) -> serde_json::Result<()> {
         let mut deserializer = serde_json::Deserializer::from_reader(genesis.as_bytes());

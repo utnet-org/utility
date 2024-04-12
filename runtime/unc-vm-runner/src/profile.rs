@@ -2,10 +2,10 @@ pub use profile_v2::ProfileDataV2;
 
 use borsh::{BorshDeserialize, BorshSerialize};
 use enum_map::{enum_map, Enum, EnumMap};
-use unc_parameters::{ActionCosts, ExtCosts, ExtCostsConfig};
-use unc_primitives_core::types::{Compute, Gas};
 use std::fmt;
 use strum::IntoEnumIterator;
+use unc_parameters::{ActionCosts, ExtCosts, ExtCostsConfig};
+use unc_primitives_core::types::{Compute, Gas};
 
 mod profile_v2;
 

@@ -46,7 +46,7 @@ pub fn add_contract(genesis: &mut Genesis, account_id: &AccountId, code: Vec<u8>
     if !is_account_record_found {
         records.push(StateRecord::Account {
             account_id: account_id.clone(),
-            account: Account::new(0, 0,0, hash, 0),
+            account: Account::new(0, 0, 0, hash, 0),
         });
     }
     records.push(StateRecord::Contract { account_id: account_id.clone(), code });

@@ -1,7 +1,7 @@
 use crate::node::{Node, RuntimeNode};
+use std::mem::size_of;
 use unc_primitives::errors::{ActionError, ActionErrorKind, FunctionCallError};
 use unc_primitives::views::FinalExecutionStatus;
-use std::mem::size_of;
 
 use assert_matches::assert_matches;
 

@@ -1,6 +1,6 @@
-use unc_primitives::errors::TxExecutionError;
 use serde_json::{to_value, Value};
 use std::fmt;
+use unc_primitives::errors::TxExecutionError;
 
 #[derive(Debug, serde::Serialize)]
 pub struct RpcParseError(pub String);
@@ -39,13 +39,7 @@ pub enum RpcRequestValidationErrorKind {
 
 /// A general Server Error
 #[derive(
-    serde::Serialize,
-    serde::Deserialize,
-    Debug,
-    PartialEq,
-    Eq,
-    Clone,
-    unc_rpc_error_macro::RpcError,
+    serde::Serialize, serde::Deserialize, Debug, PartialEq, Eq, Clone, unc_rpc_error_macro::RpcError,
 )]
 pub enum ServerError {
     TxExecutionError(TxExecutionError),

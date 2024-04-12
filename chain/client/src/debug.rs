@@ -4,6 +4,8 @@ use crate::ClientActor;
 use actix::{Context, Handler};
 
 use itertools::Itertools;
+use std::cmp::{max, min};
+use std::collections::{HashMap, HashSet};
 use unc_chain::crypto_hash_timer::CryptoHashTimer;
 use unc_chain::{unc_chain_primitives, Chain, ChainStoreAccess};
 use unc_client_primitives::debug::{
@@ -27,8 +29,6 @@ use unc_primitives::{
     views::ValidatorInfo,
 };
 use unc_store::DBCol;
-use std::cmp::{max, min};
-use std::collections::{HashMap, HashSet};
 
 use unc_client_primitives::debug::{DebugBlockStatus, DebugChunkStatus};
 use unc_network::types::{ConnectedPeerInfo, NetworkInfo, PeerType};
@@ -355,9 +355,7 @@ impl ClientActor {
         Ok(TrackedShardsView { shards_tracked_this_epoch, shards_tracked_next_epoch })
     }
 
-    fn get_recent_epoch_info(
-        &mut self,
-    ) -> Result<Vec<EpochInfoView>, unc_chain_primitives::Error> {
+    fn get_recent_epoch_info(&mut self) -> Result<Vec<EpochInfoView>, unc_chain_primitives::Error> {
         // Next epoch id
         let mut epochs_info: Vec<EpochInfoView> = Vec::new();
 
@@ -708,7 +706,11 @@ pub(crate) fn new_network_info_view(chain: &Chain, network_info: &NetworkInfo) -
                     })
                     .collect(),
                 account_key: d.account_key.clone(),
-                timestamp: chrono::DateTime::<chrono::Utc>::from_timestamp(d.timestamp.unix_timestamp(), 0).unwrap(),
+                timestamp: chrono::DateTime::<chrono::Utc>::from_timestamp(
+                    d.timestamp.unix_timestamp(),
+                    0,
+                )
+                .unwrap(),
             })
             .collect(),
         tier1_connections: network_info

@@ -1,5 +1,12 @@
 use assert_matches::assert_matches;
 
+use framework::config::GenesisExt;
+use framework::state_sync::spawn_state_sync_dump;
+use framework::test_utils::TestEnvNightshadeSetupExt;
+use framework::UNC_BASE;
+use std::ops::ControlFlow;
+use std::sync::Arc;
+use std::time::Duration;
 use unc_chain::unc_chain_primitives::error::QueryError;
 use unc_chain::{ChainGenesis, ChainStoreAccess, Provenance};
 use unc_chain_configs::ExternalStorageLocation::Filesystem;
@@ -21,13 +28,6 @@ use unc_primitives::views::{QueryRequest, QueryResponseKind};
 use unc_store::flat::store_helper;
 use unc_store::DBCol;
 use unc_store::Store;
-use framework::config::GenesisExt;
-use framework::state_sync::spawn_state_sync_dump;
-use framework::test_utils::TestEnvNightshadeSetupExt;
-use framework::UNC_BASE;
-use std::ops::ControlFlow;
-use std::sync::Arc;
-use std::time::Duration;
 
 #[test]
 /// Produce several blocks, wait for the state dump thread to notice and

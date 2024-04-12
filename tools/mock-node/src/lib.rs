@@ -2,6 +2,12 @@
 //! components of the mock network.
 
 use anyhow::{anyhow, Context as AnyhowContext};
+use std::collections::{HashMap, HashSet, VecDeque};
+use std::future::Future;
+use std::path::Path;
+use std::pin::Pin;
+use std::task::Poll;
+use std::time::Duration;
 use unc_async::time;
 use unc_chain::{Block, Chain, ChainStoreAccess, Error};
 use unc_client::sync::header::MAX_BLOCK_HEADERS;
@@ -11,12 +17,6 @@ use unc_network::tcp;
 use unc_network::types::{PartialEncodedChunkRequestMsg, PartialEncodedChunkResponseMsg};
 use unc_primitives::sharding::ChunkHash;
 use unc_primitives::types::{BlockHeight, ShardId};
-use std::collections::{HashMap, HashSet, VecDeque};
-use std::future::Future;
-use std::path::Path;
-use std::pin::Pin;
-use std::task::Poll;
-use std::time::Duration;
 
 pub mod setup;
 

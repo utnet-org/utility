@@ -1,27 +1,28 @@
 use crate::challenge::SlashedValidator;
 use crate::num_rational::Rational32;
 use crate::shard_layout::ShardLayout;
-use crate::types::validator_power_and_pledge::{ValidatorPowerAndPledge, ValidatorPowerAndPledgeV1};
 use crate::types::validator_power::{ValidatorPower, ValidatorPowerV1};
+use crate::types::validator_power_and_pledge::{
+    ValidatorPowerAndPledge, ValidatorPowerAndPledgeV1,
+};
 use crate::types::validator_stake::{ValidatorPledge, ValidatorPledgeV1};
 
 use crate::types::{
     AccountId, Balance, BlockHeightDelta, EpochHeight, EpochId, NumSeats, ProtocolVersion,
     ValidatorId, ValidatorKickoutReason,
 };
+use crate::validator_mandates::ValidatorMandates;
 use crate::version::PROTOCOL_VERSION;
 use borsh::{BorshDeserialize, BorshSerialize};
+use smart_default::SmartDefault;
+use std::collections::{BTreeMap, HashMap};
 use unc_primitives_core::checked_feature;
 use unc_primitives_core::hash::CryptoHash;
 use unc_primitives_core::types::{BlockHeight, Power};
-use smart_default::SmartDefault;
-use std::collections::{BTreeMap, HashMap};
-use crate::validator_mandates::ValidatorMandates;
 
 pub type RngSeed = [u8; 32];
 
 pub const AGGREGATOR_KEY: &[u8] = b"AGGREGATOR";
-
 
 ///
 ///
@@ -262,27 +263,31 @@ pub struct ValidatorSelectionConfig {
 }
 
 pub mod block_summary {
-    use std::collections::{BTreeMap, HashMap};
+    use crate::types::validator_power::ValidatorPower;
+    use crate::types::validator_power_and_pledge::{
+        ValidatorPowerAndPledge, ValidatorPowerAndPledgeIter,
+    };
+    use crate::types::validator_stake::ValidatorPledge;
+    use crate::types::{AccountId, ValidatorKickoutReason};
+    use crate::validator_mandates::ValidatorMandates;
     use borsh::{BorshDeserialize, BorshSerialize};
+    use std::collections::{BTreeMap, HashMap};
     use unc_primitives_core::hash::CryptoHash;
     use unc_primitives_core::types::{Balance, Power, ValidatorId};
-    use crate::types::{AccountId, ValidatorKickoutReason};
-    use crate::types::validator_stake::ValidatorPledge;
-    use crate::types::validator_power::ValidatorPower;
-    use crate::types::validator_power_and_pledge::{ValidatorPowerAndPledge, ValidatorPowerAndPledgeIter};
-    use crate::validator_mandates::ValidatorMandates;
 
     #[derive(BorshSerialize, BorshDeserialize, Eq, PartialEq, Clone, Debug, serde::Serialize)]
     pub enum BlockSummary {
         V1(BlockSummaryV1),
     }
-    #[derive(Default, Eq, PartialEq, BorshSerialize, Clone, Debug, BorshDeserialize, serde::Serialize)]
+    #[derive(
+        Default, Eq, PartialEq, BorshSerialize, Clone, Debug, BorshDeserialize, serde::Serialize,
+    )]
     pub struct BlockSummaryV1 {
         pub this_block_hash: CryptoHash,
         pub prev_block_hash: CryptoHash,
         pub random_value: CryptoHash,
         pub validators: Vec<ValidatorPowerAndPledge>,
-        pub validator_to_index: HashMap<AccountId,ValidatorId>,
+        pub validator_to_index: HashMap<AccountId, ValidatorId>,
         pub block_producers_settlement: Vec<ValidatorId>,
         pub chunk_producers_settlement: Vec<Vec<ValidatorId>>,
         pub fishermen: Vec<ValidatorPowerAndPledge>,
@@ -307,13 +312,12 @@ pub mod block_summary {
         }
     }
     impl BlockSummary {
-
         pub fn new(
             this_block_hash: CryptoHash,
             prev_block_hash: CryptoHash,
             random_value: CryptoHash,
             validators: Vec<ValidatorPowerAndPledge>,
-            validator_to_index: HashMap<AccountId,ValidatorId>,
+            validator_to_index: HashMap<AccountId, ValidatorId>,
             block_producers_settlement: Vec<ValidatorId>,
             chunk_producers_settlement: Vec<Vec<ValidatorId>>,
             fishermen: Vec<ValidatorPowerAndPledge>,
@@ -467,7 +471,10 @@ pub mod block_summary {
             }
         }
 
-        pub fn get_validator_by_account(&self, account_id: &AccountId) -> Option<ValidatorPowerAndPledge> {
+        pub fn get_validator_by_account(
+            &self,
+            account_id: &AccountId,
+        ) -> Option<ValidatorPowerAndPledge> {
             match self {
                 Self::V1(v1) => v1
                     .validator_to_index
@@ -490,7 +497,10 @@ pub mod block_summary {
             }
         }
 
-        pub fn get_fisherman_by_account(&self, account_id: &AccountId) -> Option<ValidatorPowerAndPledge> {
+        pub fn get_fisherman_by_account(
+            &self,
+            account_id: &AccountId,
+        ) -> Option<ValidatorPowerAndPledge> {
             match self {
                 Self::V1(v1) => v1
                     .fishermen_to_index
@@ -516,26 +526,26 @@ pub mod block_summary {
         pub fn vrf_block_producer(&self, _random_value: &CryptoHash) -> ValidatorId {
             return 0;
         }
-
-
     }
-
-
 }
 pub mod block_info {
     use std::collections::{BTreeMap, HashMap};
 
+    pub use super::BlockInfoV1;
     use super::SlashState;
     use crate::challenge::SlashedValidator;
     use crate::types::validator_power::{ValidatorPower, ValidatorPowerIter};
+    use crate::types::validator_power_and_pledge::{
+        ValidatorPowerAndPledge, ValidatorPowerAndPledgeIter,
+    };
+    use crate::types::validator_stake::{ValidatorPledge, ValidatorPledgeIter};
     use crate::types::{EpochId, ValidatorKickoutReason};
+    use crate::validator_mandates::ValidatorMandates;
     use borsh::{BorshDeserialize, BorshSerialize};
     use unc_primitives_core::hash::CryptoHash;
-    use unc_primitives_core::types::{AccountId, Balance, BlockHeight, Power, ProtocolVersion, ValidatorId};
-    use crate::types::validator_stake::{ValidatorPledge, ValidatorPledgeIter};
-    use crate::types::validator_power_and_pledge::{ValidatorPowerAndPledge, ValidatorPowerAndPledgeIter};
-    use crate::validator_mandates::ValidatorMandates;
-    pub use super::BlockInfoV1;
+    use unc_primitives_core::types::{
+        AccountId, Balance, BlockHeight, Power, ProtocolVersion, ValidatorId,
+    };
 
     /// Information per each block.
     #[derive(BorshSerialize, BorshDeserialize, Eq, PartialEq, Clone, Debug, serde::Serialize)]
@@ -567,7 +577,7 @@ pub mod block_info {
             // start customized by James Savechives
             random_value: CryptoHash,
             validators: Vec<ValidatorPowerAndPledge>,
-            validator_to_index: HashMap<AccountId,ValidatorId>,
+            validator_to_index: HashMap<AccountId, ValidatorId>,
             block_producers_settlement: Vec<ValidatorId>,
             chunk_producers_settlement: Vec<Vec<ValidatorId>>,
             fishermen: Vec<ValidatorPowerAndPledge>,
@@ -874,7 +884,7 @@ pub mod block_info {
                 Self::V2(v2) => v2.validators[validator_id as usize].account_id(),
             }
         }
-        
+
         #[inline]
         pub fn account_is_validator(&self, account_id: &AccountId) -> bool {
             match self {
@@ -890,7 +900,10 @@ pub mod block_info {
             }
         }
 
-        pub fn get_validator_by_account(&self, account_id: &AccountId) -> Option<ValidatorPowerAndPledge> {
+        pub fn get_validator_by_account(
+            &self,
+            account_id: &AccountId,
+        ) -> Option<ValidatorPowerAndPledge> {
             match self {
                 Self::V1(v1) => v1
                     .validator_to_index
@@ -919,7 +932,10 @@ pub mod block_info {
             }
         }
 
-        pub fn get_fisherman_by_account(&self, account_id: &AccountId) -> Option<ValidatorPowerAndPledge> {
+        pub fn get_fisherman_by_account(
+            &self,
+            account_id: &AccountId,
+        ) -> Option<ValidatorPowerAndPledge> {
             match self {
                 Self::V1(v1) => v1
                     .fishermen_to_index
@@ -952,7 +968,6 @@ pub mod block_info {
             return 0;
         }
         // end customized by James Savechives
-
     }
 
     // V1 -> V2: Use versioned ValidatorPledge structure in proposals
@@ -980,7 +995,7 @@ pub mod block_info {
         /// start customized by James Savechives
         pub random_value: CryptoHash,
         pub validators: Vec<ValidatorPowerAndPledge>,
-        pub validator_to_index: HashMap<AccountId,ValidatorId>,
+        pub validator_to_index: HashMap<AccountId, ValidatorId>,
         pub block_producers_settlement: Vec<ValidatorId>,
         pub chunk_producers_settlement: Vec<Vec<ValidatorId>>,
         pub fishermen: Vec<ValidatorPowerAndPledge>,
@@ -1000,8 +1015,6 @@ pub mod block_info {
         pub validator_mandates: ValidatorMandates,
         // end customized by James Savechives
     }
-
-
 }
 
 /// Information per each block.
@@ -1029,7 +1042,7 @@ pub struct BlockInfoV1 {
     /// start customized by James Savechives
     pub random_value: CryptoHash,
     pub validators: Vec<ValidatorPowerAndPledge>,
-    pub validator_to_index: HashMap<AccountId,ValidatorId>,
+    pub validator_to_index: HashMap<AccountId, ValidatorId>,
     pub block_producers_settlement: Vec<ValidatorId>,
     pub chunk_producers_settlement: Vec<Vec<ValidatorId>>,
     pub fishermen: Vec<ValidatorPowerAndPledge>,
@@ -1067,7 +1080,7 @@ impl BlockInfoV1 {
         // start customized by James Savechives
         random_value: CryptoHash,
         validators: Vec<ValidatorPowerAndPledge>,
-        validator_to_index: HashMap<AccountId,ValidatorId>,
+        validator_to_index: HashMap<AccountId, ValidatorId>,
         block_producers_settlement: Vec<ValidatorId>,
         chunk_producers_settlement: Vec<Vec<ValidatorId>>,
         fishermen: Vec<ValidatorPowerAndPledge>,
@@ -1133,29 +1146,33 @@ impl BlockInfoV1 {
 pub struct ValidatorWeight(ValidatorId, u64);
 
 pub mod epoch_info {
-use crate::epoch_manager::ValidatorWeight;
+    use crate::epoch_manager::ValidatorWeight;
     use crate::types::validator_power::ValidatorPower;
-    use crate::types::{BlockChunkValidatorStats, ValidatorKickoutReason, ValidatorPowerAndPledgeV1};
+    use crate::types::{
+        BlockChunkValidatorStats, ValidatorKickoutReason, ValidatorPowerAndPledgeV1,
+    };
     use crate::validator_mandates::{ValidatorMandates, ValidatorMandatesAssignment};
     use crate::version::PROTOCOL_VERSION;
     use borsh::{BorshDeserialize, BorshSerialize};
-    use unc_primitives_core::hash::CryptoHash;
-    use unc_primitives_core::types::{
-        AccountId, Balance, EpochHeight, ProtocolVersion, ValidatorId, Power,
-    };
     use rand::SeedableRng;
     use rand_chacha::ChaCha20Rng;
     use smart_default::SmartDefault;
     use std::collections::{BTreeMap, HashMap};
+    use unc_primitives_core::hash::CryptoHash;
+    use unc_primitives_core::types::{
+        AccountId, Balance, EpochHeight, Power, ProtocolVersion, ValidatorId,
+    };
 
+    use crate::types::validator_power_and_pledge::{
+        ValidatorPowerAndPledge, ValidatorPowerAndPledgeIter,
+    };
+    use crate::types::validator_stake::ValidatorPledge;
     use crate::{epoch_manager::RngSeed, rand::WeightedIndex};
     use unc_primitives_core::{
         checked_feature,
         hash::hash,
         types::{BlockHeight, ShardId},
     };
-    use crate::types::validator_stake::ValidatorPledge;
-    use crate::types::validator_power_and_pledge::{ValidatorPowerAndPledge, ValidatorPowerAndPledgeIter};
 
     pub use super::EpochInfoV1;
 
@@ -1604,7 +1621,10 @@ use crate::epoch_manager::ValidatorWeight;
             }
         }
 
-        pub fn get_validator_by_account(&self, account_id: &AccountId) -> Option<ValidatorPowerAndPledge> {
+        pub fn get_validator_by_account(
+            &self,
+            account_id: &AccountId,
+        ) -> Option<ValidatorPowerAndPledge> {
             match self {
                 Self::V1(v1) => v1.validator_to_index.get(account_id).map(|validator_id| {
                     ValidatorPowerAndPledge::V1(v1.validators[*validator_id as usize].clone())
@@ -1627,7 +1647,9 @@ use crate::epoch_manager::ValidatorWeight;
         #[inline]
         pub fn get_validator(&self, validator_id: u64) -> ValidatorPowerAndPledge {
             match self {
-                Self::V1(v1) => ValidatorPowerAndPledge::V1(v1.validators[validator_id as usize].clone()),
+                Self::V1(v1) => {
+                    ValidatorPowerAndPledge::V1(v1.validators[validator_id as usize].clone())
+                }
                 Self::V2(v2) => v2.validators[validator_id as usize].clone(),
                 Self::V3(v3) => v3.validators[validator_id as usize].clone(),
                 Self::V4(v4) => v4.validators[validator_id as usize].clone(),
@@ -1644,7 +1666,10 @@ use crate::epoch_manager::ValidatorWeight;
             }
         }
 
-        pub fn get_fisherman_by_account(&self, account_id: &AccountId) -> Option<ValidatorPowerAndPledge> {
+        pub fn get_fisherman_by_account(
+            &self,
+            account_id: &AccountId,
+        ) -> Option<ValidatorPowerAndPledge> {
             match self {
                 Self::V1(v1) => v1.fishermen_to_index.get(account_id).map(|validator_id| {
                     ValidatorPowerAndPledge::V1(v1.fishermen[*validator_id as usize].clone())
@@ -1667,7 +1692,9 @@ use crate::epoch_manager::ValidatorWeight;
         #[inline]
         pub fn get_fisherman(&self, fisherman_id: u64) -> ValidatorPowerAndPledge {
             match self {
-                Self::V1(v1) => ValidatorPowerAndPledge::V1(v1.fishermen[fisherman_id as usize].clone()),
+                Self::V1(v1) => {
+                    ValidatorPowerAndPledge::V1(v1.fishermen[fisherman_id as usize].clone())
+                }
                 Self::V2(v2) => v2.fishermen[fisherman_id as usize].clone(),
                 Self::V3(v3) => v3.fishermen[fisherman_id as usize].clone(),
                 Self::V4(v4) => v4.fishermen[fisherman_id as usize].clone(),
@@ -1872,14 +1899,14 @@ pub enum SlashState {
 pub mod epoch_sync {
     use crate::block_header::BlockHeader;
     use crate::epoch_manager::block_info::BlockInfo;
+    use crate::epoch_manager::block_summary::{BlockSummary, BlockSummaryV1};
     use crate::epoch_manager::epoch_info::EpochInfo;
     use crate::errors::epoch_sync::{EpochSyncHashType, EpochSyncInfoError};
     use crate::types::EpochId;
     use borsh::{BorshDeserialize, BorshSerialize};
+    use std::collections::{HashMap, HashSet};
     use unc_o11y::log_assert;
     use unc_primitives_core::hash::CryptoHash;
-    use std::collections::{HashMap, HashSet};
-    use crate::epoch_manager::block_summary::{BlockSummary, BlockSummaryV1};
 
     /// Struct to keep all the info that is transferred for one epoch during Epoch Sync.
     #[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug)]
@@ -1968,24 +1995,25 @@ pub mod epoch_sync {
             };
             // start customized by James Savechives
 
-            let BlockSummary::V1(BlockSummaryV1{
-                                     random_value:_random_value,
-                                     validators,
-                                     validator_to_index,
-                                     block_producers_settlement,
-                                     chunk_producers_settlement,
-                                     fishermen,
-                                     fishermen_to_index,
-                                     power_change,
-                                     pledge_change,
-                                     validator_reward,
-                                     seat_price,
-                                     minted_amount,
-                                     all_power_proposals,
-                                     all_pledge_proposals,
-                                     validator_kickout,
-                                     validator_mandates, ..
-                                 }) =  BlockSummary::default();
+            let BlockSummary::V1(BlockSummaryV1 {
+                random_value: _random_value,
+                validators,
+                validator_to_index,
+                block_producers_settlement,
+                chunk_producers_settlement,
+                fishermen,
+                fishermen_to_index,
+                power_change,
+                pledge_change,
+                validator_reward,
+                seat_price,
+                minted_amount,
+                all_power_proposals,
+                all_pledge_proposals,
+                validator_kickout,
+                validator_mandates,
+                ..
+            }) = BlockSummary::default();
             // end customized by James Savechives
             let mut block_info = BlockInfo::new(
                 *header.hash(),
@@ -2016,8 +2044,7 @@ pub mod epoch_sync {
                 all_power_proposals,
                 all_pledge_proposals,
                 validator_kickout,
-                validator_mandates
-                // end customized by James Savechives
+                validator_mandates, // end customized by James Savechives
             );
 
             *block_info.epoch_id_mut() = epoch_first_header.epoch_id().clone();

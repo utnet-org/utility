@@ -1,5 +1,5 @@
-use unc_o11y::metrics::{exponential_buckets, try_create_histogram, Counter, Histogram};
 use once_cell::sync::Lazy;
+use unc_o11y::metrics::{exponential_buckets, try_create_histogram, Counter, Histogram};
 
 pub static PARTIAL_ENCODED_CHUNK_REQUEST_PROCESSING_TIME: Lazy<unc_o11y::metrics::HistogramVec> =
     Lazy::new(|| {
@@ -20,19 +20,18 @@ pub static PARTIAL_ENCODED_CHUNK_REQUEST_PROCESSING_TIME: Lazy<unc_o11y::metrics
         .unwrap()
     });
 
-pub static DISTRIBUTE_ENCODED_CHUNK_TIME: Lazy<unc_o11y::metrics::HistogramVec> =
-    Lazy::new(|| {
-        unc_o11y::metrics::try_create_histogram_vec(
-            "unc_distribute_encoded_chunk_time",
-            concat!(
-                "Time to distribute data about a produced chunk: Preparation of network messages ",
-                "and passing it to peer manager",
-            ),
-            &["shard_id"],
-            Some(exponential_buckets(0.001, 2.0, 16).unwrap()),
-        )
-        .unwrap()
-    });
+pub static DISTRIBUTE_ENCODED_CHUNK_TIME: Lazy<unc_o11y::metrics::HistogramVec> = Lazy::new(|| {
+    unc_o11y::metrics::try_create_histogram_vec(
+        "unc_distribute_encoded_chunk_time",
+        concat!(
+            "Time to distribute data about a produced chunk: Preparation of network messages ",
+            "and passing it to peer manager",
+        ),
+        &["shard_id"],
+        Some(exponential_buckets(0.001, 2.0, 16).unwrap()),
+    )
+    .unwrap()
+});
 
 pub(crate) static PARTIAL_ENCODED_CHUNK_RESPONSE_DELAY: Lazy<Histogram> = Lazy::new(|| {
     try_create_histogram(

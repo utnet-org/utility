@@ -7,6 +7,8 @@ use crate::codegen_x64::{
     CodegenError, FuncGen,
 };
 use crate::config::Singlepass;
+use rayon::prelude::{IntoParallelIterator, ParallelIterator};
+use std::sync::Arc;
 use unc_vm_compiler::{
     Architecture, CallingConvention, Compilation, CompileError, CompileModuleInfo,
     CompiledFunction, Compiler, CompilerConfig, CpuFeature, FunctionBody, FunctionBodyData,
@@ -17,8 +19,6 @@ use unc_vm_types::{
     FunctionIndex, FunctionType, LocalFunctionIndex, MemoryIndex, ModuleInfo, TableIndex,
 };
 use unc_vm_vm::{TrapCode, VMOffsets};
-use rayon::prelude::{IntoParallelIterator, ParallelIterator};
-use std::sync::Arc;
 
 /// A compiler that compiles a WebAssembly module with Singlepass.
 /// It does the compilation in one pass
@@ -184,25 +184,23 @@ impl Compiler for SinglepassCompiler {
             });
 
         let dynamic_function_trampolines =
-            tracing::debug_span!(target: "unc_vm", "dynamic_function_trampolines").in_scope(
-                || {
-                    module
-                        .imported_function_types()
-                        .collect::<Vec<_>>()
-                        .into_par_iter()
-                        .map_init(make_assembler, |assembler, func_type| {
-                            gen_std_dynamic_import_trampoline(
-                                &vmoffsets,
-                                &func_type,
-                                calling_convention,
-                                assembler,
-                            )
-                        })
-                        .collect::<Vec<_>>()
-                        .into_iter()
-                        .collect::<PrimaryMap<FunctionIndex, FunctionBody>>()
-                },
-            );
+            tracing::debug_span!(target: "unc_vm", "dynamic_function_trampolines").in_scope(|| {
+                module
+                    .imported_function_types()
+                    .collect::<Vec<_>>()
+                    .into_par_iter()
+                    .map_init(make_assembler, |assembler, func_type| {
+                        gen_std_dynamic_import_trampoline(
+                            &vmoffsets,
+                            &func_type,
+                            calling_convention,
+                            assembler,
+                        )
+                    })
+                    .collect::<Vec<_>>()
+                    .into_iter()
+                    .collect::<PrimaryMap<FunctionIndex, FunctionBody>>()
+            });
 
         Ok(Compilation {
             functions,
@@ -232,10 +230,10 @@ fn to_compile_error<T: ToCompileError>(x: T) -> CompileError {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use unc_vm_compiler::{CpuFeature, Features, Triple};
-    use unc_vm_vm::{MemoryStyle, TableStyle};
     use std::str::FromStr;
     use target_lexicon::triple;
+    use unc_vm_compiler::{CpuFeature, Features, Triple};
+    use unc_vm_vm::{MemoryStyle, TableStyle};
 
     fn dummy_compilation_ingredients<'a>() -> (
         CompileModuleInfo,
@@ -281,13 +279,8 @@ mod tests {
         // Compile for win32
         let win32 = Target::new(triple!("i686-pc-windows-gnu"), CpuFeature::for_host());
         let (mut info, inputs, analysis) = dummy_compilation_ingredients();
-        let result = compiler.compile_module(
-            &win32,
-            &mut info,
-            inputs,
-            &unc_vm_vm::TestTunables,
-            &analysis,
-        );
+        let result =
+            compiler.compile_module(&win32, &mut info, inputs, &unc_vm_vm::TestTunables, &analysis);
         match result.unwrap_err() {
             CompileError::UnsupportedTarget(name) => assert_eq!(name, "i686"), // Windows should be checked before architecture
             error => panic!("Unexpected error: {:?}", error),

@@ -1,4 +1,7 @@
 use assert_matches::assert_matches;
+use framework::config::GenesisExt;
+use framework::test_utils::TestEnvNightshadeSetupExt;
+use std::sync::Arc;
 use unc_chain::validate::validate_challenge;
 use unc_chain::{Block, ChainGenesis, ChainStoreAccess, Error, Provenance};
 use unc_chain_configs::Genesis;
@@ -24,9 +27,6 @@ use unc_primitives::types::AccountId;
 use unc_primitives::validator_signer::ValidatorSigner;
 use unc_primitives::version::PROTOCOL_VERSION;
 use unc_store::Trie;
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
-use std::sync::Arc;
 
 /// Check that block containing a challenge is rejected.
 /// TODO (#2445): Enable challenges when they are working correctly.

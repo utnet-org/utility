@@ -1,5 +1,11 @@
 use anyhow::Context;
 
+use num_rational::Rational32;
+use serde::ser::{SerializeSeq, Serializer};
+use std::collections::{hash_map, HashMap};
+use std::fs::File;
+use std::io::{BufReader, BufWriter};
+use std::path::Path;
 use unc_chain_configs::{Genesis, GenesisValidationMode};
 use unc_crypto::PublicKey;
 use unc_primitives::hash::CryptoHash;
@@ -9,13 +15,9 @@ use unc_primitives::types::{AccountId, AccountInfo};
 use unc_primitives::utils;
 use unc_primitives::version::ProtocolVersion;
 use unc_primitives_core::account::{AccessKey, Account};
-use unc_primitives_core::types::{Balance, BlockHeightDelta, NumBlocks, NumSeats, NumShards, Power};
-use num_rational::Rational32;
-use serde::ser::{SerializeSeq, Serializer};
-use std::collections::{hash_map, HashMap};
-use std::fs::File;
-use std::io::{BufReader, BufWriter};
-use std::path::Path;
+use unc_primitives_core::types::{
+    Balance, BlockHeightDelta, NumBlocks, NumSeats, NumShards, Power,
+};
 
 mod cli;
 
@@ -53,16 +55,28 @@ impl AccountRecords {
         ret
     }
 
-    fn new_validator(amount: Balance, power: Power, pledge: Balance, num_bytes_account: u64) -> Self {
+    fn new_validator(
+        amount: Balance,
+        power: Power,
+        pledge: Balance,
+        num_bytes_account: u64,
+    ) -> Self {
         let mut ret = Self::default();
         ret.set_account(amount, pledge, power, num_bytes_account);
         ret.amount_needed = true;
         ret
     }
 
-    fn set_account(&mut self, amount: Balance, pledging: Balance, power: Power, num_bytes_account: u64) {
+    fn set_account(
+        &mut self,
+        amount: Balance,
+        pledging: Balance,
+        power: Power,
+        num_bytes_account: u64,
+    ) {
         assert!(self.account.is_none());
-        let account = Account::new(amount, pledging, power, CryptoHash::default(), num_bytes_account);
+        let account =
+            Account::new(amount, pledging, power, CryptoHash::default(), num_bytes_account);
         self.account = Some(account);
     }
 
@@ -142,7 +156,8 @@ fn validator_records(
 ) -> anyhow::Result<HashMap<AccountId, AccountRecords>> {
     let mut records = HashMap::new();
     for AccountInfo { account_id, public_key, pledging, power } in validators.iter() {
-        let mut r: AccountRecords = AccountRecords::new_validator(*pledging,  *power, *pledging, num_bytes_account);
+        let mut r: AccountRecords =
+            AccountRecords::new_validator(*pledging, *power, *pledging, num_bytes_account);
         r.keys.insert(public_key.clone(), AccessKey::full_access());
         if records.insert(account_id.clone(), r).is_some() {
             anyhow::bail!("validator {} specified twice", account_id);
@@ -197,7 +212,12 @@ fn parse_extra_records(
                                 &account_id
                             ));
                         }
-                        r.set_account(account.amount(), account.pledging(), account.power(), num_bytes_account);
+                        r.set_account(
+                            account.amount(),
+                            account.pledging(),
+                            account.power(),
+                            num_bytes_account,
+                        );
                     }
                 }
             }
@@ -396,20 +416,20 @@ pub fn amend_genesis(
 #[cfg(test)]
 mod test {
     use anyhow::Context;
+    use num_rational::Rational32;
+    use std::collections::{HashMap, HashSet};
+    use std::str::FromStr;
+    use tempfile::NamedTempFile;
     use unc_chain_configs::{get_initial_supply, Genesis, GenesisConfig};
     use unc_primitives::hash::CryptoHash;
     use unc_primitives::shard_layout::ShardLayout;
     use unc_primitives::state_record::StateRecord;
     use unc_primitives::static_clock::StaticClock;
-    use unc_primitives::types::{AccountId, AccountInfo};
+    use unc_primitives::types::{AccountId, AccountInfo, Power};
     use unc_primitives::utils;
     use unc_primitives::version::PROTOCOL_VERSION;
     use unc_primitives_core::account::{AccessKey, Account};
     use unc_primitives_core::types::{Balance, StorageUsage};
-    use num_rational::Rational32;
-    use std::collections::{HashMap, HashSet};
-    use std::str::FromStr;
-    use tempfile::NamedTempFile;
 
     // these (TestAccountInfo, TestStateRecord, and ParsedTestCase) are here so we can
     // have all static data in the testcases below
@@ -435,6 +455,7 @@ mod test {
             account_id: &'static str,
             amount: Balance,
             pledging: Balance,
+            power: Power,
             /// Storage used by the given account, includes account id, this struct, access keys and other data.
             storage_usage: StorageUsage,
         },
@@ -450,9 +471,14 @@ mod test {
     impl TestStateRecord {
         fn parse(&self) -> StateRecord {
             match &self {
-                Self::Account { account_id, amount, pledging, storage_usage } => {
-                    let account =
-                        Account::new(*amount, *pledging, CryptoHash::default(), *storage_usage);
+                Self::Account { account_id, amount, pledging, power, storage_usage } => {
+                    let account = Account::new(
+                        *amount,
+                        *pledging,
+                        power,
+                        CryptoHash::default(),
+                        *storage_usage,
+                    );
                     StateRecord::Account { account_id: account_id.parse().unwrap(), account }
                 }
                 Self::AccessKey { account_id, public_key } => StateRecord::AccessKey {

@@ -3,8 +3,8 @@ use std::path::PathBuf;
 
 use clap::{Arg, Command};
 
-use unc_crypto::{InMemorySigner, KeyType, SecretKey, Signer};
 use framework::get_default_home;
+use unc_crypto::{InMemorySigner, KeyType, SecretKey, Signer};
 
 fn generate_key_to_file(account_id: &str, key: SecretKey, path: &PathBuf) -> std::io::Result<()> {
     let signer = InMemorySigner::from_secret_key(account_id.parse().unwrap(), key);
@@ -61,15 +61,19 @@ fn main() {
     let generate_config = matches.get_flag("generate-config");
     match matches.subcommand() {
         Some(("signer-keys", args)) => {
-            let key_type: u8 = args.get_one::<String>("key-type")
-            .map(|x| x.parse().expect("Failed to parse number keys."))
-            .unwrap_or(0u8);
+            let key_type: u8 = args
+                .get_one::<String>("key-type")
+                .map(|x| x.parse().expect("Failed to parse number keys."))
+                .unwrap_or(0u8);
             let num_keys = args
                 .get_one::<String>("num-keys")
                 .map(|x| x.parse().expect("Failed to parse number keys."))
                 .unwrap_or(3usize);
-            let keys: Vec<SecretKey> =
-                (0..num_keys).map(|_| SecretKey::from_random(KeyType::try_from(key_type).unwrap_or(KeyType::ED25519))).collect();
+            let keys: Vec<SecretKey> = (0..num_keys)
+                .map(|_| {
+                    SecretKey::from_random(KeyType::try_from(key_type).unwrap_or(KeyType::ED25519))
+                })
+                .collect();
             let mut pks = vec![];
             for (i, key) in keys.into_iter().enumerate() {
                 println!("Key#{}", i);

@@ -8,6 +8,10 @@ use crate::types::{
 };
 use bytes::buf::{Buf, BufMut};
 use bytes::BytesMut;
+use std::fmt;
+use std::io;
+use std::net::SocketAddr;
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use unc_async::time::{Duration, Instant, Utc};
 use unc_crypto::{KeyType, SecretKey};
 use unc_primitives::block::{Block, BlockHeader, GenesisId};
@@ -15,10 +19,6 @@ use unc_primitives::hash::CryptoHash;
 use unc_primitives::network::{AnnounceAccount, PeerId};
 use unc_primitives::types::{BlockHeight, ShardId};
 use unc_primitives::version::{ProtocolVersion, PROTOCOL_VERSION};
-use std::fmt;
-use std::io;
-use std::net::SocketAddr;
-use tokio::io::{AsyncReadExt, AsyncWriteExt};
 
 /// Represents a connection to a peer, and provides only minimal functionality.
 /// Almost none of the usual UNC network logic is implemented, and the user

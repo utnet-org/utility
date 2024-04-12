@@ -2,13 +2,13 @@ mod cli;
 
 use self::cli::UncdCmd;
 use anyhow::Context;
-use unc_primitives::version::{Version, PROTOCOL_VERSION};
-use unc_store::metadata::DB_VERSION;
 use framework::get_default_home;
 use once_cell::sync::Lazy;
 use std::env;
 use std::path::PathBuf;
 use std::time::Duration;
+use unc_primitives::version::{Version, PROTOCOL_VERSION};
+use unc_store::metadata::DB_VERSION;
 
 static UNCD_VERSION: &str = env!("UNCD_VERSION");
 static UNCD_BUILD: &str = env!("UNCD_BUILD");

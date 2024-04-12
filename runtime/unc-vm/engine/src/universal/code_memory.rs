@@ -2,9 +2,9 @@
 // Attributions: https://github.com/wasmerio/wasmer/blob/master/ATTRIBUTIONS.md
 
 //! Memory management for executable code.
-use unc_vm_compiler::CompileError;
 use rustix::mm::{self, MapFlags, MprotectFlags, ProtFlags};
 use std::sync::Arc;
+use unc_vm_compiler::CompileError;
 
 /// The optimal alignment for functions.
 ///

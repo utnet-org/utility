@@ -1,12 +1,12 @@
 use clap::{Arg, Command};
-use unc_crypto::{InMemorySigner, KeyFile};
-use unc_o11y::tracing::{error, info};
-use unc_primitives::views::CurrentEpochValidatorInfo;
 use framework::config::{Config, BLOCK_PRODUCER_KICKOUT_THRESHOLD, CONFIG_FILENAME};
 use framework::get_default_home;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::Duration;
+use unc_crypto::{InMemorySigner, KeyFile};
+use unc_o11y::tracing::{error, info};
+use unc_primitives::views::CurrentEpochValidatorInfo;
 // TODO(1905): Move out RPC interface for transacting into separate production crate.
 use integration_tests::user::{rpc_user::RpcUser, User};
 
@@ -93,7 +93,10 @@ fn main() {
         //  - don't already have a proposal
         //  - too many missing blocks in current validators
         //  - missing in next validators
-        if validators.current_pledge_proposals.iter().any(|proposal| proposal.account_id() == &account_id)
+        if validators
+            .current_pledge_proposals
+            .iter()
+            .any(|proposal| proposal.account_id() == &account_id)
         {
             continue;
         }

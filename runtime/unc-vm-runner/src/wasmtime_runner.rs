@@ -9,10 +9,10 @@ use crate::logic::{
     CompiledContractCache, External, MemSlice, MemoryLike, VMContext, VMLogic, VMOutcome,
 };
 use crate::{imports, prepare, ContractCode};
-use unc_parameters::vm::VMKind;
-use unc_parameters::RuntimeFeesConfig;
 use std::borrow::Cow;
 use std::cell::RefCell;
+use unc_parameters::vm::VMKind;
+use unc_parameters::RuntimeFeesConfig;
 use wasmtime::ExternType::Func;
 use wasmtime::{Engine, Linker, Memory, MemoryType, Module, Store};
 

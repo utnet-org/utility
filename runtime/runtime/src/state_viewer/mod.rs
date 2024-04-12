@@ -1,6 +1,9 @@
-use crate::unc_primitives::version::PROTOCOL_VERSION;
 use crate::receipt_manager::ReceiptManager;
+use crate::state_viewer::errors::ViewChipError;
+use crate::unc_primitives::version::PROTOCOL_VERSION;
 use crate::{actions::execute_function_call, ext::RuntimeExt};
+use std::{str, sync::Arc, time::Instant};
+use tracing::debug;
 use unc_crypto::{KeyType, PublicKey};
 use unc_parameters::RuntimeConfigStore;
 use unc_primitives::account::{AccessKey, Account};
@@ -17,9 +20,6 @@ use unc_primitives_core::config::ViewConfig;
 use unc_store::{get_access_key, get_account, get_code, TrieUpdate};
 use unc_vm_runner::logic::ReturnData;
 use unc_vm_runner::ContractCode;
-use std::{str, sync::Arc, time::Instant};
-use tracing::debug;
-use crate::state_viewer::errors::ViewChipError;
 
 pub mod errors;
 
@@ -122,11 +122,9 @@ impl TrieViewer {
         let raw_prefix: &[u8] = prefix.as_ref();
         let mut chip_views = Vec::new();
 
-        let iter_result = state_update
-            .iter(&prefix)
-            .map_err(|_| ViewChipError::InternalError {
-                error_message: "Failed to iterate over state_update".to_string(),
-            })?;
+        let iter_result = state_update.iter(&prefix).map_err(|_| ViewChipError::InternalError {
+            error_message: "Failed to iterate over state_update".to_string(),
+        })?;
 
         for key_result in iter_result {
             let key = key_result.map_err(|_| ViewChipError::InternalError {
@@ -135,20 +133,20 @@ impl TrieViewer {
 
             let public_key_str = &key[raw_prefix.len()..];
 
-            let public_key = PublicKey::try_from_slice(public_key_str)
-                .map_err(|_| errors::ViewChipError::InternalError {
+            let public_key = PublicKey::try_from_slice(public_key_str).map_err(|_| {
+                errors::ViewChipError::InternalError {
                     error_message: format!(
                         "Unexpected invalid public key {:?} received from store",
                         public_key_str
                     ),
-                })?;
+                }
+            })?;
             // Extract the part of the key that follows the prefix, if needed
 
-            let chip_action = unc_store::get_rsa2048_keys_raw(state_update, &key).map_err(|e| {
-                ViewChipError::InternalError {
+            let chip_action = unc_store::get_rsa2048_keys_raw(state_update, &key)
+                .map_err(|e| ViewChipError::InternalError {
                     error_message: format!("Storage error encountered: {:?}", e),
-                }
-            })?
+                })?
                 .ok_or_else(|| ViewChipError::InternalError {
                     error_message: "Unexpected missing key from iterator".to_string(),
                 })?;
@@ -187,12 +185,15 @@ impl TrieViewer {
                     }
 
                     // Extract 'public_key' directly
-                    if let Some(public_key_val) = parsed_args.get("public_key").and_then(|v| v.as_str()) {
+                    if let Some(public_key_val) =
+                        parsed_args.get("public_key").and_then(|v| v.as_str())
+                    {
                         chip_view.public_key = public_key_val.to_string();
                     }
 
                     // Extract 'miner_id' directly
-                    if let Some(miner_id_val) = parsed_args.get("miner_id").and_then(|v| v.as_str()) {
+                    if let Some(miner_id_val) = parsed_args.get("miner_id").and_then(|v| v.as_str())
+                    {
                         chip_view.miner_id = miner_id_val.to_string();
                     }
 
@@ -224,8 +225,6 @@ impl TrieViewer {
 
         Ok(chip_views)
     }
-
-
 
     pub fn view_state(
         &self,
@@ -378,4 +377,3 @@ fn deserialize_chip_view(encoded: &[u8]) -> Result<ChipView, Box<dyn std::error:
     let chip_view = serde_json::from_slice::<ChipView>(encoded)?;
     Ok(chip_view)
 }
-

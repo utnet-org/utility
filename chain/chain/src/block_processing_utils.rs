@@ -1,16 +1,16 @@
 use crate::chain::BlockMissingChunks;
-use crate::unc_chain_primitives::error::BlockKnownError::KnownInProcessing;
 use crate::orphan::OrphanMissingChunks;
+use crate::unc_chain_primitives::error::BlockKnownError::KnownInProcessing;
 use crate::Provenance;
+use once_cell::sync::OnceCell;
+use std::collections::HashMap;
+use std::sync::Arc;
+use std::time::Instant;
 use unc_primitives::block::Block;
 use unc_primitives::challenge::{ChallengeBody, ChallengesResult};
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::sharding::{ReceiptProof, ShardChunkHeader, StateSyncInfo};
 use unc_primitives::types::ShardId;
-use once_cell::sync::OnceCell;
-use std::collections::HashMap;
-use std::sync::Arc;
-use std::time::Instant;
 
 /// Max number of blocks that can be in the pool at once.
 /// This number will likely never be hit unless there are many forks in the chain.

@@ -4,10 +4,10 @@ use std::time::{Duration, Instant};
 
 use borsh::BorshDeserialize;
 use enum_map::Enum;
-use unc_epoch_manager::shard_tracker::ShardTracker;
-use unc_epoch_manager::EpochManagerAdapter;
 use strum::IntoEnumIterator;
 use tracing::warn;
+use unc_epoch_manager::shard_tracker::ShardTracker;
+use unc_epoch_manager::EpochManagerAdapter;
 
 use unc_chain_configs::GenesisConfig;
 use unc_primitives::block::{Block, BlockHeader};

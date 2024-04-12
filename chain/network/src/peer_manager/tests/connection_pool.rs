@@ -11,10 +11,10 @@ use crate::private_actix::RegisterPeerError;
 use crate::tcp;
 use crate::testonly::make_rng;
 use crate::testonly::stream::Stream;
+use std::sync::Arc;
 use unc_async::time;
 use unc_o11y::testonly::init_test_logger;
 use unc_primitives::version::PROTOCOL_VERSION;
-use std::sync::Arc;
 
 #[tokio::test]
 async fn connection_spam_security_test() {

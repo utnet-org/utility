@@ -1,10 +1,10 @@
 use crate::single_shard_storage_mutator::SingleShardStorageMutator;
+use framework::NightshadeRuntime;
+use std::sync::Arc;
 use unc_crypto::PublicKey;
 use unc_epoch_manager::EpochManagerAdapter;
 use unc_primitives::account::{AccessKey, Account};
 use unc_primitives::types::{AccountId, EpochId, StateRoot};
-use framework::NightshadeRuntime;
-use std::sync::Arc;
 
 /// Object that updates the existing state. Combines all changes, commits them
 /// and returns new state roots.

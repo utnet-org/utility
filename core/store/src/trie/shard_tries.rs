@@ -11,6 +11,11 @@ use crate::trie::trie_storage::{TrieCache, TrieCachingStorage};
 use crate::trie::{TrieRefcountAddition, POISONED_LOCK_ERR};
 use crate::{metrics, DBCol, PrefetchApi};
 use crate::{Store, StoreUpdate, Trie, TrieChanges, TrieUpdate};
+use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
+use std::collections::HashMap;
+use std::rc::Rc;
+use std::sync::{Arc, RwLock};
+use tracing::info;
 use unc_primitives::errors::StorageError;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::shard_layout::{self, ShardUId};
@@ -18,11 +23,6 @@ use unc_primitives::trie_key::TrieKey;
 use unc_primitives::types::{
     BlockHeight, RawStateChange, RawStateChangesWithTrieKey, StateChangeCause, StateRoot,
 };
-use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
-use std::collections::HashMap;
-use std::rc::Rc;
-use std::sync::{Arc, RwLock};
-use tracing::info;
 
 struct ShardTriesInner {
     store: Store,
@@ -111,8 +111,7 @@ impl ShardTries {
         // 2) A lot of the prefetcher code assumes there is only one "main-thread" per shard active.
         //    If you want to enable it for view calls, at least make sure they don't share
         //    the `PrefetchApi` instances with the normal calls.
-        let prefetch_enabled = !is_view
-            && (self.0.trie_config.enable_receipt_prefetching);
+        let prefetch_enabled = !is_view && (self.0.trie_config.enable_receipt_prefetching);
         let prefetch_api = prefetch_enabled.then(|| {
             self.0
                 .prefetchers

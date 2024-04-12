@@ -1,6 +1,9 @@
 use crate::{ChainError, SourceBlock, SourceChunk};
 use anyhow::Context;
 use async_trait::async_trait;
+use framework::NightshadeRuntime;
+use std::path::Path;
+use std::sync::Arc;
 use unc_chain::types::RuntimeAdapter;
 use unc_chain::{ChainStore, ChainStoreAccess};
 use unc_chain_configs::GenesisValidationMode;
@@ -15,9 +18,6 @@ use unc_primitives::views::{
     AccessKeyPermissionView, ExecutionOutcomeWithIdView, QueryRequest, QueryResponseKind,
 };
 use unc_primitives_core::types::ShardId;
-use framework::NightshadeRuntime;
-use std::path::Path;
-use std::sync::Arc;
 
 fn is_on_current_chain(
     chain: &ChainStore,
@@ -38,8 +38,8 @@ impl ChainAccess {
         let mut config =
             framework::config::load_config(home.as_ref(), GenesisValidationMode::UnsafeFast)
                 .with_context(|| format!("Error loading config from {:?}", home.as_ref()))?;
-        let node_storage =
-            framework::open_storage(home.as_ref(), &mut config).context("failed opening storage")?;
+        let node_storage = framework::open_storage(home.as_ref(), &mut config)
+            .context("failed opening storage")?;
         let store = node_storage.get_hot_store();
         let chain = ChainStore::new(
             store.clone(),

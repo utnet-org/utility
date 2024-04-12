@@ -468,7 +468,6 @@ pub mod trie_key_parsers {
         res
     }
 
-
     pub fn parse_public_key_from_rsa_key_key(
         raw_key: &[u8],
         account_id: &AccountId,
@@ -483,9 +482,7 @@ pub mod trie_key_parsers {
         PublicKey::try_from_slice(&raw_key[prefix_len..])
     }
 
-    pub fn parse_account_id_from_rsa_key_key(
-        raw_key: &[u8],
-    ) -> Result<AccountId, std::io::Error> {
+    pub fn parse_account_id_from_rsa_key_key(raw_key: &[u8]) -> Result<AccountId, std::io::Error> {
         let account_id_prefix = parse_account_id_prefix(col::RSA2048_KEY, raw_key)?;
         if let Some(account_id) = next_token(account_id_prefix, RSA2048_KEY_SEPARATOR) {
             parse_account_id_from_slice(account_id, "Rsa2048Keys")
@@ -497,9 +494,7 @@ pub mod trie_key_parsers {
         }
     }
 
-    pub fn parse_trie_key_rsa_key_from_raw_key(
-        raw_key: &[u8],
-    ) -> Result<TrieKey, std::io::Error> {
+    pub fn parse_trie_key_rsa_key_from_raw_key(raw_key: &[u8]) -> Result<TrieKey, std::io::Error> {
         let account_id = parse_account_id_from_rsa_key_key(raw_key)?;
         let public_key = parse_public_key_from_rsa_key_key(raw_key, &account_id)?;
         Ok(TrieKey::Rsa2048Keys { account_id, public_key })

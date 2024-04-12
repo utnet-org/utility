@@ -1,7 +1,7 @@
 use unc_primitives::types::validator_power::ValidatorPower;
-use unc_primitives::types::{Balance, NumShards, Power, ShardId};
-use unc_primitives::types::validator_stake::ValidatorPledge;
 use unc_primitives::types::validator_power_and_pledge::ValidatorPowerAndPledge;
+use unc_primitives::types::validator_stake::ValidatorPledge;
+use unc_primitives::types::{Balance, NumShards, Power, ShardId};
 use unc_primitives::utils::min_heap::{MinHeap, PeekMut};
 
 /// Assign chunk producers (a.k.a. validators) to shards.  The i-th element
@@ -22,7 +22,7 @@ pub fn assign_shards<T: HasPledge<Balance> + Eq + Clone + PartialOrd>(
     chunk_producers: Vec<T>,
     num_shards: NumShards,
     min_validators_per_shard: usize,
-) -> Result<Vec<Vec<T>>, NotEnoughValidators>  {
+) -> Result<Vec<Vec<T>>, NotEnoughValidators> {
     for (idx, pair) in chunk_producers.windows(2).enumerate() {
         assert!(
             pair[0].get_value() >= pair[1].get_value(),
@@ -69,7 +69,7 @@ pub fn assign_shards<T: HasPledge<Balance> + Eq + Clone + PartialOrd>(
         for (_, cp) in chunk_producers.take(remaining_producers) {
             let (least_pledge, least_validator_count, shard_id) =
                 shard_index.pop().expect("shard_index should never be empty");
-            let get_value : Balance = cp.get_value();
+            let get_value: Balance = cp.get_value();
             shard_index.push((least_pledge + get_value, least_validator_count + 1, shard_id));
             result[usize::try_from(shard_id).unwrap()].push(cp);
         }
@@ -167,8 +167,8 @@ impl HasPledge<Balance> for ValidatorPowerAndPledge {
 
 #[cfg(test)]
 mod tests {
-    use unc_primitives::types::{Balance, NumShards};
     use std::collections::HashSet;
+    use unc_primitives::types::{Balance, NumShards};
 
     const EXPONENTIAL_STAKES: [Balance; 12] = [100, 90, 81, 73, 66, 59, 53, 48, 43, 39, 35, 31];
 

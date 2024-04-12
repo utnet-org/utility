@@ -1,10 +1,10 @@
 use crate::hash::CryptoHash;
 use crate::types::{AccountId, EpochId};
 use borsh::{BorshDeserialize, BorshSerialize};
-use unc_crypto::{KeyType, PublicKey, SecretKey, Signature};
 use std::fmt;
 use std::hash::Hash;
 use std::sync::Arc;
+use unc_crypto::{KeyType, PublicKey, SecretKey, Signature};
 
 /// Peer id is the public key.
 #[derive(

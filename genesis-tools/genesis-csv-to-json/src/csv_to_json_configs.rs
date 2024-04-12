@@ -1,7 +1,3 @@
-use unc_chain_configs::{Genesis, GenesisConfig};
-use unc_primitives::types::{Balance, NumShards, ShardId};
-use unc_primitives::utils::get_num_seats_per_shard;
-use unc_primitives::version::PROTOCOL_VERSION;
 use framework::config::{
     Config, BLOCK_PRODUCER_KICKOUT_THRESHOLD, CHUNK_PRODUCER_KICKOUT_THRESHOLD, CONFIG_FILENAME,
     EXPECTED_EPOCH_LENGTH, FISHERMEN_THRESHOLD, GAS_PRICE_ADJUSTMENT_RATE, GENESIS_CONFIG_FILENAME,
@@ -13,6 +9,10 @@ use framework::UNC_BASE;
 use std::collections::HashSet;
 use std::fs::File;
 use std::path::Path;
+use unc_chain_configs::{Genesis, GenesisConfig};
+use unc_primitives::types::{Balance, NumShards, ShardId};
+use unc_primitives::utils::get_num_seats_per_shard;
+use unc_primitives::version::PROTOCOL_VERSION;
 
 const ACCOUNTS_FILE: &str = "accounts.csv";
 const SHARDS: &'static [ShardId] = &[0, 1, 2, 3, 4, 5, 6, 7];

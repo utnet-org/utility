@@ -5,12 +5,12 @@ use crate::network_protocol::EDGE_MIN_TIMESTAMP_NONCE;
 use crate::store;
 use crate::store::testonly::Component;
 use crate::testonly::make_rng;
+use std::collections::{HashMap, HashSet};
+use std::sync::Arc;
 use unc_async::time;
 use unc_crypto::SecretKey;
 use unc_o11y::testonly::init_test_logger;
 use unc_primitives::network::PeerId;
-use std::collections::{HashMap, HashSet};
-use std::sync::Arc;
 
 impl Graph {
     async fn simple_update(self: &Arc<Self>, clock: &time::Clock, edges: Vec<Edge>) {

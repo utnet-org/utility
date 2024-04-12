@@ -195,10 +195,7 @@ pub fn run_canceled<F: Future>(f: F) -> impl Future<Output = F::Output> {
 
 /// Executes the future with a given clock, which can be set to fake clock.
 /// Useful for tests.
-pub fn run_test<F: Future>(
-    clock: unc_async::time::Clock,
-    f: F,
-) -> impl Future<Output = F::Output> {
+pub fn run_test<F: Future>(clock: unc_async::time::Clock, f: F) -> impl Future<Output = F::Output> {
     CtxFuture { ctx: Ctx::new(clock), inner: f }
 }
 

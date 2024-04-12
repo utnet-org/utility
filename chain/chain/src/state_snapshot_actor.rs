@@ -1,4 +1,5 @@
 use actix::{AsyncContext, Context};
+use std::sync::Arc;
 use unc_async::messaging::CanSend;
 use unc_network::types::{NetworkRequests, PeerManagerAdapter, PeerManagerMessageRequest};
 use unc_o11y::{handler_debug_span, OpenTelemetrySpanExt, WithSpanContext, WithSpanContextExt};
@@ -9,7 +10,6 @@ use unc_primitives::shard_layout::ShardUId;
 use unc_primitives::types::{EpochHeight, ShardId};
 use unc_store::flat::FlatStorageManager;
 use unc_store::ShardTries;
-use std::sync::Arc;
 
 /// Runs tasks related to state snapshots.
 /// There are three main handlers in StateSnapshotActor and they are called in sequence

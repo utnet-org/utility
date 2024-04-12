@@ -7,13 +7,13 @@ use crate::types::{Balance, BlockHeight, Gas, MerkleHash, ShardId, StateRoot, Va
 use crate::validator_signer::ValidatorSigner;
 use crate::version::{ProtocolFeature, ProtocolVersion, SHARD_CHUNK_HEADER_UPGRADE_VERSION};
 use borsh::{BorshDeserialize, BorshSerialize};
-use unc_crypto::Signature;
-use unc_fmt::AbbrBytes;
 use reed_solomon_erasure::galois_8::{Field, ReedSolomon};
 use reed_solomon_erasure::ReconstructShard;
 use std::cmp::Ordering;
 use std::sync::Arc;
 use tracing::debug_span;
+use unc_crypto::Signature;
+use unc_fmt::AbbrBytes;
 
 #[derive(
     BorshSerialize,
@@ -68,10 +68,10 @@ pub struct StateSyncInfo {
 }
 
 pub mod shard_chunk_header_inner;
+use crate::types::validator_stake::{ValidatorPledge, ValidatorPledgeIter};
 pub use shard_chunk_header_inner::{
     ShardChunkHeaderInner, ShardChunkHeaderInnerV1, ShardChunkHeaderInnerV2,
 };
-use crate::types::validator_stake::{ValidatorPledge, ValidatorPledgeIter};
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, PartialEq, Eq, Debug)]
 #[borsh(init=init)]
@@ -291,8 +291,12 @@ impl ShardChunkHeader {
     #[inline]
     pub fn prev_validator_power_proposals(&self) -> ValidatorPowerIter {
         match self {
-            Self::V1(header) => ValidatorPowerIter::v1(&header.inner.prev_validator_power_proposals),
-            Self::V2(header) => ValidatorPowerIter::v1(&header.inner.prev_validator_power_proposals),
+            Self::V1(header) => {
+                ValidatorPowerIter::v1(&header.inner.prev_validator_power_proposals)
+            }
+            Self::V2(header) => {
+                ValidatorPowerIter::v1(&header.inner.prev_validator_power_proposals)
+            }
             Self::V3(header) => header.inner.prev_validator_power_proposals(),
         }
     }
@@ -300,8 +304,12 @@ impl ShardChunkHeader {
     #[inline]
     pub fn prev_validator_pledge_proposals(&self) -> ValidatorPledgeIter {
         match self {
-            Self::V1(header) => ValidatorPledgeIter::v1(&header.inner.prev_validator_pledge_proposals),
-            Self::V2(header) => ValidatorPledgeIter::v1(&header.inner.prev_validator_pledge_proposals),
+            Self::V1(header) => {
+                ValidatorPledgeIter::v1(&header.inner.prev_validator_pledge_proposals)
+            }
+            Self::V2(header) => {
+                ValidatorPledgeIter::v1(&header.inner.prev_validator_pledge_proposals)
+            }
             Self::V3(header) => header.inner.prev_validator_pledge_proposals(),
         }
     }

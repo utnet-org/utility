@@ -2,6 +2,7 @@ use crate::flat::FlatStateChanges;
 use crate::{get, get_delayed_receipt_indices, set, ShardTries, StoreUpdate, Trie, TrieUpdate};
 use borsh::BorshDeserialize;
 use bytesize::ByteSize;
+use std::collections::HashMap;
 use unc_primitives::account::id::AccountId;
 use unc_primitives::errors::StorageError;
 use unc_primitives::receipt::Receipt;
@@ -12,7 +13,6 @@ use unc_primitives::trie_key::TrieKey;
 use unc_primitives::types::{
     ConsolidatedStateChange, StateChangeCause, StateChangesForResharding, StateRoot,
 };
-use std::collections::HashMap;
 
 use super::iterator::TrieItem;
 
@@ -325,12 +325,12 @@ mod tests {
     use crate::{set, ShardTries, ShardUId, Trie};
     use unc_primitives::account::id::AccountId;
 
+    use rand::Rng;
+    use std::collections::HashMap;
     use unc_primitives::hash::hash;
     use unc_primitives::receipt::{DelayedReceiptIndices, Receipt};
     use unc_primitives::trie_key::TrieKey;
     use unc_primitives::types::{NumShards, StateChangeCause, StateRoot};
-    use rand::Rng;
-    use std::collections::HashMap;
 
     #[test]
     fn test_add_values_to_children_states() {

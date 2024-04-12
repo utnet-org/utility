@@ -1,4 +1,8 @@
 use crate::DeserializeError;
+use rkyv::de::deserializers::SharedDeserializeMap;
+use rkyv::ser::serializers::{
+    AllocScratchError, AllocSerializer, CompositeSerializerError, SharedSerializeMapError,
+};
 use unc_vm_compiler::{
     CompileModuleInfo, CompiledFunctionFrameInfo, CustomSection, Dwarf, FunctionBody,
     JumpTableOffsets, Relocation, SectionIndex, TrampolinesSection,
@@ -7,10 +11,6 @@ use unc_vm_types::entity::PrimaryMap;
 use unc_vm_types::{
     ExportIndex, FunctionIndex, ImportIndex, LocalFunctionIndex, OwnedDataInitializer,
     SignatureIndex,
-};
-use rkyv::de::deserializers::SharedDeserializeMap;
-use rkyv::ser::serializers::{
-    AllocScratchError, AllocSerializer, CompositeSerializerError, SharedSerializeMapError,
 };
 
 const MAGIC_HEADER: [u8; 32] = {

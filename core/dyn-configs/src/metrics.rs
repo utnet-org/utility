@@ -1,5 +1,5 @@
-use unc_o11y::metrics::{try_create_int_counter, try_create_int_gauge, IntCounter, IntGauge};
 use once_cell::sync::Lazy;
+use unc_o11y::metrics::{try_create_int_counter, try_create_int_gauge, IntCounter, IntGauge};
 
 pub static CONFIG_RELOADS: Lazy<IntCounter> = Lazy::new(|| {
     try_create_int_counter(

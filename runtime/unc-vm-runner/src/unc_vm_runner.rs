@@ -13,6 +13,10 @@ use crate::prepare;
 use crate::runner::VMResult;
 use crate::{get_contract_cache_key, imports, ContractCode};
 use memoffset::offset_of;
+use std::borrow::Cow;
+use std::hash::Hash;
+use std::mem::size_of;
+use std::sync::{Arc, OnceLock};
 use unc_parameters::vm::VMKind;
 use unc_parameters::RuntimeFeesConfig;
 use unc_vm_compiler_singlepass::Singlepass;
@@ -23,10 +27,6 @@ use unc_vm_types::{FunctionIndex, InstanceConfig, MemoryType, Pages, WASM_PAGE_S
 use unc_vm_vm::{
     Artifact, Instantiatable, LinearMemory, LinearTable, Memory, MemoryStyle, TrapCode, VMMemory,
 };
-use std::borrow::Cow;
-use std::hash::Hash;
-use std::mem::size_of;
-use std::sync::{Arc, OnceLock};
 
 #[derive(Clone)]
 pub struct NearVmMemory(Arc<LinearMemory>);
@@ -538,10 +538,7 @@ impl unc_vm_vm::Tunables for &NearVM {
     ) -> Result<std::sync::Arc<dyn Memory>, unc_vm_vm::MemoryError> {
         // We do not support arbitrary Host memories. The only memory contracts may use is the
         // memory imported via `env.memory`.
-        Err(unc_vm_vm::MemoryError::CouldNotGrow {
-            current: Pages(0),
-            attempted_delta: ty.minimum,
-        })
+        Err(unc_vm_vm::MemoryError::CouldNotGrow { current: Pages(0), attempted_delta: ty.minimum })
     }
 
     unsafe fn create_vm_memory(
@@ -552,10 +549,7 @@ impl unc_vm_vm::Tunables for &NearVM {
     ) -> Result<std::sync::Arc<dyn Memory>, unc_vm_vm::MemoryError> {
         // We do not support VM memories. The only memory contracts may use is the memory imported
         // via `env.memory`.
-        Err(unc_vm_vm::MemoryError::CouldNotGrow {
-            current: Pages(0),
-            attempted_delta: ty.minimum,
-        })
+        Err(unc_vm_vm::MemoryError::CouldNotGrow { current: Pages(0), attempted_delta: ty.minimum })
     }
 
     fn create_host_table(

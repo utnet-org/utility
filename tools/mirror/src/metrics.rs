@@ -1,7 +1,7 @@
+use once_cell::sync::Lazy;
 use unc_o11y::metrics::{
     try_create_int_counter, try_create_int_counter_vec, IntCounter, IntCounterVec,
 };
-use once_cell::sync::Lazy;
 
 pub static TRANSACTIONS_SENT: Lazy<IntCounterVec> = Lazy::new(|| {
     try_create_int_counter_vec(

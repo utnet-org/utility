@@ -1,9 +1,9 @@
 use super::*;
 use crate::blacklist::Blacklist;
-use unc_async::time;
-use unc_crypto::{KeyType, SecretKey};
 use std::collections::HashSet;
 use std::net::{Ipv4Addr, SocketAddrV4};
+use unc_async::time;
+use unc_crypto::{KeyType, SecretKey};
 
 fn get_peer_id(seed: String) -> PeerId {
     PeerId::new(SecretKey::from_seed(KeyType::ED25519, seed.as_str()).public_key())

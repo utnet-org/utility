@@ -3,6 +3,7 @@ use serde_json::Value;
 use unc_jsonrpc_primitives::errors::RpcParseError;
 use unc_jsonrpc_primitives::errors::{RpcError, ServerError};
 
+mod all_miners;
 mod blocks;
 mod changes;
 mod chunks;
@@ -12,6 +13,7 @@ mod gas_price;
 mod light_client;
 mod maintenance;
 mod network_info;
+mod provider;
 mod query;
 mod receipts;
 mod sandbox;
@@ -19,8 +21,6 @@ mod split_storage;
 mod status;
 mod transactions;
 mod validator;
-mod provider;
-mod all_miners;
 
 pub(crate) trait RpcRequest: Sized {
     fn parse(value: Value) -> Result<Self, RpcParseError>;

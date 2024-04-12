@@ -1,5 +1,6 @@
 use awc::{Client, Connector};
 use futures::{future, future::LocalBoxFuture, FutureExt, TryFutureExt};
+use std::time::Duration;
 use unc_jsonrpc_primitives::errors::RpcError;
 use unc_jsonrpc_primitives::message::{from_slice, Message};
 use unc_jsonrpc_primitives::types::changes::{
@@ -15,7 +16,6 @@ use unc_primitives::views::validator_power_view::ValidatorPowerView;
 use unc_primitives::views::{
     BlockView, ChunkView, EpochValidatorInfo, GasPriceView, StatusResponse,
 };
-use std::time::Duration;
 
 #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(untagged)]
@@ -256,8 +256,7 @@ impl JsonRpcClient {
     pub fn EXPERIMENTAL_split_storage_info(
         &self,
         request: unc_jsonrpc_primitives::types::split_storage::RpcSplitStorageInfoRequest,
-    ) -> RpcRequest<unc_jsonrpc_primitives::types::split_storage::RpcSplitStorageInfoResponse>
-    {
+    ) -> RpcRequest<unc_jsonrpc_primitives::types::split_storage::RpcSplitStorageInfoResponse> {
         call_method(&self.client, &self.server_addr, "EXPERIMENTAL_split_storage_info", request)
     }
 

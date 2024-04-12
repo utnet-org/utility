@@ -1,7 +1,7 @@
-use unc_chain_configs::{ExternalStorageLocation, SyncConfig};
-use unc_config_utils::{ValidationError, ValidationErrors};
 use std::collections::HashSet;
 use std::path::Path;
+use unc_chain_configs::{ExternalStorageLocation, SyncConfig};
+use unc_config_utils::{ValidationError, ValidationErrors};
 
 use crate::config::Config;
 

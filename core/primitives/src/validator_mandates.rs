@@ -1,10 +1,10 @@
 use std::collections::HashMap;
 
-use crate::types::{ValidatorId};
-use borsh::{BorshDeserialize, BorshSerialize};
-use unc_primitives_core::types::Balance;
-use rand::{seq::SliceRandom, Rng};
 use crate::types::validator_power_and_pledge::ValidatorPowerAndPledge;
+use crate::types::ValidatorId;
+use borsh::{BorshDeserialize, BorshSerialize};
+use rand::{seq::SliceRandom, Rng};
+use unc_primitives_core::types::Balance;
 
 /// Represents the configuration of [`ValidatorMandates`]. Its parameters are expected to remain
 /// valid for one epoch.
@@ -269,10 +269,10 @@ impl ShuffledShardIds {
 mod tests {
     use std::collections::HashMap;
 
-    use unc_crypto::PublicKey;
-    use unc_primitives_core::types::Balance;
     use rand::SeedableRng;
     use rand_chacha::ChaCha8Rng;
+    use unc_crypto::PublicKey;
+    use unc_primitives_core::types::Balance;
 
     use crate::{
         types::validator_stake::ValidatorPledge, types::ValidatorId,

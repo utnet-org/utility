@@ -2,10 +2,10 @@ use std::cmp::max;
 use std::collections::HashMap;
 use std::time::{Duration, Instant};
 
+use tracing::info;
 use unc_primitives::block::Block;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::static_clock::StaticClock;
-use tracing::info;
 
 pub struct BlockStats {
     hash2depth: HashMap<CryptoHash, u64>,

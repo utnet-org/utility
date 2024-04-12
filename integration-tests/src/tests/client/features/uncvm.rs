@@ -1,6 +1,8 @@
 #![cfg_attr(not(feature = "nightly"), allow(unused_imports))]
 
 use crate::tests::client::process_blocks::deploy_test_contract;
+use framework::config::GenesisExt;
+use framework::test_utils::TestEnvNightshadeSetupExt;
 use unc_chain::ChainGenesis;
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::TestEnv;
@@ -9,8 +11,6 @@ use unc_crypto::{InMemorySigner, KeyType, Signer};
 use unc_parameters::RuntimeConfigStore;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::transaction::{Action, FunctionCallAction, Transaction};
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
 
 #[cfg_attr(all(target_arch = "aarch64", target_vendor = "apple"), ignore)]
 #[test]

@@ -2,11 +2,6 @@ use crate::test_utils::{gen_changes, simplify_changes, test_populate_trie, TestT
 use crate::trie::trie_storage::{TrieMemoryPartialStorage, TrieStorage};
 use crate::{PartialStorage, Trie, TrieUpdate};
 use assert_matches::assert_matches;
-use unc_primitives::challenge::PartialState;
-use unc_primitives::errors::{MissingTrieValueContext, StorageError};
-use unc_primitives::hash::{hash, CryptoHash};
-use unc_primitives::shard_layout::ShardUId;
-use unc_primitives::types::TrieNodesCount;
 use rand::seq::SliceRandom;
 use rand::Rng;
 use std::cell::RefCell;
@@ -14,6 +9,11 @@ use std::collections::{HashMap, HashSet};
 use std::fmt::Debug;
 use std::rc::Rc;
 use std::sync::Arc;
+use unc_primitives::challenge::PartialState;
+use unc_primitives::errors::{MissingTrieValueContext, StorageError};
+use unc_primitives::hash::{hash, CryptoHash};
+use unc_primitives::shard_layout::ShardUId;
+use unc_primitives::types::TrieNodesCount;
 
 /// TrieMemoryPartialStorage, but contains only the first n requested nodes.
 pub struct IncompletePartialStorage {

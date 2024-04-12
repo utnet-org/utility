@@ -1,5 +1,5 @@
-use unc_store::{checkpoint_hot_storage_and_cleanup_columns, Mode, NodeStorage, StoreConfig};
 use std::path::{Path, PathBuf};
+use unc_store::{checkpoint_hot_storage_and_cleanup_columns, Mode, NodeStorage, StoreConfig};
 
 #[derive(clap::Args)]
 pub(crate) struct MakeSnapshotCommand {

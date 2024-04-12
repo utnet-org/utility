@@ -1,15 +1,17 @@
 use std::collections::HashMap;
 
 use unc_primitives::checked_feature;
-use unc_primitives::epoch_manager::epoch_info::EpochInfo;
-use unc_primitives::epoch_manager::{EpochConfig, RngSeed};
 use unc_primitives::epoch_manager::block_info::BlockInfo;
 use unc_primitives::epoch_manager::block_summary::BlockSummary;
+use unc_primitives::epoch_manager::epoch_info::EpochInfo;
+use unc_primitives::epoch_manager::{EpochConfig, RngSeed};
 use unc_primitives::errors::{BlockError, EpochError};
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::types::validator_power::ValidatorPower;
 use unc_primitives::types::validator_stake::ValidatorPledge;
-use unc_primitives::types::{AccountId, Balance, NumSeats, ProtocolVersion, ValidatorKickoutReason};
+use unc_primitives::types::{
+    AccountId, Balance, NumSeats, ProtocolVersion, ValidatorKickoutReason,
+};
 
 /// Find threshold of pledge per seat, given provided pledges and required number of seats.
 pub(crate) fn find_threshold(
@@ -110,20 +112,23 @@ mod old_validator_selection {
     use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
     use std::iter;
 
+    use rand::{RngCore, SeedableRng};
+    use rand_hc::Hc128Rng;
     use unc_primitives::epoch_manager::epoch_info::EpochInfo;
     use unc_primitives::epoch_manager::EpochConfig;
     use unc_primitives::errors::EpochError;
     use unc_primitives::types::validator_power::ValidatorPower;
+    use unc_primitives::types::validator_power_and_pledge::ValidatorPowerAndPledge;
     use unc_primitives::types::validator_stake::ValidatorPledge;
-    use unc_primitives::types::{AccountId, Balance, NumSeats, ValidatorPledgeV1, ValidatorId, ValidatorKickoutReason, ValidatorPowerAndPledgeV1, ValidatorPowerV1};
+    use unc_primitives::types::{
+        AccountId, Balance, NumSeats, ValidatorId, ValidatorKickoutReason, ValidatorPledgeV1,
+        ValidatorPowerAndPledgeV1, ValidatorPowerV1,
+    };
     use unc_primitives::validator_mandates::ValidatorMandates;
     use unc_primitives::version::ProtocolVersion;
-    use rand::{RngCore, SeedableRng};
-    use rand_hc::Hc128Rng;
-    use unc_primitives::types::validator_power_and_pledge::ValidatorPowerAndPledge;
 
     use crate::proposals::find_threshold;
-        use crate::types::RngSeed;
+    use crate::types::RngSeed;
 
     pub fn proposals_to_epoch_info(
         epoch_config: &EpochConfig,
@@ -138,7 +143,7 @@ mod old_validator_selection {
     ) -> Result<EpochInfo, EpochError> {
         // Combine proposals with rollovers.
         let mut ordered_power_proposals = BTreeMap::new();
-        let mut ordered_pledge_proposals= BTreeMap::new();
+        let mut ordered_pledge_proposals = BTreeMap::new();
         // Account -> new_pledge
         let mut power_change = BTreeMap::new();
         let mut pledge_change = BTreeMap::new();
@@ -165,7 +170,7 @@ mod old_validator_selection {
             let account_id = f.account_id();
             if validator_kickout.contains_key(account_id) {
                 let account_id = f.take_account_id();
-                pledge_change.insert(account_id,0);
+                pledge_change.insert(account_id, 0);
             } else {
                 pledge_change.insert(account_id.clone(), f.pledge());
                 ordered_pledge_proposals.insert(account_id.clone(), f);
@@ -175,17 +180,17 @@ mod old_validator_selection {
         for r in prev_epoch_info.validators_iter() {
             let account_id = r.account_id().clone();
             if validator_kickout.contains_key(&account_id) {
-                pledge_change.insert(account_id,0);
+                pledge_change.insert(account_id, 0);
                 continue;
             }
-            let r_p = ValidatorPower::V1(ValidatorPowerV1{
+            let r_p = ValidatorPower::V1(ValidatorPowerV1 {
                 account_id: r.account_id().clone(),
                 public_key: r.public_key().clone(),
                 power: r.power().clone(),
             });
             let p = ordered_power_proposals.entry(account_id.clone()).or_insert(r_p);
             power_change.insert(account_id.clone(), p.power());
-            let r_f = ValidatorPledge::V1(ValidatorPledgeV1{
+            let r_f = ValidatorPledge::V1(ValidatorPledgeV1 {
                 account_id: r.account_id().clone(),
                 public_key: r.public_key().clone(),
                 pledge: r.pledge().clone(),
@@ -222,7 +227,7 @@ mod old_validator_selection {
         for (account_id, p) in ordered_pledge_proposals {
             let pledge = p.pledge();
             let power = ordered_power_proposals.get(&account_id.clone()).unwrap().power();
-            let p_f = ValidatorPowerAndPledge::V1(ValidatorPowerAndPledgeV1{
+            let p_f = ValidatorPowerAndPledge::V1(ValidatorPowerAndPledgeV1 {
                 account_id: account_id.clone(),
                 public_key: p.public_key().clone(),
                 power: power.clone(),
@@ -319,7 +324,7 @@ mod old_validator_selection {
 
         // Old validator selection is not aware of chunk validator mandates.
         let validator_mandates: ValidatorMandates = Default::default();
-        
+
         Ok(EpochInfo::new(
             prev_epoch_info.epoch_height() + 1,
             final_proposals,

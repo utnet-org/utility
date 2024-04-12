@@ -5,9 +5,9 @@ use crate::peer_manager::connection;
 use crate::private_actix::RegisterPeerError;
 use crate::tcp;
 use crate::testonly::make_rng;
+use std::sync::Arc;
 use unc_async::time;
 use unc_o11y::testonly::init_test_logger;
-use std::sync::Arc;
 
 #[tokio::test]
 async fn connection_tie_break() {

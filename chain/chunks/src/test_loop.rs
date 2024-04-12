@@ -7,7 +7,7 @@ use unc_async::{
 };
 use unc_chain::{types::Tip, Chain};
 use unc_epoch_manager::{
-    shard_tracker::{ShardTracker},
+    shard_tracker::ShardTracker,
     test_utils::{record_block, setup_epoch_manager_with_block_and_chunk_producers},
     EpochManagerAdapter, EpochManagerHandle,
 };

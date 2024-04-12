@@ -1,6 +1,6 @@
+use std::sync::Arc;
 use unc_async::time;
 use unc_network::concurrency::ctx;
-use std::sync::Arc;
 
 struct Inner {
     interval: time::Duration,

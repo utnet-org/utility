@@ -1,4 +1,3 @@
-use unc_primitives::views::AllMinersView;
 use super::ValidatorSchedule;
 use crate::types::{
     ApplyChunkBlockContext, ApplyChunkResult, ApplyChunkShardContext, ApplyResultForResharding,
@@ -6,6 +5,11 @@ use crate::types::{
 };
 use crate::BlockHeader;
 use borsh::{BorshDeserialize, BorshSerialize};
+use num_rational::Ratio;
+use std::cmp::Ordering;
+use std::collections::{BTreeMap, HashMap, HashSet};
+use std::sync::{Arc, RwLock};
+use std::time::Duration;
 use unc_chain_configs::{ProtocolConfig, DEFAULT_GC_NUM_EPOCHS_TO_KEEP};
 use unc_chain_primitives::Error;
 use unc_crypto::{KeyType, PublicKey, SecretKey, Signature};
@@ -30,21 +34,23 @@ use unc_primitives::transaction::{
     Action, ExecutionMetadata, ExecutionOutcome, ExecutionOutcomeWithId, ExecutionStatus,
     SignedTransaction, TransferAction,
 };
-use unc_primitives::types::{AccountId, ApprovalPledge, Balance, BlockHeight, EpochHeight, EpochId, Gas, Nonce, NumShards, ShardId, StateChangesForResharding, StateRoot, StateRootNode, ValidatorInfoIdentifier};
+use unc_primitives::types::validator_power_and_pledge::ValidatorPowerAndPledge;
+use unc_primitives::types::{
+    AccountId, ApprovalPledge, Balance, BlockHeight, EpochHeight, EpochId, Gas, Nonce, NumShards,
+    ShardId, StateChangesForResharding, StateRoot, StateRootNode, ValidatorInfoIdentifier,
+};
 use unc_primitives::validator_mandates::AssignmentWeight;
 use unc_primitives::version::{ProtocolVersion, PROTOCOL_VERSION};
-use unc_primitives::views::{AccessKeyInfoView, AccessKeyList, CallResult, ChipsList, ChipView, ContractCodeView, EpochValidatorInfo, QueryRequest, QueryResponse, QueryResponseKind, ViewStateResult};
+use unc_primitives::views::AllMinersView;
+use unc_primitives::views::{
+    AccessKeyInfoView, AccessKeyList, CallResult, ChipView, ChipsList, ContractCodeView,
+    EpochValidatorInfo, QueryRequest, QueryResponse, QueryResponseKind, ViewStateResult,
+};
 use unc_store::test_utils::TestTriesBuilder;
 use unc_store::{
     set_genesis_hash, set_genesis_state_roots, DBCol, ShardTries, StorageError, Store, StoreUpdate,
     Trie, TrieChanges, WrappedTrieChanges,
 };
-use num_rational::Ratio;
-use std::cmp::Ordering;
-use std::collections::{BTreeMap, HashMap, HashSet};
-use std::sync::{Arc, RwLock};
-use std::time::Duration;
-use unc_primitives::types::validator_power_and_pledge::ValidatorPowerAndPledge;
 
 /// Simple key value runtime for tests.
 ///
@@ -287,7 +293,11 @@ impl MockEpochManager {
         &self.validators_by_valset[valset].block_producers
     }
 
-    fn get_chunk_producers(&self, valset: usize, shard_id: ShardId) -> Vec<ValidatorPowerAndPledge> {
+    fn get_chunk_producers(
+        &self,
+        valset: usize,
+        shard_id: ShardId,
+    ) -> Vec<ValidatorPowerAndPledge> {
         self.validators_by_valset[valset].chunk_producers[shard_id as usize].clone()
     }
 
@@ -692,10 +702,12 @@ impl EpochManagerAdapter for MockEpochManager {
         Ok(validators[(height as usize) % validators.len()].account_id().clone())
     }
 
-    fn get_block_producer_by_hash(&self, _block_hash: &CryptoHash) -> Result<AccountId, EpochError> {
+    fn get_block_producer_by_hash(
+        &self,
+        _block_hash: &CryptoHash,
+    ) -> Result<AccountId, EpochError> {
         todo!()
     }
-
 
     fn get_chunk_producer(
         &self,
@@ -825,8 +837,8 @@ impl EpochManagerAdapter for MockEpochManager {
 
     fn verify_block_vrf(
         &self,
-         _epoch_id: &EpochId,
-         _block_height: BlockHeight,
+        _epoch_id: &EpochId,
+        _block_height: BlockHeight,
         _prev_random_value: &CryptoHash,
         _vrf_value: &unc_crypto::vrf::Value,
         _vrf_proof: &unc_crypto::vrf::Proof,
@@ -913,7 +925,8 @@ impl EpochManagerAdapter for MockEpochManager {
                 }
             }
         }
-        let all_pledge = validators.iter().map(|pledge| (pledge.pledge(), 0, false)).collect::<Vec<_>>();
+        let all_pledge =
+            validators.iter().map(|pledge| (pledge.pledge(), 0, false)).collect::<Vec<_>>();
         if !can_approved_block_be_produced(approvals, &all_pledge) {
             Err(Error::NotEnoughApprovals)
         } else {
@@ -981,7 +994,9 @@ impl EpochManagerAdapter for MockEpochManager {
     #[cfg(feature = "new_epoch_sync")]
     fn force_update_aggregator(&self, _epoch_id: &EpochId, _hash: &CryptoHash) {}
 
-fn get_all_miners(&self, _: &CryptoHash) -> Result<AllMinersView, EpochError> { todo!() }
+    fn get_all_miners(&self, _: &CryptoHash) -> Result<AllMinersView, EpochError> {
+        todo!()
+    }
 }
 
 impl RuntimeAdapter for KeyValueRuntime {

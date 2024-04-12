@@ -1,9 +1,9 @@
 use crate::{PublicKey, SecretKey};
-use unc_account_id::AccountId;
 use std::fs::File;
 use std::io;
 use std::io::{Read, Write};
 use std::path::Path;
+use unc_account_id::AccountId;
 
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct KeyFile {

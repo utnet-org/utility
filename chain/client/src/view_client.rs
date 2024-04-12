@@ -1,12 +1,21 @@
 //! Readonly view of the chain and state of the database.
 //! Useful for querying from RPC.
 
-use crate::adapter::{AnnounceAccountRequest, BlockHeadersRequest, BlockRequest, ProviderRequest,AllMinersRequest, StateRequestHeader, StateRequestPart, StateResponse, TxStatusRequest, TxStatusResponse};
+use crate::adapter::{
+    AllMinersRequest, AnnounceAccountRequest, BlockHeadersRequest, BlockRequest, ProviderRequest,
+    StateRequestHeader, StateRequestPart, StateResponse, TxStatusRequest, TxStatusResponse,
+};
 use crate::{
     metrics, sync, GetChunk, GetExecutionOutcomeResponse, GetNextLightClientBlock, GetStateChanges,
     GetStateChangesInBlock, GetValidatorInfo, GetValidatorOrdered,
 };
 use actix::{Actor, Addr, Handler, SyncArbiter, SyncContext};
+use std::cmp::Ordering;
+use std::collections::{BTreeSet, HashMap, VecDeque};
+use std::hash::Hash;
+use std::sync::{Arc, Mutex, RwLock};
+use std::time::{Duration, Instant};
+use tracing::{error, info, warn};
 use unc_async::messaging::CanSend;
 use unc_chain::types::{RuntimeAdapter, Tip};
 use unc_chain::{
@@ -14,7 +23,17 @@ use unc_chain::{
 };
 use unc_chain_configs::{ClientConfig, ProtocolConfigView};
 use unc_chain_primitives::error::EpochErrorResultToChainError;
-use unc_client_primitives::types::{Error, GetBlock, GetBlockError, GetBlockProof, GetBlockProofError, GetBlockProofResponse, GetBlockWithMerkleTree, GetChunkError, GetExecutionOutcome, GetExecutionOutcomeError, GetExecutionOutcomesForBlock, GetGasPrice, GetGasPriceError, GetMaintenanceWindows, GetMaintenanceWindowsError, GetNextLightClientBlockError, GetProtocolConfig, GetProtocolConfigError, GetProvider, GetProviderError, GetAllMiners, GetReceipt, GetReceiptError, GetSplitStorageInfo, GetSplitStorageInfoError, GetStateChangesError, GetStateChangesWithCauseInBlock, GetStateChangesWithCauseInBlockForTrackedShards, GetValidatorInfoError, Query, QueryError, TxStatus, TxStatusError, GetAllMinersError};
+use unc_client_primitives::types::{
+    Error, GetAllMiners, GetAllMinersError, GetBlock, GetBlockError, GetBlockProof,
+    GetBlockProofError, GetBlockProofResponse, GetBlockWithMerkleTree, GetChunkError,
+    GetExecutionOutcome, GetExecutionOutcomeError, GetExecutionOutcomesForBlock, GetGasPrice,
+    GetGasPriceError, GetMaintenanceWindows, GetMaintenanceWindowsError,
+    GetNextLightClientBlockError, GetProtocolConfig, GetProtocolConfigError, GetProvider,
+    GetProviderError, GetReceipt, GetReceiptError, GetSplitStorageInfo, GetSplitStorageInfoError,
+    GetStateChangesError, GetStateChangesWithCauseInBlock,
+    GetStateChangesWithCauseInBlockForTrackedShards, GetValidatorInfoError, Query, QueryError,
+    TxStatus, TxStatusError,
+};
 use unc_epoch_manager::shard_tracker::ShardTracker;
 use unc_epoch_manager::EpochManagerAdapter;
 use unc_network::types::{
@@ -34,17 +53,22 @@ use unc_primitives::state_sync::{
     ShardStateSyncResponse, ShardStateSyncResponseHeader, ShardStateSyncResponseV3,
 };
 use unc_primitives::static_clock::StaticClock;
-use unc_primitives::types::{AccountId, BlockHeight, BlockId, BlockReference, EpochReference, Finality, MaybeBlockId, ShardId, SyncCheckpoint, TransactionOrReceiptId, ValidatorInfoIdentifier};
-use unc_primitives::views::{AllMinersView, BlockView, ChunkView, EpochValidatorInfo, ExecutionOutcomeWithIdView, ExecutionStatusView, FinalExecutionOutcomeView, FinalExecutionOutcomeViewEnum, GasPriceView, LightClientBlockView, MaintenanceWindowsView, QueryRequest, QueryResponse, ReceiptView, SplitStorageInfoView, StateChangesKindsView, StateChangesView, TxExecutionStatus, TxStatusView};
+use unc_primitives::transaction::SignedTransaction;
+use unc_primitives::types::{
+    AccountId, BlockHeight, BlockId, BlockReference, EpochReference, Finality, MaybeBlockId,
+    ShardId, SyncCheckpoint, TransactionOrReceiptId, ValidatorInfoIdentifier,
+};
+use unc_primitives::views::validator_power_and_pledge_view::ValidatorPowerAndPledgeView;
+use unc_primitives::views::{
+    AllMinersView, BlockView, ChunkView, EpochValidatorInfo, ExecutionOutcomeWithIdView,
+    ExecutionStatusView, FinalExecutionOutcomeView, FinalExecutionOutcomeViewEnum,
+    FinalExecutionStatus, GasPriceView, LightClientBlockView, MaintenanceWindowsView, QueryRequest,
+    QueryResponse, ReceiptView, SignedTransactionView, SplitStorageInfoView, StateChangesKindsView,
+    StateChangesView, TxExecutionStatus, TxStatusView,
+};
+
 use unc_store::flat::{FlatStorageReadyStatus, FlatStorageStatus};
 use unc_store::{DBCol, COLD_HEAD_KEY, FINAL_HEAD_KEY, HEAD_KEY};
-use std::cmp::Ordering;
-use std::collections::{BTreeSet, HashMap, VecDeque};
-use std::hash::Hash;
-use std::sync::{Arc, Mutex, RwLock};
-use std::time::{Duration, Instant};
-use tracing::{error, info, warn};
-use unc_primitives::views::validator_power_and_pledge_view::ValidatorPowerAndPledgeView;
 
 /// Max number of queries that we keep.
 const QUERY_REQUEST_LIMIT: usize = 500;
@@ -385,16 +409,12 @@ impl ViewClientActor {
                     vm_error: error_message,
                     block_height,
                     block_hash,
-                } ,
+                },
                 unc_chain::unc_chain_primitives::error::QueryError::UnknownChip {
                     public_key,
                     block_height,
                     block_hash,
-                } => QueryError::UnknownChip {
-                    public_key,
-                    block_height,
-                    block_hash,
-                },
+                } => QueryError::UnknownChip { public_key, block_height, block_hash },
                 unc_chain::unc_chain_primitives::error::QueryError::TooLargeContractState {
                     requested_account_id,
                     block_height,
@@ -421,7 +441,15 @@ impl ViewClientActor {
             .chain
             .get_block_header(&execution_outcome.transaction_outcome.block_hash)?])
         {
-            return Ok(TxExecutionStatus::Included);
+            return if execution_outcome
+                .receipts_outcome
+                .iter()
+                .all(|e| e.outcome.status != ExecutionStatusView::Unknown)
+            {
+                Ok(TxExecutionStatus::ExecutedOptimistic)
+            } else {
+                Ok(TxExecutionStatus::Included)
+            };
         }
 
         if execution_outcome
@@ -494,11 +522,29 @@ impl ViewClientActor {
                     Ok(TxStatusView { execution_outcome: Some(res), status })
                 }
                 Err(unc_chain::Error::DBNotFoundErr(_)) => {
-                    if self.chain.get_execution_outcome(&tx_hash).is_ok() {
-                        Ok(TxStatusView {
-                            execution_outcome: None,
-                            status: TxExecutionStatus::None,
-                        })
+                    if let Ok(Some(transaction)) = self.chain.chain_store.get_transaction(&tx_hash)
+                    {
+                        let transaction: SignedTransactionView =
+                            SignedTransaction::clone(&transaction).into();
+                        if let Ok(tx_outcome) = self.chain.get_execution_outcome(&tx_hash) {
+                            let outcome = FinalExecutionOutcomeViewEnum::FinalExecutionOutcome(
+                                FinalExecutionOutcomeView {
+                                    status: FinalExecutionStatus::Started,
+                                    transaction,
+                                    transaction_outcome: tx_outcome.into(),
+                                    receipts_outcome: vec![],
+                                },
+                            );
+                            Ok(TxStatusView {
+                                execution_outcome: Some(outcome),
+                                status: TxExecutionStatus::Included,
+                            })
+                        } else {
+                            Ok(TxStatusView {
+                                execution_outcome: None,
+                                status: TxExecutionStatus::Included,
+                            })
+                        }
                     } else {
                         Err(TxStatusError::MissingTransaction(tx_hash))
                     }
@@ -623,12 +669,10 @@ impl Handler<WithSpanContext<GetProvider>> for ViewClientActor {
     fn handle(&mut self, msg: WithSpanContext<GetProvider>, _: &mut Self::Context) -> Self::Result {
         let (_span, msg) = handler_debug_span!(target: "client", msg);
         tracing::debug!(target: "client", ?msg);
-        let epoch_id= msg.0;
+        let epoch_id = msg.0;
         let height = msg.1;
-        let block_author = self
-            .epoch_manager
-            .get_block_producer(&epoch_id, height)
-            .into_chain_error()?;
+        let block_author =
+            self.epoch_manager.get_block_producer(&epoch_id, height).into_chain_error()?;
         Ok(block_author)
     }
 }
@@ -637,14 +681,15 @@ impl Handler<WithSpanContext<GetProvider>> for ViewClientActor {
 impl Handler<WithSpanContext<GetAllMiners>> for ViewClientActor {
     type Result = Result<AllMinersView, GetAllMinersError>;
     #[perf]
-    fn handle(&mut self, msg: WithSpanContext<GetAllMiners>, _: &mut Self::Context) -> Self::Result {
+    fn handle(
+        &mut self,
+        msg: WithSpanContext<GetAllMiners>,
+        _: &mut Self::Context,
+    ) -> Self::Result {
         let (_span, msg) = handler_debug_span!(target: "client", msg);
         tracing::debug!(target: "client", ?msg);
-        let block_hash= msg.0;
-        let all_miners = self
-            .epoch_manager
-            .get_all_miners(&block_hash)
-            .into_chain_error()?;
+        let block_hash = msg.0;
+        let all_miners = self.epoch_manager.get_all_miners(&block_hash).into_chain_error()?;
         Ok(all_miners)
     }
 }
@@ -1298,7 +1343,6 @@ impl Handler<WithSpanContext<BlockRequest>> for ViewClientActor {
     }
 }
 
-
 impl Handler<WithSpanContext<ProviderRequest>> for ViewClientActor {
     type Result = Option<AccountId>;
 
@@ -1331,8 +1375,9 @@ impl Handler<WithSpanContext<AllMinersRequest>> for ViewClientActor {
     ) -> Self::Result {
         let (_span, msg) = handler_debug_span!(target: "client", msg);
         tracing::debug!(target: "client", ?msg);
-        let _timer =
-            metrics::VIEW_CLIENT_MESSAGE_TIME.with_label_values(&["AllMinersRequest"]).start_timer();
+        let _timer = metrics::VIEW_CLIENT_MESSAGE_TIME
+            .with_label_values(&["AllMinersRequest"])
+            .start_timer();
         let AllMinersRequest(block_hash) = msg;
         if let Ok(all_miners) = self.epoch_manager.get_all_miners(&block_hash) {
             Some(all_miners)

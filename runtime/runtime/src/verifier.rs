@@ -1,7 +1,7 @@
 use crate::config::{total_prepaid_gas, tx_cost, TransactionCost};
 use crate::unc_primitives::account::Account;
 use crate::VerificationResult;
-use unc_crypto::key_conversion::{is_valid_staking_key, is_valid_challenge_key};
+use unc_crypto::key_conversion::{is_valid_challenge_key, is_valid_staking_key};
 use unc_parameters::RuntimeConfig;
 use unc_primitives::account::AccessKeyPermission;
 use unc_primitives::action::delegate::SignedDelegateAction;
@@ -13,8 +13,8 @@ use unc_primitives::errors::{
 use unc_primitives::receipt::{ActionReceipt, DataReceipt, Receipt, ReceiptEnum};
 use unc_primitives::transaction::DeleteAccountAction;
 use unc_primitives::transaction::{
-    Action, AddKeyAction, DeployContractAction, FunctionCallAction, SignedTransaction, PledgeAction,
-    RegisterRsa2048KeysAction, CreateRsa2048ChallengeAction,
+    Action, AddKeyAction, CreateRsa2048ChallengeAction, DeployContractAction, FunctionCallAction,
+    PledgeAction, RegisterRsa2048KeysAction, SignedTransaction,
 };
 use unc_primitives::types::{AccountId, Balance};
 use unc_primitives::types::{BlockHeight, StorageUsage};
@@ -523,7 +523,9 @@ fn validate_register_rsa2048_keys_action(
     Ok(())
 }
 
-fn validate_create_rsa2048_challenge_action(action: &CreateRsa2048ChallengeAction) -> Result<(), ActionsValidationError> {
+fn validate_create_rsa2048_challenge_action(
+    action: &CreateRsa2048ChallengeAction,
+) -> Result<(), ActionsValidationError> {
     if !is_valid_challenge_key(&action.public_key) {
         return Err(ActionsValidationError::UnsuitablePledgingKey {
             public_key: Box::new(action.public_key.clone()),
@@ -559,6 +561,7 @@ fn truncate_string(s: &str, limit: usize) -> String {
 mod tests {
     use std::sync::Arc;
 
+    use testlib::runtime_utils::{alice_account, bob_account, eve_dot_alice_account};
     use unc_crypto::{InMemorySigner, KeyType, PublicKey, Signature, Signer};
     use unc_primitives::account::{AccessKey, FunctionCallPermission};
     use unc_primitives::action::delegate::{DelegateAction, NonDelegateAction};
@@ -570,7 +573,6 @@ mod tests {
     use unc_primitives::types::{AccountId, Balance, MerkleHash, StateChangeCause};
     use unc_primitives::version::PROTOCOL_VERSION;
     use unc_store::test_utils::TestTriesBuilder;
-    use testlib::runtime_utils::{alice_account, bob_account, eve_dot_alice_account};
 
     use crate::unc_primitives::shard_layout::ShardUId;
 
@@ -725,9 +727,9 @@ mod tests {
         };
         use crate::verifier::tests::{setup_accounts, TESTING_INIT_BALANCE};
         use crate::verifier::{is_zero_balance_account, ZERO_BALANCE_ACCOUNT_STORAGE_LIMIT};
+        use testlib::runtime_utils::{alice_account, bob_account};
         use unc_primitives::account::AccessKey;
         use unc_store::{get_account, TrieUpdate};
-        use testlib::runtime_utils::{alice_account, bob_account};
 
         fn set_up_test_account(
             account_id: &AccountId,

@@ -6,6 +6,7 @@ use assert_matches::assert_matches;
 
 use futures::future::join_all;
 use futures::{future, FutureExt, TryFutureExt};
+use std::time::Duration;
 use unc_actix_test_utils::spawn_interruptible;
 use unc_client::{GetBlock, GetExecutionOutcome, GetValidatorInfo};
 use unc_crypto::{InMemorySigner, KeyType};
@@ -24,7 +25,6 @@ use unc_primitives::types::{
 };
 use unc_primitives::version::ProtocolVersion;
 use unc_primitives::views::{ExecutionOutcomeView, ExecutionStatusView, TxExecutionStatus};
-use std::time::Duration;
 
 #[test]
 #[cfg_attr(not(feature = "expensive_tests"), ignore)]
@@ -106,8 +106,7 @@ fn test_get_execution_outcome(is_tx_successful: bool) {
         let view_client = clients[0].1.clone();
 
         let genesis_hash = *genesis_block(&genesis).hash();
-        let signer =
-            InMemorySigner::from_seed("unc.0".parse().unwrap(), KeyType::ED25519, "unc.0");
+        let signer = InMemorySigner::from_seed("unc.0".parse().unwrap(), KeyType::ED25519, "unc.0");
         let transaction = if is_tx_successful {
             SignedTransaction::send_money(
                 1,
@@ -366,8 +365,7 @@ fn test_tx_not_enough_balance_must_return_error() {
         let view_client = clients[0].1.clone();
 
         let genesis_hash = *genesis_block(&genesis).hash();
-        let signer =
-            InMemorySigner::from_seed("unc.0".parse().unwrap(), KeyType::ED25519, "unc.0");
+        let signer = InMemorySigner::from_seed("unc.0".parse().unwrap(), KeyType::ED25519, "unc.0");
         let transaction = SignedTransaction::send_money(
             1,
             "unc.0".parse().unwrap(),
@@ -430,8 +428,7 @@ fn test_check_unknown_tx_must_return_error() {
         let view_client = clients[0].1.clone();
 
         let genesis_hash = *genesis_block(&genesis).hash();
-        let signer =
-            InMemorySigner::from_seed("unc.0".parse().unwrap(), KeyType::ED25519, "unc.0");
+        let signer = InMemorySigner::from_seed("unc.0".parse().unwrap(), KeyType::ED25519, "unc.0");
         let transaction = SignedTransaction::send_money(
             1,
             "unc.0".parse().unwrap(),

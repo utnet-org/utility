@@ -2,9 +2,9 @@ use crate::MemoryError;
 use crate::{Memory, Table};
 use crate::{MemoryStyle, TableStyle};
 use crate::{VMMemoryDefinition, VMTableDefinition};
-use unc_vm_types::{MemoryType, TableType};
 use std::ptr::NonNull;
 use std::sync::Arc;
+use unc_vm_types::{MemoryType, TableType};
 
 /// An engine delegates the creation of memories, tables, and globals
 /// to a foreign implementor of this trait.

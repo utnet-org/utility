@@ -2,6 +2,8 @@ use std::sync::Arc;
 
 use actix::Addr;
 use futures::{future, future::LocalBoxFuture, FutureExt, TryFutureExt};
+use once_cell::sync::Lazy;
+use serde_json::json;
 use unc_chain_configs::GenesisConfig;
 use unc_client::test_utils::setup_no_network_with_validity_period_and_no_epoch_sync;
 use unc_client::ViewClientActor;
@@ -12,8 +14,6 @@ use unc_jsonrpc_primitives::{
 };
 use unc_network::tcp;
 use unc_primitives::types::NumBlocks;
-use once_cell::sync::Lazy;
-use serde_json::json;
 
 pub static TEST_GENESIS_CONFIG: Lazy<GenesisConfig> =
     Lazy::new(|| GenesisConfig::from_json(include_str!("../res/genesis_config.json")));
@@ -32,17 +32,18 @@ pub fn start_all_with_validity_period_and_no_epoch_sync(
     transaction_validity_period: NumBlocks,
     enable_doomslug: bool,
 ) -> (Addr<ViewClientActor>, tcp::ListenerAddr) {
-    let actor_handles: unc_client::test_utils::ActorHandlesForTesting = setup_no_network_with_validity_period_and_no_epoch_sync(
-        vec!["test1".parse().unwrap()],
-        if let NodeType::Validator = node_type {
-            "test1".parse().unwrap()
-        } else {
-            "other".parse().unwrap()
-        },
-        true,
-        transaction_validity_period,
-        enable_doomslug,
-    );
+    let actor_handles: unc_client::test_utils::ActorHandlesForTesting =
+        setup_no_network_with_validity_period_and_no_epoch_sync(
+            vec!["test1".parse().unwrap()],
+            if let NodeType::Validator = node_type {
+                "test1".parse().unwrap()
+            } else {
+                "other".parse().unwrap()
+            },
+            true,
+            transaction_validity_period,
+            enable_doomslug,
+        );
 
     let addr = tcp::ListenerAddr::reserve_for_test();
     start_http(
@@ -98,10 +99,7 @@ where
         .insert_header(("Content-Type", "application/json"))
         .send_json(&request)
         .map_err(|err| {
-            unc_jsonrpc_primitives::errors::RpcError::new_internal_error(
-                None,
-                format!("{:?}", err),
-            )
+            unc_jsonrpc_primitives::errors::RpcError::new_internal_error(None, format!("{:?}", err))
         })
         .and_then(|mut response| {
             response.body().map(|body| match body {

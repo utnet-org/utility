@@ -1,5 +1,6 @@
 use crate::test_utils::TestEnv;
 use assert_matches::assert_matches;
+use std::sync::Arc;
 use unc_chain::{test_utils, ChainGenesis, Provenance};
 use unc_crypto::vrf::Value;
 use unc_crypto::{KeyType, PublicKey, Signature};
@@ -11,7 +12,6 @@ use unc_primitives::sharding::ShardChunkHeaderV3;
 use unc_primitives::test_utils::create_test_signer;
 use unc_primitives::types::validator_stake::ValidatorPledge;
 use unc_primitives::utils::MaybeValidated;
-use std::sync::Arc;
 
 /// Only process one block per height
 /// Test that if a node receives two blocks at the same height, it doesn't process the second one

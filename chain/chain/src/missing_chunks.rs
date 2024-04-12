@@ -1,6 +1,3 @@
-use unc_primitives::hash::CryptoHash;
-use unc_primitives::sharding::ChunkHash;
-use unc_primitives::types::BlockHeight;
 use std::cmp::Ordering;
 use std::collections::{
     btree_map::{self, BTreeMap},
@@ -8,6 +5,9 @@ use std::collections::{
     BinaryHeap, HashSet,
 };
 use tracing::{debug, warn};
+use unc_primitives::hash::CryptoHash;
+use unc_primitives::sharding::ChunkHash;
+use unc_primitives::types::BlockHeight;
 
 type BlockHash = CryptoHash;
 

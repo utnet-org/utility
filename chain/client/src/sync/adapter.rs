@@ -4,6 +4,8 @@ use actix::prelude::SendError;
 use actix::{Actor, Message};
 use actix_rt::Arbiter;
 use core::fmt::Debug;
+use std::collections::HashMap;
+use tracing::warn;
 use unc_async::messaging::Sender;
 use unc_network::types::{
     PeerManagerMessageRequest, StateSync as NetworkStateSync, StateSyncResponse,
@@ -11,8 +13,6 @@ use unc_network::types::{
 use unc_o11y::WithSpanContextExt;
 use unc_primitives::hash::CryptoHash;
 use unc_store::ShardUId;
-use std::collections::HashMap;
-use tracing::warn;
 
 /// Information about the shard being synced
 #[derive(Debug)]

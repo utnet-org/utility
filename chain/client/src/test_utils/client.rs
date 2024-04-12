@@ -8,6 +8,7 @@ use std::sync::{Arc, RwLock};
 use crate::Client;
 use actix_rt::{Arbiter, System};
 use itertools::Itertools;
+use num_rational::Ratio;
 use unc_chain::chain::{do_apply_chunks, BlockCatchUpRequest};
 use unc_chain::resharding::ReshardingRequest;
 use unc_chain::test_utils::{wait_for_all_blocks_in_processing, wait_for_block_in_processing};
@@ -23,7 +24,6 @@ use unc_primitives::transaction::SignedTransaction;
 use unc_primitives::types::{BlockHeight, ShardId};
 use unc_primitives::utils::MaybeValidated;
 use unc_primitives::version::PROTOCOL_VERSION;
-use num_rational::Ratio;
 
 impl Client {
     /// Unlike Client::start_process_block, which returns before the block finishes processing

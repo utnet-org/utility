@@ -2,6 +2,7 @@
 //! deployed.
 
 use borsh::BorshDeserialize;
+use std::collections::{BTreeMap, BTreeSet, VecDeque};
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::receipt::{Receipt, ReceiptEnum};
 use unc_primitives::transaction::{Action, ExecutionOutcomeWithProof};
@@ -9,7 +10,6 @@ use unc_primitives::trie_key::trie_key_parsers::parse_account_id_from_contract_c
 use unc_primitives::trie_key::TrieKey;
 use unc_primitives::types::AccountId;
 use unc_store::{DBCol, NibbleSlice, StorageError, Store, Trie, TrieTraversalItem};
-use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
 type Result<T> = std::result::Result<T, ContractAccountError>;
 
@@ -340,8 +340,12 @@ fn try_find_actions_spawned_by_receipt(
                                     Action::DeleteKey(_) => ActionType::DeleteKey,
                                     Action::DeleteAccount(_) => ActionType::DeleteAccount,
                                     Action::Delegate(_) => ActionType::Delegate,
-                                    Action::RegisterRsa2048Keys(_) => ActionType::RegisterRsa2048Keys,
-                                    Action::CreateRsa2048Challenge(_) => ActionType::CreateRsa2048Challenge,
+                                    Action::RegisterRsa2048Keys(_) => {
+                                        ActionType::RegisterRsa2048Keys
+                                    }
+                                    Action::CreateRsa2048Challenge(_) => {
+                                        ActionType::CreateRsa2048Challenge
+                                    }
                                 };
                                 entry
                                     .actions
@@ -486,6 +490,7 @@ impl ContractAccountFilter {
 mod tests {
     use super::{ContractAccount, ContractAccountFilter, Summary};
     use borsh::BorshSerialize;
+    use std::fmt::Write;
     use unc_crypto::{InMemorySigner, Signer};
     use unc_primitives::hash::CryptoHash;
     use unc_primitives::receipt::{ActionReceipt, Receipt, ReceiptEnum};
@@ -500,7 +505,6 @@ mod tests {
         TestTriesBuilder,
     };
     use unc_store::{DBCol, ShardUId, Store, Trie};
-    use std::fmt::Write;
 
     #[test]
     fn test_three_contract_sizes() {

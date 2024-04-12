@@ -20,10 +20,10 @@
 use crate::concurrency::rate;
 use futures::future::BoxFuture;
 use futures::FutureExt;
-use unc_async::time;
 use std::future::Future;
 use tokio::sync::mpsc;
 use tokio::sync::oneshot;
+use unc_async::time;
 
 /// Boxed asynchronous function. In rust asynchronous functions
 /// are just regular functions which return a Future.

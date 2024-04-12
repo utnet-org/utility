@@ -1,10 +1,10 @@
 use crate::key_conversion::convert_secret_key;
 use crate::key_file::KeyFile;
 use crate::{KeyType, PublicKey, SecretKey, Signature};
-use unc_account_id::AccountId;
 use std::io;
 use std::path::Path;
 use std::sync::Arc;
+use unc_account_id::AccountId;
 
 /// Generic signer trait, that can sign with some subset of supported curves.
 pub trait Signer: Sync + Send {

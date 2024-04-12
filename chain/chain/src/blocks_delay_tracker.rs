@@ -1,4 +1,8 @@
 use chrono::DateTime;
+use std::collections::{hash_map::Entry, BTreeMap, HashMap};
+use std::mem;
+use std::time::Instant;
+use tracing::error;
 use unc_epoch_manager::EpochManagerAdapter;
 use unc_primitives::block::{Block, Tip};
 use unc_primitives::hash::CryptoHash;
@@ -9,10 +13,6 @@ use unc_primitives::views::{
     BlockProcessingInfo, BlockProcessingStatus, ChainProcessingInfo, ChunkProcessingInfo,
     ChunkProcessingStatus, DroppedReason,
 };
-use std::collections::{hash_map::Entry, BTreeMap, HashMap};
-use std::mem;
-use std::time::Instant;
-use tracing::error;
 
 use crate::{metrics, Chain, ChainStoreAccess};
 

@@ -1,5 +1,5 @@
-use unc_o11y::metrics::{exponential_buckets, HistogramVec, IntCounter, IntCounterVec};
 use once_cell::sync::Lazy;
+use unc_o11y::metrics::{exponential_buckets, HistogramVec, IntCounter, IntCounterVec};
 
 pub static RPC_PROCESSING_TIME: Lazy<HistogramVec> = Lazy::new(|| {
     unc_o11y::metrics::try_create_histogram_vec(

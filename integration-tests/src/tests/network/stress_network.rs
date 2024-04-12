@@ -4,8 +4,8 @@ use std::time::Duration;
 
 use actix::{Actor, AsyncContext, System};
 use futures::FutureExt;
-use unc_async::messaging::Sender;
 use tracing::info;
+use unc_async::messaging::Sender;
 
 use unc_actix_test_utils::run_actix;
 use unc_async::time;

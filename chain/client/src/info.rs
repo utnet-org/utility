@@ -2,6 +2,13 @@ use crate::config_updater::ConfigUpdater;
 use crate::{metrics, SyncStatus};
 use actix::Addr;
 use itertools::Itertools;
+use std::cmp::min;
+use std::collections::HashMap;
+use std::fmt::Write;
+use std::sync::Arc;
+use std::time::Instant;
+use sysinfo::{get_current_pid, set_open_files_limit, Pid, ProcessExt, System, SystemExt};
+use tracing::info;
 use unc_chain_configs::{ClientConfig, LogSummaryStyle, SyncConfig};
 use unc_client_primitives::types::StateSyncStatus;
 use unc_network::types::NetworkInfo;
@@ -23,13 +30,6 @@ use unc_primitives::views::{
     ValidatorKickoutView,
 };
 use unc_telemetry::{telemetry, TelemetryActor};
-use std::cmp::min;
-use std::collections::HashMap;
-use std::fmt::Write;
-use std::sync::Arc;
-use std::time::Instant;
-use sysinfo::{get_current_pid, set_open_files_limit, Pid, ProcessExt, System, SystemExt};
-use tracing::info;
 
 const TERAGAS: f64 = 1_000_000_000_000_f64;
 
@@ -860,13 +860,13 @@ fn get_validator_epoch_stats(
 mod tests {
     use super::*;
     use assert_matches::assert_matches;
+    use num_rational::Ratio;
     use unc_chain::test_utils::{KeyValueRuntime, MockEpochManager, ValidatorSchedule};
     use unc_chain::types::ChainConfig;
     use unc_chain::{Chain, ChainGenesis, DoomslugThresholdMode};
     use unc_epoch_manager::shard_tracker::ShardTracker;
     use unc_network::test_utils::peer_id_from_seed;
     use unc_primitives::version::PROTOCOL_VERSION;
-    use num_rational::Ratio;
 
     #[test]
     fn test_pretty_number() {

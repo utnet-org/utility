@@ -2,12 +2,12 @@ use crate::accounts_data::*;
 use crate::network_protocol::testonly as data;
 use crate::network_protocol::SignedAccountData;
 use crate::testonly::{assert_is_superset, make_rng, AsSet as _, Rng};
-use unc_async::time;
-use unc_o11y::testonly::init_test_logger;
-use unc_primitives::validator_signer::InMemoryValidatorSigner;
 use pretty_assertions::assert_eq;
 use std::collections::HashSet;
 use std::sync::Arc;
+use unc_async::time;
+use unc_o11y::testonly::init_test_logger;
+use unc_primitives::validator_signer::InMemoryValidatorSigner;
 
 fn make_account_data(
     rng: &mut Rng,

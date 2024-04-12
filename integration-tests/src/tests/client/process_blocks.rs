@@ -5,7 +5,12 @@ use std::sync::{Arc, RwLock};
 
 use actix::System;
 use assert_matches::assert_matches;
+use framework::config::{GenesisExt, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
+use framework::test_utils::TestEnvNightshadeSetupExt;
+use framework::UNC_BASE;
 use futures::{future, FutureExt};
+use rand::prelude::StdRng;
+use rand::{Rng, SeedableRng};
 use unc_actix_test_utils::run_actix;
 use unc_async::messaging::IntoSender;
 use unc_chain::chain::ApplyStatePartsRequest;
@@ -75,11 +80,6 @@ use unc_store::test_utils::create_test_node_storage_with_cold;
 use unc_store::test_utils::create_test_store;
 use unc_store::NodeStorage;
 use unc_store::{get, DBCol, TrieChanges};
-use framework::config::{GenesisExt, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
-use framework::test_utils::TestEnvNightshadeSetupExt;
-use framework::UNC_BASE;
-use rand::prelude::StdRng;
-use rand::{Rng, SeedableRng};
 
 pub fn set_block_protocol_version(
     block: &mut Block,
@@ -3492,12 +3492,12 @@ fn test_long_chain_with_restart_from_snapshot() {
 /// These tests fail on aarch because the WasmtimeVM::precompile method doesn't populate the cache.
 mod contract_precompilation_tests {
     use super::*;
+    use node_runtime::state_viewer::TrieViewer;
     use unc_primitives::test_utils::MockEpochInfoProvider;
     use unc_primitives::views::ViewApplyState;
     use unc_store::{StoreCompiledContractCache, TrieUpdate};
     use unc_vm_runner::logic::CompiledContractCache;
     use unc_vm_runner::{get_contract_cache_key, ContractCode};
-    use node_runtime::state_viewer::TrieViewer;
 
     const EPOCH_LENGTH: u64 = 25;
 

@@ -1,6 +1,11 @@
 use crate::test_helpers::heavy_test;
 use actix::{Actor, System};
+use framework::test_utils::TestEnvNightshadeSetupExt;
+use framework::{config::GenesisExt, load_test_config, start_with_config};
 use futures::{future, FutureExt};
+use std::ops::ControlFlow;
+use std::sync::{Arc, RwLock};
+use std::time::Duration;
 use unc_actix_test_utils::run_actix;
 use unc_chain::chain::ApplyStatePartsRequest;
 use unc_chain::{ChainGenesis, Provenance};
@@ -23,11 +28,6 @@ use unc_primitives::types::{BlockId, BlockReference, EpochId, EpochReference};
 use unc_primitives::utils::MaybeValidated;
 use unc_primitives_core::types::ShardId;
 use unc_store::DBCol;
-use framework::test_utils::TestEnvNightshadeSetupExt;
-use framework::{config::GenesisExt, load_test_config, start_with_config};
-use std::ops::ControlFlow;
-use std::sync::{Arc, RwLock};
-use std::time::Duration;
 
 /// One client is in front, another must sync to it using state (fast) sync.
 #[test]
@@ -926,8 +926,7 @@ fn test_state_sync_headers_no_tracked_shards() {
 
             let mut unc2 =
                 load_test_config("test2", tcp::ListenerAddr::reserve_for_test(), genesis.clone());
-            unc2.network_config.peer_store.boot_nodes =
-                convert_boot_nodes(vec![("test1", *port1)]);
+            unc2.network_config.peer_store.boot_nodes = convert_boot_nodes(vec![("test1", *port1)]);
             unc2.client_config.min_num_peers = 0;
             let dir2 = tempfile::Builder::new()
                 .prefix("test_state_sync_headers_no_tracked_shards_2")

@@ -2,9 +2,6 @@
 
 use anyhow::Context;
 use genesis_populate::GenesisBuilder;
-use unc_chain_configs::GenesisValidationMode;
-use unc_parameters::vm::VMKind;
-use unc_parameters::RuntimeConfigView;
 use replay::ReplayCmd;
 use runtime_params_estimator::config::{Config, GasMetric};
 use runtime_params_estimator::{
@@ -18,6 +15,9 @@ use std::path::PathBuf;
 use std::process::Command;
 use std::time;
 use tracing_subscriber::Layer;
+use unc_chain_configs::GenesisValidationMode;
+use unc_parameters::vm::VMKind;
+use unc_parameters::RuntimeConfigView;
 
 mod replay;
 

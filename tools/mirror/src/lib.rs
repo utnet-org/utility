@@ -2,6 +2,15 @@ use actix::Addr;
 use anyhow::Context;
 use async_trait::async_trait;
 use borsh::{BorshDeserialize, BorshSerialize};
+use framework::config::UncConfig;
+use rocksdb::DB;
+use std::borrow::Cow;
+use std::collections::{HashMap, HashSet};
+use std::path::Path;
+use std::sync::Arc;
+use std::time::{Duration, Instant};
+use strum::IntoEnumIterator;
+use tokio::sync::mpsc;
 use unc_chain_configs::GenesisValidationMode;
 use unc_chain_primitives::error::QueryError as RuntimeQueryError;
 use unc_client::{ClientActor, ViewClientActor};
@@ -16,7 +25,7 @@ use unc_o11y::WithSpanContextExt;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::receipt::{Receipt, ReceiptEnum};
 use unc_primitives::transaction::{
-    Action, AddKeyAction, CreateAccountAction, DeleteKeyAction, SignedTransaction, PledgeAction,
+    Action, AddKeyAction, CreateAccountAction, DeleteKeyAction, PledgeAction, SignedTransaction,
     Transaction,
 };
 use unc_primitives::types::{
@@ -29,15 +38,6 @@ use unc_primitives::views::{
 use unc_primitives_core::account::id::AccountType;
 use unc_primitives_core::account::{AccessKey, AccessKeyPermission};
 use unc_primitives_core::types::{Nonce, ShardId};
-use framework::config::UncConfig;
-use rocksdb::DB;
-use std::borrow::Cow;
-use std::collections::{HashMap, HashSet};
-use std::path::Path;
-use std::sync::Arc;
-use std::time::{Duration, Instant};
-use strum::IntoEnumIterator;
-use tokio::sync::mpsc;
 
 mod chain_tracker;
 pub mod cli;
@@ -1005,8 +1005,7 @@ impl<T: ChainAccess> TxMirror<T> {
                                 )
                             })?
                         {
-                            if target_account.get_account_type() == AccountType::UtilityAccount
-                            {
+                            if target_account.get_account_type() == AccountType::UtilityAccount {
                                 let public_key =
                                     PublicKey::from_unc_implicit_account(&target_account)
                                         .expect("must be unc-implicit");

@@ -1,3 +1,9 @@
+use framework::NightshadeRuntime;
+use rayon::iter::{IntoParallelIterator, ParallelIterator};
+use std::fs::File;
+use std::io::Write;
+use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::{Arc, Mutex};
 use unc_chain::chain::collect_receipts_from_response;
 use unc_chain::migrations::check_if_block_is_first_with_chunk_of_version;
 use unc_chain::types::{
@@ -14,12 +20,6 @@ use unc_primitives::trie_key::TrieKey;
 use unc_primitives::types::chunk_extra::ChunkExtra;
 use unc_primitives::types::{BlockHeight, ShardId};
 use unc_store::{DBCol, Store};
-use framework::NightshadeRuntime;
-use rayon::iter::{IntoParallelIterator, ParallelIterator};
-use std::fs::File;
-use std::io::Write;
-use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::{Arc, Mutex};
 
 fn timestamp_ms() -> u64 {
     use std::time::{SystemTime, UNIX_EPOCH};
@@ -146,7 +146,7 @@ fn apply_block_from_range(
     let chunk_present: bool;
 
     let block_author = epoch_manager
-        .get_block_producer(block.header().epoch_id(),block.header().height())
+        .get_block_producer(block.header().epoch_id(), block.header().height())
         .unwrap();
 
     let apply_result = if *block.header().prev_hash() == CryptoHash::default() {
@@ -467,6 +467,9 @@ mod test {
     use std::io::{Read, Seek, SeekFrom};
     use std::path::Path;
 
+    use framework::config::GenesisExt;
+    use framework::config::TESTING_INIT_PLEDGE;
+    use framework::NightshadeRuntime;
     use unc_chain::{ChainGenesis, Provenance};
     use unc_chain_configs::Genesis;
     use unc_client::test_utils::TestEnv;
@@ -478,9 +481,6 @@ mod test {
     use unc_store::genesis::initialize_genesis_state;
     use unc_store::test_utils::create_test_store;
     use unc_store::Store;
-    use framework::config::GenesisExt;
-    use framework::config::TESTING_INIT_PLEDGE;
-    use framework::NightshadeRuntime;
 
     use crate::apply_chain_range::apply_chain_range;
 

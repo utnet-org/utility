@@ -28,6 +28,16 @@ use crate::types::{
 use actix::fut::future::wrap_future;
 use actix::{Actor as _, ActorContext as _, ActorFutureExt as _, AsyncContext as _};
 use lru::LruCache;
+use parking_lot::Mutex;
+use rand::seq::IteratorRandom;
+use rand::thread_rng;
+use std::cmp::min;
+use std::fmt::Debug;
+use std::io;
+use std::net::SocketAddr;
+use std::sync::atomic::Ordering;
+use std::sync::Arc;
+use tracing::Instrument as _;
 use unc_async::time;
 use unc_crypto::Signature;
 use unc_o11y::{handler_debug_span, log_assert, OpenTelemetrySpanExt, WithSpanContext};
@@ -39,16 +49,6 @@ use unc_primitives::utils::DisplayOption;
 use unc_primitives::version::{
     ProtocolVersion, PEER_MIN_ALLOWED_PROTOCOL_VERSION, PROTOCOL_VERSION,
 };
-use parking_lot::Mutex;
-use rand::seq::IteratorRandom;
-use rand::thread_rng;
-use std::cmp::min;
-use std::fmt::Debug;
-use std::io;
-use std::net::SocketAddr;
-use std::sync::atomic::Ordering;
-use std::sync::Arc;
-use tracing::Instrument as _;
 
 /// How often to request peers from active peers.
 const REQUEST_PEERS_INTERVAL: time::Duration = time::Duration::seconds(60);

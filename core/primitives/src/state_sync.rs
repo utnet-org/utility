@@ -5,8 +5,8 @@ use crate::sharding::{
 };
 use crate::types::{BlockHeight, EpochId, ShardId, StateRoot, StateRootNode};
 use borsh::{BorshDeserialize, BorshSerialize};
-use unc_primitives_core::types::EpochHeight;
 use std::sync::Arc;
+use unc_primitives_core::types::EpochHeight;
 
 #[derive(PartialEq, Eq, Clone, Debug, BorshSerialize, BorshDeserialize)]
 pub struct ReceiptProofResponse(pub CryptoHash, pub Arc<Vec<ReceiptProof>>);

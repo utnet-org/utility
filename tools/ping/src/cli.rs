@@ -1,14 +1,14 @@
 use anyhow::Context;
-use unc_network::types::PeerInfo;
-use unc_primitives::hash::CryptoHash;
-use unc_primitives::network::PeerId;
-use unc_primitives::types::AccountId;
 use std::collections::HashSet;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use std::time::Duration;
+use unc_network::types::PeerInfo;
+use unc_primitives::hash::CryptoHash;
+use unc_primitives::network::PeerId;
+use unc_primitives::types::AccountId;
 
 #[derive(clap::Parser)]
 pub struct PingCommand {

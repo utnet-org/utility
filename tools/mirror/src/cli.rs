@@ -1,7 +1,7 @@
 use anyhow::Context;
-use unc_primitives::types::BlockHeight;
 use std::cell::Cell;
 use std::path::PathBuf;
+use unc_primitives::types::BlockHeight;
 
 #[derive(clap::Parser)]
 pub struct MirrorCommand {

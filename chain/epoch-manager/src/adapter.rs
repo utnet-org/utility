@@ -2,6 +2,9 @@ use crate::types::BlockHeaderInfo;
 #[cfg(feature = "new_epoch_sync")]
 use crate::EpochInfoAggregator;
 use crate::EpochManagerHandle;
+use std::cmp::Ordering;
+use std::collections::HashMap;
+use std::sync::Arc;
 use unc_chain_primitives::Error;
 use unc_crypto::Signature;
 use unc_primitives::block_header::{Approval, ApprovalInner, BlockHeader};
@@ -13,15 +16,15 @@ use unc_primitives::errors::EpochError;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::shard_layout::{account_id_to_shard_id, ShardLayout, ShardLayoutError};
 use unc_primitives::sharding::{ChunkHash, ShardChunkHeader};
-use unc_primitives::types::{AccountId, ApprovalPledge, Balance, BlockHeight, EpochHeight, EpochId, ShardId, ValidatorInfoIdentifier};
+use unc_primitives::types::validator_power_and_pledge::ValidatorPowerAndPledge;
+use unc_primitives::types::{
+    AccountId, ApprovalPledge, Balance, BlockHeight, EpochHeight, EpochId, ShardId,
+    ValidatorInfoIdentifier,
+};
 use unc_primitives::validator_mandates::AssignmentWeight;
 use unc_primitives::version::ProtocolVersion;
 use unc_primitives::views::{AllMinersView, EpochValidatorInfo};
 use unc_store::{ShardUId, StoreUpdate};
-use std::cmp::Ordering;
-use std::collections::HashMap;
-use std::sync::Arc;
-use unc_primitives::types::validator_power_and_pledge::ValidatorPowerAndPledge;
 
 /// A trait that abstracts the interface of the EpochManager.
 /// The two implementations are EpochManagerHandle and KeyValueEpochManager.
@@ -177,16 +180,10 @@ pub trait EpochManagerAdapter: Send + Sync {
     ) -> Result<AccountId, EpochError>;
 
     /// Block producers for given prev block hash. Return BlockError if outside of known boundaries.
-    fn get_block_producer_by_hash(
-    &self,
-    block_hash: &CryptoHash,
-    ) -> Result<AccountId, EpochError>;
+    fn get_block_producer_by_hash(&self, block_hash: &CryptoHash) -> Result<AccountId, EpochError>;
 
     /// All Miners for given block hash. Return BlockError if outside of known boundaries.
-    fn get_all_miners(
-        &self,
-        block_hash: &CryptoHash,
-    ) -> Result<AllMinersView, EpochError>;
+    fn get_all_miners(&self, block_hash: &CryptoHash) -> Result<AllMinersView, EpochError>;
 
     /// Chunk producer for given height for given shard. Return EpochError if outside of known boundaries.
     fn get_chunk_producer(
@@ -662,8 +659,8 @@ impl EpochManagerAdapter for EpochManagerHandle {
     }
 
     fn get_block_producer_by_hash(&self, block_hash: &CryptoHash) -> Result<AccountId, EpochError> {
-    let epoch_manager = self.read();
-    Ok(epoch_manager.get_block_producer_info_by_hash(block_hash)?.take_account_id())
+        let epoch_manager = self.read();
+        Ok(epoch_manager.get_block_producer_info_by_hash(block_hash)?.take_account_id())
     }
 
     fn get_all_miners(&self, block_hash: &CryptoHash) -> Result<AllMinersView, EpochError> {
@@ -826,7 +823,7 @@ impl EpochManagerAdapter for EpochManagerHandle {
         let public_key = unc_crypto::key_conversion::convert_public_key(
             validator.public_key().unwrap_as_ed25519(),
         )
-            .unwrap();
+        .unwrap();
 
         if !public_key.is_vrf_valid(&prev_random_value.as_ref(), vrf_value, vrf_proof) {
             return Err(Error::InvalidRandomnessBeaconOutput);

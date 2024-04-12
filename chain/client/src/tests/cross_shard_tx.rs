@@ -11,9 +11,7 @@ use unc_actix_test_utils::run_actix;
 use unc_chain::test_utils::{account_id_to_shard_id, ValidatorSchedule};
 use unc_crypto::{InMemorySigner, KeyType};
 use unc_network::types::PeerInfo;
-use unc_network::types::{
-    NetworkResponses, PeerManagerMessageRequest, PeerManagerMessageResponse,
-};
+use unc_network::types::{NetworkResponses, PeerManagerMessageRequest, PeerManagerMessageResponse};
 use unc_o11y::testonly::init_integration_logger;
 use unc_o11y::WithSpanContextExt;
 use unc_primitives::hash::CryptoHash;

@@ -12,11 +12,11 @@ use crate::wasmer2_runner::Wasmer2VM;
 use crate::ContractCode;
 use crate::{prepare, MockCompiledContractCache};
 use assert_matches::assert_matches;
+use std::io;
+use std::sync::atomic::{AtomicBool, Ordering};
 use unc_parameters::vm::VMKind;
 use unc_parameters::RuntimeFeesConfig;
 use unc_primitives_core::hash::CryptoHash;
-use std::io;
-use std::sync::atomic::{AtomicBool, Ordering};
 use wasmer_compiler::{CpuFeature, Target};
 use wasmer_engine::Executable;
 

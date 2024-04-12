@@ -1,6 +1,6 @@
 use chrono::{DateTime, NaiveDateTime, ParseError, Utc};
-use unc_primitives_core::types::ProtocolVersion;
 use std::env;
+use unc_primitives_core::types::ProtocolVersion;
 
 /// Defines the point in time after which validators are expected to vote on the
 /// new protocol version.
@@ -11,7 +11,9 @@ pub struct ProtocolUpgradeVotingSchedule {
 
 impl Default for ProtocolUpgradeVotingSchedule {
     fn default() -> Self {
-        Self { timestamp: DateTime::<Utc>::from_timestamp(chrono::Utc::now().timestamp(), 0).unwrap() }
+        Self {
+            timestamp: DateTime::<Utc>::from_timestamp(chrono::Utc::now().timestamp(), 0).unwrap(),
+        }
     }
 }
 
@@ -44,7 +46,8 @@ impl ProtocolUpgradeVotingSchedule {
             timestamp: DateTime::<Utc>::from_timestamp(
                 NaiveDateTime::parse_from_str(s, "%Y-%m-%d %H:%M:%S")?.and_utc().timestamp(),
                 0,
-            ).unwrap(),
+            )
+            .unwrap(),
         })
     }
 }

@@ -1,5 +1,7 @@
 use crate::tests::client::process_blocks::deploy_test_contract;
 use assert_matches::assert_matches;
+use framework::config::GenesisExt;
+use framework::test_utils::TestEnvNightshadeSetupExt;
 use unc_chain::ChainGenesis;
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::TestEnv;
@@ -9,8 +11,6 @@ use unc_primitives::errors::{
 };
 use unc_primitives::version::ProtocolFeature;
 use unc_primitives::views::FinalExecutionStatus;
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
 
 fn verify_contract_limits_upgrade(
     feature: ProtocolFeature,

@@ -3,10 +3,10 @@ use crate::logic::tests::vm_logic_builder::VMLogicBuilder;
 use crate::logic::HostError;
 use crate::map;
 use hex::FromHex;
-use unc_parameters::ExtCosts;
 use serde::de::Error;
 use serde_json::from_slice;
 use std::{fmt::Display, fs};
+use unc_parameters::ExtCosts;
 
 #[test]
 fn test_sha256() {

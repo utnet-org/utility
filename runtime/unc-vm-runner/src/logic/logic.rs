@@ -7,6 +7,7 @@ use super::utils::split_method_names;
 use super::ValuePtr;
 use super::{HostError, VMLogicError};
 use crate::ProfileDataV3;
+use std::mem::size_of;
 use unc_crypto::Secp256K1Signature;
 use unc_parameters::vm::{Config, StorageGetMode};
 use unc_parameters::{
@@ -16,7 +17,6 @@ use unc_primitives_core::config::ViewConfig;
 use unc_primitives_core::types::{
     AccountId, Balance, Compute, EpochHeight, Gas, GasWeight, StorageUsage,
 };
-use std::mem::size_of;
 use ExtCosts::*;
 
 pub type Result<T, E = VMLogicError> = ::std::result::Result<T, E>;
@@ -641,7 +641,6 @@ impl<'a> VMLogic<'a> {
         let stake = self.ext.validator_stake(&account_id)?.unwrap_or_default();
         self.memory.set_u128(&mut self.gas_counter, stake_ptr, stake)
     }
-
 
     pub fn validator_power(
         &mut self,

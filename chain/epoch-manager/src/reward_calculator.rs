@@ -152,10 +152,10 @@ impl RewardCalculator {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use unc_primitives::types::{BlockChunkValidatorStats, ValidatorStats};
-    use unc_primitives::version::PROTOCOL_VERSION;
     use num_rational::Ratio;
     use std::collections::HashMap;
+    use unc_primitives::types::{BlockChunkValidatorStats, ValidatorStats};
+    use unc_primitives::version::PROTOCOL_VERSION;
 
     #[test]
     fn test_zero_produced_and_expected() {

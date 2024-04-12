@@ -82,8 +82,7 @@ fn profiling() {
         Ok(art) => unsafe {
             let serialized = art.serialize().unwrap();
             let executable =
-                unc_vm_engine::universal::UniversalExecutableRef::deserialize(&serialized)
-                    .unwrap();
+                unc_vm_engine::universal::UniversalExecutableRef::deserialize(&serialized).unwrap();
             let artifact = engine.load_universal_executable_ref(&executable).unwrap();
             let info = artifact
                 .functions()

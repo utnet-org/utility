@@ -1,13 +1,13 @@
 use std::collections::HashMap;
 
 use genesis_populate::get_account_id;
+use rand::prelude::ThreadRng;
+use rand::seq::SliceRandom;
+use rand::Rng;
 use unc_crypto::{InMemorySigner, KeyType};
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::transaction::{Action, FunctionCallAction, SignedTransaction};
 use unc_primitives::types::AccountId;
-use rand::prelude::ThreadRng;
-use rand::seq::SliceRandom;
-use rand::Rng;
 
 /// A helper to create transaction for processing by a `TestBed`.
 #[derive(Clone)]

@@ -1,4 +1,8 @@
 use crate::node::{Node, RuntimeNode};
+use framework::config::GenesisExt;
+use std::collections::HashSet;
+use std::mem::size_of;
+use testlib::runtime_utils::{add_test_contract, alice_account, bob_account};
 use unc_chain_configs::Genesis;
 use unc_parameters::{ExtCosts, RuntimeConfig, RuntimeConfigStore};
 use unc_primitives::serialize::to_base64;
@@ -7,10 +11,6 @@ use unc_primitives::version::PROTOCOL_VERSION;
 use unc_primitives::views::{
     CostGasUsed, ExecutionOutcomeWithIdView, ExecutionStatusView, FinalExecutionStatus,
 };
-use framework::config::GenesisExt;
-use std::collections::HashSet;
-use std::mem::size_of;
-use testlib::runtime_utils::{add_test_contract, alice_account, bob_account};
 
 /// Initial balance used in tests.
 const TESTING_INIT_BALANCE: u128 = 1_000_000_000 * UNC_BASE;

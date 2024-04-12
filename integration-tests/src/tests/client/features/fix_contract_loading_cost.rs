@@ -1,12 +1,12 @@
 use super::super::process_blocks::deploy_test_contract;
 use assert_matches::assert_matches;
+use framework::config::GenesisExt;
+use framework::test_utils::TestEnvNightshadeSetupExt;
 use unc_chain::ChainGenesis;
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::TestEnv;
 use unc_primitives::types::{AccountId, BlockHeight};
 use unc_primitives::views::FinalExecutionStatus;
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
 
 /// Create a `TestEnv` with an account and a contract deployed to that account.
 fn prepare_env_with_contract(

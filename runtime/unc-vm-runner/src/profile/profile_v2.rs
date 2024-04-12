@@ -1,9 +1,9 @@
 use borsh::{BorshDeserialize, BorshSerialize};
-use unc_parameters::{ActionCosts, ExtCosts};
-use unc_primitives_core::types::Gas;
 use std::fmt;
 use std::ops::Index;
 use strum::IntoEnumIterator;
+use unc_parameters::{ActionCosts, ExtCosts};
+use unc_primitives_core::types::Gas;
 
 /// Deprecated serialization format to store profiles in the database.
 ///

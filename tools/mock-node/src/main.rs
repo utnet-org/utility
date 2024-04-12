@@ -7,6 +7,9 @@ use actix::System;
 use anyhow::Context;
 use mock_node::setup::{setup_mock_node, MockNode};
 use mock_node::MockNetworkConfig;
+use std::net::SocketAddr;
+use std::path::{Path, PathBuf};
+use std::time::{Duration, Instant};
 use unc_actix_test_utils::run_actix;
 use unc_chain_configs::GenesisValidationMode;
 use unc_crypto::{InMemorySigner, KeyType};
@@ -14,9 +17,6 @@ use unc_jsonrpc_client::JsonRpcClient;
 use unc_network::tcp;
 use unc_o11y::testonly::init_integration_logger;
 use unc_primitives::types::BlockHeight;
-use std::net::SocketAddr;
-use std::path::{Path, PathBuf};
-use std::time::{Duration, Instant};
 
 /// Program to start a mock node, which runs a regular client in a mock network environment.
 /// The mock network simulates the entire network by replaying a pre-generated chain history

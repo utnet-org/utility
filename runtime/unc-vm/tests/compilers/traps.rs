@@ -1,7 +1,7 @@
 use anyhow::Result;
+use std::panic::{self, AssertUnwindSafe};
 use unc_vm_engine::RuntimeError;
 use unc_vm_test_api::*;
-use std::panic::{self, AssertUnwindSafe};
 
 #[compiler_test(traps)]
 fn test_trap_return(config: crate::Config) -> Result<()> {

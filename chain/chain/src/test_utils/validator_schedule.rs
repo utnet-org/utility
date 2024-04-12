@@ -1,5 +1,5 @@
-use unc_primitives::types::{AccountId, NumShards};
 use std::collections::HashSet;
+use unc_primitives::types::{AccountId, NumShards};
 
 /// Validator schedule describes how block and chunk producers are selected by
 /// the KeyValue runtime.

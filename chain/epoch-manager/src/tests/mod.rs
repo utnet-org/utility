@@ -3,23 +3,23 @@ mod random_epochs;
 use super::*;
 use crate::reward_calculator::NUM_NS_IN_SECOND;
 use crate::test_utils::{
-    block_info, change_power, default_reward_calculator, epoch_config,
+    block_info, change_power, default_reward_calculator, do_power, epoch_config,
     epoch_config_with_production_config, epoch_info, epoch_info_with_num_seats, hash_range,
     record_block, record_block_with_final_block_hash, record_block_with_slashes,
-    record_with_block_info, reward, setup_default_epoch_manager, setup_epoch_manager, do_power,
+    record_with_block_info, reward, setup_default_epoch_manager, setup_epoch_manager,
     DEFAULT_TOTAL_SUPPLY,
 };
+use num_rational::Ratio;
 use unc_primitives::account::id::AccountIdRef;
 use unc_primitives::challenge::SlashedValidator;
 use unc_primitives::epoch_manager::EpochConfig;
 use unc_primitives::hash::hash;
 use unc_primitives::shard_layout::ShardLayout;
+use unc_primitives::types::Power;
 use unc_primitives::types::ValidatorKickoutReason::{NotEnoughBlocks, NotEnoughChunks};
 use unc_primitives::version::ProtocolFeature::SimpleNightshade;
 use unc_primitives::version::PROTOCOL_VERSION;
 use unc_store::test_utils::create_test_store;
-use num_rational::Ratio;
-use unc_primitives::types::Power;
 
 impl EpochManager {
     /// Returns number of produced and expected blocks by given validator.
@@ -44,7 +44,7 @@ impl EpochManager {
 
 #[test]
 fn test_power_validator() {
-    let amount_powered :Power = 1_000_000;
+    let amount_powered: Power = 1_000_000;
     let validators = vec![("test1".parse().unwrap(), amount_powered)];
     let mut epoch_manager = setup_default_epoch_manager(validators.clone(), 1, 1, 2, 2, 90, 60);
 
@@ -94,7 +94,10 @@ fn test_power_validator() {
 
     let expected3 = epoch_info_with_num_seats(
         2,
-        vec![("test1".parse().unwrap(), amount_powered), ("test2".parse().unwrap(), amount_powered)],
+        vec![
+            ("test1".parse().unwrap(), amount_powered),
+            ("test2".parse().unwrap(), amount_powered),
+        ],
         vec![0, 1],
         vec![vec![0, 1]],
         vec![],
@@ -119,10 +122,7 @@ fn test_power_validator() {
         epoch_manager.config.clone(),
         PROTOCOL_VERSION,
         epoch_manager.reward_calculator,
-        validators
-            .iter()
-            .map(|(account_id, power)| do_power(account_id.clone(), *power))
-            .collect(),
+        validators.iter().map(|(account_id, power)| do_power(account_id.clone(), *power)).collect(),
     )
     .unwrap();
     assert!(compare_epoch_infos(&epoch_manager2.get_epoch_info(&epoch3).unwrap(), &expected3));
@@ -132,8 +132,10 @@ fn test_power_validator() {
 fn test_validator_change_of_pledge() {
     let amount_pledged = 1_000_000;
     let fishermen_threshold = 100;
-    let validators =
-        vec![("test1".parse().unwrap(), amount_pledged), ("test2".parse().unwrap(), amount_pledged)];
+    let validators = vec![
+        ("test1".parse().unwrap(), amount_pledged),
+        ("test2".parse().unwrap(), amount_pledged),
+    ];
     let mut epoch_manager = setup_epoch_manager(
         validators,
         2,
@@ -320,8 +322,10 @@ fn test_one_validator_kickout() {
 #[test]
 fn test_validator_kickout() {
     let amount_pledged = 1_000_000;
-    let validators =
-        vec![("test1".parse().unwrap(), amount_pledged), ("test2".parse().unwrap(), amount_pledged)];
+    let validators = vec![
+        ("test1".parse().unwrap(), amount_pledged),
+        ("test2".parse().unwrap(), amount_pledged),
+    ];
     let epoch_length = 10;
     let mut epoch_manager = setup_default_epoch_manager(validators, epoch_length, 1, 2, 0, 90, 60);
     let h = hash_range((3 * epoch_length) as usize);
@@ -583,8 +587,10 @@ fn test_double_sign_slashing1() {
 #[test]
 fn test_double_sign_slashing2() {
     let amount_pledged = 1_000_000;
-    let validators =
-        vec![("test1".parse().unwrap(), amount_pledged), ("test2".parse().unwrap(), amount_pledged)];
+    let validators = vec![
+        ("test1".parse().unwrap(), amount_pledged),
+        ("test2".parse().unwrap(), amount_pledged),
+    ];
     let mut epoch_manager = setup_default_epoch_manager(validators, 2, 1, 2, 0, 90, 60);
 
     let h = hash_range(10);
@@ -760,8 +766,10 @@ fn test_validator_reward_one_validator() {
 fn test_validator_reward_weight_by_pledge() {
     let pledge_amount1 = 1_000_000;
     let pledge_amount2 = 500_000;
-    let validators =
-        vec![("test1".parse().unwrap(), pledge_amount1), ("test2".parse().unwrap(), pledge_amount2)];
+    let validators = vec![
+        ("test1".parse().unwrap(), pledge_amount1),
+        ("test2".parse().unwrap(), pledge_amount2),
+    ];
     let epoch_length = 2;
     let total_supply = (pledge_amount1 + pledge_amount2) * validators.len() as u128;
     let reward_calculator = RewardCalculator {
@@ -980,8 +988,10 @@ fn test_reward_multiple_shards() {
 #[test]
 fn test_unpledge_and_then_change_pledge() {
     let amount_powered = 1_000_000;
-    let validators =
-        vec![("test1".parse().unwrap(), amount_powered), ("test2".parse().unwrap(), amount_powered)];
+    let validators = vec![
+        ("test1".parse().unwrap(), amount_powered),
+        ("test2".parse().unwrap(), amount_powered),
+    ];
     let mut epoch_manager = setup_default_epoch_manager(validators, 2, 1, 2, 0, 90, 60);
     let h = hash_range(8);
     record_block(&mut epoch_manager, CryptoHash::default(), h[0], 0, vec![]);
@@ -1002,7 +1012,10 @@ fn test_unpledge_and_then_change_pledge() {
     check_fishermen(&epoch_info, &[]);
     check_pledge_change(
         &epoch_info,
-        vec![("test1".parse().unwrap(), amount_powered), ("test2".parse().unwrap(), amount_powered)],
+        vec![
+            ("test1".parse().unwrap(), amount_powered),
+            ("test2".parse().unwrap(), amount_powered),
+        ],
     );
     check_kickout(&epoch_info, &[]);
     check_reward(
@@ -1254,11 +1267,29 @@ fn test_epoch_info_aggregator_data_loss() {
     );
     let h = hash_range(6);
     record_block(&mut em, Default::default(), h[0], 0, vec![]);
-    record_block(&mut em, h[0], h[1], 1, vec![do_power("test1".parse().unwrap(), power_amount - 10)]);
-    record_block(&mut em, h[1], h[3], 3, vec![do_power("test2".parse().unwrap(), power_amount + 10)]);
+    record_block(
+        &mut em,
+        h[0],
+        h[1],
+        1,
+        vec![do_power("test1".parse().unwrap(), power_amount - 10)],
+    );
+    record_block(
+        &mut em,
+        h[1],
+        h[3],
+        3,
+        vec![do_power("test2".parse().unwrap(), power_amount + 10)],
+    );
     assert_eq!(h[1], em.epoch_info_aggregator.last_block_hash);
     em.epoch_info_aggregator = EpochInfoAggregator::default();
-    record_block(&mut em, h[3], h[5], 5, vec![do_power("test1".parse().unwrap(), power_amount - 1)]);
+    record_block(
+        &mut em,
+        h[3],
+        h[5],
+        5,
+        vec![do_power("test1".parse().unwrap(), power_amount - 1)],
+    );
     assert_eq!(h[3], em.epoch_info_aggregator.last_block_hash);
     let epoch_id = em.get_epoch_id(&h[5]).unwrap();
     let epoch_info = em.get_epoch_info(&epoch_id).unwrap();
@@ -1341,7 +1372,13 @@ fn test_epoch_info_aggregator_reorg_beginning_of_epoch() {
     for i in 1..5 {
         record_block(&mut em, h[i - 1], h[i], i as u64, vec![]);
     }
-    record_block(&mut em, h[4], h[5], 5, vec![do_power("test1".parse().unwrap(), power_amount - 1)]);
+    record_block(
+        &mut em,
+        h[4],
+        h[5],
+        5,
+        vec![do_power("test1".parse().unwrap(), power_amount - 1)],
+    );
     record_block_with_final_block_hash(
         &mut em,
         h[5],
@@ -1526,8 +1563,10 @@ fn test_chunk_validator_kickout() {
 #[test]
 fn test_compare_epoch_id() {
     let amount_pledged = 1_000_000;
-    let validators =
-        vec![("test1".parse().unwrap(), amount_pledged), ("test2".parse().unwrap(), amount_pledged)];
+    let validators = vec![
+        ("test1".parse().unwrap(), amount_pledged),
+        ("test2".parse().unwrap(), amount_pledged),
+    ];
     let mut epoch_manager = setup_default_epoch_manager(validators, 2, 1, 2, 0, 90, 60);
     let h = hash_range(8);
     record_block(&mut epoch_manager, CryptoHash::default(), h[0], 0, vec![]);
@@ -2320,8 +2359,10 @@ fn test_protocol_version_switch_after_switch() {
 #[test]
 fn test_final_block_consistency() {
     let amount_powered = 1_000_000;
-    let validators =
-        vec![("test1".parse().unwrap(), amount_powered), ("test2".parse().unwrap(), amount_powered)];
+    let validators = vec![
+        ("test1".parse().unwrap(), amount_powered),
+        ("test2".parse().unwrap(), amount_powered),
+    ];
     let mut epoch_manager = setup_default_epoch_manager(validators, 10, 1, 3, 0, 90, 60);
 
     let h = hash_range(10);
@@ -2354,8 +2395,10 @@ fn test_final_block_consistency() {
 #[test]
 fn test_epoch_validators_cache() {
     let amount_powered = 1_000_000;
-    let validators =
-        vec![("test1".parse().unwrap(), amount_powered), ("test2".parse().unwrap(), amount_powered)];
+    let validators = vec![
+        ("test1".parse().unwrap(), amount_powered),
+        ("test2".parse().unwrap(), amount_powered),
+    ];
     let mut epoch_manager = setup_default_epoch_manager(validators, 2, 1, 10, 0, 90, 60);
     let h = hash_range(10);
     record_block(&mut epoch_manager, CryptoHash::default(), h[0], 0, vec![]);

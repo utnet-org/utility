@@ -1,7 +1,5 @@
 use unc_client_primitives::types::StatusError;
-use unc_jsonrpc_primitives::types::status::{
-    RpcHealthResponse, RpcStatusError, RpcStatusResponse,
-};
+use unc_jsonrpc_primitives::types::status::{RpcHealthResponse, RpcStatusError, RpcStatusResponse};
 use unc_primitives::views::StatusResponse;
 
 use super::RpcFrom;
@@ -45,9 +43,7 @@ impl RpcFrom<unc_client_primitives::debug::DebugStatusResponse>
                 unc_jsonrpc_primitives::types::status::DebugStatusResponse::ValidatorStatus(x)
             }
             unc_client_primitives::debug::DebugStatusResponse::ChainProcessingStatus(x) => {
-                unc_jsonrpc_primitives::types::status::DebugStatusResponse::ChainProcessingStatus(
-                    x,
-                )
+                unc_jsonrpc_primitives::types::status::DebugStatusResponse::ChainProcessingStatus(x)
             }
         }
     }

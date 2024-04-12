@@ -1,4 +1,6 @@
 use chrono::{DateTime, Duration, Utc};
+use rand::seq::IteratorRandom;
+use tracing::{debug, warn};
 use unc_async::messaging::CanSend;
 use unc_chain::Chain;
 use unc_chain::{check_known, ChainStoreAccess};
@@ -10,8 +12,6 @@ use unc_primitives::block::Tip;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::static_clock::StaticClock;
 use unc_primitives::types::{BlockHeight, BlockHeightDelta};
-use rand::seq::IteratorRandom;
-use tracing::{debug, warn};
 
 /// Maximum number of block requested at once in BlockSync
 const MAX_BLOCK_REQUESTS: usize = 5;

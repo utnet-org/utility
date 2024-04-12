@@ -1,9 +1,9 @@
+use serde_json::Value;
 use unc_client_primitives::types::GetSplitStorageInfoError;
 use unc_jsonrpc_primitives::{
     errors::RpcParseError,
     types::split_storage::{RpcSplitStorageInfoError, RpcSplitStorageInfoRequest},
 };
-use serde_json::Value;
 
 use super::{Params, RpcFrom, RpcRequest};
 

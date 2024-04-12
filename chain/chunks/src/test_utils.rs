@@ -1,7 +1,9 @@
+use std::collections::VecDeque;
+use std::sync::{Arc, Mutex, RwLock};
 use unc_async::messaging::CanSend;
 use unc_chain::types::{EpochManagerAdapter, Tip};
 use unc_chain::{Chain, ChainStore};
-use unc_epoch_manager::shard_tracker::{ShardTracker};
+use unc_epoch_manager::shard_tracker::ShardTracker;
 use unc_epoch_manager::test_utils::setup_epoch_manager_with_block_and_chunk_producers;
 use unc_epoch_manager::EpochManagerHandle;
 use unc_network::shards_manager::ShardsManagerRequestFromNetwork;
@@ -19,8 +21,6 @@ use unc_primitives::types::{AccountId, EpochId, ShardId};
 use unc_primitives::version::PROTOCOL_VERSION;
 use unc_store::test_utils::create_test_store;
 use unc_store::Store;
-use std::collections::VecDeque;
-use std::sync::{Arc, Mutex, RwLock};
 
 use crate::adapter::ShardsManagerRequestFromClient;
 use crate::client::ShardsManagerResponse;
@@ -74,9 +74,7 @@ impl ChunkTestFixture {
             2,
         );
         let epoch_manager = epoch_manager.into_handle();
-        let shard_tracker = ShardTracker::new(
-            Arc::new(epoch_manager.clone()),
-        );
+        let shard_tracker = ShardTracker::new(Arc::new(epoch_manager.clone()));
         let mock_network = Arc::new(MockPeerManagerAdapter::default());
         let mock_client_adapter = Arc::new(MockClientAdapterForShardsManager::default());
 

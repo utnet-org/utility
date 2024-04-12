@@ -4,6 +4,8 @@ use crate::UncConfig;
 
 use borsh::BorshDeserialize;
 use errors::FromStateViewerErrors;
+use node_runtime::adapter::ViewRuntimeAdapter;
+use node_runtime::state_viewer::TrieViewer;
 use unc_chain::types::{
     ApplyChunkBlockContext, ApplyChunkResult, ApplyChunkShardContext, ApplyResultForResharding,
     RuntimeAdapter, RuntimeStorageConfig, StorageDataSource, Tip,
@@ -33,7 +35,10 @@ use unc_primitives::types::{
     ShardId, StateChangeCause, StateChangesForResharding, StateRoot, StateRootNode,
 };
 use unc_primitives::version::ProtocolVersion;
-use unc_primitives::views::{AccessKeyInfoView, CallResult, ChipView, QueryRequest, QueryResponse, QueryResponseKind, ViewApplyState, ViewStateResult};
+use unc_primitives::views::{
+    AccessKeyInfoView, CallResult, ChipView, QueryRequest, QueryResponse, QueryResponseKind,
+    ViewApplyState, ViewStateResult,
+};
 use unc_store::config::StateSnapshotType;
 use unc_store::flat::FlatStorageManager;
 use unc_store::metadata::DbKind;
@@ -44,10 +49,11 @@ use unc_store::{
 use unc_vm_runner::logic::CompiledContractCache;
 use unc_vm_runner::precompile_contract;
 use unc_vm_runner::ContractCode;
-use node_runtime::adapter::ViewRuntimeAdapter;
-use node_runtime::state_viewer::TrieViewer;
 
-use node_runtime::{validate_transaction, verify_and_charge_transaction, ApplyState, Runtime, ValidatorAccountsUpdate};
+use node_runtime::{
+    validate_transaction, verify_and_charge_transaction, ApplyState, Runtime,
+    ValidatorAccountsUpdate,
+};
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
@@ -378,9 +384,9 @@ impl NightshadeRuntime {
                     protocol_treasury_account_id: Some(
                         self.genesis_config.protocol_treasury_account.clone(),
                     )
-                        .filter(|account_id| {
-                            account_id_to_shard_id(account_id, &shard_layout) == shard_id
-                        }),
+                    .filter(|account_id| {
+                        account_id_to_shard_id(account_id, &shard_layout) == shard_id
+                    }),
                     slashing_info,
                 })
             }
@@ -780,7 +786,8 @@ impl RuntimeAdapter for NightshadeRuntime {
         // transactions. from 13mega bytes limit to 4 mega bytes
         let size_limit = transactions_gas_limit
             / (runtime_config.wasm_config.ext_costs.gas_cost(ExtCosts::storage_write_value_byte)
-                + runtime_config.wasm_config.ext_costs.gas_cost(ExtCosts::storage_read_value_byte)) / 3;
+                + runtime_config.wasm_config.ext_costs.gas_cost(ExtCosts::storage_read_value_byte))
+            / 3;
 
         while total_gas_burnt < transactions_gas_limit
             && total_size < size_limit
@@ -920,15 +927,14 @@ impl RuntimeAdapter for NightshadeRuntime {
     ) -> Result<QueryResponse, unc_chain::unc_chain_primitives::error::QueryError> {
         match request {
             QueryRequest::ViewAccount { account_id } => {
-                let account = self
-                    .view_account(&shard_uid, *state_root, account_id)
-                    .map_err(|err| {
-                    unc_chain::unc_chain_primitives::error::QueryError::from_view_account_error(
-                        err,
-                        block_height,
-                        *block_hash,
-                    )
-                })?;
+                let account =
+                    self.view_account(&shard_uid, *state_root, account_id).map_err(|err| {
+                        unc_chain::unc_chain_primitives::error::QueryError::from_view_account_error(
+                            err,
+                            block_height,
+                            *block_hash,
+                        )
+                    })?;
                 Ok(QueryResponse {
                     kind: QueryResponseKind::ViewAccount(account.into()),
                     block_height,
@@ -1032,13 +1038,14 @@ impl RuntimeAdapter for NightshadeRuntime {
                 })
             }
             QueryRequest::ViewChipList { account_id } => {
-                let chip_list_result = self.view_chip_list(&shard_uid, *state_root, account_id).map_err(|err| {
-                    unc_chain::unc_chain_primitives::error::QueryError::from_view_chip_error(
-                        err,
-                        block_height,
-                        *block_hash,
-                    )
-                })?;
+                let chip_list_result =
+                    self.view_chip_list(&shard_uid, *state_root, account_id).map_err(|err| {
+                        unc_chain::unc_chain_primitives::error::QueryError::from_view_chip_error(
+                            err,
+                            block_height,
+                            *block_hash,
+                        )
+                    })?;
 
                 Ok(QueryResponse {
                     kind: QueryResponseKind::ChipList(
@@ -1353,8 +1360,7 @@ impl node_runtime::adapter::ViewRuntimeAdapter for NightshadeRuntime {
         shard_uid: &ShardUId,
         state_root: MerkleHash,
         account_id: &AccountId,
-    ) -> Result<Vec<ChipView>, node_runtime::state_viewer::errors::ViewChipError>
-    {
+    ) -> Result<Vec<ChipView>, node_runtime::state_viewer::errors::ViewChipError> {
         let state_update = self.tries.new_trie_update_view(*shard_uid, state_root);
         self.trie_viewer.view_chip_list(&state_update, account_id)
     }

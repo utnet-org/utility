@@ -7,8 +7,8 @@
 //! related bugs when implementing an ABI.
 
 use super::externals::FromToNativeWasmType;
-use unc_vm_types::ValueType;
 use std::marker::PhantomData;
+use unc_vm_types::ValueType;
 
 /// The `Item` marker type. This is the default and does not usually need to be
 /// specified.

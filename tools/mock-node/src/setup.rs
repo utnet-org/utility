@@ -2,6 +2,12 @@
 
 use crate::{MockNetworkConfig, MockPeer};
 use anyhow::Context;
+use framework::{NightshadeRuntime, UncConfig};
+use rayon::iter::{IntoParallelIterator, ParallelIterator};
+use std::cmp::min;
+use std::path::Path;
+use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::Arc;
 use unc_chain::types::RuntimeAdapter;
 use unc_chain::ChainStoreUpdate;
 use unc_chain::{Chain, ChainGenesis, ChainStore, ChainStoreAccess, DoomslugThresholdMode};
@@ -16,12 +22,6 @@ use unc_primitives::state_part::PartId;
 use unc_primitives::state_sync::get_num_state_parts;
 use unc_primitives::types::{BlockHeight, NumShards, ShardId};
 use unc_store::test_utils::create_test_store;
-use framework::{UncConfig, NightshadeRuntime};
-use rayon::iter::{IntoParallelIterator, ParallelIterator};
-use std::cmp::min;
-use std::path::Path;
-use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::Arc;
 
 fn setup_runtime(
     home_dir: &Path,
@@ -37,8 +37,7 @@ fn setup_runtime(
             .get_hot_store()
     };
     let epoch_manager = EpochManager::new_arc_handle(store.clone(), &config.genesis.config);
-    let shard_tracker =
-        ShardTracker::new(epoch_manager.clone());
+    let shard_tracker = ShardTracker::new(epoch_manager.clone());
     let runtime = NightshadeRuntime::from_config(home_dir, store, config, epoch_manager.clone());
     (epoch_manager, shard_tracker, runtime)
 }
@@ -276,7 +275,13 @@ mod tests {
     use crate::setup::{setup_mock_node, MockNode};
     use crate::MockNetworkConfig;
     use actix::{Actor, System};
+    use framework::config::GenesisExt;
+    use framework::{load_test_config, start_with_config, UNC_BASE};
     use futures::{future, FutureExt};
+    use rand::thread_rng;
+    use std::ops::ControlFlow;
+    use std::sync::{Arc, RwLock};
+    use std::time::Duration;
     use unc_actix_test_utils::{run_actix, spawn_interruptible};
     use unc_chain::{ChainStore, ChainStoreAccess};
     use unc_chain_configs::Genesis;
@@ -289,12 +294,6 @@ mod tests {
     use unc_o11y::WithSpanContextExt;
     use unc_primitives::transaction::SignedTransaction;
     use unc_store::test_utils::gen_account_from_alphabet;
-    use framework::config::GenesisExt;
-    use framework::{load_test_config, start_with_config, UNC_BASE};
-    use rand::thread_rng;
-    use std::ops::ControlFlow;
-    use std::sync::{Arc, RwLock};
-    use std::time::Duration;
 
     // Test the basic mocknet setup.
     // This test first starts a localnet with one validator node that generates 2 epochs of blocks

@@ -3,10 +3,10 @@ use super::super::store::{Store, StoreObject};
 use super::super::types::GlobalType;
 use super::super::types::Mutability;
 use super::super::types::Val;
-use unc_vm_engine::RuntimeError;
-use unc_vm_vm::{Export, Global as RuntimeGlobal, VMGlobal};
 use std::fmt;
 use std::sync::Arc;
+use unc_vm_engine::RuntimeError;
+use unc_vm_vm::{Export, Global as RuntimeGlobal, VMGlobal};
 
 /// A WebAssembly `global` instance.
 ///

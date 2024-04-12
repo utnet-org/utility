@@ -4,9 +4,9 @@ use crate::logic::types::ReturnData;
 use crate::logic::Config;
 use crate::runner::VMKindExt;
 use crate::ContractCode;
+use std::mem::size_of;
 use unc_parameters::RuntimeFeesConfig;
 use unc_primitives_core::types::Balance;
-use std::mem::size_of;
 
 use super::test_vm_config;
 use crate::runner::VMResult;
@@ -24,9 +24,7 @@ fn encode(xs: &[u64]) -> Vec<u8> {
 fn test_contract(vm_kind: VMKind) -> ContractCode {
     let code = match vm_kind {
         // testing backwards-compatibility, use an old WASM
-        VMKind::Wasmer0 | VMKind::Wasmer2 => {
-            unc_test_contracts::backwards_compatible_rs_contract()
-        }
+        VMKind::Wasmer0 | VMKind::Wasmer2 => unc_test_contracts::backwards_compatible_rs_contract(),
         // production and developer environment, use a cutting-edge WASM
         VMKind::Wasmtime | VMKind::NearVm => unc_test_contracts::rs_contract(),
     };

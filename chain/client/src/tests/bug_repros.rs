@@ -7,9 +7,9 @@ use std::sync::{Arc, RwLock};
 
 use actix::System;
 use futures::FutureExt;
+use rand::{thread_rng, Rng};
 use unc_async::messaging::CanSend;
 use unc_network::shards_manager::ShardsManagerRequestFromNetwork;
-use rand::{thread_rng, Rng};
 
 use crate::adapter::{BlockApproval, BlockResponse, ProcessTxRequest};
 use crate::test_utils::{setup_mock_all_validators, ActorHandlesForTesting};

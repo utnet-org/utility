@@ -1,11 +1,9 @@
-use unc_primitives::types::EpochId;
 use serde_json::Value;
+use unc_primitives::types::EpochId;
 
 use unc_client_primitives::types::{GetProviderError, GetProviderInfoError};
 use unc_jsonrpc_primitives::errors::RpcParseError;
-use unc_jsonrpc_primitives::types::provider::{
-    RpcProviderError, RpcProviderRequest,
-};
+use unc_jsonrpc_primitives::types::provider::{RpcProviderError, RpcProviderRequest};
 
 use super::{RpcFrom, RpcRequest};
 
@@ -31,22 +29,23 @@ impl RpcRequest for RpcProviderRequest {
 
         // Ensure the decoded bytes have the correct length for a CryptoHash
         if bytes.len() != 32 {
-            return Err(RpcParseError("Decoded hash does not match expected length".parse().unwrap()));
+            return Err(RpcParseError(
+                "Decoded hash does not match expected length".parse().unwrap(),
+            ));
         }
 
         // Construct the CryptoHash from the decoded bytes
-        let epoch_id : EpochId = epoch_id_str
+        let epoch_id: EpochId = epoch_id_str
             .parse()
             .map_err(|_| RpcParseError("Failed to parse epoch_id from base58".parse().unwrap()))?;
 
-            let block_height = value
-                    .get("block_height")
-                    .and_then(|v| v.as_u64())
-                    .ok_or_else(|| RpcParseError("block_height not found or not a u64".parse().unwrap()))?;
+        let block_height = value
+            .get("block_height")
+            .and_then(|v| v.as_u64())
+            .ok_or_else(|| RpcParseError("block_height not found or not a u64".parse().unwrap()))?;
 
         Ok(Self { epoch_id, block_height })
     }
-
 }
 
 impl RpcFrom<actix::MailboxError> for RpcProviderError {
@@ -75,10 +74,10 @@ impl RpcFrom<GetProviderInfoError> for RpcProviderError {
 impl RpcFrom<GetProviderError> for RpcProviderError {
     fn rpc_from(error: GetProviderError) -> Self {
         match error {
-            GetProviderError::UnknownBlock{.. } => Self::UnknownBlock{},
-            GetProviderError::NotSyncedYet{.. }  => Self::ProviderInfoUnavailable,
-            GetProviderError::IOError{error_message} => Self::InternalError { error_message },
-            GetProviderError::Unreachable{ref error_message} => {
+            GetProviderError::UnknownBlock { .. } => Self::UnknownBlock {},
+            GetProviderError::NotSyncedYet { .. } => Self::ProviderInfoUnavailable,
+            GetProviderError::IOError { error_message } => Self::InternalError { error_message },
+            GetProviderError::Unreachable { ref error_message } => {
                 tracing::warn!(target: "jsonrpc", "Unreachable error occurred: {}", error_message);
                 crate::metrics::RPC_UNREACHABLE_ERROR_COUNT
                     .with_label_values(&["RpcProviderError"])

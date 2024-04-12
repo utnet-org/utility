@@ -363,8 +363,7 @@ fn test_tx_invalid_tx_error() {
         let view_client = clients[0].1.clone();
 
         let genesis_hash = *genesis_block(&genesis).hash();
-        let signer =
-            InMemorySigner::from_seed("unc.5".parse().unwrap(), KeyType::ED25519, "unc.5");
+        let signer = InMemorySigner::from_seed("unc.5".parse().unwrap(), KeyType::ED25519, "unc.5");
         let transaction = SignedTransaction::send_money(
             1,
             "unc.5".parse().unwrap(),
@@ -438,9 +437,7 @@ fn test_query_rpc_account_view_unknown_block_must_return_error() {
         let client = new_client(&format!("http://{}", rpc_addrs[0]));
         let query_response = client
             .query(unc_jsonrpc_primitives::types::query::RpcQueryRequest {
-                block_reference: unc_primitives::types::BlockReference::BlockId(BlockId::Height(
-                    1,
-                )),
+                block_reference: unc_primitives::types::BlockReference::BlockId(BlockId::Height(1)),
                 request: unc_primitives::views::QueryRequest::ViewAccount {
                     account_id: "unc.0".parse().unwrap(),
                 },

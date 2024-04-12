@@ -3,6 +3,7 @@ use crate::types::{
     ApplyChunkBlockContext, ApplyChunkResult, ApplyChunkShardContext, ApplyResultForResharding,
     ReshardingResults, RuntimeAdapter, RuntimeStorageConfig, StorageDataSource,
 };
+use std::collections::HashMap;
 use unc_chain_primitives::Error;
 use unc_epoch_manager::EpochManagerAdapter;
 use unc_primitives::hash::CryptoHash;
@@ -12,7 +13,6 @@ use unc_primitives::shard_layout::ShardUId;
 use unc_primitives::sharding::ShardChunk;
 use unc_primitives::types::chunk_extra::ChunkExtra;
 use unc_primitives::types::{BlockHeight, Gas, StateChangesForResharding, StateRoot};
-use std::collections::HashMap;
 
 /// Result of updating a shard for some block when it has a new chunk for this
 /// shard.

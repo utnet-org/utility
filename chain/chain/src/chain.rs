@@ -36,6 +36,13 @@ use chrono::Duration;
 use crossbeam_channel::{unbounded, Receiver, Sender};
 use itertools::Itertools;
 use lru::LruCache;
+use once_cell::sync::OnceCell;
+use rayon::iter::{IntoParallelIterator, ParallelIterator};
+use std::collections::{BTreeMap, HashMap, HashSet};
+use std::fmt::{Debug, Formatter};
+use std::sync::Arc;
+use std::time::Instant;
+use tracing::{debug, debug_span, error, info, warn, Span};
 use unc_chain_configs::{MutableConfigValue, ReshardingConfig, ReshardingHandle};
 #[cfg(feature = "new_epoch_sync")]
 use unc_chain_primitives::error::epoch_sync::EpochSyncInfoError;
@@ -93,13 +100,6 @@ use unc_store::config::StateSnapshotType;
 use unc_store::flat::{store_helper, FlatStorageReadyStatus, FlatStorageStatus};
 use unc_store::get_genesis_state_roots;
 use unc_store::DBCol;
-use once_cell::sync::OnceCell;
-use rayon::iter::{IntoParallelIterator, ParallelIterator};
-use std::collections::{BTreeMap, HashMap, HashSet};
-use std::fmt::{Debug, Formatter};
-use std::sync::Arc;
-use std::time::Instant;
-use tracing::{debug, debug_span, error, info, warn, Span};
 
 /// The size of the invalid_blocks in-memory pool
 pub const INVALID_CHUNKS_POOL_SIZE: usize = 5000;
@@ -216,7 +216,7 @@ type BlockApplyChunksResult = (CryptoHash, Vec<(ShardId, Result<ShardUpdateResul
 /// Facade to the blockchain block processing and storage.
 /// Provides current view on the state according to the chain state.
 pub struct Chain {
-    chain_store: ChainStore,
+    pub chain_store: ChainStore,
     pub epoch_manager: Arc<dyn EpochManagerAdapter>,
     pub shard_tracker: ShardTracker,
     pub runtime_adapter: Arc<dyn RuntimeAdapter>,
@@ -441,11 +441,13 @@ impl Chain {
                 for chunk in genesis_chunks {
                     store_update.save_chunk(chunk.clone());
                 }
-                store_update.merge(epoch_manager.add_validator_proposals_for_blocks(BlockHeaderInfo::new(
-                    genesis.header(),
-                    // genesis height is considered final
-                    chain_genesis.height,
-                ))?);
+                store_update.merge(epoch_manager.add_validator_proposals_for_blocks(
+                    BlockHeaderInfo::new(
+                        genesis.header(),
+                        // genesis height is considered final
+                        chain_genesis.height,
+                    ),
+                )?);
                 store_update.save_block_header(genesis.header().clone())?;
                 store_update.save_block(genesis.clone());
                 store_update
@@ -1460,9 +1462,9 @@ impl Chain {
             // Add validator proposals for given header.
             let last_finalized_height =
                 chain_store_update.get_block_height(header.last_final_block())?;
-            let epoch_manager_update = self
-                .epoch_manager
-                .add_validator_proposals_for_blocks(BlockHeaderInfo::new(header, last_finalized_height))?;
+            let epoch_manager_update = self.epoch_manager.add_validator_proposals_for_blocks(
+                BlockHeaderInfo::new(header, last_finalized_height),
+            )?;
             chain_store_update.merge(epoch_manager_update);
             chain_store_update.commit()?;
 

@@ -1,5 +1,11 @@
 use crate::epoch_info::iterate_and_filter;
 use borsh::BorshDeserialize;
+use framework::{NightshadeRuntime, UncConfig};
+use std::ops::Range;
+use std::path::{Path, PathBuf};
+use std::str::FromStr;
+use std::sync::Arc;
+use std::time::{Duration, Instant};
 use unc_chain::{Chain, ChainGenesis, ChainStoreAccess, DoomslugThresholdMode};
 use unc_client::sync::external::{
     create_bucket_readonly, create_bucket_readwrite, external_storage_location,
@@ -16,12 +22,6 @@ use unc_primitives::types::{EpochId, StateRoot};
 use unc_primitives_core::hash::CryptoHash;
 use unc_primitives_core::types::{BlockHeight, EpochHeight, ShardId};
 use unc_store::{PartialStorage, Store, Trie};
-use framework::{UncConfig, NightshadeRuntime};
-use std::ops::Range;
-use std::path::{Path, PathBuf};
-use std::str::FromStr;
-use std::sync::Arc;
-use std::time::{Duration, Instant};
 
 #[derive(clap::ValueEnum, Clone, Debug, Default)]
 pub(crate) enum LoadAction {
@@ -96,11 +96,8 @@ impl StatePartsSubCommand {
         unc_config: UncConfig,
         store: Store,
     ) {
-        let epoch_manager =
-            EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
-        let shard_tracker = ShardTracker::new(
-            epoch_manager.clone(),
-        );
+        let epoch_manager = EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
+        let shard_tracker = ShardTracker::new(epoch_manager.clone());
         let runtime = NightshadeRuntime::from_config(
             home_dir,
             store.clone(),

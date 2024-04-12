@@ -4,11 +4,13 @@ use std::sync::Arc;
 
 use actix::{Actor, Addr, System};
 use futures::{future, FutureExt};
-use unc_primitives::num_rational::Ratio;
 use rand::Rng;
+use unc_primitives::num_rational::Ratio;
 
 use crate::genesis_helpers::genesis_hash;
 use crate::test_helpers::heavy_test;
+use framework::config::{GenesisExt, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
+use framework::{load_test_config, start_with_config, UncConfig, UNC_BASE};
 use unc_actix_test_utils::run_actix;
 use unc_chain_configs::Genesis;
 use unc_client::{ClientActor, GetBlock, ProcessTxRequest, Query, Status, ViewClientActor};
@@ -20,11 +22,9 @@ use unc_primitives::hash::CryptoHash;
 use unc_primitives::transaction::SignedTransaction;
 use unc_primitives::types::{AccountId, BlockHeightDelta, BlockReference, NumSeats};
 use unc_primitives::views::{QueryRequest, QueryResponseKind, ValidatorInfo};
-use framework::config::{GenesisExt, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
-use framework::{load_test_config, start_with_config, UncConfig, UNC_BASE};
 
 use unc_o11y::WithSpanContextExt;
-use {unc_primitives::types::BlockId, primitive_types::U256};
+use {primitive_types::U256, unc_primitives::types::BlockId};
 
 #[derive(Clone)]
 struct TestNode {

@@ -9,6 +9,12 @@ use api::RpcRequest;
 pub use api::{RpcFrom, RpcInto};
 use futures::Future;
 use futures::FutureExt;
+use serde_json::{json, Value};
+use std::path::PathBuf;
+use std::sync::Arc;
+use std::time::{Duration, Instant};
+use tokio::time::{sleep, timeout};
+use tracing::{error, info};
 use unc_chain_configs::GenesisConfig;
 use unc_client::{
     ClientActor, DebugStatus, GetBlock, GetBlockProof, GetChunk, GetClientConfig,
@@ -17,7 +23,7 @@ use unc_client::{
     GetStateChangesInBlock, GetValidatorInfo, GetValidatorOrdered, ProcessTxRequest,
     ProcessTxResponse, Query, Status, TxStatus, ViewClientActor,
 };
-use unc_client_primitives::types::{GetProvider, GetAllMiners, GetSplitStorageInfo};
+use unc_client_primitives::types::{GetAllMiners, GetProvider, GetSplitStorageInfo};
 pub use unc_jsonrpc_client as client;
 use unc_jsonrpc_primitives::errors::RpcError;
 use unc_jsonrpc_primitives::message::{Message, Request};
@@ -38,12 +44,6 @@ use unc_primitives::hash::CryptoHash;
 use unc_primitives::transaction::SignedTransaction;
 use unc_primitives::types::{AccountId, BlockHeight};
 use unc_primitives::views::{QueryRequest, TxExecutionStatus};
-use serde_json::{json, Value};
-use std::path::PathBuf;
-use std::sync::Arc;
-use std::time::{Duration, Instant};
-use tokio::time::{sleep, timeout};
-use tracing::{error, info};
 
 mod api;
 mod metrics;
@@ -393,11 +393,9 @@ impl JsonRpcHandler {
             "sandbox_fast_forward" => {
                 process_method_call(request, |params| self.sandbox_fast_forward(params)).await
             }
-            "provider" => {
-                process_method_call(request, |params | self.get_provider(params)).await
-            }
+            "provider" => process_method_call(request, |params| self.get_provider(params)).await,
             "all_miners" => {
-                process_method_call(request, |params | self.get_all_miners(params)).await
+                process_method_call(request, |params| self.get_all_miners(params)).await
             }
             _ => return Err(request),
         })
@@ -563,7 +561,7 @@ impl JsonRpcHandler {
                 .await;
                 match tx_status_result.clone() {
                     Ok(result) => {
-                        if result.status >= finality {
+                        if tx_execution_status_meets_expectations(&finality, &result.status) {
                             break Ok(result.into())
                         }
                         // else: No such transaction recorded on chain yet
@@ -595,15 +593,11 @@ impl JsonRpcHandler {
         .map_err(|_| {
             metrics::RPC_TIMEOUT_TOTAL.inc();
             tracing::warn!(
-                target: "jsonrpc", "Timeout: tx_status_fetch method. tx_info {:?} fetch_receipt {:?}",
+                target: "jsonrpc", "Timeout: tx_status_fetch method. tx_info {:?} fetch_receipt {:?} result {:?}",
                 tx_info,
                 fetch_receipt,
             );
-            if let Err(error) = tx_status_result {
-                error
-            } else {
-                unc_jsonrpc_primitives::types::transactions::RpcTransactionError::TimeoutError
-            }
+            unc_jsonrpc_primitives::types::transactions::RpcTransactionError::TimeoutError
         })?
     }
 
@@ -684,7 +678,7 @@ impl JsonRpcHandler {
     > {
         self.send_tx(RpcSendTransactionRequest {
             signed_transaction: request_data.signed_transaction,
-            wait_until: TxExecutionStatus::Final,
+            wait_until: TxExecutionStatus::ExecutedOptimistic,
         })
         .await
     }
@@ -785,7 +779,9 @@ impl JsonRpcHandler {
                             .split_storage_info(RpcSplitStorageInfoRequest {})
                             .await
                             .map_err(|e| e.into_rpc_status_error())?;
-                        unc_jsonrpc_primitives::types::status::DebugStatusResponse::SplitStoreStatus(split_storage_info.result)
+                        unc_jsonrpc_primitives::types::status::DebugStatusResponse::SplitStoreStatus(
+                            split_storage_info.result,
+                        )
                     }
                     _ => return Ok(None),
                 };
@@ -861,8 +857,10 @@ impl JsonRpcHandler {
         unc_jsonrpc_primitives::types::provider::RpcProviderResponse,
         unc_jsonrpc_primitives::types::provider::RpcProviderError,
     > {
-        let provider_account = self.view_client_send(GetProvider(request_data.epoch_id, request_data.block_height)).await?;
-        Ok(unc_jsonrpc_primitives::types::provider::RpcProviderResponse{ provider_account })
+        let provider_account = self
+            .view_client_send(GetProvider(request_data.epoch_id, request_data.block_height))
+            .await?;
+        Ok(unc_jsonrpc_primitives::types::provider::RpcProviderResponse { provider_account })
     }
 
     async fn get_all_miners(
@@ -873,7 +871,36 @@ impl JsonRpcHandler {
         unc_jsonrpc_primitives::types::all_miners::RpcAllMinersError,
     > {
         let all_miners = self.view_client_send(GetAllMiners(request_data.block_hash)).await?;
-        Ok(unc_jsonrpc_primitives::types::all_miners::RpcAllMinersResponse{ total_power: all_miners.total_power, miners: all_miners.miners })
+        Ok(unc_jsonrpc_primitives::types::all_miners::RpcAllMinersResponse {
+            total_power: all_miners.total_power,
+            miners: all_miners.miners,
+        })
+    }
+
+    fn tx_execution_status_meets_expectations(
+        expected: &TxExecutionStatus,
+        actual: &TxExecutionStatus,
+    ) -> bool {
+        match expected {
+            TxExecutionStatus::None => true,
+            TxExecutionStatus::Included => actual != &TxExecutionStatus::None,
+            TxExecutionStatus::ExecutedOptimistic => [
+                TxExecutionStatus::ExecutedOptimistic,
+                TxExecutionStatus::Executed,
+                TxExecutionStatus::Final,
+            ]
+            .contains(actual),
+            TxExecutionStatus::IncludedFinal => [
+                TxExecutionStatus::IncludedFinal,
+                TxExecutionStatus::Executed,
+                TxExecutionStatus::Final,
+            ]
+            .contains(actual),
+            TxExecutionStatus::Executed => {
+                [TxExecutionStatus::Executed, TxExecutionStatus::Final].contains(actual)
+            }
+            TxExecutionStatus::Final => actual == &TxExecutionStatus::Final,
+        }
     }
 
     async fn block(
@@ -913,11 +940,9 @@ impl JsonRpcHandler {
             Some(receipt_view) => {
                 Ok(unc_jsonrpc_primitives::types::receipts::RpcReceiptResponse { receipt_view })
             }
-            None => {
-                Err(unc_jsonrpc_primitives::types::receipts::RpcReceiptError::UnknownReceipt {
-                    receipt_id: request_data.receipt_reference.receipt_id,
-                })
-            }
+            None => Err(unc_jsonrpc_primitives::types::receipts::RpcReceiptError::UnknownReceipt {
+                receipt_id: request_data.receipt_reference.receipt_id,
+            }),
         }
     }
 
@@ -1079,9 +1104,8 @@ impl JsonRpcHandler {
         unc_jsonrpc_primitives::types::maintenance::RpcMaintenanceWindowsResponse,
         unc_jsonrpc_primitives::types::maintenance::RpcMaintenanceWindowsError,
     > {
-        let unc_jsonrpc_primitives::types::maintenance::RpcMaintenanceWindowsRequest {
-            account_id,
-        } = request;
+        let unc_jsonrpc_primitives::types::maintenance::RpcMaintenanceWindowsRequest { account_id } =
+            request;
         let windows = self.view_client_send(GetMaintenanceWindows { account_id }).await?;
         Ok(windows.iter().map(|r| (r.start, r.end)).collect())
     }
@@ -1215,16 +1239,14 @@ impl JsonRpcHandler {
         actix::spawn(
             self.client_addr
                 .send(
-                    unc_client::NetworkAdversarialMessage::AdvDisableHeaderSync
-                        .with_span_context(),
+                    unc_client::NetworkAdversarialMessage::AdvDisableHeaderSync.with_span_context(),
                 )
                 .map(|_| ()),
         );
         actix::spawn(
             self.view_client_addr
                 .send(
-                    unc_client::NetworkAdversarialMessage::AdvDisableHeaderSync
-                        .with_span_context(),
+                    unc_client::NetworkAdversarialMessage::AdvDisableHeaderSync.with_span_context(),
                 )
                 .map(|_| ()),
         );
@@ -1234,16 +1256,12 @@ impl JsonRpcHandler {
     async fn adv_disable_doomslug(&self, _params: Value) -> Result<Value, RpcError> {
         actix::spawn(
             self.client_addr
-                .send(
-                    unc_client::NetworkAdversarialMessage::AdvDisableDoomslug.with_span_context(),
-                )
+                .send(unc_client::NetworkAdversarialMessage::AdvDisableDoomslug.with_span_context())
                 .map(|_| ()),
         );
         actix::spawn(
             self.view_client_addr
-                .send(
-                    unc_client::NetworkAdversarialMessage::AdvDisableDoomslug.with_span_context(),
-                )
+                .send(unc_client::NetworkAdversarialMessage::AdvDisableDoomslug.with_span_context())
                 .map(|_| ()),
         );
         Ok(Value::String(String::new()))
@@ -1254,10 +1272,8 @@ impl JsonRpcHandler {
         actix::spawn(
             self.client_addr
                 .send(
-                    unc_client::NetworkAdversarialMessage::AdvProduceBlocks(
-                        num_blocks, only_valid,
-                    )
-                    .with_span_context(),
+                    unc_client::NetworkAdversarialMessage::AdvProduceBlocks(num_blocks, only_valid)
+                        .with_span_context(),
                 )
                 .map(|_| ()),
         );

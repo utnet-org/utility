@@ -1,10 +1,10 @@
+use once_cell::sync::Lazy;
 use unc_o11y::metrics::{
     exponential_buckets, try_create_counter, try_create_gauge, try_create_histogram,
     try_create_histogram_vec, try_create_int_counter, try_create_int_counter_vec,
     try_create_int_gauge, try_create_int_gauge_vec, Counter, Gauge, Histogram, HistogramVec,
     IntCounter, IntCounterVec, IntGauge, IntGaugeVec,
 };
-use once_cell::sync::Lazy;
 
 pub(crate) static BLOCK_PRODUCED_TOTAL: Lazy<IntCounter> = Lazy::new(|| {
     try_create_int_counter(
@@ -202,12 +202,8 @@ pub(crate) static PEERS_WITH_INVALID_HASH: Lazy<IntGauge> = Lazy::new(|| {
 });
 
 pub(crate) static CHUNK_SKIPPED_TOTAL: Lazy<IntCounterVec> = Lazy::new(|| {
-    try_create_int_counter_vec(
-        "unc_chunk_skipped_total",
-        "Number of skipped chunks",
-        &["shard_id"],
-    )
-    .unwrap()
+    try_create_int_counter_vec("unc_chunk_skipped_total", "Number of skipped chunks", &["shard_id"])
+        .unwrap()
 });
 
 pub(crate) static CHUNK_PRODUCER_BANNED_FOR_EPOCH: Lazy<IntCounter> = Lazy::new(|| {
@@ -291,16 +287,12 @@ pub(crate) static TOTAL_SUPPLY: Lazy<Gauge> = Lazy::new(|| {
 });
 
 pub(crate) static FINAL_BLOCK_HEIGHT: Lazy<IntGauge> = Lazy::new(|| {
-    try_create_int_gauge("unc_final_block_height", "Last block that has full BFT finality")
-        .unwrap()
+    try_create_int_gauge("unc_final_block_height", "Last block that has full BFT finality").unwrap()
 });
 
 pub(crate) static FINAL_DOOMSLUG_BLOCK_HEIGHT: Lazy<IntGauge> = Lazy::new(|| {
-    try_create_int_gauge(
-        "unc_final_doomslug_block_height",
-        "Last block that has Doomslug finality",
-    )
-    .unwrap()
+    try_create_int_gauge("unc_final_doomslug_block_height", "Last block that has Doomslug finality")
+        .unwrap()
 });
 
 static NODE_DB_VERSION: Lazy<IntGauge> = Lazy::new(|| {
@@ -405,12 +397,8 @@ pub(crate) fn export_version(uncd_version: &unc_primitives::version::Version) {
 }
 
 pub(crate) static STATE_SYNC_STAGE: Lazy<IntGaugeVec> = Lazy::new(|| {
-    try_create_int_gauge_vec(
-        "unc_state_sync_stage",
-        "Stage of state sync per shard",
-        &["shard_id"],
-    )
-    .unwrap()
+    try_create_int_gauge_vec("unc_state_sync_stage", "Stage of state sync per shard", &["shard_id"])
+        .unwrap()
 });
 
 pub(crate) static STATE_SYNC_RETRY_PART: Lazy<IntCounterVec> = Lazy::new(|| {

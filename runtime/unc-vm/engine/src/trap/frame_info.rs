@@ -11,11 +11,11 @@
 //! let module: ModuleInfo = ...;
 //! FRAME_INFO.register(module, compiled_functions);
 //! ```
+use std::collections::BTreeMap;
+use std::sync::{Arc, RwLock};
 use unc_vm_compiler::{CompiledFunctionFrameInfo, SourceLoc, TrapInformation};
 use unc_vm_types::entity::{EntityRef, PrimaryMap};
 use unc_vm_types::{LocalFunctionIndex, ModuleInfo};
-use std::collections::BTreeMap;
-use std::sync::{Arc, RwLock};
 
 lazy_static::lazy_static! {
     /// This is a global cache of backtrace frame information for all active

@@ -3,8 +3,8 @@ use unc_epoch_manager::EpochManagerAdapter;
 use unc_primitives::block::BlockHeader;
 use unc_primitives::hash::{hash, CryptoHash};
 use unc_primitives::types::EpochId;
-use unc_primitives::views::{BlockHeaderInnerLiteView, LightClientBlockView};
 use unc_primitives::views::validator_power_and_pledge_view::ValidatorPowerAndPledgeView;
+use unc_primitives::views::{BlockHeaderInnerLiteView, LightClientBlockView};
 
 use crate::ChainStoreAccess;
 

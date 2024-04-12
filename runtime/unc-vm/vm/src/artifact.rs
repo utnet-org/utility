@@ -1,9 +1,9 @@
 use crate::{InstanceHandle, Resolver, Tunables, VMLocalFunction, VMSharedSignatureIndex};
+use std::{any::Any, collections::BTreeMap, sync::Arc};
 use unc_vm_types::{
     entity::BoxedSlice, ElemIndex, FunctionIndex, GlobalInit, GlobalType, ImportCounts,
     InstanceConfig, LocalFunctionIndex, OwnedDataInitializer, OwnedTableInitializer,
 };
-use std::{any::Any, collections::BTreeMap, sync::Arc};
 
 /// [`Artifact`]s that can be instantiated.
 pub trait Instantiatable: Artifact {

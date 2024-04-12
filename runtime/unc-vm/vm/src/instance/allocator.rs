@@ -1,12 +1,12 @@
 use super::{Instance, InstanceRef};
 use crate::vmcontext::{VMMemoryDefinition, VMTableDefinition};
 use crate::VMOffsets;
-use unc_vm_types::entity::EntityRef;
-use unc_vm_types::{LocalMemoryIndex, LocalTableIndex};
 use std::alloc::{self, Layout};
 use std::convert::TryFrom;
 use std::mem;
 use std::ptr::{self, NonNull};
+use unc_vm_types::entity::EntityRef;
+use unc_vm_types::{LocalMemoryIndex, LocalTableIndex};
 
 /// This is an intermediate type that manages the raw allocation and
 /// metadata when creating an [`Instance`].

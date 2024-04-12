@@ -1,6 +1,10 @@
 //! Client is responsible for tracking the chain, chunks, and producing them when needed.
 //! This client works completely synchronously and must be operated by some async actor outside.
 
+use framework::config::GenesisExt;
+use framework::test_utils::TestEnvNightshadeSetupExt;
+use std::collections::HashMap;
+use std::sync::Arc;
 use unc_chain::ChainGenesis;
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::TestEnv;
@@ -12,10 +16,6 @@ use unc_primitives::hash::hash;
 use unc_primitives::network::PeerId;
 use unc_primitives::test_utils::create_test_signer;
 use unc_primitives::validator_signer::InMemoryValidatorSigner;
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
-use std::collections::HashMap;
-use std::sync::Arc;
 
 #[test]
 fn test_pending_approvals() {

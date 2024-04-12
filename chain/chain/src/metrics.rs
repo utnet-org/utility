@@ -1,9 +1,9 @@
+use once_cell::sync::Lazy;
 use unc_o11y::metrics::{
     exponential_buckets, processing_time_buckets, try_create_histogram, try_create_histogram_vec,
     try_create_histogram_with_buckets, try_create_int_counter, try_create_int_gauge,
     try_create_int_gauge_vec, Histogram, HistogramVec, IntCounter, IntGauge, IntGaugeVec,
 };
-use once_cell::sync::Lazy;
 
 pub static BLOCK_PROCESSING_ATTEMPTS_TOTAL: Lazy<IntCounter> = Lazy::new(|| {
     try_create_int_counter(
@@ -13,8 +13,7 @@ pub static BLOCK_PROCESSING_ATTEMPTS_TOTAL: Lazy<IntCounter> = Lazy::new(|| {
     .unwrap()
 });
 pub static BLOCK_PROCESSED_TOTAL: Lazy<IntCounter> = Lazy::new(|| {
-    try_create_int_counter("unc_block_processed_total", "Total number of blocks processed")
-        .unwrap()
+    try_create_int_counter("unc_block_processed_total", "Total number of blocks processed").unwrap()
 });
 pub static BLOCK_PROCESSING_TIME: Lazy<Histogram> = Lazy::new(|| {
     try_create_histogram_with_buckets(

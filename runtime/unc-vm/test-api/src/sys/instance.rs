@@ -3,10 +3,10 @@ use super::exports::ExportError;
 use super::externals::WasmTypeList;
 use super::module::Module;
 use super::native::NativeFunc;
-use unc_vm_engine::{LinkError, RuntimeError};
-use unc_vm_vm::{Export, InstanceHandle, Resolver};
 use std::sync::{Arc, Mutex};
 use thiserror::Error;
+use unc_vm_engine::{LinkError, RuntimeError};
+use unc_vm_vm::{Export, InstanceHandle, Resolver};
 
 pub use unc_vm_types::InstanceConfig;
 

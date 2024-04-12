@@ -1,10 +1,10 @@
 use actix::System;
 use futures::{future, FutureExt};
+use std::sync::Arc;
+use std::time::Duration;
 use unc_chain::test_utils::ValidatorSchedule;
 use unc_primitives::merkle::PartialMerkleTree;
 use unc_primitives::test_utils::create_test_signer;
-use std::sync::Arc;
-use std::time::Duration;
 
 use crate::adapter::{BlockResponse, ProcessTxRequest, ProcessTxResponse, StateRequestHeader};
 use crate::test_utils::{setup_mock_all_validators, setup_no_network, setup_only_view};
@@ -22,6 +22,7 @@ use unc_network::types::{
 };
 
 use chrono::Utc;
+use num_rational::Ratio;
 use unc_o11y::testonly::init_test_logger;
 use unc_o11y::WithSpanContextExt;
 use unc_primitives::block::{Block, BlockHeader};
@@ -30,7 +31,6 @@ use unc_primitives::types::{BlockId, BlockReference, EpochId};
 use unc_primitives::utils::to_timestamp;
 use unc_primitives::version::PROTOCOL_VERSION;
 use unc_primitives::views::{QueryRequest, QueryResponseKind};
-use num_rational::Ratio;
 
 /// Query account from view client
 #[test]

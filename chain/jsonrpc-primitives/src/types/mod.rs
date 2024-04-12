@@ -1,3 +1,4 @@
+pub mod all_miners;
 pub mod blocks;
 pub mod changes;
 pub mod chunks;
@@ -8,6 +9,7 @@ pub mod gas_price;
 pub mod light_client;
 pub mod maintenance;
 pub mod network_info;
+pub mod provider;
 pub mod query;
 pub mod receipts;
 pub mod sandbox;
@@ -15,5 +17,3 @@ pub mod split_storage;
 pub mod status;
 pub mod transactions;
 pub mod validator;
-pub mod provider;
-pub mod all_miners;

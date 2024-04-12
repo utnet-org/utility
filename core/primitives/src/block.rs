@@ -19,11 +19,11 @@ use crate::validator_signer::{EmptyValidatorSigner, ValidatorSigner};
 use crate::version::{ProtocolVersion, SHARD_CHUNK_HEADER_UPGRADE_VERSION};
 use borsh::{BorshDeserialize, BorshSerialize};
 use chrono::{DateTime, Utc};
-use unc_crypto::Signature;
-use unc_primitives_core::types::ShardId;
 use primitive_types::U256;
 use std::ops::Index;
 use std::sync::Arc;
+use unc_crypto::Signature;
+use unc_primitives_core::types::ShardId;
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq, Default)]
 pub struct GenesisId {

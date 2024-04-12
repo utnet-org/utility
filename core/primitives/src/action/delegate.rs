@@ -7,12 +7,12 @@ pub use self::private_non_delegate_action::NonDelegateAction;
 use super::Action;
 use crate::signable_message::{SignableMessage, SignableMessageType};
 use borsh::{BorshDeserialize, BorshSerialize};
+use serde::{Deserialize, Serialize};
+use std::io::{Error, ErrorKind, Read};
 use unc_crypto::{PublicKey, Signature};
 use unc_primitives_core::hash::{hash, CryptoHash};
 use unc_primitives_core::types::BlockHeight;
 use unc_primitives_core::types::{AccountId, Nonce};
-use serde::{Deserialize, Serialize};
-use std::io::{Error, ErrorKind, Read};
 
 /// This is an index number of Action::Delegate in Action enumeration
 const ACTION_DELEGATE_NUMBER: u8 = 8;

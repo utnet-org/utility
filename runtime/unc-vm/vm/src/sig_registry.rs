@@ -4,9 +4,9 @@
 //! Implement a registry of function signatures, for fast indirect call
 //! signature checking.
 
-use unc_vm_types::FunctionType;
 use std::collections::{hash_map, HashMap};
 use std::convert::TryFrom;
+use unc_vm_types::FunctionType;
 
 /// An index into the shared signature registry, usable for checking signatures
 /// at indirect calls.

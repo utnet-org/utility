@@ -11,12 +11,12 @@ use crate::network_protocol::{
 use crate::network_protocol::{RoutedMessage, RoutedMessageV2};
 use crate::types::StateResponseInfo;
 use borsh::BorshDeserialize as _;
+use protobuf::MessageField as MF;
+use std::sync::Arc;
 use unc_async::time::error::ComponentRange;
 use unc_primitives::block::{Block, BlockHeader};
 use unc_primitives::challenge::Challenge;
 use unc_primitives::transaction::SignedTransaction;
-use protobuf::MessageField as MF;
-use std::sync::Arc;
 
 #[derive(thiserror::Error, Debug)]
 pub enum ParseRoutingTableUpdateError {

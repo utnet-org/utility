@@ -1,13 +1,13 @@
 //! Linking for Universal-compiled code.
 
+use std::collections::HashMap;
+use std::ptr::{read_unaligned, write_unaligned};
 use unc_vm_compiler::{
     JumpTable, Relocation, RelocationKind, RelocationTarget, SectionIndex, TrampolinesSection,
 };
 use unc_vm_types::entity::PrimaryMap;
 use unc_vm_types::LocalFunctionIndex;
 use unc_vm_vm::{SectionBodyPtr, VMLocalFunction};
-use std::collections::HashMap;
-use std::ptr::{read_unaligned, write_unaligned};
 
 /// Add a new trampoline address, given the base adress of the Section. Return the address of the jump
 /// The trampoline itself still have to be writen

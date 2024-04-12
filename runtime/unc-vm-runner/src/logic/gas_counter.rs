@@ -1,10 +1,10 @@
 use super::errors::{HostError, VMLogicError};
 use super::TrieNodesCount;
 use crate::ProfileDataV3;
+use std::collections::HashMap;
 use unc_parameters::ExtCosts::{read_cached_trie_node, touching_trie_node};
 use unc_parameters::{ActionCosts, ExtCosts, ExtCostsConfig};
 use unc_primitives_core::types::Gas;
-use std::collections::HashMap;
 
 #[inline]
 pub fn with_ext_cost_counter(f: impl FnOnce(&mut HashMap<ExtCosts, u64>)) {

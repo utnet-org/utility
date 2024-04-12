@@ -1,3 +1,5 @@
+use framework::config::GenesisExt;
+use framework::test_utils::TestEnvNightshadeSetupExt;
 use unc_chain::{ChainGenesis, Provenance};
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::TestEnv;
@@ -10,8 +12,6 @@ use unc_primitives::transaction::{
     Action, DeployContractAction, FunctionCallAction, SignedTransaction,
 };
 use unc_primitives::types::{AccountId, BlockHeight, Nonce};
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
 
 fn test_setup() -> (TestEnv, InMemorySigner) {
     let epoch_length = 5;

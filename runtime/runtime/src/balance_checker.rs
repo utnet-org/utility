@@ -4,14 +4,16 @@ use crate::config::{
 };
 use crate::safe_add_balance_apply;
 use crate::{ApplyStats, DelayedReceiptIndices, ValidatorAccountsUpdate};
+use std::collections::HashSet;
 use unc_parameters::{ActionCosts, RuntimeConfig};
-use unc_primitives::errors::{BalanceMismatchError, IntegerOverflowError, RuntimeError, StorageError};
+use unc_primitives::errors::{
+    BalanceMismatchError, IntegerOverflowError, RuntimeError, StorageError,
+};
 use unc_primitives::receipt::{Receipt, ReceiptEnum};
 use unc_primitives::transaction::SignedTransaction;
 use unc_primitives::trie_key::TrieKey;
 use unc_primitives::types::{AccountId, Balance};
 use unc_store::{get, get_account, get_postponed_receipt, TrieAccess, TrieUpdate};
-use std::collections::HashSet;
 
 /// Returns delayed receipts with given range of indices.
 fn get_delayed_receipts(
@@ -134,24 +136,24 @@ pub(crate) fn check_balance(
         .chain(incoming_receipts.iter().map(|r| r.receiver_id.clone()))
         .chain(processed_delayed_receipts.iter().map(|r| r.receiver_id.clone()))
         .collect();
-    let incoming_validator_rewards =
-        if let Some(validator_accounts_update) = validator_accounts_update {
+    let incoming_validator_rewards = if let Some(validator_accounts_update) =
+        validator_accounts_update
+    {
+        all_accounts_ids.extend(validator_accounts_update.pledge_info.keys().cloned());
+        all_accounts_ids.extend(validator_accounts_update.validator_rewards.keys().cloned());
 
-            all_accounts_ids.extend(validator_accounts_update.pledge_info.keys().cloned());
-            all_accounts_ids.extend(validator_accounts_update.validator_rewards.keys().cloned());
-
-            all_accounts_ids.extend(validator_accounts_update.last_pledge_proposals.keys().cloned());
-            all_accounts_ids.extend(validator_accounts_update.slashing_info.keys().cloned());
-            if let Some(account_id) = &validator_accounts_update.protocol_treasury_account_id {
-                all_accounts_ids.insert(account_id.clone());
-            }
-            validator_accounts_update
-                .validator_rewards
-                .values()
-                .try_fold(0u128, |res, balance| safe_add_balance(res, *balance))?
-        } else {
-            0
-        };
+        all_accounts_ids.extend(validator_accounts_update.last_pledge_proposals.keys().cloned());
+        all_accounts_ids.extend(validator_accounts_update.slashing_info.keys().cloned());
+        if let Some(account_id) = &validator_accounts_update.protocol_treasury_account_id {
+            all_accounts_ids.insert(account_id.clone());
+        }
+        validator_accounts_update
+            .validator_rewards
+            .values()
+            .try_fold(0u128, |res, balance| safe_add_balance(res, *balance))?
+    } else {
+        0
+    };
 
     let initial_accounts_balance = total_accounts_balance(initial_state, &all_accounts_ids)?;
     let final_accounts_balance = total_accounts_balance(final_state, &all_accounts_ids)?;
@@ -241,6 +243,7 @@ pub(crate) fn check_balance(
 mod tests {
     use super::*;
     use crate::ApplyStats;
+    use testlib::runtime_utils::{alice_account, bob_account};
     use unc_crypto::{InMemorySigner, KeyType};
     use unc_primitives::hash::{hash, CryptoHash};
     use unc_primitives::receipt::ActionReceipt;
@@ -249,7 +252,6 @@ mod tests {
     use unc_primitives::types::{MerkleHash, StateChangeCause};
     use unc_store::test_utils::TestTriesBuilder;
     use unc_store::{set_account, Trie};
-    use testlib::runtime_utils::{alice_account, bob_account};
 
     use crate::unc_primitives::shard_layout::ShardUId;
     use assert_matches::assert_matches;

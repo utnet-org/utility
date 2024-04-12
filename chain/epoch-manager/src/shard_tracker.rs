@@ -12,9 +12,7 @@ pub struct ShardTracker {
 
 impl ShardTracker {
     pub fn new(epoch_manager: Arc<dyn EpochManagerAdapter>) -> Self {
-        ShardTracker {
-            epoch_manager,
-        }
+        ShardTracker { epoch_manager }
     }
 
     pub fn new_empty(epoch_manager: Arc<dyn EpochManagerAdapter>) -> Self {
@@ -100,20 +98,20 @@ mod tests {
     use super::ShardTracker;
     use crate::test_utils::hash_range;
     use crate::{EpochManager, EpochManagerAdapter, EpochManagerHandle, RewardCalculator};
+    use num_rational::Ratio;
+    use std::collections::HashSet;
+    use std::sync::Arc;
     use unc_crypto::{KeyType, PublicKey};
     use unc_primitives::epoch_manager::block_info::BlockInfo;
     use unc_primitives::epoch_manager::{AllEpochConfig, EpochConfig};
     use unc_primitives::hash::CryptoHash;
     use unc_primitives::shard_layout::ShardLayout;
     use unc_primitives::types::validator_power::ValidatorPower;
+    use unc_primitives::types::validator_stake::ValidatorPledge;
     use unc_primitives::types::{BlockHeight, EpochId, NumShards, ProtocolVersion, ShardId};
     use unc_primitives::version::ProtocolFeature::SimpleNightshade;
     use unc_primitives::version::PROTOCOL_VERSION;
     use unc_store::test_utils::create_test_store;
-    use num_rational::Ratio;
-    use std::collections::HashSet;
-    use std::sync::Arc;
-    use unc_primitives::types::validator_stake::ValidatorPledge;
 
     const DEFAULT_TOTAL_SUPPLY: u128 = 1_000_000_000_000;
 

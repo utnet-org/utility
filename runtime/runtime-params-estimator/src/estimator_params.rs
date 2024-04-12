@@ -2,8 +2,8 @@
 //! These parameters have been estimated manually and are now hard-coded for a more deterministic estimation of runtime parameters.
 //! This module contains the hard-coded constants as well as the code to manually re-estimate them.
 
-use unc_primitives::{hash::CryptoHash, types::Gas};
 use num_rational::Ratio;
+use unc_primitives::{hash::CryptoHash, types::Gas};
 
 use crate::{config::GasMetric, gas_cost::GasCost};
 

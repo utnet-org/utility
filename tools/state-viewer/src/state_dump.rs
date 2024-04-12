@@ -1,14 +1,4 @@
 use chrono::Utc;
-use unc_chain::types::RuntimeAdapter;
-use unc_chain_configs::{Genesis, GenesisChangeConfig, GenesisConfig};
-use unc_crypto::PublicKey;
-use unc_epoch_manager::EpochManagerAdapter;
-use unc_epoch_manager::EpochManagerHandle;
-use unc_primitives::account::id::AccountId;
-use unc_primitives::block::BlockHeader;
-use unc_primitives::state_record::state_record_to_account_id;
-use unc_primitives::state_record::StateRecord;
-use unc_primitives::types::{AccountInfo, Balance, StateRoot};
 use framework::config::UncConfig;
 use framework::NightshadeRuntime;
 use redis::Commands;
@@ -20,6 +10,16 @@ use std::fs;
 use std::fs::File;
 use std::path::Path;
 use std::sync::Arc;
+use unc_chain::types::RuntimeAdapter;
+use unc_chain_configs::{Genesis, GenesisChangeConfig, GenesisConfig};
+use unc_crypto::PublicKey;
+use unc_epoch_manager::EpochManagerAdapter;
+use unc_epoch_manager::EpochManagerHandle;
+use unc_primitives::account::id::AccountId;
+use unc_primitives::block::BlockHeader;
+use unc_primitives::state_record::state_record_to_account_id;
+use unc_primitives::state_record::StateRecord;
+use unc_primitives::types::{AccountInfo, Balance, StateRoot};
 use unc_primitives_core::types::Power;
 
 /// Returns a `UncConfig` with genesis records taken from the current state.
@@ -62,7 +62,7 @@ pub fn state_dump(
     genesis_config.genesis_time = Utc::now();
     genesis_config.validators = validators
         .iter()
-        .map(|(account_id, (public_key, power,pledge))| AccountInfo {
+        .map(|(account_id, (public_key, power, pledge))| AccountInfo {
             account_id: account_id.clone(),
             public_key: public_key.clone(),
             power: *power,
@@ -245,7 +245,7 @@ fn iterate_over_records(
                 }
                 if let StateRecord::Account { account_id, account } = &mut sr {
                     if account.pledging() > 0 {
-                        let pledge = *validators.get(account_id).map(|(_,_, s)| s).unwrap_or(&0);
+                        let pledge = *validators.get(account_id).map(|(_, _, s)| s).unwrap_or(&0);
                         if account.pledging() > pledge {
                             account.set_amount(account.amount() + account.pledging() - pledge);
                         }
@@ -295,6 +295,11 @@ mod test {
     use std::path::Path;
     use std::sync::Arc;
 
+    use framework::config::GenesisExt;
+    use framework::config::TESTING_INIT_PLEDGE;
+    use framework::config::{Config, UncConfig};
+    use framework::test_utils::TestEnvNightshadeSetupExt;
+    use framework::NightshadeRuntime;
     use unc_chain::{ChainGenesis, ChainStoreAccess, Provenance};
     use unc_chain_configs::genesis_validate::validate_genesis;
     use unc_chain_configs::{Genesis, GenesisChangeConfig};
@@ -312,11 +317,6 @@ mod test {
     use unc_store::genesis::initialize_genesis_state;
     use unc_store::test_utils::create_test_store;
     use unc_store::Store;
-    use framework::config::GenesisExt;
-    use framework::config::TESTING_INIT_PLEDGE;
-    use framework::config::{Config, UncConfig};
-    use framework::test_utils::TestEnvNightshadeSetupExt;
-    use framework::NightshadeRuntime;
 
     use crate::state_dump::state_dump;
     use unc_primitives::hash::CryptoHash;

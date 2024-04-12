@@ -11,10 +11,10 @@ use crate::testonly::stream::Stream;
 use crate::types::{PartialEncodedChunkRequestMsg, PartialEncodedChunkResponseMsg};
 use anyhow::Context as _;
 use assert_matches::assert_matches;
+use std::sync::Arc;
 use unc_async::time;
 use unc_o11y::testonly::init_test_logger;
 use unc_primitives::version::{PEER_MIN_ALLOWED_PROTOCOL_VERSION, PROTOCOL_VERSION};
-use std::sync::Arc;
 
 async fn test_peer_communication(
     outbound_encoding: Option<Encoding>,

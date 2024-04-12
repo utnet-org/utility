@@ -3,15 +3,17 @@ use crate::hash::{hash, CryptoHash};
 use crate::merkle::combine_hash;
 use crate::network::PeerId;
 use crate::types::validator_power::{ValidatorPower, ValidatorPowerIter, ValidatorPowerV1};
-use crate::types::{AccountId, Balance, BlockHeight, EpochId, MerkleHash, NumBlocks, ValidatorPledgeV1};
+use crate::types::validator_stake::{ValidatorPledge, ValidatorPledgeIter};
+use crate::types::{
+    AccountId, Balance, BlockHeight, EpochId, MerkleHash, NumBlocks, ValidatorPledgeV1,
+};
 use crate::utils::{from_timestamp, to_timestamp};
 use crate::validator_signer::ValidatorSigner;
 use crate::version::{get_protocol_version, ProtocolVersion, PROTOCOL_VERSION};
 use borsh::{BorshDeserialize, BorshSerialize};
 use chrono::{DateTime, Utc};
-use unc_crypto::{KeyType, PublicKey, Signature};
 use std::sync::Arc;
-use crate::types::validator_stake::{ValidatorPledge, ValidatorPledgeIter};
+use unc_crypto::{KeyType, PublicKey, Signature};
 
 #[derive(BorshSerialize, BorshDeserialize, serde::Serialize, Debug, Clone, Eq, PartialEq)]
 pub struct BlockHeaderInnerLite {

@@ -1,8 +1,13 @@
 use crate::genesis_helpers::genesis_block;
-use crate::unc_utils::{add_blocks, setup_configs};
 use crate::test_helpers::heavy_test;
+use crate::unc_utils::{add_blocks, setup_configs};
 use actix::{Actor, System};
+use framework::config::{GenesisExt, TESTING_INIT_PLEDGE};
+use framework::{load_test_config, start_with_config};
 use futures::{future, FutureExt};
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::{Arc, RwLock};
+use std::time::Duration;
 use unc_actix_test_utils::run_actix;
 use unc_chain_configs::Genesis;
 use unc_client::{GetBlock, ProcessTxRequest};
@@ -13,11 +18,6 @@ use unc_o11y::testonly::init_integration_logger;
 use unc_o11y::WithSpanContextExt;
 use unc_primitives::test_utils::create_test_signer;
 use unc_primitives::transaction::SignedTransaction;
-use framework::config::{GenesisExt, TESTING_INIT_PLEDGE};
-use framework::{load_test_config, start_with_config};
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::{Arc, RwLock};
-use std::time::Duration;
 
 /// One client is in front, another must sync to it before they can produce blocks.
 #[test]

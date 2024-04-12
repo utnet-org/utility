@@ -2,11 +2,11 @@ use self::arena::Arena;
 use self::metrics::MEM_TRIE_NUM_ROOTS;
 use self::node::{MemTrieNodeId, MemTrieNodePtr};
 use self::updating::MemTrieUpdate;
+use std::collections::{BTreeMap, HashMap};
 use unc_primitives::errors::StorageError;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::shard_layout::ShardUId;
 use unc_primitives::types::{BlockHeight, StateRoot};
-use std::collections::{BTreeMap, HashMap};
 
 mod arena;
 mod construction;
@@ -173,12 +173,12 @@ mod tests {
     use super::node::{InputMemTrieNode, MemTrieNodeId};
     use super::MemTries;
     use crate::NibbleSlice;
+    use rand::seq::SliceRandom;
+    use rand::Rng;
     use unc_primitives::hash::CryptoHash;
     use unc_primitives::shard_layout::ShardUId;
     use unc_primitives::state::FlatStateValue;
     use unc_primitives::types::BlockHeight;
-    use rand::seq::SliceRandom;
-    use rand::Rng;
 
     #[test]
     fn test_construct_empty_trie() {

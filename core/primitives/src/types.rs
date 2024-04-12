@@ -7,14 +7,14 @@ use crate::receipt::Receipt;
 use crate::serialize::dec_format;
 use crate::trie_key::TrieKey;
 use borsh::{BorshDeserialize, BorshSerialize};
-use unc_crypto::PublicKey;
-/// Reexport primitive types
-pub use unc_primitives_core::types::*;
-pub use unc_vm_runner::logic::TrieNodesCount;
 use once_cell::sync::Lazy;
 use serde_with::base64::Base64;
 use serde_with::serde_as;
 use std::sync::Arc;
+use unc_crypto::PublicKey;
+/// Reexport primitive types
+pub use unc_primitives_core::types::*;
+pub use unc_vm_runner::logic::TrieNodesCount;
 
 /// Hash used by to store state root.
 pub type StateRoot = CryptoHash;
@@ -257,16 +257,47 @@ pub enum StateChangesRequest {
 
 #[derive(Debug)]
 pub enum StateChangeValue {
-    AccountUpdate { account_id: AccountId, account: Account },
-    AccountDeletion { account_id: AccountId },
-    AccessKeyUpdate { account_id: AccountId, public_key: PublicKey, access_key: AccessKey },
-    AccessKeyDeletion { account_id: AccountId, public_key: PublicKey },
-    DataUpdate { account_id: AccountId, key: StoreKey, value: StoreValue },
-    DataDeletion { account_id: AccountId, key: StoreKey },
-    ContractCodeUpdate { account_id: AccountId, code: Vec<u8> },
-    ContractCodeDeletion { account_id: AccountId },
-    RsaKeyUpdate { account_id: AccountId, public_key: PublicKey, rsa_key: RegisterRsa2048KeysAction },
-    RsaKeyDeletion { account_id: AccountId, public_key: PublicKey },
+    AccountUpdate {
+        account_id: AccountId,
+        account: Account,
+    },
+    AccountDeletion {
+        account_id: AccountId,
+    },
+    AccessKeyUpdate {
+        account_id: AccountId,
+        public_key: PublicKey,
+        access_key: AccessKey,
+    },
+    AccessKeyDeletion {
+        account_id: AccountId,
+        public_key: PublicKey,
+    },
+    DataUpdate {
+        account_id: AccountId,
+        key: StoreKey,
+        value: StoreValue,
+    },
+    DataDeletion {
+        account_id: AccountId,
+        key: StoreKey,
+    },
+    ContractCodeUpdate {
+        account_id: AccountId,
+        code: Vec<u8>,
+    },
+    ContractCodeDeletion {
+        account_id: AccountId,
+    },
+    RsaKeyUpdate {
+        account_id: AccountId,
+        public_key: PublicKey,
+        rsa_key: RegisterRsa2048KeysAction,
+    },
+    RsaKeyDeletion {
+        account_id: AccountId,
+        public_key: PublicKey,
+    },
 }
 
 impl StateChangeValue {
@@ -545,15 +576,17 @@ pub struct ApprovalPledge {
 
 pub mod validator_power_and_pledge {
     use borsh::{BorshDeserialize, BorshSerialize};
+    use serde::Serialize;
     use unc_crypto::PublicKey;
     use unc_primitives_core::types::{AccountId, Balance, Power};
-    use serde::Serialize;
 
     use super::ApprovalPledge;
     pub use super::ValidatorPowerAndPledgeV1;
 
     /// Stores validator and its power with pledge.
-    #[derive(BorshSerialize, BorshDeserialize, Serialize, Debug, Clone, PartialEq, Eq, PartialOrd)]
+    #[derive(
+        BorshSerialize, BorshDeserialize, Serialize, Debug, Clone, PartialEq, Eq, PartialOrd,
+    )]
     #[serde(tag = "validator_power_and_pledge_struct_version")]
     pub enum ValidatorPowerAndPledge {
         V1(ValidatorPowerAndPledgeV1),
@@ -641,7 +674,6 @@ pub mod validator_power_and_pledge {
                 Self::V1(v1) => v1,
             }
         }
-
 
         #[inline]
         pub fn account_and_pledge(self) -> (AccountId, Balance) {
@@ -766,14 +798,13 @@ pub mod validator_power_and_pledge {
             self.pledge() % pledge_per_mandate
         }
     }
-
 }
 
 pub mod validator_stake {
     use borsh::{BorshDeserialize, BorshSerialize};
+    use serde::Serialize;
     use unc_crypto::PublicKey;
     use unc_primitives_core::types::{AccountId, Balance};
-    use serde::Serialize;
 
     pub use super::ValidatorPledgeV1;
 
@@ -825,7 +856,9 @@ pub mod validator_stake {
                     ValidatorPledgeIterSource::V1(collection) => {
                         ValidatorPledge::V1(collection[self.curr_index].clone())
                     }
-                    ValidatorPledgeIterSource::V2(collection) => collection[self.curr_index].clone(),
+                    ValidatorPledgeIterSource::V2(collection) => {
+                        collection[self.curr_index].clone()
+                    }
                 };
                 self.curr_index += 1;
                 Some(item)
@@ -911,8 +944,6 @@ pub mod validator_stake {
             }
         }
     }
-
-
 }
 #[derive(BorshSerialize, BorshDeserialize, serde::Serialize, Debug, Clone, PartialEq, Eq)]
 pub struct ApprovalPower {
@@ -928,9 +959,9 @@ pub struct ApprovalPower {
 pub mod validator_power {
     use crate::types::ApprovalPower;
     use borsh::{BorshDeserialize, BorshSerialize};
+    use serde::Serialize;
     use unc_crypto::PublicKey;
     use unc_primitives_core::types::{AccountId, Power};
-    use serde::Serialize;
 
     pub use super::ValidatorPowerV1;
 
@@ -999,7 +1030,7 @@ pub mod validator_power {
 
     impl ValidatorPower {
         pub fn new_v1(account_id: AccountId, public_key: PublicKey, power: Power) -> Self {
-            Self::V1(ValidatorPowerV1 { account_id, public_key, power})
+            Self::V1(ValidatorPowerV1 { account_id, public_key, power })
         }
 
         pub fn new(account_id: AccountId, public_key: PublicKey, power: Power) -> Self {
@@ -1076,12 +1107,12 @@ pub mod validator_power {
                 power_next_epoch: if is_next_epoch { self.power() } else { 0 },
             }
         }
-
-
     }
 }
 /// Stores validator and its power with pledge.
-#[derive(BorshSerialize, BorshDeserialize, serde::Serialize, Debug, Clone, PartialEq, Eq, PartialOrd)]
+#[derive(
+    BorshSerialize, BorshDeserialize, serde::Serialize, Debug, Clone, PartialEq, Eq, PartialOrd,
+)]
 pub struct ValidatorPowerAndPledgeV1 {
     /// Account that has power.
     pub account_id: AccountId,
@@ -1158,7 +1189,7 @@ pub mod chunk_extra {
 
     impl ChunkExtra {
         pub fn new_with_only_state_root(state_root: &StateRoot) -> Self {
-            Self::new(state_root, CryptoHash::default(), vec![], vec![], 0, 0,0)
+            Self::new(state_root, CryptoHash::default(), vec![], vec![], 0, 0, 0)
         }
 
         pub fn new(

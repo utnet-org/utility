@@ -1,11 +1,11 @@
-use unc_primitives::state_record::StateRecord;
-use unc_primitives_core::account::id::AccountType;
-use unc_primitives_core::account::{AccessKey, AccessKeyPermission};
 use serde::ser::{SerializeSeq, Serializer};
 use std::collections::HashSet;
 use std::fs::File;
 use std::io::{BufReader, BufWriter};
 use std::path::Path;
+use unc_primitives::state_record::StateRecord;
+use unc_primitives_core::account::id::AccountType;
+use unc_primitives_core::account::{AccessKey, AccessKeyPermission};
 
 /// Reads records, makes changes to them and writes them to a new file.
 /// `records_file_in` must be different from `records_file_out`.

@@ -1,9 +1,9 @@
 use crate::store;
 use lru::LruCache;
-use unc_primitives::network::{AnnounceAccount, PeerId};
-use unc_primitives::types::AccountId;
 use parking_lot::Mutex;
 use std::collections::HashMap;
+use unc_primitives::network::{AnnounceAccount, PeerId};
+use unc_primitives::types::AccountId;
 
 #[cfg(test)]
 mod tests;

@@ -4,6 +4,7 @@ use std::time::{Duration, Instant};
 
 use crate::doomslug::trackable::TrackableBlockHeightValue;
 use crate::metrics;
+use tracing::{debug, debug_span, field, info};
 use unc_client_primitives::debug::{ApprovalAtHeightStatus, ApprovalHistoryEntry};
 use unc_crypto::Signature;
 use unc_primitives::block::{Approval, ApprovalInner};
@@ -11,7 +12,6 @@ use unc_primitives::hash::CryptoHash;
 use unc_primitives::static_clock::StaticClock;
 use unc_primitives::types::{AccountId, ApprovalPledge, Balance, BlockHeight, BlockHeightDelta};
 use unc_primitives::validator_signer::ValidatorSigner;
-use tracing::{debug, debug_span, field, info};
 
 /// Have that many iterations in the timer instead of `loop` to prevent potential bugs from blocking
 /// the node
@@ -75,9 +75,9 @@ struct DoomslugApprovalsTracker {
 }
 
 mod trackable {
+    use once_cell::sync::Lazy;
     use unc_o11y::metrics::IntGauge;
     use unc_primitives::types::BlockHeight;
-    use once_cell::sync::Lazy;
 
     pub struct TrackableBlockHeightValue(BlockHeight, &'static Lazy<IntGauge>);
 
@@ -166,8 +166,10 @@ impl DoomslugApprovalsTracker {
         account_id_to_pledges: HashMap<AccountId, (Balance, Balance)>,
         threshold_mode: DoomslugThresholdMode,
     ) -> Self {
-        let total_pledge_this_epoch = account_id_to_pledges.values().map(|(x, _)| x).sum::<Balance>();
-        let total_pledge_next_epoch = account_id_to_pledges.values().map(|(_, x)| x).sum::<Balance>();
+        let total_pledge_this_epoch =
+            account_id_to_pledges.values().map(|(x, _)| x).sum::<Balance>();
+        let total_pledge_next_epoch =
+            account_id_to_pledges.values().map(|(_, x)| x).sum::<Balance>();
 
         DoomslugApprovalsTracker {
             witness: Default::default(),
@@ -203,7 +205,8 @@ impl DoomslugApprovalsTracker {
         });
 
         if increment_approved_pledge {
-            let pledges = self.account_id_to_pledges.get(&approval.account_id).map_or((0, 0), |x| *x);
+            let pledges =
+                self.account_id_to_pledges.get(&approval.account_id).map_or((0, 0), |x| *x);
             self.approved_pledge_this_epoch += pledges.0;
             self.approved_pledge_next_epoch += pledges.1;
         }

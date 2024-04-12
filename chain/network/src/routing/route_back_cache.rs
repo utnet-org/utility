@@ -1,7 +1,7 @@
+use std::collections::{btree_map, BTreeMap, BTreeSet, HashMap};
 use unc_async::time;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::network::PeerId;
-use std::collections::{btree_map, BTreeMap, BTreeSet, HashMap};
 
 /// default value for `capacity`
 const DEFAULT_CAPACITY: usize = 100_000;

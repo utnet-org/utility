@@ -16,7 +16,7 @@ use crate::num_rational::Ratio;
 use crate::sharding::{ShardChunkHeader, ShardChunkHeaderV3};
 use crate::transaction::{
     Action, AddKeyAction, CreateAccountAction, DeleteAccountAction, DeleteKeyAction,
-    DeployContractAction, FunctionCallAction, SignedTransaction, PledgeAction, Transaction,
+    DeployContractAction, FunctionCallAction, PledgeAction, SignedTransaction, Transaction,
     TransferAction,
 };
 use crate::types::{AccountId, Balance, EpochId, EpochInfoProvider, Gas, Nonce};
@@ -490,11 +490,11 @@ impl Block {
 
 #[derive(Default)]
 pub struct MockEpochInfoProvider {
-    pub validators: HashMap<AccountId, (Power,Balance)>,
+    pub validators: HashMap<AccountId, (Power, Balance)>,
 }
 
 impl MockEpochInfoProvider {
-    pub fn new(validators: impl Iterator<Item = (AccountId, (Power,Balance))>) -> Self {
+    pub fn new(validators: impl Iterator<Item = (AccountId, (Power, Balance))>) -> Self {
         MockEpochInfoProvider { validators: validators.collect() }
     }
 }
@@ -506,7 +506,6 @@ impl EpochInfoProvider for MockEpochInfoProvider {
         _last_block_hash: &CryptoHash,
         account_id: &AccountId,
     ) -> Result<Option<Power>, EpochError> {
-
         if let Some((power, _balance)) = self.validators.get(account_id) {
             Ok(Some(power).cloned())
         } else {
@@ -519,7 +518,6 @@ impl EpochInfoProvider for MockEpochInfoProvider {
         _epoch_id: &EpochId,
         _last_block_hash: &CryptoHash,
     ) -> Result<Power, EpochError> {
-
         let total_power: Power = self.validators.values().map(|(power, _)| power).sum();
         Ok(total_power)
     }
@@ -529,11 +527,11 @@ impl EpochInfoProvider for MockEpochInfoProvider {
     }
 
     fn validator_stake(
-            &self,
-            _epoch_id: &EpochId,
-            _last_block_hash: &CryptoHash,
-            account_id: &AccountId,
-        ) -> Result<Option<Balance>, EpochError> {
+        &self,
+        _epoch_id: &EpochId,
+        _last_block_hash: &CryptoHash,
+        account_id: &AccountId,
+    ) -> Result<Option<Balance>, EpochError> {
         if let Some((_power, balance)) = self.validators.get(account_id) {
             Ok(Some(balance).cloned())
         } else {

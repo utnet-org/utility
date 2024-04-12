@@ -8,9 +8,9 @@ use std::{fmt, io};
 
 use borsh::{BorshDeserialize, BorshSerialize};
 use metadata::{DbKind, DbVersion, KIND_KEY, VERSION_KEY};
-use unc_primitives::transaction::RegisterRsa2048KeysAction;
 use once_cell::sync::Lazy;
 use strum;
+use unc_primitives::transaction::RegisterRsa2048KeysAction;
 
 pub use columns::DBCol;
 pub use db::{
@@ -1068,8 +1068,8 @@ mod tests {
     /// Check StoreCompiledContractCache implementation.
     #[test]
     fn test_store_compiled_contract_cache() {
-        use unc_vm_runner::logic::{CompiledContract, CompiledContractCache};
         use std::str::FromStr;
+        use unc_vm_runner::logic::{CompiledContract, CompiledContractCache};
 
         let store = crate::test_utils::create_test_store();
         let cache = super::StoreCompiledContractCache::new(&store);

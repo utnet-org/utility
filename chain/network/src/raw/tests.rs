@@ -3,12 +3,12 @@ use crate::raw;
 use crate::tcp;
 use crate::testonly;
 use crate::types::PeerInfo;
+use std::sync::Arc;
 use unc_async::time;
 use unc_crypto::{KeyType, SecretKey};
 use unc_o11y::testonly::init_test_logger;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::network::PeerId;
-use std::sync::Arc;
 
 #[tokio::test]
 async fn test_raw_conn_pings() {

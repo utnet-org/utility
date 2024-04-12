@@ -2,12 +2,12 @@ pub use self::iterator::TrieUpdateIterator;
 use super::{OptimizedValueRef, Trie};
 use crate::trie::{KeyLookupMode, TrieChanges};
 use crate::StorageError;
+use std::collections::BTreeMap;
 use unc_primitives::trie_key::TrieKey;
 use unc_primitives::types::{
     RawStateChange, RawStateChanges, RawStateChangesWithTrieKey, StateChangeCause, StateRoot,
     TrieCacheMode,
 };
-use std::collections::BTreeMap;
 
 mod iterator;
 

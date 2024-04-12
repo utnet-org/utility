@@ -104,9 +104,7 @@ impl<'a> unc_store::StoreMigrator for Migrator<'a> {
         match version {
             0..=31 => unreachable!(),
             32 => unc_store::migrations::migrate_32_to_33(store),
-            33 => {
-                unc_store::migrations::migrate_33_to_34(store, self.config.client_config.archive)
-            }
+            33 => unc_store::migrations::migrate_33_to_34(store, self.config.client_config.archive),
             34 => unc_store::migrations::migrate_34_to_35(store),
             35 => {
                 tracing::info!(target: "migrations", "Migrating DB version from 35 to 36. Flat storage data will be created on disk.");

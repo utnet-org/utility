@@ -2,10 +2,10 @@ use super::dependencies::{MemSlice, MemoryLike};
 use super::errors::{HostError, VMLogicError};
 use super::gas_counter::GasCounter;
 use core::mem::size_of;
-use unc_parameters::vm::LimitConfig;
-use unc_parameters::ExtCosts::*;
 use std::borrow::Cow;
 use std::collections::hash_map::Entry;
+use unc_parameters::vm::LimitConfig;
+use unc_parameters::ExtCosts::*;
 
 type Result<T> = ::std::result::Result<T, VMLogicError>;
 

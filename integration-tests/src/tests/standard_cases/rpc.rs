@@ -4,10 +4,10 @@
 use crate::node::{create_nodes_from_seeds, Node, NodeConfig, ThreadNode};
 use crate::test_helpers::heavy_test;
 use crate::tests::standard_cases::*;
-use unc_o11y::testonly::init_test_module_logger;
 use std::thread;
 use std::time::Duration;
 use testlib::runtime_utils::alice_account;
+use unc_o11y::testonly::init_test_module_logger;
 
 fn create_thread_nodes_rpc() -> Vec<ThreadNode> {
     init_test_module_logger("runtime");

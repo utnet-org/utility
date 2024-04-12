@@ -16,6 +16,7 @@ use crate::store::ChainStoreAccess;
 use crate::types::{AcceptedBlock, ChainConfig, ChainGenesis};
 use crate::DoomslugThresholdMode;
 use crate::{BlockProcessingArtifact, Provenance};
+use tracing::debug;
 use unc_chain_primitives::Error;
 use unc_epoch_manager::shard_tracker::ShardTracker;
 use unc_primitives::block::Block;
@@ -28,7 +29,6 @@ use unc_primitives::validator_signer::InMemoryValidatorSigner;
 use unc_primitives::version::PROTOCOL_VERSION;
 use unc_store::test_utils::create_test_store;
 use unc_store::DBCol;
-use tracing::debug;
 
 pub fn get_chain() -> Chain {
     get_chain_with_epoch_length_and_num_shards(10, 1)

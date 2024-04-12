@@ -1,15 +1,15 @@
 pub mod delegate;
 
 use borsh::{BorshDeserialize, BorshSerialize};
+use serde_with::base64::Base64;
+use serde_with::serde_as;
+use std::fmt;
 use unc_crypto::PublicKey;
 use unc_primitives_core::{
     account::AccessKey,
     serialize::dec_format,
     types::{AccountId, Balance, Gas},
 };
-use serde_with::base64::Base64;
-use serde_with::serde_as;
-use std::fmt;
 
 fn base64(s: &[u8]) -> String {
     use base64::Engine;
@@ -154,11 +154,7 @@ pub struct TransferAction {
 
 #[serde_as]
 #[derive(
-    BorshSerialize,
-    BorshDeserialize, 
-    serde::Serialize, 
-    serde::Deserialize, 
-    PartialEq, Eq, Clone,
+    BorshSerialize, BorshDeserialize, serde::Serialize, serde::Deserialize, PartialEq, Eq, Clone,
 )]
 pub struct RegisterRsa2048KeysAction {
     /// this only can be used by the owner of root account
@@ -183,11 +179,7 @@ impl fmt::Debug for RegisterRsa2048KeysAction {
 
 #[serde_as]
 #[derive(
-    BorshSerialize,
-    BorshDeserialize, 
-    serde::Serialize, 
-    serde::Deserialize, 
-    PartialEq, Eq, Clone,
+    BorshSerialize, BorshDeserialize, serde::Serialize, serde::Deserialize, PartialEq, Eq, Clone,
 )]
 pub struct CreateRsa2048ChallengeAction {
     /// real miner request to create rsa2048 challenge

@@ -1,7 +1,7 @@
 use borsh::{BorshDeserialize, BorshSerialize};
-use unc_primitives_core::hash::CryptoHash;
 use std::fmt;
 use types::AccountId;
+use unc_primitives_core::hash::CryptoHash;
 
 mod alt_bn128;
 mod context;
@@ -22,9 +22,9 @@ pub use dependencies::{External, MemSlice, MemoryLike, ValuePtr};
 pub use errors::{HostError, VMLogicError};
 pub use gas_counter::with_ext_cost_counter;
 pub use logic::{VMLogic, VMOutcome};
+pub use types::ReturnData;
 pub use unc_parameters::vm::{Config, ContractPrepareVersion, LimitConfig, StorageGetMode};
 pub use unc_primitives_core::types::ProtocolVersion;
-pub use types::ReturnData;
 
 #[derive(Debug, Clone, PartialEq, BorshDeserialize, BorshSerialize)]
 pub enum CompiledContract {

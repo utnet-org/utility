@@ -1,11 +1,11 @@
 use super::adapter::{SyncMessage as ClientSyncMessage, SyncShardInfo};
+use tracing::{debug, info, warn};
 use unc_async::messaging::Sender;
 use unc_network::types::{PeerManagerMessageRequest, StateSyncResponse};
 use unc_o11y::{handler_debug_span, OpenTelemetrySpanExt, WithSpanContext};
 use unc_performance_metrics_macros::perf;
 use unc_primitives::hash::CryptoHash;
 use unc_store::ShardUId;
-use tracing::{debug, info, warn};
 
 /// Message channels
 #[allow(dead_code)]

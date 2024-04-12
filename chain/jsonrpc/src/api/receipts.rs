@@ -1,10 +1,10 @@
 use super::{Params, RpcFrom, RpcRequest};
+use serde_json::Value;
 use unc_client_primitives::types::{GetReceipt, GetReceiptError};
 use unc_jsonrpc_primitives::errors::RpcParseError;
 use unc_jsonrpc_primitives::types::receipts::{
     ReceiptReference, RpcReceiptError, RpcReceiptRequest,
 };
-use serde_json::Value;
 
 impl RpcRequest for RpcReceiptRequest {
     fn parse(value: Value) -> Result<Self, RpcParseError> {

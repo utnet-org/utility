@@ -1,8 +1,8 @@
+use once_cell::sync::Lazy;
 use unc_o11y::metrics::{
     try_create_int_counter, try_create_int_counter_vec, try_create_int_gauge_vec, IntCounter,
     IntCounterVec, IntGaugeVec,
 };
-use once_cell::sync::Lazy;
 
 pub static MEM_TRIE_NUM_ROOTS: Lazy<IntGaugeVec> = Lazy::new(|| {
     try_create_int_gauge_vec(

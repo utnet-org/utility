@@ -3,10 +3,10 @@
 
 use crate::compiler::SinglepassCompiler;
 use crate::emitter_x64::Location;
-use unc_vm_compiler::{Compiler, CompilerConfig, CpuFeature, Target};
-use unc_vm_types::{Features, FunctionType, Type};
 use smallvec::SmallVec;
 use std::sync::Arc;
+use unc_vm_compiler::{Compiler, CompilerConfig, CpuFeature, Target};
+use unc_vm_types::{Features, FunctionType, Type};
 
 #[derive(Debug, Clone)]
 pub(crate) enum IntrinsicKind {

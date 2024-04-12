@@ -1,3 +1,10 @@
+use serde::{
+    ser::{
+        SerializeMap, SerializeSeq, SerializeStruct, SerializeStructVariant, SerializeTuple,
+        SerializeTupleStruct, SerializeTupleVariant,
+    },
+    Serialize, Serializer,
+};
 /// This file implements a completely new serialization format which
 /// transforms anything that implements serde::Serialize into an
 /// EntityDataValue (i.e. a generic tree of string key-value pairs).
@@ -12,13 +19,6 @@
 /// write TypeScript type definitions.
 use unc_jsonrpc_primitives::types::entity_debug::{
     EntityDataEntry, EntityDataStruct, EntityDataValue,
-};
-use serde::{
-    ser::{
-        SerializeMap, SerializeSeq, SerializeStruct, SerializeStructVariant, SerializeTuple,
-        SerializeTupleStruct, SerializeTupleVariant,
-    },
-    Serialize, Serializer,
 };
 
 /// Root data for serialization output.
@@ -489,10 +489,10 @@ where
 #[cfg(test)]
 mod tests {
     use super::serialize_entity;
+    use serde::Serialize;
     use unc_jsonrpc_primitives::types::entity_debug::{
         EntityDataEntry, EntityDataStruct, EntityDataValue,
     };
-    use serde::Serialize;
 
     fn val<T: ToString>(s: T) -> EntityDataValue {
         EntityDataValue::String(s.to_string())

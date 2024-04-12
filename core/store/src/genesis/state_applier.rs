@@ -4,6 +4,8 @@ use crate::{
     set_delayed_receipt, set_postponed_receipt, set_received_data, ShardTries, TrieUpdate,
 };
 
+use std::collections::{HashMap, HashSet};
+use std::sync::atomic;
 use unc_chain_configs::Genesis;
 use unc_crypto::PublicKey;
 use unc_parameters::StorageUsageConfig;
@@ -14,8 +16,6 @@ use unc_primitives::state_record::{state_record_to_account_id, StateRecord};
 use unc_primitives::trie_key::TrieKey;
 use unc_primitives::types::{AccountId, Balance, Power, ShardId, StateChangeCause, StateRoot};
 use unc_vm_runner::ContractCode;
-use std::collections::{HashMap, HashSet};
-use std::sync::atomic;
 
 /// Computes the expected storage per account for a given stream of StateRecord(s).
 /// For example: the storage for Contract depends on its length, we don't charge storage for receipts

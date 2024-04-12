@@ -6,6 +6,8 @@ use crate::lib::std::string::ToString;
 use crate::lib::std::{boxed::Box, string::String, vec::Vec};
 use crate::translate_module;
 use crate::{WasmError, WasmResult};
+use std::convert::{TryFrom, TryInto};
+use std::sync::Arc;
 use unc_vm_types::entity::PrimaryMap;
 use unc_vm_types::FunctionType;
 use unc_vm_types::{
@@ -14,8 +16,6 @@ use unc_vm_types::{
     LocalFunctionIndex, MemoryIndex, MemoryType, ModuleInfo, OwnedTableInitializer, SignatureIndex,
     TableIndex, TableType,
 };
-use std::convert::{TryFrom, TryInto};
-use std::sync::Arc;
 pub use wasmparser::FunctionBody as FunctionReader;
 
 /// Contains function data: bytecode and its offset in the module.

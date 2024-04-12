@@ -1,5 +1,13 @@
 use crate::tests::client::process_blocks::produce_blocks_from_height;
 use assert_matches::assert_matches;
+use framework::config::GenesisExt;
+use framework::test_utils::TestEnvNightshadeSetupExt;
+use framework::UNC_BASE;
+use rand::seq::SliceRandom;
+use rand::{thread_rng, Rng};
+use std::collections::HashSet;
+use std::sync::Arc;
+use tracing::debug;
 use unc_async::messaging::CanSend;
 use unc_chain::orphan::NUM_ORPHAN_ANCESTORS_CHECK;
 use unc_chain::{ChainGenesis, Error, Provenance};
@@ -21,14 +29,6 @@ use unc_primitives::types::{AccountId, BlockHeight};
 use unc_primitives::utils::derive_unc_account_id;
 use unc_primitives::version::{ProtocolFeature, ProtocolVersion};
 use unc_primitives::views::FinalExecutionStatus;
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
-use framework::UNC_BASE;
-use rand::seq::SliceRandom;
-use rand::{thread_rng, Rng};
-use std::collections::HashSet;
-use std::sync::Arc;
-use tracing::debug;
 
 /// Try to process tx in the next blocks, check that tx and all generated receipts succeed.
 /// Return height of the next block.
@@ -182,8 +182,7 @@ fn get_status_of_tx_hash_collision_for_unc_implicit_account(
         100,
         *block.hash(),
     );
-    let response =
-        env.clients[0].process_tx(send_money_from_unc_implicit_account_tx, false, false);
+    let response = env.clients[0].process_tx(send_money_from_unc_implicit_account_tx, false, false);
 
     // Check that sending money from UNC-implicit account with correct nonce is still valid.
     let send_money_from_unc_implicit_account_tx = SignedTransaction::send_money(

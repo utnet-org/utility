@@ -1,9 +1,9 @@
-use unc_primitives::static_clock::StaticClock;
-use unc_primitives::test_utils::create_test_signer;
 use rand::{thread_rng, Rng};
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
 use std::time::{Duration, Instant};
+use unc_primitives::static_clock::StaticClock;
+use unc_primitives::test_utils::create_test_signer;
 
 use crate::{Doomslug, DoomslugThresholdMode};
 use unc_crypto::{KeyType, SecretKey};

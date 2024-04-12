@@ -1,5 +1,5 @@
-use unc_o11y::metrics::{try_create_int_gauge_vec, IntGaugeVec};
 use once_cell::sync::Lazy;
+use unc_o11y::metrics::{try_create_int_gauge_vec, IntGaugeVec};
 
 pub static MEM_TRIE_ARENA_ACTIVE_ALLOCS_BYTES: Lazy<IntGaugeVec> = Lazy::new(|| {
     try_create_int_gauge_vec(

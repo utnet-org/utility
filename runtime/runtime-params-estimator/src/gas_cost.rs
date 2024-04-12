@@ -3,10 +3,10 @@ use std::panic::Location;
 use std::time::{Duration, Instant};
 use std::{fmt, iter, ops};
 
-use unc_primitives::types::Gas;
 use num_rational::Ratio;
 use num_traits::ToPrimitive;
 use serde_json::json;
+use unc_primitives::types::Gas;
 
 use crate::config::GasMetric;
 use crate::estimator_params::{GAS_IN_INSTR, GAS_IN_NS, IO_READ_BYTE_COST, IO_WRITE_BYTE_COST};
@@ -515,9 +515,9 @@ mod tests {
     use super::{least_squares_method_gas_cost_pos_neg, GasCost, LeastSquaresTolerance};
     use crate::estimator_params::{GAS_IN_INSTR, GAS_IN_NS, IO_READ_BYTE_COST, IO_WRITE_BYTE_COST};
     use crate::qemu::QemuMeasurement;
-    use unc_primitives::types::Gas;
     use num_rational::Ratio;
     use num_traits::{ToPrimitive, Zero};
+    use unc_primitives::types::Gas;
 
     #[track_caller]
     fn check_uncertainty(

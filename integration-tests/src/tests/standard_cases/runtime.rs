@@ -1,12 +1,12 @@
 use crate::node::RuntimeNode;
 use crate::tests::standard_cases::*;
+use framework::config::{GenesisExt, TESTING_INIT_BALANCE};
+use testlib::runtime_utils::{add_test_contract, alice_account, bob_account};
 use unc_chain_configs::Genesis;
 use unc_crypto::SecretKey;
 use unc_primitives::checked_feature;
 use unc_primitives::state_record::StateRecord;
 use unc_primitives::version::PROTOCOL_VERSION;
-use framework::config::{GenesisExt, TESTING_INIT_BALANCE};
-use testlib::runtime_utils::{add_test_contract, alice_account, bob_account};
 
 fn create_runtime_node() -> RuntimeNode {
     RuntimeNode::new(&alice_account())

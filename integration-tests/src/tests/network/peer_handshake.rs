@@ -2,6 +2,8 @@ use crate::tests::network::runner::*;
 use actix::Actor;
 use actix::System;
 use futures::{future, FutureExt};
+use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+use std::sync::Arc;
 use unc_actix_test_utils::run_actix;
 use unc_async::time;
 use unc_network::config;
@@ -13,8 +15,6 @@ use unc_network::PeerManagerActor;
 use unc_o11y::testonly::init_test_logger;
 use unc_o11y::WithSpanContextExt;
 use unc_primitives::block::GenesisId;
-use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
-use std::sync::Arc;
 
 #[cfg(test)]
 fn make_peer_manager(

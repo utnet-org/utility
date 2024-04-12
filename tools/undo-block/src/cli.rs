@@ -1,9 +1,9 @@
+use framework::load_config;
+use std::path::Path;
 use unc_chain::ChainStore;
 use unc_chain_configs::GenesisValidationMode;
 use unc_epoch_manager::EpochManager;
 use unc_store::{Mode, NodeStorage};
-use framework::load_config;
-use std::path::Path;
 
 #[derive(clap::Parser)]
 pub struct UndoBlockCommand {
@@ -31,8 +31,7 @@ impl UndoBlockCommand {
         let storage = store_opener.open_in_mode(Mode::ReadWrite).unwrap();
         let store = storage.get_hot_store();
 
-        let epoch_manager =
-            EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
+        let epoch_manager = EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
 
         let mut chain_store = ChainStore::new(
             store,

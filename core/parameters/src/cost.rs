@@ -1,8 +1,8 @@
 use crate::parameter::Parameter;
 use enum_map::{enum_map, EnumMap};
+use num_rational::Rational32;
 use unc_account_id::AccountType;
 use unc_primitives_core::types::{Balance, Compute, Gas};
-use num_rational::Rational32;
 
 /// Costs associated with an object that can only be sent over the network (and executed
 /// by the receiver).
@@ -511,7 +511,7 @@ impl StorageUsageConfig {
 
 /// Helper functions for computing Transfer fees.
 /// In case of implicit account creation they include extra fees for the CreateAccount and
-/// AddFullAccessKey (for UNC-implicit account only) actions that are implicit.
+/// AddFullAccessKey (for Utility account only) actions that are implicit.
 /// We can assume that no overflow will happen here.
 pub fn transfer_exec_fee(
     cfg: &RuntimeFeesConfig,

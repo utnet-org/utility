@@ -2,6 +2,9 @@
 //! done as separate steps.
 
 use crate::InstantiationError;
+use std::collections::BTreeMap;
+use std::convert::TryFrom;
+use std::sync::Arc;
 use unc_vm_types::entity::{BoxedSlice, EntityRef, PrimaryMap};
 use unc_vm_types::{
     DataIndex, ElemIndex, FunctionIndex, GlobalInit, GlobalType, ImportCounts, LocalFunctionIndex,
@@ -13,9 +16,6 @@ use unc_vm_vm::{
     Resolver, TableStyle, Tunables, VMImport, VMImportType, VMLocalFunction, VMOffsets,
     VMSharedSignatureIndex,
 };
-use std::collections::BTreeMap;
-use std::convert::TryFrom;
-use std::sync::Arc;
 
 /// A compiled wasm module, containing everything necessary for instantiation.
 pub struct UniversalArtifact {

@@ -6,8 +6,8 @@ use crate::types::{Disconnect, HandshakeFailureReason, PeerMessage};
 use crate::types::{PartialEncodedChunkRequestMsg, PartialEncodedChunkResponseMsg};
 use anyhow::{bail, Context as _};
 use itertools::Itertools as _;
-use unc_async::time;
 use rand::Rng as _;
+use unc_async::time;
 
 #[test]
 fn deduplicate_edges() {

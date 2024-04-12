@@ -62,8 +62,7 @@ pub trait ViewRuntimeAdapter {
         shard_uid: &ShardUId,
         state_root: MerkleHash,
         account_id: &AccountId,
-    ) -> Result<Vec<ChipView>, crate::state_viewer::errors::ViewChipError>
-    ;
+    ) -> Result<Vec<ChipView>, crate::state_viewer::errors::ViewChipError>;
 
     fn view_state(
         &self,

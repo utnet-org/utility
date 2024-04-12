@@ -18,6 +18,12 @@ use chrono::DateTime;
 use chrono::Utc;
 use itertools::Itertools;
 use lru::LruCache;
+use std::cmp::max;
+use std::collections::{HashMap, HashSet};
+use std::sync::Arc;
+use std::sync::RwLock;
+use std::time::{Duration, Instant};
+use tracing::{debug, debug_span, error, info, trace, warn};
 use unc_async::messaging::IntoSender;
 use unc_async::messaging::{CanSend, Sender};
 use unc_chain::chain::VerifyBlockHashAndSignatureResult;
@@ -71,9 +77,9 @@ use unc_primitives::sharding::{
 };
 use unc_primitives::static_clock::StaticClock;
 use unc_primitives::transaction::SignedTransaction;
-use unc_primitives::types::{ApprovalPledge, Gas};
 use unc_primitives::types::StateRoot;
 use unc_primitives::types::{AccountId, BlockHeight, EpochId, NumBlocks, ShardId};
+use unc_primitives::types::{ApprovalPledge, Gas};
 use unc_primitives::unwrap_or_return;
 use unc_primitives::utils::MaybeValidated;
 use unc_primitives::validator_signer::ValidatorSigner;
@@ -81,12 +87,6 @@ use unc_primitives::version::PROTOCOL_VERSION;
 use unc_primitives::views::{CatchupStatusView, DroppedReason};
 use unc_store::metadata::DbKind;
 use unc_store::ShardUId;
-use std::cmp::max;
-use std::collections::{HashMap, HashSet};
-use std::sync::Arc;
-use std::sync::RwLock;
-use std::time::{Duration, Instant};
-use tracing::{debug, debug_span, error, info, trace, warn};
 
 const NUM_REBROADCAST_BLOCKS: usize = 30;
 const CHUNK_HEADERS_FOR_INCLUSION_CACHE_SIZE: usize = 2048;
@@ -339,7 +339,7 @@ impl Client {
             network_adapter.clone().into_sender(),
             runtime_adapter.clone(),
         );
-                Ok(Self {
+        Ok(Self {
             #[cfg(feature = "test_features")]
             adv_produce_blocks: None,
             #[cfg(feature = "test_features")]
@@ -2041,7 +2041,11 @@ impl Client {
                     return;
                 }
             };
-        self.doomslug.on_approval_message(StaticClock::instant(), approval, &block_producer_pledges);
+        self.doomslug.on_approval_message(
+            StaticClock::instant(),
+            approval,
+            &block_producer_pledges,
+        );
     }
 
     /// Forwards given transaction to upcoming validators.

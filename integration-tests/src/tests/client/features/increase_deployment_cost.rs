@@ -1,4 +1,6 @@
 use assert_matches::assert_matches;
+use framework::config::GenesisExt;
+use framework::test_utils::TestEnvNightshadeSetupExt;
 use unc_chain::ChainGenesis;
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::TestEnv;
@@ -9,8 +11,6 @@ use unc_primitives::transaction::{Action, DeployContractAction};
 use unc_primitives::version::ProtocolFeature;
 use unc_primitives::views::FinalExecutionStatus;
 use unc_primitives_core::version::PROTOCOL_VERSION;
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
 
 /// Tests if the cost of deployment is higher after the protocol update 53
 #[test]

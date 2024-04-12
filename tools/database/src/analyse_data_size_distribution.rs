@@ -1,12 +1,12 @@
 use clap::Parser;
-use unc_store::db::{Database, RocksDB};
-use unc_store::DBCol;
 use rayon::prelude::*;
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 use std::{panic, println};
 use strum::IntoEnumIterator;
+use unc_store::db::{Database, RocksDB};
+use unc_store::DBCol;
 
 use crate::utils::{open_rocksdb, resolve_column};
 

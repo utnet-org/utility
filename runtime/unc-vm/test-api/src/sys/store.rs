@@ -1,10 +1,10 @@
 use crate::sys::tunables::BaseTunables;
+use std::fmt;
+use std::sync::Arc;
 #[cfg(all(feature = "compiler", feature = "engine"))]
 use unc_vm_compiler::CompilerConfig;
 use unc_vm_engine::universal::UniversalEngine;
 use unc_vm_vm::Tunables;
-use std::fmt;
-use std::sync::Arc;
 
 /// The store represents all global state that can be manipulated by
 /// WebAssembly programs. It consists of the runtime representation

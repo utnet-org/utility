@@ -2,14 +2,14 @@
 extern crate bencher;
 
 use bencher::Bencher;
+use framework::{get_default_home, load_config, NightshadeRuntime};
+use std::time::{Duration, Instant};
 use unc_chain::{types::RuntimeAdapter, ChainStore, ChainStoreAccess};
 use unc_chain_configs::GenesisValidationMode;
 use unc_epoch_manager::EpochManager;
 use unc_o11y::testonly::init_integration_logger;
 use unc_primitives::types::StateRoot;
 use unc_store::Mode;
-use framework::{get_default_home, load_config, NightshadeRuntime};
-use std::time::{Duration, Instant};
 
 /// Read `TrieItem`s - nodes containing values - using Trie iterator, stop when 10k items were read.
 /// Note that the first run populates OS caches, so all next runs will be faster. You may want to run
@@ -42,8 +42,7 @@ fn read_trie_items(bench: &mut Bencher, shard_id: usize, mode: Mode) {
         let chain_store =
             ChainStore::new(store.clone(), unc_config.genesis.config.genesis_height, true);
 
-        let epoch_manager =
-            EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
+        let epoch_manager = EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
         let runtime = NightshadeRuntime::from_config(&home_dir, store, &unc_config, epoch_manager);
         let head = chain_store.head().unwrap();
         let last_block = chain_store.get_block(&head.last_block_hash).unwrap();

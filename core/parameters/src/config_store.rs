@@ -1,9 +1,9 @@
 use crate::config::RuntimeConfig;
 use crate::parameter_table::{ParameterTable, ParameterTableDiff};
-use unc_primitives_core::types::ProtocolVersion;
 use std::collections::BTreeMap;
 use std::ops::Bound;
 use std::sync::Arc;
+use unc_primitives_core::types::ProtocolVersion;
 
 macro_rules! include_config {
     ($file:expr) => {
@@ -154,10 +154,10 @@ impl RuntimeConfigStore {
 mod tests {
     use super::*;
     use crate::cost::{ActionCosts, ExtCosts};
+    use std::collections::HashSet;
     use unc_primitives_core::version::ProtocolFeature::{
         LowerDataReceiptAndEcrecoverBaseCost, LowerStorageCost, LowerStorageKeyLimit,
     };
-    use std::collections::HashSet;
 
     const GENESIS_PROTOCOL_VERSION: ProtocolVersion = 29;
     const RECEIPTS_DEPTH: u64 = 63;

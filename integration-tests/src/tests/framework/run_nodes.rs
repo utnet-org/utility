@@ -1,11 +1,11 @@
 use crate::tests::framework::node_cluster::NodeCluster;
 use actix::System;
+use rand::{thread_rng, Rng};
+use std::ops::ControlFlow;
 use unc_client::GetBlock;
 use unc_network::test_utils::wait_or_timeout;
 use unc_o11y::WithSpanContextExt;
 use unc_primitives::types::{BlockHeightDelta, NumSeats, NumShards};
-use rand::{thread_rng, Rng};
-use std::ops::ControlFlow;
 
 fn run_heavy_nodes(
     num_shards: NumShards,

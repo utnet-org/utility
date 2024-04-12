@@ -4,6 +4,7 @@ mod rpc;
 mod runtime;
 
 use assert_matches::assert_matches;
+use framework::config::{TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE, UNC_BASE};
 use unc_crypto::{InMemorySigner, KeyType, PublicKey};
 use unc_jsonrpc_primitives::errors::ServerError;
 use unc_parameters::{ActionCosts, ExtCosts};
@@ -21,18 +22,17 @@ use unc_primitives::views::{
     AccessKeyView, AccountView, ExecutionMetadataView, FinalExecutionOutcomeView,
     FinalExecutionStatus,
 };
-use framework::config::{UNC_BASE, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
 
 use crate::node::Node;
 use crate::user::User;
-use unc_parameters::RuntimeConfig;
-use unc_primitives::receipt::{ActionReceipt, Receipt, ReceiptEnum};
-use unc_primitives::test_utils;
-use unc_primitives::transaction::{Action, DeployContractAction, FunctionCallAction};
 use testlib::fees_utils::FeeHelper;
 use testlib::runtime_utils::{
     alice_account, bob_account, eve_dot_alice_account, x_dot_y_dot_alice_account,
 };
+use unc_parameters::RuntimeConfig;
+use unc_primitives::receipt::{ActionReceipt, Receipt, ReceiptEnum};
+use unc_primitives::test_utils;
+use unc_primitives::transaction::{Action, DeployContractAction, FunctionCallAction};
 
 /// The amount to send with function call.
 const FUNCTION_CALL_AMOUNT: Balance = TESTING_INIT_BALANCE / 10;
@@ -1327,7 +1327,9 @@ pub fn test_delete_account_while_staking(node: impl Node) {
         FinalExecutionStatus::Failure(
             ActionError {
                 index: Some(0),
-                kind: ActionErrorKind::DeleteAccountPledging{ account_id: eve_dot_alice_account() }
+                kind: ActionErrorKind::DeleteAccountPledging {
+                    account_id: eve_dot_alice_account()
+                }
             }
             .into()
         )

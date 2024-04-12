@@ -1,8 +1,8 @@
+use num_rational::Rational32;
+use std::path::PathBuf;
 use unc_primitives::types::NumBlocks;
 use unc_primitives::types::{BlockHeightDelta, NumSeats};
 use unc_primitives::version::ProtocolVersion;
-use num_rational::Rational32;
-use std::path::PathBuf;
 
 /// Amend a genesis/records file created by `dump-state`.
 #[derive(clap::Parser)]

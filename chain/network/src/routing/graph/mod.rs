@@ -6,12 +6,12 @@ use crate::routing::routing_table_view::RoutingTableView;
 use crate::stats::metrics;
 use crate::store;
 use arc_swap::ArcSwap;
-use unc_async::time;
-use unc_primitives::network::PeerId;
 use parking_lot::Mutex;
 use rayon::iter::ParallelBridge;
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
+use unc_async::time;
+use unc_primitives::network::PeerId;
 
 #[cfg(test)]
 mod tests;

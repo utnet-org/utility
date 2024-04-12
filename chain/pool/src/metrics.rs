@@ -1,5 +1,5 @@
-use unc_o11y::metrics::IntGaugeVec;
 use once_cell::sync::Lazy;
+use unc_o11y::metrics::IntGaugeVec;
 
 pub static TRANSACTION_POOL_COUNT: Lazy<IntGaugeVec> = Lazy::new(|| {
     unc_o11y::metrics::try_create_int_gauge_vec(

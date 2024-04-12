@@ -1,7 +1,12 @@
 use actix::Message;
 use chrono::DateTime;
 use chrono::Utc;
+use std::collections::HashMap;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
+use tracing::debug_span;
 use unc_chain_configs::{ClientConfig, ProtocolConfigView};
+use unc_primitives::errors::EpochError;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::merkle::{MerklePath, PartialMerkleTree};
 use unc_primitives::network::PeerId;
@@ -10,16 +15,17 @@ use unc_primitives::types::{
     AccountId, BlockHeight, BlockReference, EpochId, EpochReference, MaybeBlockId, ShardId,
     TransactionOrReceiptId,
 };
-use unc_primitives::views::{AllMinersView, BlockView, ChunkView, DownloadStatusView, EpochValidatorInfo, ExecutionOutcomeWithIdView, GasPriceView, LightClientBlockLiteView, LightClientBlockView, MaintenanceWindowsView, QueryRequest, QueryResponse, ReceiptView, ShardSyncDownloadView, SplitStorageInfoView, StateChangesKindsView, StateChangesRequestView, StateChangesView, SyncStatusView, TxStatusView};
+use unc_primitives::views::validator_power_and_pledge_view::ValidatorPowerAndPledgeView;
+use unc_primitives::views::{
+    AllMinersView, BlockView, ChunkView, DownloadStatusView, EpochValidatorInfo,
+    ExecutionOutcomeWithIdView, GasPriceView, LightClientBlockLiteView, LightClientBlockView,
+    MaintenanceWindowsView, QueryRequest, QueryResponse, ReceiptView, ShardSyncDownloadView,
+    SplitStorageInfoView, StateChangesKindsView, StateChangesRequestView, StateChangesView,
+    SyncStatusView, TxStatusView,
+};
 pub use unc_primitives::views::{StatusResponse, StatusSyncInfo};
-use std::collections::HashMap;
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Arc;
-use tracing::debug_span;
 use yansi::Color::Magenta;
 use yansi::Style;
-use unc_primitives::errors::EpochError;
-use unc_primitives::views::validator_power_and_pledge_view::ValidatorPowerAndPledgeView;
 
 /// Combines errors coming from chain, tx pool and block producer.
 #[derive(Debug, thiserror::Error)]
@@ -404,8 +410,6 @@ impl From<EpochError> for GetProviderError {
     }
 }
 
-
-
 impl Message for crate::types::GetProvider {
     type Result = Result<AccountId, crate::types::GetProviderError>;
 }
@@ -447,7 +451,6 @@ impl From<EpochError> for crate::types::GetAllMinersError {
         Self::IOError { error_message: error.to_string() }
     }
 }
-
 
 impl Message for crate::types::GetAllMiners {
     type Result = Result<AllMinersView, crate::types::GetAllMinersError>;
@@ -598,9 +601,7 @@ pub enum QueryError {
         block_height: unc_primitives::types::BlockHeight,
         block_hash: unc_primitives::hash::CryptoHash,
     },
-    #[error(
-    "Chip {public_key} does not exist while viewing at block #{block_height}"
-    )]
+    #[error("Chip {public_key} does not exist while viewing at block #{block_height}")]
     UnknownChip {
         public_key: unc_crypto::PublicKey,
         block_height: unc_primitives::types::BlockHeight,
@@ -844,7 +845,6 @@ pub struct GetValidatorInfo {
 impl Message for GetValidatorInfo {
     type Result = Result<EpochValidatorInfo, GetValidatorInfoError>;
 }
-
 
 #[derive(thiserror::Error, Debug)]
 pub enum GetProviderInfoError {

@@ -108,24 +108,17 @@ impl QueryError {
         block_hash: unc_primitives::hash::CryptoHash,
     ) -> QueryError {
         match error {
-            ViewChipError::InvalidAccountId { requested_account_id } => Self::InvalidAccount {
-                requested_account_id,
-                block_height,
-                block_hash,
-            },
-            ViewChipError::ChipDoesNotExist { public_key } => Self::UnknownChip {
-                public_key,
-                block_height,
-                block_hash,
-            },
-            ViewChipError::InternalError { error_message } => Self::InternalError {
-                error_message,
-                block_height,
-                block_hash,
-            },
+            ViewChipError::InvalidAccountId { requested_account_id } => {
+                Self::InvalidAccount { requested_account_id, block_height, block_hash }
+            }
+            ViewChipError::ChipDoesNotExist { public_key } => {
+                Self::UnknownChip { public_key, block_height, block_hash }
+            }
+            ViewChipError::InternalError { error_message } => {
+                Self::InternalError { error_message, block_height, block_hash }
+            }
         }
     }
-
 
     pub fn from_epoch_error(
         error: unc_primitives::errors::EpochError,

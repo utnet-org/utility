@@ -1,5 +1,14 @@
 #[cfg(unix)]
 use anyhow::Context;
+use serde_json::Value;
+use std::fs::File;
+use std::io::BufReader;
+use std::net::SocketAddr;
+use std::path::{Path, PathBuf};
+use std::sync::Arc;
+use tokio::sync::broadcast;
+use tokio::sync::broadcast::Receiver;
+use tracing::{debug, error, info, warn};
 use unc_amend_genesis::AmendGenesisCommand;
 use unc_chain_configs::GenesisValidationMode;
 use unc_client::ConfigUpdater;
@@ -28,15 +37,6 @@ use unc_state_viewer::StateViewerSubCommand;
 use unc_store::db::RocksDB;
 use unc_store::Mode;
 use unc_undo_block::cli::UndoBlockCommand;
-use serde_json::Value;
-use std::fs::File;
-use std::io::BufReader;
-use std::net::SocketAddr;
-use std::path::{Path, PathBuf};
-use std::sync::Arc;
-use tokio::sync::broadcast;
-use tokio::sync::broadcast::Receiver;
-use tracing::{debug, error, info, warn};
 
 /// UNC Protocol Node
 #[derive(clap::Parser)]
@@ -592,8 +592,7 @@ impl RunCmd {
             .await;
             actix::System::current().stop();
             // Disable the subscriber to properly shutdown the tracer.
-            unc_o11y::reload(Some("error"), None, Some(unc_o11y::OpenTelemetryLevel::OFF))
-                .unwrap();
+            unc_o11y::reload(Some("error"), None, Some(unc_o11y::OpenTelemetryLevel::OFF)).unwrap();
         });
         sys.run().unwrap();
         info!(target: "uncd", "Waiting for RocksDB to gracefully shutdown");

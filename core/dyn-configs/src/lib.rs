@@ -1,12 +1,12 @@
 #![doc = include_str!("../README.md")]
 
-use unc_chain_configs::UpdateableClientConfig;
-use unc_o11y::log_config::LogConfig;
-use unc_primitives::static_clock::StaticClock;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use std::sync::Arc;
 use tokio::sync::broadcast::Sender;
+use unc_chain_configs::UpdateableClientConfig;
+use unc_o11y::log_config::LogConfig;
+use unc_primitives::static_clock::StaticClock;
 
 mod metrics;
 

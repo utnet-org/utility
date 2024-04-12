@@ -5,6 +5,7 @@ use bencher::{black_box, Bencher};
 use borsh::BorshDeserialize;
 use unc_primitives::static_clock::StaticClock;
 
+use num_rational::Rational32;
 use unc_crypto::{KeyType, PublicKey, Signature};
 use unc_primitives::account::Account;
 use unc_primitives::block::{genesis_chunks, Block};
@@ -16,7 +17,6 @@ use unc_primitives::types::{EpochId, StateRoot};
 use unc_primitives::validator_signer::InMemoryValidatorSigner;
 use unc_primitives::version::PROTOCOL_VERSION;
 use unc_primitives_core::types::MerkleHash;
-use num_rational::Rational32;
 
 fn create_transaction() -> SignedTransaction {
     let mut actions = vec![];

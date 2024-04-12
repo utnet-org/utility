@@ -1,6 +1,9 @@
 use secp256k1::rand::SeedableRng;
 
-use crate::signature::{ED25519PublicKey, ED25519SecretKey, KeyType, PRIVTAE_KEY_DEFAULT_RSA_KEY_BITS, PublicKey, SecretKey};
+use crate::signature::{
+    ED25519PublicKey, ED25519SecretKey, KeyType, PublicKey, SecretKey,
+    PRIVTAE_KEY_DEFAULT_RSA_KEY_BITS,
+};
 use crate::{InMemorySigner, Signature};
 use unc_account_id::AccountId;
 

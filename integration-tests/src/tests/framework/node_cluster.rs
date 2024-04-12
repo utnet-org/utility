@@ -1,6 +1,7 @@
 use crate::test_helpers::heavy_test;
 use actix::Addr;
 use actix_rt::ArbiterHandle;
+use framework::{config::GenesisExt, load_test_config, start_with_config};
 use futures::future;
 use unc_actix_test_utils::{run_actix, spawn_interruptible};
 use unc_chain_configs::Genesis;
@@ -9,7 +10,6 @@ use unc_network::tcp;
 use unc_network::test_utils::convert_boot_nodes;
 use unc_o11y::testonly::init_integration_logger;
 use unc_primitives::types::{BlockHeight, BlockHeightDelta, NumSeats, NumShards};
-use framework::{config::GenesisExt, load_test_config, start_with_config};
 
 fn start_nodes(
     temp_dir: &std::path::Path,

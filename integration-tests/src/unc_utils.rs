@@ -1,5 +1,7 @@
 use crate::genesis_helpers::genesis_block;
 use actix::Addr;
+use framework::config::{GenesisExt, TESTING_INIT_PLEDGE, TESTING_INIT_POWER};
+use framework::{load_test_config, UncConfig};
 use unc_chain::Block;
 use unc_chain_configs::Genesis;
 use unc_client::{BlockResponse, ClientActor};
@@ -11,12 +13,10 @@ use unc_primitives::block::Approval;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::merkle::PartialMerkleTree;
 use unc_primitives::num_rational::{Ratio, Rational32};
-use unc_primitives::types::{BlockHeightDelta, EpochId};
 use unc_primitives::types::validator_power_and_pledge::ValidatorPowerAndPledge;
+use unc_primitives::types::{BlockHeightDelta, EpochId};
 use unc_primitives::validator_signer::ValidatorSigner;
 use unc_primitives::version::PROTOCOL_VERSION;
-use framework::config::{GenesisExt, TESTING_INIT_POWER, TESTING_INIT_PLEDGE};
-use framework::{load_test_config, UncConfig};
 
 // This assumes that there is no height skipped. Otherwise epoch hash calculation will be wrong.
 pub fn add_blocks(

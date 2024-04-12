@@ -1,8 +1,8 @@
+use once_cell::sync::Lazy;
 use unc_o11y::metrics::{
     exponential_buckets, try_create_histogram_vec, try_create_int_counter_vec, HistogramVec,
     IntCounterVec,
 };
-use once_cell::sync::Lazy;
 
 pub(crate) static PONG_RECEIVED: Lazy<HistogramVec> = Lazy::new(|| {
     try_create_histogram_vec(

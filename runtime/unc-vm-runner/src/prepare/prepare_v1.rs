@@ -160,7 +160,7 @@ fn wasmparser_decode(
     code: &[u8],
     features: crate::features::WasmFeatures,
 ) -> Result<(Option<u64>, Option<u64>), wasmparser::BinaryReaderError> {
-    use wasmparser::{TypeRef, ValidPayload, FuncValidatorAllocations};
+    use wasmparser::{FuncValidatorAllocations, TypeRef, ValidPayload};
     let mut validator = wasmparser::Validator::new_with_features(features.into());
     let mut function_count = Some(0u64);
     let mut local_count = Some(0u64);
@@ -177,7 +177,7 @@ fn wasmparser_decode(
                     }
                     TypeRef::Table(_)
                     | TypeRef::Memory(_)
-                    |TypeRef::Tag(_)
+                    | TypeRef::Tag(_)
                     | TypeRef::Global(_) => {}
                 }
             }

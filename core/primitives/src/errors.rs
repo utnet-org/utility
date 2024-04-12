@@ -2,10 +2,10 @@ use crate::hash::CryptoHash;
 use crate::serialize::dec_format;
 use crate::types::{AccountId, Balance, EpochId, Gas, Nonce};
 use borsh::{BorshDeserialize, BorshSerialize};
+use std::fmt::{Debug, Display};
 use unc_crypto::PublicKey;
 use unc_primitives_core::types::{BlockHeight, ProtocolVersion};
 use unc_rpc_error_macro::RpcError;
-use std::fmt::{Debug, Display};
 
 /// Error returned in the ExecutionOutcome in case of failure
 #[derive(
@@ -447,7 +447,7 @@ pub enum ActionErrorKind {
     /// The public key is already used for an existing access key
     AddKeyAlreadyExists { account_id: AccountId, public_key: Box<PublicKey> },
     /// Account is staking and can not be deleted
-    DeleteAccountPledging{ account_id: AccountId },
+    DeleteAccountPledging { account_id: AccountId },
     /// ActionReceipt can't be completed, because the remaining balance will not be enough to cover storage.
     LackBalanceForState {
         /// An account which needs balance
@@ -902,7 +902,9 @@ impl Debug for crate::errors::BlockError {
             crate::errors::BlockError::ThresholdError { pledge_sum, num_seats } => {
                 write!(f, "ThresholdError({}, {})", pledge_sum, num_seats)
             }
-            crate::errors::BlockError::BlockOutOfBounds(block_height) => write!(f, "EpochOutOfBounds({:?})", block_height),
+            crate::errors::BlockError::BlockOutOfBounds(block_height) => {
+                write!(f, "EpochOutOfBounds({:?})", block_height)
+            }
             crate::errors::BlockError::MissingBlock(hash) => write!(f, "MissingBlock({})", hash),
             crate::errors::BlockError::IOErr(err) => write!(f, "IOErr({})", err),
             crate::errors::BlockError::NotAValidator(account_id, block_height) => {
@@ -934,38 +936,23 @@ impl From<std::io::Error> for crate::errors::BlockError {
 impl From<EpochError> for BlockError {
     fn from(error: EpochError) -> Self {
         match error {
-            EpochError::IOErr(..) => {
-                BlockError::IOErr(error.to_string())
-            },
+            EpochError::IOErr(..) => BlockError::IOErr(error.to_string()),
             EpochError::ChunkValidatorSelectionError(..) => {
                 BlockError::ChunkValidatorSelectionError(error.to_string())
-            },
-            EpochError::EpochOutOfBounds(..) => {
-                BlockError::BlockOutOfBounds(CryptoHash::default())
-            },
-            EpochError::MissingBlock(block_hash) => {
-                BlockError::MissingBlock(block_hash)
-            },
+            }
+            EpochError::EpochOutOfBounds(..) => BlockError::BlockOutOfBounds(CryptoHash::default()),
+            EpochError::MissingBlock(block_hash) => BlockError::MissingBlock(block_hash),
             EpochError::NotAValidator(account_id, _hash) => {
                 BlockError::NotAValidator(account_id, 0)
-            },
-            EpochError::NotEnoughValidators{ num_validators: x, num_shards: y } => {
-                BlockError::NotEnoughValidators{ num_validators: x, num_shards: y }
-            },
-            EpochError::ShardingError(..) => {
-                BlockError::ShardingError(error.to_string())
-            },
-            EpochError::ThresholdError{
-                pledge_sum: pledge,
-                num_seats: seats,
-            } => {
-                BlockError::ThresholdError{
-                    pledge_sum: pledge,
-                    num_seats: seats,
-                }
+            }
+            EpochError::NotEnoughValidators { num_validators: x, num_shards: y } => {
+                BlockError::NotEnoughValidators { num_validators: x, num_shards: y }
+            }
+            EpochError::ShardingError(..) => BlockError::ShardingError(error.to_string()),
+            EpochError::ThresholdError { pledge_sum: pledge, num_seats: seats } => {
+                BlockError::ThresholdError { pledge_sum: pledge, num_seats: seats }
             }
         }
-
     }
 }
 #[derive(Eq, PartialEq, Clone)]
@@ -1055,44 +1042,25 @@ impl From<std::io::Error> for EpochError {
 impl From<BlockError> for EpochError {
     fn from(error: BlockError) -> Self {
         match error {
-            BlockError::IOErr(..) => {
-                EpochError::IOErr(error.to_string())
-            },
+            BlockError::IOErr(..) => EpochError::IOErr(error.to_string()),
             BlockError::ChunkValidatorSelectionError(..) => {
                 EpochError::ChunkValidatorSelectionError(error.to_string())
-            },
-            BlockError::BlockOutOfBounds(..) => {
-                EpochError::EpochOutOfBounds(EpochId::default())
-            },
-            BlockError::MissingBlock(block_hash) => {
-                EpochError::MissingBlock(block_hash)
-            },
+            }
+            BlockError::BlockOutOfBounds(..) => EpochError::EpochOutOfBounds(EpochId::default()),
+            BlockError::MissingBlock(block_hash) => EpochError::MissingBlock(block_hash),
             BlockError::NotAValidator(account_id, _block_height) => {
                 EpochError::NotAValidator(account_id, EpochId::default())
-            },
-            BlockError::NotEnoughValidators{ num_validators: x, num_shards: y } => {
-                EpochError::NotEnoughValidators{ num_validators: x, num_shards: y }
-            },
-            BlockError::ShardingError(..) => {
-                EpochError::ShardingError(error.to_string())
-            },
-            BlockError::ThresholdError{
-                pledge_sum: pledge,
-                num_seats: seats,
-            } => {
-                EpochError::ThresholdError{
-                    pledge_sum: pledge,
-                    num_seats: seats,
-                }
-            },
-            BlockError::ValidatorTotalPowerError(..) => {
-                EpochError::IOErr(error.to_string())
-            },
-            BlockError::NoAvailableValidator(..) => {
-                EpochError::IOErr(error.to_string())
             }
+            BlockError::NotEnoughValidators { num_validators: x, num_shards: y } => {
+                EpochError::NotEnoughValidators { num_validators: x, num_shards: y }
+            }
+            BlockError::ShardingError(..) => EpochError::ShardingError(error.to_string()),
+            BlockError::ThresholdError { pledge_sum: pledge, num_seats: seats } => {
+                EpochError::ThresholdError { pledge_sum: pledge, num_seats: seats }
+            }
+            BlockError::ValidatorTotalPowerError(..) => EpochError::IOErr(error.to_string()),
+            BlockError::NoAvailableValidator(..) => EpochError::IOErr(error.to_string()),
         }
-
     }
 }
 
@@ -1393,9 +1361,9 @@ impl From<unc_vm_runner::logic::errors::FunctionCallError> for FunctionCallError
 
 #[cfg(feature = "new_epoch_sync")]
 pub mod epoch_sync {
+    use std::fmt::Debug;
     use unc_primitives_core::hash::CryptoHash;
     use unc_primitives_core::types::EpochHeight;
-    use std::fmt::Debug;
 
     #[derive(Eq, PartialEq, Clone, strum::Display, Debug)]
     pub enum EpochSyncHashType {

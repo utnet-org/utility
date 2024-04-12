@@ -1,8 +1,6 @@
 use super::types::PublicKey;
 use unc_primitives_core::config::ViewConfig;
-use unc_primitives_core::types::{
-    AccountId, Balance, BlockHeight, EpochHeight, Gas, StorageUsage,
-};
+use unc_primitives_core::types::{AccountId, Balance, BlockHeight, EpochHeight, Gas, StorageUsage};
 
 #[derive(Clone)]
 /// Context for the contract execution.

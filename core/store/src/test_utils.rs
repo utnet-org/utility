@@ -8,6 +8,11 @@ use crate::{
     TrieConfig,
 };
 use itertools::Itertools;
+use rand::seq::SliceRandom;
+use rand::Rng;
+use std::collections::HashMap;
+use std::str::from_utf8;
+use std::sync::Arc;
 use unc_primitives::account::id::AccountId;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::receipt::{DataReceipt, Receipt, ReceiptEnum};
@@ -15,11 +20,6 @@ use unc_primitives::shard_layout::{ShardUId, ShardVersion};
 use unc_primitives::state::FlatStateValue;
 use unc_primitives::trie_key::TrieKey;
 use unc_primitives::types::{NumShards, StateRoot};
-use rand::seq::SliceRandom;
-use rand::Rng;
-use std::collections::HashMap;
-use std::str::from_utf8;
-use std::sync::Arc;
 
 /// Creates an in-memory node storage.
 ///

@@ -5,13 +5,13 @@ use anyhow::bail;
 use im::hashmap::Entry;
 use im::{HashMap, HashSet};
 use lru::LruCache;
-use unc_async::time;
-use unc_primitives::network::PeerId;
 use parking_lot::Mutex;
 use rand::seq::IteratorRandom;
 use rand::thread_rng;
 use std::net::SocketAddr;
 use std::ops::Not;
+use unc_async::time;
+use unc_primitives::network::PeerId;
 
 #[cfg(test)]
 mod testonly;

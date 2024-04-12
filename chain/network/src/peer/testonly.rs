@@ -14,11 +14,11 @@ use crate::store;
 use crate::tcp;
 use crate::testonly::actix::ActixSystem;
 use crate::testonly::fake_client;
+use std::sync::Arc;
 use unc_async::messaging::IntoSender;
 use unc_async::time;
 use unc_o11y::WithSpanContextExt;
 use unc_primitives::network::PeerId;
-use std::sync::Arc;
 
 pub struct PeerConfig {
     pub chain: Arc<data::Chain>,

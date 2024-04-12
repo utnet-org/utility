@@ -1,4 +1,6 @@
 use crate::tests::client::process_blocks::deploy_test_contract_with_protocol_version;
+use framework::config::GenesisExt;
+use framework::test_utils::TestEnvNightshadeSetupExt;
 use unc_chain::ChainGenesis;
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::TestEnv;
@@ -10,8 +12,6 @@ use unc_primitives::transaction::{Action, ExecutionMetadata, FunctionCallAction,
 use unc_primitives::version::ProtocolFeature;
 use unc_primitives_core::hash::CryptoHash;
 use unc_primitives_core::types::Gas;
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
 
 /// Check that after flat storage upgrade:
 /// - value read from contract is the same;

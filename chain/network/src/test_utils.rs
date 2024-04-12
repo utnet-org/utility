@@ -7,6 +7,12 @@ use crate::PeerManagerActor;
 use actix::{Actor, ActorContext, Context, Handler};
 use futures::future::BoxFuture;
 use futures::{future, Future, FutureExt};
+use rand::{thread_rng, RngCore};
+use std::collections::{HashMap, VecDeque};
+use std::ops::ControlFlow;
+use std::sync::{Arc, RwLock};
+use tokio::sync::Notify;
+use tracing::debug;
 use unc_async::messaging::{CanSend, CanSendAsync};
 use unc_crypto::{KeyType, SecretKey};
 use unc_o11y::{handler_debug_span, OpenTelemetrySpanExt, WithSpanContext};
@@ -14,12 +20,6 @@ use unc_primitives::hash::hash;
 use unc_primitives::network::PeerId;
 use unc_primitives::types::EpochId;
 use unc_primitives::utils::index_to_bytes;
-use rand::{thread_rng, RngCore};
-use std::collections::{HashMap, VecDeque};
-use std::ops::ControlFlow;
-use std::sync::{Arc, RwLock};
-use tokio::sync::Notify;
-use tracing::debug;
 
 // `peer_id_from_seed` generate `PeerId` from seed for unit tests
 pub fn peer_id_from_seed(seed: &str) -> PeerId {

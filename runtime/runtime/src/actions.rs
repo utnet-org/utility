@@ -16,8 +16,9 @@ use unc_primitives::errors::{ActionError, ActionErrorKind, InvalidAccessKeyError
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::receipt::{ActionReceipt, Receipt, ReceiptEnum};
 use unc_primitives::transaction::{
-    Action, AddKeyAction, DeleteAccountAction, DeleteKeyAction, DeployContractAction,
-    FunctionCallAction, PledgeAction, TransferAction, RegisterRsa2048KeysAction, CreateRsa2048ChallengeAction,
+    Action, AddKeyAction, CreateRsa2048ChallengeAction, DeleteAccountAction, DeleteKeyAction,
+    DeployContractAction, FunctionCallAction, PledgeAction, RegisterRsa2048KeysAction,
+    TransferAction,
 };
 use unc_primitives::types::validator_power::ValidatorPower;
 use unc_primitives::types::{AccountId, BlockHeight, EpochInfoProvider, Gas, TrieCacheMode};
@@ -26,7 +27,10 @@ use unc_primitives::version::{
     ProtocolFeature, ProtocolVersion, DELETE_KEY_STORAGE_USAGE_PROTOCOL_VERSION,
 };
 use unc_primitives_core::account::id::AccountType;
-use unc_store::{get_access_key, get_code, get_rsa2048_keys, remove_access_key, remove_account, remove_rsa2048_keys, set_access_key, set_code, set_rsa2048_keys, StorageError, TrieUpdate};
+use unc_store::{
+    get_access_key, get_code, get_rsa2048_keys, remove_access_key, remove_account,
+    remove_rsa2048_keys, set_access_key, set_code, set_rsa2048_keys, StorageError, TrieUpdate,
+};
 use unc_vm_runner::logic::errors::{
     CompilationError, FunctionCallError, InconsistentStateError, VMRunnerError,
 };
@@ -703,14 +707,15 @@ pub(crate) fn action_create_rsa2048_challenge(
     result: &mut ActionResult,
     account_id: &AccountId,
     challenge: &CreateRsa2048ChallengeAction,
-) -> Result<(), RuntimeError>{
+) -> Result<(), RuntimeError> {
     //TODO: 从unc 基金会获取的公钥， 匹配验证签名以及附加参数(如算力, 矿工信息, dev_id, 等)
     let root_id = "unc".parse::<AccountId>().unwrap();
     if get_rsa2048_keys(state_update, &root_id, &challenge.public_key)?.is_none() {
         result.result = Err(ActionErrorKind::RsaKeysNotFound {
             account_id: account_id.to_owned(),
             public_key: challenge.public_key.clone().into(),
-        }.into());
+        }
+        .into());
         return Ok(());
     }
 
@@ -726,9 +731,12 @@ pub(crate) fn action_create_rsa2048_challenge(
                         match power_str.parse::<u64>() {
                             Ok(power) => {
                                 // compute total power
-                                let total_power = account.power().checked_add(power).ok_or_else(|| {
-                                    StorageError::StorageInconsistentState("Account power integer overflow".to_string())
-                                })?;
+                                let total_power =
+                                    account.power().checked_add(power).ok_or_else(|| {
+                                        StorageError::StorageInconsistentState(
+                                            "Account power integer overflow".to_string(),
+                                        )
+                                    })?;
                                 // push power to validator proposal
                                 result.validator_power_proposals.push(ValidatorPower::new(
                                     account_id.clone(),
@@ -741,12 +749,14 @@ pub(crate) fn action_create_rsa2048_challenge(
                             }
                             Err(_) => tracing::error!("Power value is not a valid u128 number"),
                         }
-                    },
+                    }
                     None => {
                         if let Some(power_number) = power_val.as_u64() {
                             tracing::warn!("Power (as u64, converted from u128): {}", power_number);
                         } else {
-                            tracing::error!("Power value is not a string or a number that fits into u64");
+                            tracing::error!(
+                                "Power value is not a string or a number that fits into u64"
+                            );
                         }
                     }
                 }
@@ -757,11 +767,7 @@ pub(crate) fn action_create_rsa2048_challenge(
         }
     };
     // remove from unc list and add to the miner list
-    remove_rsa2048_keys(
-        state_update,
-        root_id.clone(),
-        challenge.public_key.clone()
-    );
+    remove_rsa2048_keys(state_update, root_id.clone(), challenge.public_key.clone());
     set_rsa2048_keys(
         state_update,
         account_id.clone(),
@@ -1004,7 +1010,10 @@ pub(crate) fn check_actor_permissions(
     account_id: &AccountId,
 ) -> Result<(), ActionError> {
     match action {
-        Action::DeployContract(_) | Action::Pledge(_) | Action::AddKey(_) | Action::DeleteKey(_) => {
+        Action::DeployContract(_)
+        | Action::Pledge(_)
+        | Action::AddKey(_)
+        | Action::DeleteKey(_) => {
             if actor_id != account_id {
                 return Err(ActionErrorKind::ActorNoPermission {
                     account_id: account_id.clone(),
@@ -1023,7 +1032,7 @@ pub(crate) fn check_actor_permissions(
             }
             let account = account.as_ref().unwrap();
             if account.pledging() != 0 {
-                return Err(ActionErrorKind::DeleteAccountPledging{
+                return Err(ActionErrorKind::DeleteAccountPledging {
                     account_id: account_id.clone(),
                 }
                 .into());
@@ -1041,7 +1050,7 @@ pub(crate) fn check_actor_permissions(
                 }
                 .into());
             }
-        },
+        }
         Action::CreateRsa2048Challenge(_) => (),
     };
     Ok(())
@@ -1137,6 +1146,7 @@ mod tests {
 
     use super::*;
     use crate::unc_primitives::shard_layout::ShardUId;
+    use std::sync::Arc;
     use unc_primitives::account::FunctionCallPermission;
     use unc_primitives::action::delegate::NonDelegateAction;
     use unc_primitives::errors::InvalidAccessKeyError;
@@ -1147,7 +1157,6 @@ mod tests {
     use unc_primitives::types::{EpochId, StateChangeCause};
     use unc_store::set_account;
     use unc_store::test_utils::TestTriesBuilder;
-    use std::sync::Arc;
 
     fn test_action_create_account(
         account_id: AccountId,
@@ -1248,7 +1257,7 @@ mod tests {
         storage_usage: u64,
         state_update: &mut TrieUpdate,
     ) -> ActionResult {
-        let mut account = Some(Account::new(100, 0,0, *code_hash, storage_usage));
+        let mut account = Some(Account::new(100, 0, 0, *code_hash, storage_usage));
         let mut actor_id = account_id.clone();
         let mut action_result = ActionResult::default();
         let receipt = Receipt::new_balance_refund(&"alice.unc".parse().unwrap(), 0);
@@ -1467,11 +1476,8 @@ mod tests {
 
         let apply_state =
             create_apply_state(signed_delegate_action.delegate_action.max_block_height);
-        let mut state_update = setup_account(
-            &sender_id,
-            &PublicKey::empty(unc_crypto::KeyType::ED25519),
-            &access_key,
-        );
+        let mut state_update =
+            setup_account(&sender_id, &PublicKey::empty(unc_crypto::KeyType::ED25519), &access_key);
 
         validate_delegate_action_key(
             &mut state_update,

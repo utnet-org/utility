@@ -2,6 +2,7 @@ use crate::network_protocol::Encoding;
 use crate::network_protocol::{RoutedMessageBody, RoutedMessageV2};
 use crate::tcp;
 use crate::types::PeerType;
+use once_cell::sync::Lazy;
 use unc_async::time;
 use unc_o11y::metrics::prometheus;
 use unc_o11y::metrics::{
@@ -10,7 +11,6 @@ use unc_o11y::metrics::{
     try_create_int_gauge, try_create_int_gauge_vec, Histogram, HistogramVec, IntCounter,
     IntCounterVec, IntGauge, IntGaugeVec, MetricVec, MetricVecBuilder,
 };
-use once_cell::sync::Lazy;
 
 /// Labels represents a schema of an IntGaugeVec metric.
 pub trait Labels: 'static {

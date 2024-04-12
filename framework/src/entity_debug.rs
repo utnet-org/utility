@@ -1,6 +1,8 @@
 use crate::entity_debug_serializer::serialize_entity;
 use anyhow::anyhow;
 
+use serde::Serialize;
+use std::sync::Arc;
 use unc_chain::types::RuntimeAdapter;
 use unc_chain::{Block, BlockHeader};
 use unc_epoch_manager::EpochManagerAdapter;
@@ -25,8 +27,6 @@ use unc_store::{
     DBCol, NibbleSlice, ShardUId, Store, TrieCachingStorage, FINAL_HEAD_KEY, HEADER_HEAD_KEY,
     HEAD_KEY,
 };
-use serde::Serialize;
-use std::sync::Arc;
 
 pub struct EntityDebugHandlerImpl {
     pub epoch_manager: Arc<dyn EpochManagerAdapter>,

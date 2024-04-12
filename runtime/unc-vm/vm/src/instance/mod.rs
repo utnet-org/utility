@@ -30,12 +30,6 @@ use crate::{unc_vm_call_trampoline, Artifact, VMOffsets, VMTrampoline};
 use crate::{VMExtern, VMFunction, VMGlobal};
 use memoffset::offset_of;
 use more_asserts::assert_lt;
-use unc_vm_types::entity::{packed_option::ReservedValue, BoxedSlice, EntityRef, PrimaryMap};
-use unc_vm_types::{
-    DataIndex, DataInitializer, ElemIndex, ExportIndex, FastGasCounter, FunctionIndex, GlobalIndex,
-    GlobalInit, InstanceConfig, LocalGlobalIndex, LocalMemoryIndex, LocalTableIndex, MemoryIndex,
-    OwnedTableInitializer, Pages, TableIndex,
-};
 use std::any::Any;
 use std::cell::RefCell;
 use std::collections::BTreeMap;
@@ -46,6 +40,12 @@ use std::mem;
 use std::ptr::{self, NonNull};
 use std::slice;
 use std::sync::Arc;
+use unc_vm_types::entity::{packed_option::ReservedValue, BoxedSlice, EntityRef, PrimaryMap};
+use unc_vm_types::{
+    DataIndex, DataInitializer, ElemIndex, ExportIndex, FastGasCounter, FunctionIndex, GlobalIndex,
+    GlobalInit, InstanceConfig, LocalGlobalIndex, LocalMemoryIndex, LocalTableIndex, MemoryIndex,
+    OwnedTableInitializer, Pages, TableIndex,
+};
 
 /// The function pointer to call with data and an [`Instance`] pointer to
 /// finish initializing the host env.

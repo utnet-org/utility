@@ -3,11 +3,11 @@
 /// in particular schema::StoreUpdate is not exported.
 use crate::network_protocol::Edge;
 use crate::types::ConnectionInfo;
-use unc_primitives::network::{AnnounceAccount, PeerId};
-use unc_primitives::types::AccountId;
 use std::collections::HashSet;
 use std::sync::Arc;
 use tracing::debug;
+use unc_primitives::network::{AnnounceAccount, PeerId};
+use unc_primitives::types::AccountId;
 
 mod schema;
 #[cfg(test)]

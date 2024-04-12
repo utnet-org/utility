@@ -24,6 +24,15 @@ use actix::{Actor, Addr, Arbiter, AsyncContext, Context, Handler};
 use actix_rt::ArbiterHandle;
 use chrono::{DateTime, Utc};
 use itertools::Itertools;
+use rand::seq::SliceRandom;
+use rand::{thread_rng, Rng};
+use std::collections::HashMap;
+use std::fmt;
+use std::sync::{Arc, RwLock};
+use std::thread;
+use std::time::{Duration, Instant};
+use tokio::sync::broadcast;
+use tracing::{debug, debug_span, error, info, trace, warn};
 use unc_async::messaging::{CanSend, Sender};
 use unc_chain::chain::{
     ApplyStatePartsRequest, ApplyStatePartsResponse, BlockCatchUpRequest, BlockCatchUpResponse,
@@ -72,15 +81,6 @@ use unc_primitives::views::{DetailedDebugStatus, ValidatorInfo};
 use unc_store::DBCol;
 use unc_store::ShardUId;
 use unc_telemetry::TelemetryActor;
-use rand::seq::SliceRandom;
-use rand::{thread_rng, Rng};
-use std::collections::HashMap;
-use std::fmt;
-use std::sync::{Arc, RwLock};
-use std::thread;
-use std::time::{Duration, Instant};
-use tokio::sync::broadcast;
-use tracing::{debug, debug_span, error, info, trace, warn};
 
 /// Multiplier on `max_block_time` to wait until deciding that chain stalled.
 const STATUS_WAIT_TIME_MULTIPLIER: u64 = 10;
@@ -1057,7 +1057,7 @@ impl ClientActor {
         }
 
         for height in
-        latest_known.height + 1..=self.client.doomslug.get_largest_height_crossing_threshold()
+            latest_known.height + 1..=self.client.doomslug.get_largest_height_crossing_threshold()
         {
             let next_block_producer_account =
                 self.client.epoch_manager.get_block_producer(&epoch_id, height)?;

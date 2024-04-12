@@ -1,6 +1,10 @@
 use crate::test_helpers::heavy_test;
 use actix::System;
 use futures::{future, FutureExt};
+use std::collections::HashMap;
+use std::sync::{Arc, RwLock};
+use std::time::Instant;
+use tracing::info;
 use unc_actix_test_utils::run_actix;
 use unc_async::time;
 use unc_chain::test_utils::ValidatorSchedule;
@@ -17,10 +21,6 @@ use unc_o11y::WithSpanContextExt;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::transaction::SignedTransaction;
 use unc_primitives::types::AccountId;
-use std::collections::HashMap;
-use std::sync::{Arc, RwLock};
-use std::time::Instant;
-use tracing::info;
 
 struct Test {
     validator_groups: u64,

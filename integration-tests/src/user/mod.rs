@@ -11,7 +11,7 @@ use unc_primitives::receipt::Receipt;
 use unc_primitives::test_utils::create_user_test_signer;
 use unc_primitives::transaction::{
     Action, AddKeyAction, CreateAccountAction, DeleteAccountAction, DeleteKeyAction,
-    DeployContractAction, ExecutionOutcome, FunctionCallAction, SignedTransaction, PledgeAction,
+    DeployContractAction, ExecutionOutcome, FunctionCallAction, PledgeAction, SignedTransaction,
     TransferAction,
 };
 use unc_primitives::types::{AccountId, Balance, BlockHeight, Gas, MerkleHash, ShardId};

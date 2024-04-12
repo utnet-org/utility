@@ -1,10 +1,10 @@
 use borsh::BorshDeserialize;
-use unc_primitives::types::StateRoot;
-use unc_store::db::TestDB;
-use unc_store::Store;
 use std::fs::File;
 use std::io::Read;
 use std::path::{Path, PathBuf};
+use unc_primitives::types::StateRoot;
+use unc_store::db::TestDB;
+use unc_store::Store;
 
 const STATE_DUMP_FILE: &str = "state_dump";
 const GENESIS_ROOTS_FILE: &str = "genesis_roots";

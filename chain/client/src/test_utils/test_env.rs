@@ -4,6 +4,7 @@ use std::time::Instant;
 
 use crate::adapter::ProcessTxResponse;
 use crate::Client;
+use once_cell::sync::OnceCell;
 use unc_async::messaging::CanSend;
 use unc_chain::test_utils::ValidatorSchedule;
 use unc_chain::{ChainGenesis, Provenance};
@@ -32,7 +33,6 @@ use unc_primitives::version::ProtocolVersion;
 use unc_primitives::views::{
     AccountView, FinalExecutionOutcomeView, QueryRequest, QueryResponseKind, StateItem,
 };
-use once_cell::sync::OnceCell;
 
 use super::setup::{setup_client_with_runtime, ShardsManagerAdapterForTest};
 use super::test_env_builder::TestEnvBuilder;

@@ -10,14 +10,14 @@ use crate::tcp;
 use crate::testonly::{make_rng, AsSet as _};
 use crate::types::PeerMessage;
 use itertools::Itertools;
-use unc_async::time;
-use unc_o11y::testonly::init_test_logger;
-use unc_store::db::TestDB;
 use peer_manager::testonly::FDS_PER_PEER;
 use pretty_assertions::assert_eq;
 use rand::seq::SliceRandom as _;
 use std::collections::HashSet;
 use std::sync::Arc;
+use unc_async::time;
+use unc_o11y::testonly::init_test_logger;
+use unc_store::db::TestDB;
 
 #[tokio::test]
 async fn broadcast() {

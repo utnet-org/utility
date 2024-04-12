@@ -1,5 +1,6 @@
 use std::collections::BTreeSet;
 
+use num_rational::Ratio;
 use unc_chain::types::RuntimeStorageConfig;
 use unc_chain::{Chain, ChainGenesis};
 use unc_epoch_manager::types::BlockHeaderInfo;
@@ -8,7 +9,6 @@ use unc_primitives::test_utils::create_test_signer;
 use unc_primitives::types::validator_stake::{ValidatorPledge, ValidatorPledgeIter};
 use unc_store::flat::{FlatStateChanges, FlatStateDelta, FlatStateDeltaMetadata};
 use unc_store::genesis::initialize_genesis_state;
-use num_rational::Ratio;
 
 use crate::config::{GenesisExt, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
 use unc_chain_configs::{Genesis, DEFAULT_GC_NUM_EPOCHS_TO_KEEP};
@@ -29,9 +29,9 @@ use unc_store::{get_genesis_state_roots, NodeStorage};
 
 use super::*;
 
+use primitive_types::U256;
 use unc_primitives::account::id::AccountIdRef;
 use unc_primitives::trie_key::TrieKey;
-use primitive_types::U256;
 
 fn pledge(
     nonce: Nonce,
@@ -456,7 +456,10 @@ fn test_validator_rotation() {
     );
     let test3_acc = env.view_account(&"test3".parse().unwrap());
     // Got 3 * X, staking 2 * X of them.
-    assert_eq!((test3_acc.amount, test3_acc.pledging), (TESTING_INIT_PLEDGE, 2 * TESTING_INIT_PLEDGE));
+    assert_eq!(
+        (test3_acc.amount, test3_acc.pledging),
+        (TESTING_INIT_PLEDGE, 2 * TESTING_INIT_PLEDGE)
+    );
 }
 
 /// One validator tries to decrease their pledge in epoch T. Make sure that the pledge return happens in epoch T+3.
@@ -1316,8 +1319,10 @@ fn test_proposal_deduped() {
         .map(|id| InMemorySigner::from_seed(id.clone(), KeyType::ED25519, id.as_ref()))
         .collect();
 
-    let staking_transaction1 = pledge(1, &signers[1], &block_producers[1], TESTING_INIT_PLEDGE - 100);
-    let staking_transaction2 = pledge(2, &signers[1], &block_producers[1], TESTING_INIT_PLEDGE - 10);
+    let staking_transaction1 =
+        pledge(1, &signers[1], &block_producers[1], TESTING_INIT_PLEDGE - 100);
+    let staking_transaction2 =
+        pledge(2, &signers[1], &block_producers[1], TESTING_INIT_PLEDGE - 10);
     env.step_default(vec![staking_transaction1, staking_transaction2]);
     assert_eq!(env.last_proposals.len(), 1);
     assert_eq!(env.last_proposals[0].pledge(), TESTING_INIT_PLEDGE - 10);

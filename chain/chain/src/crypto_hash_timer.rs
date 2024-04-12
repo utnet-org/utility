@@ -1,9 +1,9 @@
 use lru::LruCache;
-use unc_primitives::{hash::CryptoHash, static_clock::StaticClock};
 use std::{
     sync::Mutex,
     time::{Duration, Instant},
 };
+use unc_primitives::{hash::CryptoHash, static_clock::StaticClock};
 
 use once_cell::sync::Lazy;
 

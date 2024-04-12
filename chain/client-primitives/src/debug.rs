@@ -2,6 +2,7 @@
 //! without backwards compatibility of JSON encoding.
 use crate::types::StatusError;
 use chrono::DateTime;
+use std::collections::HashMap;
 use unc_primitives::types::EpochId;
 use unc_primitives::views::{
     CatchupStatusView, ChainProcessingInfo, EpochValidatorInfo, RequestedStatePartsView,
@@ -14,7 +15,6 @@ use unc_primitives::{
     types::{AccountId, BlockHeight},
     views::ValidatorInfo,
 };
-use std::collections::HashMap;
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct TrackedShardsView {

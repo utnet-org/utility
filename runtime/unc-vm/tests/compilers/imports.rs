@@ -3,14 +3,14 @@
 //! dynamic ones) work properly.
 
 use anyhow::Result;
-use unc_vm_engine::RuntimeError;
-use unc_vm_test_api::*;
 use std::convert::Infallible;
 use std::sync::atomic::AtomicBool;
 use std::sync::{
     atomic::{AtomicUsize, Ordering::SeqCst},
     Arc,
 };
+use unc_vm_engine::RuntimeError;
+use unc_vm_test_api::*;
 
 fn get_module(store: &Store) -> Result<Module> {
     let wat = r#"

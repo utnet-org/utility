@@ -144,6 +144,8 @@ impl ShardedTransactionPool {
 #[cfg(test)]
 mod tests {
     use crate::client::ShardedTransactionPool;
+    use rand::{rngs::StdRng, seq::SliceRandom, SeedableRng};
+    use std::{collections::HashMap, str::FromStr};
     use unc_crypto::{InMemorySigner, KeyType};
     use unc_o11y::testonly::init_test_logger;
     use unc_pool::types::PoolIterator;
@@ -155,8 +157,6 @@ mod tests {
         types::AccountId,
     };
     use unc_store::ShardUId;
-    use rand::{rngs::StdRng, seq::SliceRandom, SeedableRng};
-    use std::{collections::HashMap, str::FromStr};
 
     const TEST_SEED: RngSeed = [3; 32];
 

@@ -3,6 +3,10 @@ use crate::{config::Singlepass, emitter_x64::*, machine::Machine, x64_decl::*};
 use dynasmrt::{x64::X64Relocation, DynamicLabel, VecAssembler};
 use finite_wasm::gas::InstrumentationKind;
 use memoffset::offset_of;
+use smallvec::{smallvec, SmallVec};
+use std::convert::TryFrom;
+use std::iter;
+use std::slice;
 use unc_vm_compiler::wasmparser::{BlockType as WpBlockType, MemArg, Operator, ValType as WpType};
 use unc_vm_compiler::{
     CallingConvention, CompiledFunction, CompiledFunctionFrameInfo, CustomSection,
@@ -18,10 +22,6 @@ use unc_vm_types::{
     SignatureIndex, TableIndex, Type,
 };
 use unc_vm_vm::{TableStyle, TrapCode, VMBuiltinFunctionIndex, VMOffsets};
-use smallvec::{smallvec, SmallVec};
-use std::convert::TryFrom;
-use std::iter;
-use std::slice;
 
 type Assembler = VecAssembler<X64Relocation>;
 

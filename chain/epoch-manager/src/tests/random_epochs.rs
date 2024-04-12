@@ -4,7 +4,7 @@ use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::sync::Arc;
 
 use crate::test_utils::{
-    hash_range, record_block_with_slashes, setup_default_epoch_manager, do_power,
+    do_power, hash_range, record_block_with_slashes, setup_default_epoch_manager,
 };
 use crate::EpochManager;
 use unc_primitives::challenge::SlashedValidator;

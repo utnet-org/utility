@@ -2,6 +2,9 @@
 use chrono::DateTime;
 use chrono::Utc;
 use csv::ReaderBuilder;
+use std::fs::File;
+use std::io::Read;
+use std::path::PathBuf;
 use unc_crypto::{KeyType, PublicKey};
 use unc_network::types::PeerInfo;
 use unc_primitives::account::{AccessKey, AccessKeyPermission, Account, FunctionCallPermission};
@@ -10,9 +13,6 @@ use unc_primitives::receipt::{ActionReceipt, Receipt, ReceiptEnum};
 use unc_primitives::state_record::StateRecord;
 use unc_primitives::transaction::{Action, FunctionCallAction};
 use unc_primitives::types::{AccountId, AccountInfo, Balance, Gas, Power};
-use std::fs::File;
-use std::io::Read;
-use std::path::PathBuf;
 
 /// Methods that can be called by a non-privileged access key.
 const REGULAR_METHOD_NAMES: &[&str] = &["pledge", "transfer"];
@@ -189,7 +189,13 @@ fn account_records(row: &Row, gas_price: Balance) -> Vec<StateRecord> {
 
     let mut res = vec![StateRecord::Account {
         account_id: row.account_id.clone(),
-        account: Account::new(row.amount, row.validator_stake, row.validator_power, smart_contract_hash, 0),
+        account: Account::new(
+            row.amount,
+            row.validator_stake,
+            row.validator_power,
+            smart_contract_hash,
+            0,
+        ),
     }];
 
     // Add restricted access keys.

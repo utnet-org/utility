@@ -1,8 +1,8 @@
 use std::collections::{BTreeMap, HashMap};
 
+use num_rational::Ratio;
 use unc_primitives::types::{EpochId, Power};
 use unc_store::Store;
-use num_rational::Ratio;
 
 use crate::proposals::find_threshold;
 use crate::RewardCalculator;
@@ -25,9 +25,9 @@ use unc_primitives::version::PROTOCOL_VERSION;
 use unc_store::test_utils::create_test_store;
 
 use unc_primitives::shard_layout::ShardLayout;
-use {crate::reward_calculator::NUM_NS_IN_SECOND, crate::NUM_SECONDS_IN_A_YEAR};
-use unc_primitives::types::validator_stake::ValidatorPledge;
 use unc_primitives::types::validator_power_and_pledge::ValidatorPowerAndPledge;
+use unc_primitives::types::validator_stake::ValidatorPledge;
+use {crate::reward_calculator::NUM_NS_IN_SECOND, crate::NUM_SECONDS_IN_A_YEAR};
 
 pub const DEFAULT_GAS_PRICE: u128 = 100;
 pub const DEFAULT_TOTAL_SUPPLY: u128 = 1_000_000_000_000;
@@ -90,27 +90,29 @@ pub fn epoch_info_with_num_seats(
     num_seats: NumSeats,
 ) -> EpochInfo {
     let seat_price =
-        find_threshold(&accounts.iter().map(|(_,_, s)| *s).collect::<Vec<_>>(), num_seats).unwrap();
+        find_threshold(&accounts.iter().map(|(_, _, s)| *s).collect::<Vec<_>>(), num_seats)
+            .unwrap();
     accounts.sort();
     let validator_to_index = accounts.iter().enumerate().fold(HashMap::new(), |mut acc, (i, x)| {
         acc.insert(x.0.clone(), i as u64);
         acc
     });
     let fishermen_to_index =
-        fishermen.iter().enumerate().map(|(i, (s,_ , _))| (s.clone(), i as ValidatorId)).collect();
-    let account_to_validators = |accounts: Vec<(AccountId, Power, Balance)>| -> Vec<ValidatorPowerAndPledge> {
-        accounts
-            .into_iter()
-            .map(|(account_id, power,pledging)| {
-                ValidatorPowerAndPledge::new(
-                    account_id.clone(),
-                    SecretKey::from_seed(KeyType::ED25519, account_id.as_ref()).public_key(),
-                    power,
-                    pledging,
-                )
-            })
-            .collect()
-    };
+        fishermen.iter().enumerate().map(|(i, (s, _, _))| (s.clone(), i as ValidatorId)).collect();
+    let account_to_validators =
+        |accounts: Vec<(AccountId, Power, Balance)>| -> Vec<ValidatorPowerAndPledge> {
+            accounts
+                .into_iter()
+                .map(|(account_id, power, pledging)| {
+                    ValidatorPowerAndPledge::new(
+                        account_id.clone(),
+                        SecretKey::from_seed(KeyType::ED25519, account_id.as_ref()).public_key(),
+                        power,
+                        pledging,
+                    )
+                })
+                .collect()
+        };
     let all_validators = account_to_validators(accounts);
     let validator_mandates = {
         // TODO(#10014) determine required pledge per mandate instead of reusing seat price.
@@ -253,7 +255,7 @@ pub fn setup_epoch_manager(
         reward_calculator,
         power_validators
             .iter()
-            .map(|(account_id, power)| do_power(account_id.clone(), *power,))
+            .map(|(account_id, power)| do_power(account_id.clone(), *power))
             .collect(),
         pledge_validators
             .iter()
@@ -459,9 +461,17 @@ pub fn record_block(
     cur_h: CryptoHash,
     height: BlockHeight,
     power_proposals: Vec<ValidatorPower>,
-    pledge_proposals: Vec<ValidatorPledge>
+    pledge_proposals: Vec<ValidatorPledge>,
 ) {
-    record_block_with_slashes(epoch_manager, prev_h, cur_h, height, power_proposals, pledge_proposals, vec![]);
+    record_block_with_slashes(
+        epoch_manager,
+        prev_h,
+        cur_h,
+        height,
+        power_proposals,
+        pledge_proposals,
+        vec![],
+    );
 }
 
 pub fn block_info(
@@ -475,7 +485,7 @@ pub fn block_info(
     total_supply: Balance,
     random_value: CryptoHash,
     validators: Vec<ValidatorPowerAndPledge>,
-    validator_to_index: HashMap<AccountId,ValidatorId>,
+    validator_to_index: HashMap<AccountId, ValidatorId>,
     block_producers_settlement: Vec<ValidatorId>,
     chunk_producers_settlement: Vec<Vec<ValidatorId>>,
     fishermen: Vec<ValidatorPowerAndPledge>,

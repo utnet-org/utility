@@ -1,5 +1,14 @@
 use crate::single_shard_storage_mutator::SingleShardStorageMutator;
 use crate::storage_mutator::StorageMutator;
+use framework::{load_config, open_storage, NightshadeRuntime, UncConfig, UNC_BASE};
+use rayon::iter::{IntoParallelIterator, ParallelIterator};
+use serde::Deserialize;
+use std::collections::HashSet;
+use std::fs::File;
+use std::io::BufReader;
+use std::path::{Path, PathBuf};
+use std::sync::Arc;
+use strum::IntoEnumIterator;
 use unc_chain::types::{RuntimeAdapter, Tip};
 use unc_chain::{ChainStore, ChainStoreAccess};
 use unc_chain_configs::{Genesis, GenesisConfig, GenesisValidationMode};
@@ -21,7 +30,7 @@ use unc_primitives::state_record::StateRecord;
 use unc_primitives::trie_key::col;
 use unc_primitives::trie_key::trie_key_parsers::parse_account_id_from_account_key;
 use unc_primitives::types::{
-    AccountId, AccountInfo, Balance, BlockHeight, EpochId, NumBlocks, ShardId, StateRoot, Power,
+    AccountId, AccountInfo, Balance, BlockHeight, EpochId, NumBlocks, Power, ShardId, StateRoot,
 };
 use unc_primitives::version::PROTOCOL_VERSION;
 use unc_store::db::RocksDB;
@@ -30,15 +39,6 @@ use unc_store::{
     checkpoint_hot_storage_and_cleanup_columns, DBCol, Store, TrieDBStorage, TrieStorage,
     FINAL_HEAD_KEY,
 };
-use framework::{load_config, open_storage, UncConfig, NightshadeRuntime, UNC_BASE};
-use rayon::iter::{IntoParallelIterator, ParallelIterator};
-use serde::Deserialize;
-use std::collections::HashSet;
-use std::fs::File;
-use std::io::BufReader;
-use std::path::{Path, PathBuf};
-use std::sync::Arc;
-use strum::IntoEnumIterator;
 
 #[derive(clap::Parser)]
 /// Use the following sub-commands:
@@ -234,8 +234,7 @@ impl ForkNetworkCommand {
         let store = storage.get_hot_store();
         assert!(self.snapshot_db(store.clone(), unc_config, home_dir)?);
 
-        let epoch_manager =
-            EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
+        let epoch_manager = EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
         let head = store.get_ser::<Tip>(DBCol::BlockMisc, FINAL_HEAD_KEY)?.unwrap();
         let shard_layout = epoch_manager.get_shard_layout(&head.epoch_id)?;
         let all_shard_uids: Vec<_> = shard_layout.shard_uids().collect();
@@ -245,8 +244,7 @@ impl ForkNetworkCommand {
         let fork_heads = get_fork_heads(&all_shard_uids, store.clone())?;
         tracing::info!(?fork_heads);
 
-        let chain =
-            ChainStore::new(store.clone(), unc_config.genesis.config.genesis_height, false);
+        let chain = ChainStore::new(store.clone(), unc_config.genesis.config.genesis_height, false);
 
         // Move flat storage to the max height for consistency across shards.
         let (block_height, desired_block_hash) =
@@ -315,8 +313,7 @@ impl ForkNetworkCommand {
             self.get_state_roots_and_hash(store.clone())?;
         tracing::info!(?prev_state_roots, ?epoch_id, ?prev_hash);
 
-        let epoch_manager =
-            EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
+        let epoch_manager = EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
         let num_shards = prev_state_roots.len();
         let all_shard_uids: Vec<ShardUId> = (0..num_shards)
             .map(|shard_id| epoch_manager.shard_id_to_uid(shard_id as ShardId, &epoch_id).unwrap())
@@ -360,8 +357,7 @@ impl ForkNetworkCommand {
         let (prev_state_roots, _prev_hash, epoch_id, block_height) =
             self.get_state_roots_and_hash(store.clone())?;
 
-        let epoch_manager =
-            EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
+        let epoch_manager = EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
 
         let runtime =
             NightshadeRuntime::from_config(home_dir, store, &unc_config, epoch_manager.clone());
@@ -558,10 +554,8 @@ impl ForkNetworkCommand {
                     }
                     StateRecord::PostponedReceipt(receipt) => {
                         // TODO(eth-implicit) Change back to is_implicit() when ETH-implicit accounts are supported.
-                        if receipt.predecessor_id.get_account_type()
-                            == AccountType::UtilityAccount
-                            || receipt.receiver_id.get_account_type()
-                                == AccountType::UtilityAccount
+                        if receipt.predecessor_id.get_account_type() == AccountType::UtilityAccount
+                            || receipt.receiver_id.get_account_type() == AccountType::UtilityAccount
                         {
                             let new_receipt = Receipt {
                                 predecessor_id: map_account(&receipt.predecessor_id, None),
@@ -585,10 +579,8 @@ impl ForkNetworkCommand {
                     }
                     StateRecord::DelayedReceipt(receipt) => {
                         // TODO(eth-implicit) Change back to is_implicit() when ETH-implicit accounts are supported.
-                        if receipt.predecessor_id.get_account_type()
-                            == AccountType::UtilityAccount
-                            || receipt.receiver_id.get_account_type()
-                                == AccountType::UtilityAccount
+                        if receipt.predecessor_id.get_account_type() == AccountType::UtilityAccount
+                            || receipt.receiver_id.get_account_type() == AccountType::UtilityAccount
                         {
                             let new_receipt = Receipt {
                                 predecessor_id: map_account(&receipt.predecessor_id, None),

@@ -98,12 +98,16 @@ use crate::vm_estimator::create_context;
 use estimator_params::sha256_cost;
 use gas_cost::{LeastSquaresTolerance, NonNegativeTolerance};
 use gas_metering::gas_metering_cost;
+use serde_json::json;
+use std::convert::TryFrom;
+use std::iter;
+use std::time::Instant;
 use unc_crypto::{KeyType, SecretKey};
 use unc_parameters::{ExtCosts, RuntimeConfigStore, RuntimeFeesConfig};
 use unc_primitives::account::{AccessKey, AccessKeyPermission, FunctionCallPermission};
 use unc_primitives::transaction::{
     Action, AddKeyAction, CreateAccountAction, DeleteAccountAction, DeleteKeyAction,
-    DeployContractAction, SignedTransaction, PledgeAction, TransferAction,
+    DeployContractAction, PledgeAction, SignedTransaction, TransferAction,
 };
 use unc_primitives::types::AccountId;
 use unc_primitives::version::PROTOCOL_VERSION;
@@ -111,10 +115,6 @@ use unc_vm_runner::internal::VMKindExt;
 use unc_vm_runner::logic::mocks::mock_external::MockedExternal;
 use unc_vm_runner::ContractCode;
 use unc_vm_runner::MockCompiledContractCache;
-use serde_json::json;
-use std::convert::TryFrom;
-use std::iter;
-use std::time::Instant;
 use utils::{
     average_cost, fn_cost, fn_cost_count, fn_cost_in_contract, fn_cost_with_setup,
     generate_data_only_contract, generate_fn_name, noop_function_call_cost, read_resource,

@@ -1,10 +1,10 @@
 use crate::error::{DirectiveError, DirectiveErrors};
 use crate::spectest::spectest_importobject;
 use anyhow::{anyhow, bail, Result};
-use unc_vm_test_api::*;
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::path::Path;
 use std::str;
+use unc_vm_test_api::*;
 
 /// The wast test script language allows modules to be defined and actions
 /// to be performed on them.

@@ -1,6 +1,6 @@
+use std::path::Path;
 use unc_store::metadata::DbKind;
 use unc_store::NodeStorage;
-use std::path::Path;
 
 /// This can potentially support db specified not in config, but in command line.
 /// `ChangeRelative { path: Path, archive: bool }`

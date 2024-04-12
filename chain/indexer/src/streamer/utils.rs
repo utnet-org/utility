@@ -1,9 +1,9 @@
 use actix::Addr;
 
+use node_runtime::config::tx_cost;
 use unc_indexer_primitives::IndexerTransactionWithOutcome;
 use unc_parameters::RuntimeConfig;
 use unc_primitives::views;
-use node_runtime::config::tx_cost;
 
 use super::errors::FailedToFetchData;
 use super::fetchers::fetch_block;

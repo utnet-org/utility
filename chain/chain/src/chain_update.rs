@@ -12,6 +12,11 @@ use crate::update_shard::{
 };
 use crate::{metrics, DoomslugThresholdMode};
 use crate::{Chain, Doomslug};
+use std::collections::HashMap;
+#[cfg(feature = "new_epoch_sync")]
+use std::collections::HashSet;
+use std::sync::Arc;
+use tracing::{debug, info, warn};
 use unc_chain_primitives::error::Error;
 use unc_epoch_manager::shard_tracker::ShardTracker;
 use unc_epoch_manager::types::BlockHeaderInfo;
@@ -29,11 +34,6 @@ use unc_primitives::types::{
     AccountId, BlockExtra, BlockHeight, BlockHeightDelta, NumShards, ShardId,
 };
 use unc_primitives::views::LightClientBlockView;
-use std::collections::HashMap;
-#[cfg(feature = "new_epoch_sync")]
-use std::collections::HashSet;
-use std::sync::Arc;
-use tracing::{debug, info, warn};
 
 /// Chain update helper, contains information that is needed to process block
 /// and decide to accept it or reject it.
@@ -282,8 +282,12 @@ impl<'a> ChainUpdate<'a> {
                     let new_chunk_extra = ChunkExtra::new(
                         &result.new_root,
                         outcome_root,
-                        validator_power_proposals_by_shard.remove(&result.shard_uid).unwrap_or_default(),
-                        validator_pledge_proposals_by_shard.remove(&result.shard_uid).unwrap_or_default(),
+                        validator_power_proposals_by_shard
+                            .remove(&result.shard_uid)
+                            .unwrap_or_default(),
+                        validator_pledge_proposals_by_shard
+                            .remove(&result.shard_uid)
+                            .unwrap_or_default(),
                         gas_burnt,
                         gas_limit,
                         balance_burnt,
@@ -488,9 +492,9 @@ impl<'a> ChainUpdate<'a> {
             self.chain_store_update.get_block_header(last_final_block)?.height()
         };
 
-        let epoch_manager_update = self
-            .epoch_manager
-            .add_validator_proposals_for_blocks(BlockHeaderInfo::new(block.header(), last_finalized_height))?;
+        let epoch_manager_update = self.epoch_manager.add_validator_proposals_for_blocks(
+            BlockHeaderInfo::new(block.header(), last_finalized_height),
+        )?;
         self.chain_store_update.merge(epoch_manager_update);
 
         #[cfg(feature = "new_epoch_sync")]

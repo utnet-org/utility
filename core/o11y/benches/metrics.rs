@@ -2,8 +2,8 @@
 extern crate bencher;
 
 use bencher::Bencher;
-use unc_o11y::metrics::{try_create_int_counter_vec, IntCounter, IntCounterVec};
 use once_cell::sync::Lazy;
+use unc_o11y::metrics::{try_create_int_counter_vec, IntCounter, IntCounterVec};
 
 static COUNTERS: Lazy<IntCounterVec> = Lazy::new(|| {
     try_create_int_counter_vec("unc_test_counters_1", "Just counters", &["shard_id"]).unwrap()

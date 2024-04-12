@@ -150,10 +150,10 @@ pub fn validate_chunk_with_chunk_extra_and_receipts_root(
 
     let chunk_header_power_proposals = chunk_header.prev_validator_power_proposals();
     let chunk_header_pledge_proposals = chunk_header.prev_validator_pledge_proposals();
-    
+
     if chunk_header_power_proposals.len() != chunk_extra_power_proposals.len()
         || !chunk_extra_power_proposals.eq(chunk_header_power_proposals)
-    || chunk_header_pledge_proposals.len() != chunk_extra_pledge_proposals.len()
+        || chunk_header_pledge_proposals.len() != chunk_extra_pledge_proposals.len()
         || !chunk_extra_pledge_proposals.eq(chunk_header_pledge_proposals)
     {
         return Err(Error::InvalidValidatorProposals);

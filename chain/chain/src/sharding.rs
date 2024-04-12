@@ -1,7 +1,7 @@
-use unc_primitives::hash::CryptoHash;
 use rand::seq::SliceRandom;
 use rand::SeedableRng;
 use rand_chacha::ChaCha20Rng;
+use unc_primitives::hash::CryptoHash;
 
 pub fn shuffle_receipt_proofs<ReceiptProofType>(
     receipt_proofs: &mut Vec<ReceiptProofType>,

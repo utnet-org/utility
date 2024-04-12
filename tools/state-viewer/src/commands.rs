@@ -7,8 +7,18 @@ use crate::state_dump::state_dump_redis;
 use crate::tx_dump::dump_tx_from_block;
 use crate::{apply_chunk, epoch_info};
 use bytesize::ByteSize;
+use framework::{NightshadeRuntime, UncConfig};
 use itertools::GroupBy;
 use itertools::Itertools;
+use node_runtime::adapter::ViewRuntimeAdapter;
+use serde_json::json;
+use std::collections::BinaryHeap;
+use std::collections::HashMap;
+use std::fs::{self, File};
+use std::io::Write;
+use std::path::{Path, PathBuf};
+use std::rc::Rc;
+use std::sync::Arc;
 use unc_chain::chain::collect_receipts_from_response;
 use unc_chain::migrations::check_if_block_is_first_with_chunk_of_version;
 use unc_chain::types::ApplyChunkBlockContext;
@@ -39,16 +49,6 @@ use unc_store::flat::FlatStorageManager;
 use unc_store::test_utils::create_test_store;
 use unc_store::TrieStorage;
 use unc_store::{DBCol, Store, Trie, TrieCache, TrieCachingStorage, TrieConfig, TrieDBStorage};
-use framework::{UncConfig, NightshadeRuntime};
-use node_runtime::adapter::ViewRuntimeAdapter;
-use serde_json::json;
-use std::collections::BinaryHeap;
-use std::collections::HashMap;
-use std::fs::{self, File};
-use std::io::Write;
-use std::path::{Path, PathBuf};
-use std::rc::Rc;
-use std::sync::Arc;
 use yansi::Color::Red;
 
 pub(crate) fn apply_block(
@@ -177,12 +177,8 @@ pub(crate) fn apply_chunk(
     use_flat_storage: bool,
 ) -> anyhow::Result<()> {
     let epoch_manager = EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
-    let runtime = NightshadeRuntime::from_config(
-        home_dir,
-        store.clone(),
-        &unc_config,
-        epoch_manager.clone(),
-    );
+    let runtime =
+        NightshadeRuntime::from_config(home_dir, store.clone(), &unc_config, epoch_manager.clone());
     let mut chain_store = ChainStore::new(
         store,
         unc_config.genesis.config.genesis_height,
@@ -217,12 +213,8 @@ pub(crate) fn apply_range(
     let mut csv_file = csv_file.map(|filename| std::fs::File::create(filename).unwrap());
 
     let epoch_manager = EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
-    let runtime = NightshadeRuntime::from_config(
-        home_dir,
-        store.clone(),
-        &unc_config,
-        epoch_manager.clone(),
-    );
+    let runtime =
+        NightshadeRuntime::from_config(home_dir, store.clone(), &unc_config, epoch_manager.clone());
     apply_chain_range(
         store,
         &unc_config.genesis,
@@ -247,12 +239,8 @@ pub(crate) fn apply_receipt(
     use_flat_storage: bool,
 ) -> anyhow::Result<()> {
     let epoch_manager = EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
-    let runtime = NightshadeRuntime::from_config(
-        home_dir,
-        store.clone(),
-        &unc_config,
-        epoch_manager.clone(),
-    );
+    let runtime =
+        NightshadeRuntime::from_config(home_dir, store.clone(), &unc_config, epoch_manager.clone());
     apply_chunk::apply_receipt(
         unc_config.genesis.config.genesis_height,
         epoch_manager.as_ref(),
@@ -272,12 +260,8 @@ pub(crate) fn apply_tx(
     use_flat_storage: bool,
 ) -> anyhow::Result<()> {
     let epoch_manager = EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
-    let runtime = NightshadeRuntime::from_config(
-        home_dir,
-        store.clone(),
-        &unc_config,
-        epoch_manager.clone(),
-    );
+    let runtime =
+        NightshadeRuntime::from_config(home_dir, store.clone(), &unc_config, epoch_manager.clone());
     apply_chunk::apply_tx(
         unc_config.genesis.config.genesis_height,
         epoch_manager.as_ref(),
@@ -520,8 +504,10 @@ fn chunk_extras_equal(l: &ChunkExtra, r: &ChunkExtra) -> bool {
     if l.balance_burnt() != r.balance_burnt() {
         return false;
     }
-    l.validator_power_proposals().collect::<Vec<_>>() == r.validator_power_proposals().collect::<Vec<_>>()&&
-    l.validator_pledge_proposals().collect::<Vec<_>>() == r.validator_pledge_proposals().collect::<Vec<_>>()
+    l.validator_power_proposals().collect::<Vec<_>>()
+        == r.validator_power_proposals().collect::<Vec<_>>()
+        && l.validator_pledge_proposals().collect::<Vec<_>>()
+            == r.validator_pledge_proposals().collect::<Vec<_>>()
 }
 
 pub(crate) fn check_apply_block_result(
@@ -609,7 +595,7 @@ pub(crate) fn print_chain(
                         _ => {}
                     };
                     let block_producer = epoch_manager
-                        .get_block_producer(header.epoch_id(),header.height())
+                        .get_block_producer(header.epoch_id(), header.height())
                         .map(|account_id| account_id.to_string())
                         .ok()
                         .unwrap_or("error".to_owned());
@@ -671,7 +657,7 @@ pub(crate) fn print_chain(
             }
         } else if let Some(epoch_id) = &cur_epoch_id {
             let block_producer = epoch_manager
-                .get_block_producer(epoch_id,height)
+                .get_block_producer(epoch_id, height)
                 .map(|account_id| account_id.to_string())
                 .unwrap_or("error".to_owned());
             println!(
@@ -1032,10 +1018,8 @@ pub(crate) fn contract_accounts(
 
     let tries = state_roots.iter().enumerate().map(|(shard_id, &state_root)| {
         // TODO: This assumes simple nightshade layout, it will need an update when we reshard.
-        let shard_uid = ShardUId::from_shard_id_and_layout(
-            shard_id as u64,
-            &ShardLayout::v0_single_shard(),
-        );
+        let shard_uid =
+            ShardUId::from_shard_id_and_layout(shard_id as u64, &ShardLayout::v0_single_shard());
         // Use simple non-caching storage, we don't expect many duplicate lookups while iterating.
         let storage = TrieDBStorage::new(store.clone(), shard_uid);
         // We don't need flat state to traverse all accounts.
@@ -1079,8 +1063,7 @@ pub(crate) fn clear_cache(store: Store) {
 /// Prints the state statistics for all shards. Please note that it relies on
 /// the live flat storage and may break if the node is not stopped.
 pub(crate) fn print_state_stats(home_dir: &Path, store: Store, unc_config: UncConfig) {
-    let (epoch_manager, runtime, _, block_header) =
-        load_trie(store.clone(), home_dir, &unc_config);
+    let (epoch_manager, runtime, _, block_header) = load_trie(store.clone(), home_dir, &unc_config);
 
     let block_hash = *block_header.hash();
     let shard_layout = epoch_manager.get_shard_layout_from_prev_block(&block_hash).unwrap();
@@ -1323,6 +1306,10 @@ impl std::fmt::Debug for StateStatsAccount {
 
 #[cfg(test)]
 mod tests {
+    use framework::config::Config;
+    use framework::config::GenesisExt;
+    use framework::{NightshadeRuntime, UncConfig};
+    use std::sync::Arc;
     use unc_chain::types::RuntimeAdapter;
     use unc_chain::ChainGenesis;
     use unc_chain_configs::Genesis;
@@ -1333,10 +1320,6 @@ mod tests {
     use unc_primitives::types::chunk_extra::ChunkExtra;
     use unc_primitives::types::AccountId;
     use unc_store::genesis::initialize_genesis_state;
-    use framework::config::Config;
-    use framework::config::GenesisExt;
-    use framework::{UncConfig, NightshadeRuntime};
-    use std::sync::Arc;
 
     #[test]
     /// Tests that getting the latest trie state actually gets the latest state.

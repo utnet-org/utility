@@ -1,11 +1,11 @@
+use std::collections::HashMap;
+use std::sync::Arc;
 use unc_o11y::metrics::prometheus;
 use unc_o11y::metrics::prometheus::core::{GenericCounter, GenericGauge};
 use unc_primitives::errors::StorageError;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::shard_layout::ShardUId;
 use unc_vm_runner::logic::TrieNodesCount;
-use std::collections::HashMap;
-use std::sync::Arc;
 
 use crate::{metrics, TrieStorage};
 

@@ -14,6 +14,14 @@ use actix_rt::System;
 use chrono::DateTime;
 use chrono::Utc;
 use futures::{future, FutureExt};
+use num_rational::Ratio;
+use once_cell::sync::OnceCell;
+use rand::{thread_rng, Rng};
+use std::cmp::max;
+use std::collections::{HashMap, HashSet};
+use std::ops::DerefMut;
+use std::sync::{Arc, RwLock};
+use std::time::{Duration, Instant};
 use unc_async::actix::AddrWithAutoSpanContextExt;
 use unc_async::messaging::{CanSend, IntoSender, LateBoundSender, Sender};
 use unc_async::time;
@@ -28,7 +36,7 @@ use unc_chunks::shards_manager_actor::start_shards_manager;
 use unc_chunks::test_utils::SynchronousShardsManagerAdapter;
 use unc_chunks::ShardsManager;
 use unc_crypto::{KeyType, PublicKey};
-use unc_epoch_manager::shard_tracker::{ShardTracker};
+use unc_epoch_manager::shard_tracker::ShardTracker;
 use unc_epoch_manager::EpochManagerAdapter;
 use unc_network::shards_manager::ShardsManagerRequestFromNetwork;
 use unc_network::types::{BlockInfo, PeerChainInfo};
@@ -50,14 +58,6 @@ use unc_primitives::version::PROTOCOL_VERSION;
 use unc_store::test_utils::create_test_store;
 use unc_store::Store;
 use unc_telemetry::TelemetryActor;
-use num_rational::Ratio;
-use once_cell::sync::OnceCell;
-use rand::{thread_rng, Rng};
-use std::cmp::max;
-use std::collections::{HashMap, HashSet};
-use std::ops::DerefMut;
-use std::sync::{Arc, RwLock};
-use std::time::{Duration, Instant};
 
 pub const TEST_SEED: RngSeed = [3; 32];
 
@@ -926,15 +926,8 @@ pub fn setup_client_with_runtime(
 ) -> Client {
     let validator_signer =
         account_id.map(|x| Arc::new(create_test_signer(x.as_str())) as Arc<dyn ValidatorSigner>);
-    let mut config = ClientConfig::test(
-        true,
-        10,
-        20,
-        num_validator_seats,
-        archive,
-        save_trie_changes,
-        true,
-    );
+    let mut config =
+        ClientConfig::test(true, 10, 20, num_validator_seats, archive, save_trie_changes, true);
     config.epoch_length = chain_genesis.epoch_length;
     let state_sync_adapter =
         Arc::new(RwLock::new(SyncAdapter::new(Sender::noop(), Sender::noop())));

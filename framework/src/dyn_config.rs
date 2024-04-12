@@ -1,9 +1,9 @@
 use crate::config::Config;
+use serde::Deserialize;
+use std::path::{Path, PathBuf};
 use unc_chain_configs::UpdateableClientConfig;
 use unc_dyn_configs::{UpdateableConfigLoaderError, UpdateableConfigs};
 use unc_o11y::log_config::LogConfig;
-use serde::Deserialize;
-use std::path::{Path, PathBuf};
 
 pub const LOG_CONFIG_FILENAME: &str = "log_config.json";
 

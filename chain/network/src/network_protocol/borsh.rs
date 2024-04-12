@@ -7,14 +7,14 @@ use crate::network_protocol::edge::{Edge, PartialEdgeInfo};
 use crate::network_protocol::SyncSnapshotHosts;
 use crate::network_protocol::{PeerChainInfoV2, PeerInfo, RoutedMessage, StateResponseInfo};
 use borsh::{BorshDeserialize, BorshSerialize};
+use std::fmt;
+use std::fmt::Formatter;
 use unc_primitives::block::{Block, BlockHeader, GenesisId};
 use unc_primitives::challenge::Challenge;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::network::{AnnounceAccount, PeerId};
 use unc_primitives::transaction::SignedTransaction;
 use unc_primitives::types::ShardId;
-use std::fmt;
-use std::fmt::Formatter;
 
 #[derive(BorshSerialize, PartialEq, Eq, Clone, Debug)]
 /// Structure representing handshake between peers.

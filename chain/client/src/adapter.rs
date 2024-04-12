@@ -1,9 +1,6 @@
-use unc_primitives::views::AllMinersView;
 use crate::client_actor::ClientActor;
 use crate::view_client::ViewClientActor;
-use unc_network::types::{
-    NetworkInfo, ReasonForBan, StateResponseInfo,
-};
+use unc_network::types::{NetworkInfo, ReasonForBan, StateResponseInfo};
 use unc_o11y::WithSpanContextExt;
 use unc_primitives::block::{Approval, Block, BlockHeader};
 use unc_primitives::challenge::Challenge;
@@ -13,8 +10,9 @@ use unc_primitives::hash::CryptoHash;
 use unc_primitives::network::{AnnounceAccount, PeerId};
 use unc_primitives::transaction::SignedTransaction;
 use unc_primitives::types::{AccountId, BlockHeight, EpochId, Power, ShardId};
-use unc_primitives::views::FinalExecutionOutcomeView;
 use unc_primitives::views::validator_power_view::ValidatorPowerView;
+use unc_primitives::views::AllMinersView;
+use unc_primitives::views::FinalExecutionOutcomeView;
 
 /// Transaction status query
 #[derive(actix::Message, Debug)]
@@ -118,7 +116,6 @@ pub struct SetNetworkInfo(pub NetworkInfo);
 #[derive(actix::Message, Debug)]
 #[rtype(result = "()")]
 pub(crate) struct RecvChallenge(pub Challenge);
-
 
 #[derive(actix::Message, Debug)]
 #[rtype(result = "ProcessTxResponse")]

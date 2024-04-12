@@ -1,6 +1,6 @@
+use rand::{thread_rng, RngCore};
 use unc_parameters::{Fee, RuntimeConfig, RuntimeFeesConfig, StorageUsageConfig};
 use unc_primitives::num_rational::Rational32;
-use rand::{thread_rng, RngCore};
 
 pub fn random_config() -> RuntimeConfig {
     let mut rng = thread_rng();

@@ -1,18 +1,27 @@
 use crate::download_file::{run_download_file, FileDownloadError};
 use crate::dyn_config::LOG_CONFIG_FILENAME;
 use anyhow::{anyhow, bail, Context};
+use num_rational::Rational32;
+use std::fs;
+use std::fs::File;
+use std::io::{Read, Write};
+use std::path::Path;
+use std::sync::Arc;
+use std::time::Duration;
+#[cfg(test)]
+use tempfile::tempdir;
+use tracing::{info, warn};
 use unc_chain_configs::{
-    default_enable_multiline_logging,
-    default_header_sync_expected_height_per_second, default_header_sync_initial_timeout,
-    default_header_sync_progress_timeout, default_header_sync_stall_ban_timeout,
-    default_log_summary_period, default_produce_chunk_add_transactions_time_limit,
-    default_state_sync, default_state_sync_enabled, default_state_sync_timeout,
-    default_sync_check_period, default_sync_height_threshold, default_sync_step_period,
-    default_transaction_pool_size_limit, default_trie_viewer_state_size_limit,
-    default_tx_routing_height_horizon, default_view_client_threads,
-    default_view_client_throttle_period, get_initial_supply, ClientConfig, GCConfig, Genesis,
-    GenesisConfig, GenesisValidationMode, LogSummaryStyle, MutableConfigValue, ReshardingConfig,
-    StateSyncConfig,
+    default_enable_multiline_logging, default_header_sync_expected_height_per_second,
+    default_header_sync_initial_timeout, default_header_sync_progress_timeout,
+    default_header_sync_stall_ban_timeout, default_log_summary_period,
+    default_produce_chunk_add_transactions_time_limit, default_state_sync,
+    default_state_sync_enabled, default_state_sync_timeout, default_sync_check_period,
+    default_sync_height_threshold, default_sync_step_period, default_transaction_pool_size_limit,
+    default_trie_viewer_state_size_limit, default_tx_routing_height_horizon,
+    default_view_client_threads, default_view_client_throttle_period, get_initial_supply,
+    ClientConfig, GCConfig, Genesis, GenesisConfig, GenesisValidationMode, LogSummaryStyle,
+    MutableConfigValue, ReshardingConfig, StateSyncConfig,
 };
 use unc_config_utils::{ValidationError, ValidationErrors};
 use unc_crypto::{InMemorySigner, KeyFile, KeyType, PublicKey, Signer};
@@ -31,22 +40,12 @@ use unc_primitives::static_clock::StaticClock;
 use unc_primitives::test_utils::create_test_signer;
 use unc_primitives::types::{
     AccountId, AccountInfo, Balance, BlockHeight, BlockHeightDelta, Gas, NumBlocks, NumSeats,
-    NumShards, ShardId, Power,
+    NumShards, Power, ShardId,
 };
 use unc_primitives::utils::{generate_random_string, get_num_seats_per_shard};
 use unc_primitives::validator_signer::{InMemoryValidatorSigner, ValidatorSigner};
 use unc_primitives::version::PROTOCOL_VERSION;
 use unc_telemetry::TelemetryConfig;
-use num_rational::Rational32;
-use std::fs;
-use std::fs::File;
-use std::io::{Read, Write};
-use std::path::Path;
-use std::sync::Arc;
-use std::time::Duration;
-#[cfg(test)]
-use tempfile::tempdir;
-use tracing::{info, warn};
 
 /// Initial balance used in tests.
 pub const TESTING_INIT_BALANCE: Balance = 1_000_000_000 * UNC_BASE;
@@ -457,8 +456,8 @@ impl Config {
         let mut unrecognised_fields = Vec::new();
         let json_str_without_comments = unc_config_utils::strip_comments_from_json_str(&json_str)
             .map_err(|_| ValidationError::ConfigFileError {
-                error_message: format!("Failed to strip comments from {}", path.display()),
-            })?;
+            error_message: format!("Failed to strip comments from {}", path.display()),
+        })?;
         let config: Config = serde_ignored::deserialize(
             &mut serde_json::Deserializer::from_str(&json_str_without_comments),
             |field| unrecognised_fields.push(field.to_string()),
@@ -534,7 +533,8 @@ impl Genesis {
                 &mut records,
                 account,
                 &signer.public_key.clone(),
-                TESTING_INIT_BALANCE - if i < num_validator_seats { TESTING_INIT_PLEDGE } else { 0 },
+                TESTING_INIT_BALANCE
+                    - if i < num_validator_seats { TESTING_INIT_PLEDGE } else { 0 },
                 if i < num_validator_seats { TESTING_INIT_PLEDGE } else { 0 },
                 TESTING_INIT_POWER,
                 CryptoHash::default(),
@@ -765,7 +765,7 @@ fn add_account_with_key(
     public_key: &PublicKey,
     amount: u128,
     pledging: u128,
-    power:  u64,
+    power: u64,
     code_hash: CryptoHash,
 ) {
     records.push(StateRecord::Account {
@@ -1276,24 +1276,15 @@ pub fn init_testnet_configs(
 }
 
 pub fn get_genesis_url(chain_id: &str) -> String {
-    format!(
-        "https://unc-s3.jongun2038.win/{}/genesis.json.xz",
-        chain_id,
-    )
+    format!("https://unc-s3.jongun2038.win/{}/genesis.json.xz", chain_id,)
 }
 
 pub fn get_records_url(chain_id: &str) -> String {
-    format!(
-        "https://unc-s3.jongun2038.win/{}/records.json.xz",
-        chain_id,
-    )
+    format!("https://unc-s3.jongun2038.win/{}/records.json.xz", chain_id,)
 }
 
 pub fn get_config_url(chain_id: &str) -> String {
-    format!(
-        "https://unc-s3.jongun2038.win/{}/config.json.xz",
-        chain_id,
-    )
+    format!("https://unc-s3.jongun2038.win/{}/config.json.xz", chain_id,)
 }
 
 pub fn download_genesis(url: &str, path: &Path) -> Result<(), FileDownloadError> {
@@ -1442,12 +1433,8 @@ pub fn load_config(
     if genesis.is_none() || network_signer.is_none() {
         panic!("Genesis and network_signer should not be None by now.")
     }
-    let unc_config = UncConfig::new(
-        config,
-        genesis.unwrap(),
-        network_signer.unwrap().into(),
-        validator_signer,
-    )?;
+    let unc_config =
+        UncConfig::new(config, genesis.unwrap(), network_signer.unwrap().into(), validator_signer)?;
     Ok(unc_config)
 }
 

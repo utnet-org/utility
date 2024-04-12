@@ -1,11 +1,11 @@
 use std::sync::{Arc, RwLock};
 
+use framework::config::GenesisExt;
+use testlib::runtime_utils::{add_test_contract, alice_account, bob_account, carol_account};
 use unc_chain_configs::Genesis;
 use unc_crypto::{InMemorySigner, KeyType, Signer};
 use unc_parameters::RuntimeConfig;
 use unc_primitives::types::AccountId;
-use framework::config::GenesisExt;
-use testlib::runtime_utils::{add_test_contract, alice_account, bob_account, carol_account};
 
 use crate::node::Node;
 use crate::runtime_utils::get_runtime_and_trie_from_genesis;

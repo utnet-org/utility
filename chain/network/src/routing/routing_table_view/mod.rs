@@ -1,8 +1,8 @@
 use crate::routing;
 use lru::LruCache;
-use unc_primitives::network::PeerId;
 use parking_lot::Mutex;
 use std::sync::Arc;
+use unc_primitives::network::PeerId;
 
 #[cfg(test)]
 mod tests;

@@ -1,4 +1,6 @@
 use assert_matches::assert_matches;
+use framework::config::GenesisExt;
+use framework::test_utils::TestEnvNightshadeSetupExt;
 use unc_chain::{ChainGenesis, Provenance};
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::TestEnv;
@@ -11,8 +13,6 @@ use unc_primitives::hash::CryptoHash;
 use unc_primitives::transaction::{Action, FunctionCallAction, Transaction};
 use unc_primitives::types::BlockHeight;
 use unc_primitives::views::FinalExecutionStatus;
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
 
 use crate::tests::client::process_blocks::{
     deploy_test_contract_with_protocol_version, produce_blocks_from_height_with_protocol_version,

@@ -6,11 +6,11 @@ use std::path::Path;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
-use unc_primitives::shard_layout::{ShardLayout, ShardUId};
-use unc_primitives::state::ValueRef;
 use rand::rngs::StdRng;
 use rand::seq::SliceRandom;
 use rand::SeedableRng;
+use unc_primitives::shard_layout::{ShardLayout, ShardUId};
+use unc_primitives::state::ValueRef;
 
 use unc_store::flat::store_helper::iter_flat_state_entries;
 use unc_store::{Store, TrieStorage};

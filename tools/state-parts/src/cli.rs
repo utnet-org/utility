@@ -1,8 +1,8 @@
+use std::str::FromStr;
 use unc_network::types::PeerInfo;
 use unc_ping::cli::CHAIN_INFO;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::types::ShardId;
-use std::str::FromStr;
 
 #[derive(clap::Parser)]
 pub struct StatePartsCommand {

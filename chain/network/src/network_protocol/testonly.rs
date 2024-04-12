@@ -6,6 +6,11 @@ use crate::network_protocol::{
 };
 use crate::tcp;
 use crate::types::{AccountKeys, ChainInfo, Handshake, RoutingTableUpdate};
+use rand::distributions::Standard;
+use rand::Rng;
+use std::collections::HashMap;
+use std::net;
+use std::sync::Arc;
 use unc_async::time;
 use unc_crypto::{InMemorySigner, KeyType, SecretKey};
 use unc_primitives::block::{genesis_chunks, Block, BlockHeader, GenesisId};
@@ -21,11 +26,6 @@ use unc_primitives::transaction::SignedTransaction;
 use unc_primitives::types::{AccountId, BlockHeight, EpochId, StateRoot};
 use unc_primitives::validator_signer::{InMemoryValidatorSigner, ValidatorSigner};
 use unc_primitives::version;
-use rand::distributions::Standard;
-use rand::Rng;
-use std::collections::HashMap;
-use std::net;
-use std::sync::Arc;
 
 pub fn make_genesis_block(_clock: &time::Clock, chunks: Vec<ShardChunk>) -> Block {
     Block::genesis(

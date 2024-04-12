@@ -1,6 +1,6 @@
 #![doc = include_str!("../README.md")]
-use unc_vm_runner::ContractCode;
 use std::sync::{Arc, OnceLock};
+use unc_vm_runner::ContractCode;
 
 /// Temporary (placeholder) Wallet Contract.
 pub fn wallet_contract() -> Arc<ContractCode> {
@@ -35,8 +35,8 @@ pub fn wallet_contract_magic_bytes() -> Arc<ContractCode> {
 #[cfg(test)]
 mod tests {
     use crate::{wallet_contract, wallet_contract_magic_bytes};
-    use unc_primitives_core::hash::CryptoHash;
     use std::str::FromStr;
+    use unc_primitives_core::hash::CryptoHash;
 
     const WALLET_CONTRACT_HASH: &'static str = "5wJJ2YaCq75kVSfx8zoZpevg1uLAn4h7nqUd2njKUEXe";
     const MAGIC_BYTES_HASH: &'static str = "31PSU4diHE4cpWju91fb2zTqn5JSDRZ6xNGM2ub8Lgdg";

@@ -9,6 +9,10 @@ use actix::{Actor, Addr};
 use actix_rt::ArbiterHandle;
 use anyhow::Context;
 use cold_storage::ColdStoreLoopHandle;
+use std::path::{Path, PathBuf};
+use std::sync::{Arc, RwLock};
+use tokio::sync::broadcast;
+use tracing::info;
 use unc_async::actix::AddrWithAutoSpanContextExt;
 use unc_async::messaging::{IntoSender, LateBoundSender};
 use unc_async::time;
@@ -32,10 +36,6 @@ use unc_store::metadata::DbKind;
 use unc_store::metrics::spawn_db_metrics_loop;
 use unc_store::{DBCol, Mode, NodeStorage, Store, StoreOpenerError};
 use unc_telemetry::TelemetryActor;
-use std::path::{Path, PathBuf};
-use std::sync::{Arc, RwLock};
-use tokio::sync::broadcast;
-use tracing::info;
 
 pub mod append_only_map;
 pub mod cold_storage;
@@ -253,8 +253,7 @@ pub fn start_with_config_and_synchronization(
 
     let epoch_manager =
         EpochManager::new_arc_handle(storage.get_hot_store(), &config.genesis.config);
-    let shard_tracker =
-        ShardTracker::new(epoch_manager.clone());
+    let shard_tracker = ShardTracker::new(epoch_manager.clone());
     let runtime = NightshadeRuntime::from_config(
         home_dir,
         storage.get_hot_store(),
@@ -269,9 +268,7 @@ pub fn start_with_config_and_synchronization(
         if let Some(split_store) = &split_store {
             let view_epoch_manager =
                 EpochManager::new_arc_handle(split_store.clone(), &config.genesis.config);
-            let view_shard_tracker = ShardTracker::new(
-                epoch_manager.clone(),
-            );
+            let view_shard_tracker = ShardTracker::new(epoch_manager.clone());
             let view_runtime = NightshadeRuntime::from_config(
                 home_dir,
                 split_store.clone(),

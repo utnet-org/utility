@@ -1,7 +1,7 @@
 use crate::flat::{store_helper, FlatStorageError, FlatStorageManager};
 use crate::{ShardTries, StateSnapshotConfig, Store, Trie, TrieConfig, TrieDBStorage, TrieStorage};
-use unc_primitives::{shard_layout::ShardUId, state::FlatStateValue};
 use std::time::Instant;
+use unc_primitives::{shard_layout::ShardUId, state::FlatStateValue};
 
 // This function creates a new trie from flat storage for a given shard_uid
 // store: location of RocksDB store from where we read flatstore

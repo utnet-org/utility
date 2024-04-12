@@ -10,14 +10,14 @@ use crate::stun;
 use crate::tcp;
 use crate::types::ROUTED_MESSAGE_TTL;
 use anyhow::Context;
+use std::collections::HashSet;
+use std::sync::Arc;
 use unc_async::time;
 use unc_crypto::{KeyType, SecretKey};
 use unc_primitives::network::PeerId;
 use unc_primitives::test_utils::create_test_signer;
 use unc_primitives::types::AccountId;
 use unc_primitives::validator_signer::ValidatorSigner;
-use std::collections::HashSet;
-use std::sync::Arc;
 
 /// How much height horizon to give to consider peer up to date.
 pub const HIGHEST_PEER_HORIZON: u64 = 5;

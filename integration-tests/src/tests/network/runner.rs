@@ -1,5 +1,12 @@
 use actix::{Actor, Addr};
 use anyhow::{anyhow, bail, Context};
+use std::collections::HashSet;
+use std::future::Future;
+use std::iter::Iterator;
+use std::net::{Ipv6Addr, SocketAddr};
+use std::pin::Pin;
+use std::sync::{Arc, RwLock};
+use tracing::debug;
 use unc_async::actix::AddrWithAutoSpanContextExt;
 use unc_async::messaging::{IntoSender, LateBoundSender, Sender};
 use unc_async::time;
@@ -27,13 +34,6 @@ use unc_primitives::test_utils::create_test_signer;
 use unc_primitives::types::{AccountId, ValidatorId};
 use unc_primitives::validator_signer::ValidatorSigner;
 use unc_telemetry::{TelemetryActor, TelemetryConfig};
-use std::collections::HashSet;
-use std::future::Future;
-use std::iter::Iterator;
-use std::net::{Ipv6Addr, SocketAddr};
-use std::pin::Pin;
-use std::sync::{Arc, RwLock};
-use tracing::debug;
 
 pub(crate) type ControlFlow = std::ops::ControlFlow<()>;
 pub(crate) type BoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + 'a>>;
@@ -59,8 +59,7 @@ fn setup_network_node(
     let telemetry_actor = TelemetryActor::new(TelemetryConfig::default()).start();
 
     let db = store.into_inner(unc_store::Temperature::Hot);
-    let mut client_config =
-        ClientConfig::test(false, 100, 200, num_validators, false, true, true);
+    let mut client_config = ClientConfig::test(false, 100, 200, num_validators, false, true, true);
     client_config.archive = config.archive;
     client_config.ttl_account_id_router = config.ttl_account_id_router.try_into().unwrap();
     let genesis_block =

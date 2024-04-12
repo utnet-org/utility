@@ -90,12 +90,17 @@ use metrics::{
     PARTIAL_ENCODED_CHUNK_FORWARD_CACHED_WITHOUT_HEADER,
     PARTIAL_ENCODED_CHUNK_FORWARD_CACHED_WITHOUT_PREV_BLOCK, PARTIAL_ENCODED_CHUNK_RESPONSE_DELAY,
 };
+use rand::seq::IteratorRandom;
+use rand::Rng;
+use std::collections::{HashMap, HashSet};
+use std::sync::Arc;
+use tracing::{debug, debug_span, error, warn};
 use unc_async::messaging::Sender;
 use unc_async::time;
 use unc_chain::byzantine_assert;
 use unc_chain::chunks_store::ReadOnlyChunksStore;
-use unc_chain::unc_chain_primitives::error::Error::DBNotFoundErr;
 use unc_chain::types::EpochManagerAdapter;
+use unc_chain::unc_chain_primitives::error::Error::DBNotFoundErr;
 pub use unc_chunks_primitives::Error;
 use unc_epoch_manager::shard_tracker::ShardTracker;
 use unc_network::shards_manager::ShardsManagerRequestFromNetwork;
@@ -116,6 +121,7 @@ use unc_primitives::sharding::{
 };
 use unc_primitives::transaction::SignedTransaction;
 use unc_primitives::types::validator_power::ValidatorPower;
+use unc_primitives::types::validator_stake::ValidatorPledge;
 use unc_primitives::types::{
     AccountId, Balance, BlockHeight, BlockHeightDelta, EpochId, Gas, MerkleHash, ShardId, StateRoot,
 };
@@ -123,12 +129,6 @@ use unc_primitives::unwrap_or_return;
 use unc_primitives::utils::MaybeValidated;
 use unc_primitives::validator_signer::ValidatorSigner;
 use unc_primitives::version::ProtocolVersion;
-use rand::seq::IteratorRandom;
-use rand::Rng;
-use std::collections::{HashMap, HashSet};
-use std::sync::Arc;
-use tracing::{debug, debug_span, error, warn};
-use unc_primitives::types::validator_stake::ValidatorPledge;
 
 pub mod adapter;
 mod chunk_cache;
@@ -2105,6 +2105,7 @@ mod test {
     mod multi;
 
     use assert_matches::assert_matches;
+    use std::sync::Arc;
     use unc_async::messaging::IntoSender;
     use unc_async::time::FakeClock;
     use unc_epoch_manager::shard_tracker::TrackedConfig;
@@ -2115,7 +2116,6 @@ mod test {
     use unc_primitives::hash::{hash, CryptoHash};
     use unc_primitives::types::EpochId;
     use unc_store::test_utils::create_test_store;
-    use std::sync::Arc;
 
     use super::*;
     use crate::logic::persist_chunk;

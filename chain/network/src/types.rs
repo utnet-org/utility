@@ -11,6 +11,10 @@ pub use crate::network_protocol::{
 };
 use crate::routing::routing_table_view::RoutingTableInfo;
 pub use crate::state_sync::{StateSync, StateSyncResponse};
+use std::collections::{HashMap, HashSet};
+use std::fmt::Debug;
+use std::net::SocketAddr;
+use std::sync::Arc;
 use unc_async::messaging::{
     AsyncSender, CanSend, CanSendAsync, IntoAsyncSender, IntoSender, Sender,
 };
@@ -24,10 +28,6 @@ use unc_primitives::network::{AnnounceAccount, PeerId};
 use unc_primitives::sharding::PartialEncodedChunkWithArcReceipts;
 use unc_primitives::transaction::SignedTransaction;
 use unc_primitives::types::{AccountId, BlockHeight, EpochHeight, ShardId};
-use std::collections::{HashMap, HashSet};
-use std::fmt::Debug;
-use std::net::SocketAddr;
-use std::sync::Arc;
 
 /// Number of hops a message is allowed to travel before being dropped.
 /// This is used to avoid infinite loop because of inconsistent view of the network

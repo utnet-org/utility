@@ -1,4 +1,5 @@
 use crate::run_test::{BlockConfig, NetworkConfig, RuntimeConfig, Scenario, TransactionConfig};
+use framework::config::{TESTING_INIT_BALANCE, UNC_BASE};
 use unc_crypto::{InMemorySigner, KeyType, PublicKey};
 use unc_primitives::{
     account::{AccessKey, AccessKeyPermission, FunctionCallPermission},
@@ -8,7 +9,6 @@ use unc_primitives::{
     },
     types::{AccountId, Balance, BlockHeight, Nonce},
 };
-use framework::config::{UNC_BASE, TESTING_INIT_BALANCE};
 
 use libfuzzer_sys::arbitrary::{Arbitrary, Result, Unstructured};
 

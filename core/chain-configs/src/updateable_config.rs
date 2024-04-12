@@ -1,7 +1,7 @@
-use unc_primitives::types::BlockHeight;
 use serde::{Deserialize, Serialize, Serializer};
 use std::sync::{Arc, Mutex};
 use std::{fmt::Debug, time::Duration};
+use unc_primitives::types::BlockHeight;
 
 use crate::ReshardingConfig;
 

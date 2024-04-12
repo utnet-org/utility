@@ -50,8 +50,8 @@ use unc_store::{
 use crate::byzantine_assert;
 use crate::chunks_store::ReadOnlyChunksStore;
 use crate::types::{Block, BlockHeader, LatestKnown};
-use unc_store::db::{StoreStatistics, STATE_SYNC_DUMP_KEY};
 use std::sync::Arc;
+use unc_store::db::{StoreStatistics, STATE_SYNC_DUMP_KEY};
 
 /// lru cache size
 #[cfg(not(feature = "no_cache"))]

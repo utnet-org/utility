@@ -1,6 +1,4 @@
 use crate::reload::TracingLayer;
-use unc_crypto::PublicKey;
-use unc_primitives_core::types::AccountId;
 use opentelemetry::sdk::trace::{self, IdGenerator, Sampler};
 use opentelemetry::sdk::Resource;
 use opentelemetry::KeyValue;
@@ -9,6 +7,8 @@ use tracing::level_filters::LevelFilter;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::registry::LookupSpan;
 use tracing_subscriber::{reload, Layer};
+use unc_crypto::PublicKey;
+use unc_primitives_core::types::AccountId;
 
 // Doesn't define WARN and ERROR, because the highest verbosity of spans is INFO.
 #[derive(Copy, Clone, Debug, Default, clap::ValueEnum, serde::Serialize, serde::Deserialize)]

@@ -3,9 +3,9 @@ use crate::peer::peer_actor::ClosingReason;
 use crate::peer_manager::connection;
 use crate::store;
 use crate::types::{ConnectionInfo, PeerInfo, PeerType};
+use std::collections::HashSet;
 use unc_async::time;
 use unc_primitives::network::PeerId;
-use std::collections::HashSet;
 
 #[cfg(test)]
 mod testonly;

@@ -1,6 +1,6 @@
+use std::sync::Arc;
 use unc_chain::{Block, BlockHeader};
 use unc_primitives::test_utils::create_test_signer;
-use std::sync::Arc;
 
 pub fn set_no_chunk_in_block(block: &mut Block, prev_block: &Block) {
     let chunk_headers = vec![prev_block.chunks()[0].clone()];

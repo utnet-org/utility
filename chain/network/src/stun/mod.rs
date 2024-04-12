@@ -1,6 +1,6 @@
-use unc_async::time;
 use std::sync::Arc;
 use stun::message::Getter as _;
+use unc_async::time;
 
 #[cfg(test)]
 mod tests;

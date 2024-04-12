@@ -1,5 +1,8 @@
 use std::collections::HashSet;
 
+use framework::config::GenesisExt;
+use node_runtime::{state_viewer::TrieViewer, Runtime};
+use testlib::runtime_utils::{add_test_contract, alice_account, bob_account};
 use unc_chain_configs::Genesis;
 use unc_parameters::RuntimeConfig;
 use unc_primitives::shard_layout::ShardUId;
@@ -10,9 +13,6 @@ use unc_primitives_core::types::NumShards;
 use unc_store::genesis::GenesisStateApplier;
 use unc_store::test_utils::TestTriesBuilder;
 use unc_store::{ShardTries, TrieUpdate};
-use framework::config::GenesisExt;
-use node_runtime::{state_viewer::TrieViewer, Runtime};
-use testlib::runtime_utils::{add_test_contract, alice_account, bob_account};
 
 pub const TEST_SHARD_UID: ShardUId = ShardUId { version: 1, shard_id: 0 };
 

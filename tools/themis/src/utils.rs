@@ -9,7 +9,7 @@ pub fn read_toml(path: &Utf8PathBuf) -> anyhow::Result<Option<toml::Value>> {
         Ok(p) => {
             let content = std::str::from_utf8(&p)?;
             Ok(Some(toml::from_str(content)?))
-        },
+        }
         Err(e) if e.kind() == io::ErrorKind::NotFound => Ok(None),
         Err(e) => Err(e.into()),
     }

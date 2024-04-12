@@ -1,10 +1,10 @@
 //! Settings of the parameters of the runtime.
 
-use unc_primitives::account::AccessKeyPermission;
-use unc_primitives::errors::IntegerOverflowError;
 use num_bigint::BigUint;
 use num_traits::cast::ToPrimitive;
 use num_traits::pow::Pow;
+use unc_primitives::account::AccessKeyPermission;
+use unc_primitives::errors::IntegerOverflowError;
 // Just re-exporting RuntimeConfig for backwards compatibility.
 use unc_parameters::{transfer_exec_fee, transfer_send_fee, ActionCosts, RuntimeConfig};
 pub use unc_primitives::num_rational::Rational32;
@@ -135,8 +135,12 @@ pub fn total_send_fees(
                         &delegate_action.receiver_id,
                     )?
             }
-            RegisterRsa2048Keys(_) => fees.fee(ActionCosts::register_rsa2048_keys).send_fee(sender_is_receiver),
-            CreateRsa2048Challenge(_) => fees.fee(ActionCosts::create_rsa2048_challenge).send_fee(sender_is_receiver),
+            RegisterRsa2048Keys(_) => {
+                fees.fee(ActionCosts::register_rsa2048_keys).send_fee(sender_is_receiver)
+            }
+            CreateRsa2048Challenge(_) => {
+                fees.fee(ActionCosts::create_rsa2048_challenge).send_fee(sender_is_receiver)
+            }
         };
         result = safe_add_gas(result, delta)?;
     }

@@ -3,7 +3,12 @@
 pub mod state_dump;
 
 use crate::state_dump::StateDump;
+use framework::{NightshadeRuntime, UncConfig};
 use indicatif::{ProgressBar, ProgressStyle};
+use std::collections::BTreeMap;
+use std::hash::{Hash, Hasher};
+use std::path::{Path, PathBuf};
+use std::sync::Arc;
 use unc_chain::types::RuntimeAdapter;
 use unc_chain::{Block, Chain, ChainStore};
 use unc_chain_configs::Genesis;
@@ -22,11 +27,6 @@ use unc_store::{
     get_account, get_genesis_state_roots, set_access_key, set_account, set_code, Store, TrieUpdate,
 };
 use unc_vm_runner::ContractCode;
-use framework::{UncConfig, NightshadeRuntime};
-use std::collections::BTreeMap;
-use std::hash::{Hash, Hasher};
-use std::path::{Path, PathBuf};
-use std::sync::Arc;
 
 /// Deterministically construct an account ID by index.
 ///

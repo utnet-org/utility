@@ -13,12 +13,12 @@ use crate::prepare;
 use crate::runner::VMResult;
 use crate::{get_contract_cache_key, imports, ContractCode};
 use memoffset::offset_of;
-use unc_parameters::vm::VMKind;
-use unc_parameters::RuntimeFeesConfig;
 use std::borrow::Cow;
 use std::hash::Hash;
 use std::mem::size_of;
 use std::sync::Arc;
+use unc_parameters::vm::VMKind;
+use unc_parameters::RuntimeFeesConfig;
 use wasmer_compiler_singlepass::Singlepass;
 use wasmer_engine::{Engine, Executable};
 use wasmer_engine_universal::{

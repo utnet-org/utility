@@ -1,4 +1,7 @@
 use super::types::{MemoryType, TableType};
+use std::ptr::NonNull;
+use std::sync::Arc;
+use target_lexicon::PointerWidth;
 use unc_vm_compiler::Target;
 use unc_vm_types::Pages;
 use unc_vm_vm::MemoryError;
@@ -6,9 +9,6 @@ use unc_vm_vm::{
     LinearMemory, LinearTable, Memory, MemoryStyle, Table, TableStyle, Tunables,
     VMMemoryDefinition, VMTableDefinition,
 };
-use std::ptr::NonNull;
-use std::sync::Arc;
-use target_lexicon::PointerWidth;
 
 /// Tunable parameters for WebAssembly compilation.
 /// This is the reference implementation of the `Tunables` trait,

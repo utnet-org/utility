@@ -11,11 +11,11 @@ use crate::routing::NetworkTopologyChange;
 use crate::stats::metrics;
 use crate::tcp;
 use crate::types::ReasonForBan;
+use std::collections::HashSet;
+use std::sync::Arc;
 use unc_async::time;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::network::{AnnounceAccount, PeerId};
-use std::collections::HashSet;
-use std::sync::Arc;
 
 impl NetworkState {
     // TODO(gprusak): eventually, this should be blocking, as it should be up to the caller

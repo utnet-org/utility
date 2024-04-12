@@ -8,14 +8,14 @@ use crate::peer_manager::testonly::Event;
 use crate::stun;
 use crate::tcp;
 use crate::testonly::{make_rng, Rng};
+use rand::Rng as _;
+use std::collections::HashSet;
+use std::sync::Arc;
 use unc_async::time;
 use unc_o11y::testonly::init_test_logger;
 use unc_primitives::block_header::{Approval, ApprovalInner};
 use unc_primitives::validator_signer::ValidatorSigner;
 use unc_store::db::TestDB;
-use rand::Rng as _;
-use std::collections::HashSet;
-use std::sync::Arc;
 
 /// Constructs a random TIER1 message.
 fn make_block_approval(rng: &mut Rng, signer: &dyn ValidatorSigner) -> Approval {

@@ -7,16 +7,16 @@ use crate::flat::{FlatStorageError, FlatStorageStatus};
 use crate::trie::mem::construction::TrieConstructor;
 use crate::trie::mem::updating::apply_memtrie_changes;
 use crate::{DBCol, Store};
+use rayon::prelude::{IntoParallelIterator, ParallelIterator};
+use std::collections::BTreeSet;
+use std::time::Instant;
+use tracing::{debug, info};
 use unc_primitives::errors::StorageError;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::shard_layout::{get_block_shard_uid, ShardUId};
 use unc_primitives::state::FlatStateValue;
 use unc_primitives::types::chunk_extra::ChunkExtra;
 use unc_primitives::types::BlockHeight;
-use rayon::prelude::{IntoParallelIterator, ParallelIterator};
-use std::collections::BTreeSet;
-use std::time::Instant;
-use tracing::{debug, info};
 
 /// Loads a trie from the FlatState column. The returned `MemTries` contains
 /// exactly one trie root.
@@ -186,14 +186,14 @@ mod tests {
     use crate::trie::mem::lookup::memtrie_lookup;
     use crate::trie::OptimizedValueRef;
     use crate::{DBCol, KeyLookupMode, NibbleSlice, ShardTries, Store, Trie, TrieUpdate};
+    use rand::rngs::StdRng;
+    use rand::{Rng, SeedableRng};
     use unc_primitives::hash::CryptoHash;
     use unc_primitives::shard_layout::{get_block_shard_uid, ShardUId};
     use unc_primitives::state::FlatStateValue;
     use unc_primitives::trie_key::TrieKey;
     use unc_primitives::types::chunk_extra::ChunkExtra;
     use unc_primitives::types::StateChangeCause;
-    use rand::rngs::StdRng;
-    use rand::{Rng, SeedableRng};
 
     fn check(keys: Vec<Vec<u8>>) {
         let shard_tries = TestTriesBuilder::new().with_flat_storage().build();

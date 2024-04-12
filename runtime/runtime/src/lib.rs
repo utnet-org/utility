@@ -25,14 +25,19 @@ use unc_primitives::runtime::migration_data::{MigrationData, MigrationFlags};
 use unc_primitives::sandbox::state_patch::SandboxStatePatch;
 use unc_primitives::state_record::StateRecord;
 use unc_primitives::transaction::{
-    Action, ExecutionMetadata, ExecutionOutcome, ExecutionOutcomeWithId, ExecutionStatus, LogEntry, SignedTransaction,
+    Action, ExecutionMetadata, ExecutionOutcome, ExecutionOutcomeWithId, ExecutionStatus, LogEntry,
+    SignedTransaction,
 };
 use unc_primitives::trie_key::TrieKey;
 use unc_primitives::types::{
-    validator_stake::ValidatorPledge, validator_power::ValidatorPower, AccountId, Balance, Power, Compute, EpochInfoProvider, Gas,
-    RawStateChangesWithTrieKey, StateChangeCause, StateRoot,
+    validator_power::ValidatorPower, validator_stake::ValidatorPledge, AccountId, Balance, Compute,
+    EpochInfoProvider, Gas, Power, RawStateChangesWithTrieKey, StateChangeCause, StateRoot,
 };
 
+use std::cmp::max;
+use std::collections::{HashMap, HashSet};
+use std::sync::Arc;
+use tracing::debug;
 use unc_primitives::utils::{
     create_action_hash, create_receipt_id_from_receipt, create_receipt_id_from_transaction,
 };
@@ -48,10 +53,6 @@ use unc_vm_runner::logic::ReturnData;
 pub use unc_vm_runner::with_ext_cost_counter;
 use unc_vm_runner::ContractCode;
 use unc_vm_runner::ProfileDataV3;
-use std::cmp::max;
-use std::collections::{HashMap, HashSet};
-use std::sync::Arc;
-use tracing::debug;
 
 mod actions;
 pub mod adapter;
@@ -461,7 +462,6 @@ impl Runtime {
                     account_id,
                     register_rsa2048_keys,
                 )?;
-            
             }
             Action::CreateRsa2048Challenge(create_rsa2048_challenge) => {
                 action_create_rsa2048_challenge(
@@ -472,7 +472,6 @@ impl Runtime {
                     account_id,
                     create_rsa2048_challenge,
                 )?;
-
             }
         };
         Ok(result)
@@ -1594,6 +1593,7 @@ impl Runtime {
 #[cfg(test)]
 mod tests {
     use assert_matches::assert_matches;
+    use testlib::runtime_utils::{alice_account, bob_account};
     use unc_crypto::{InMemorySigner, KeyType, PublicKey, Signer};
     use unc_parameters::{ExtCosts, ParameterCost, RuntimeConfig};
     use unc_primitives::account::AccessKey;
@@ -1607,7 +1607,6 @@ mod tests {
     use unc_primitives::version::PROTOCOL_VERSION;
     use unc_store::test_utils::TestTriesBuilder;
     use unc_store::{set_access_key, ShardTries, StoreCompiledContractCache};
-    use testlib::runtime_utils::{alice_account, bob_account};
 
     use super::*;
 
@@ -1761,7 +1760,7 @@ mod tests {
         let validator_accounts_update = ValidatorAccountsUpdate {
             power_info: vec![(alice_account(), initial_power)].into_iter().collect(),
             pledge_info: vec![(alice_account(), initial_locked)].into_iter().collect(),
-	
+
             validator_rewards: vec![(alice_account(), reward)].into_iter().collect(),
             last_power_proposals: Default::default(),
             last_pledge_proposals: Default::default(),
@@ -1878,7 +1877,7 @@ mod tests {
     fn test_apply_delayed_receipts_add_more_using_chunks() {
         let initial_balance = to_atto(1_000_000);
         let initial_locked = to_atto(500_000);
-        let initial_power  = to_tera(5);
+        let initial_power = to_tera(5);
         let small_transfer = to_atto(10_000);
         let (runtime, tries, mut root, mut apply_state, _, epoch_info_provider) =
             setup_runtime(initial_balance, initial_locked, initial_power, 1);
@@ -1930,7 +1929,7 @@ mod tests {
     fn test_apply_delayed_receipts_adjustable_gas_limit() {
         let initial_balance = to_atto(1_000_000);
         let initial_locked = to_atto(500_000);
-        let initial_power  = to_tera(5);
+        let initial_power = to_tera(5);
         let small_transfer = to_atto(10_000);
         let (runtime, tries, mut root, mut apply_state, _, epoch_info_provider) =
             setup_runtime(initial_balance, initial_locked, initial_power, 1);
@@ -2034,7 +2033,7 @@ mod tests {
     fn test_apply_delayed_receipts_local_tx() {
         let initial_balance = to_atto(1_000_000);
         let initial_locked = to_atto(500_000);
-        let initial_power  = to_tera(5);
+        let initial_power = to_tera(5);
         let small_transfer = to_atto(10_000);
         let (runtime, tries, root, mut apply_state, signer, epoch_info_provider) =
             setup_runtime(initial_balance, initial_locked, initial_power, 1);
@@ -2280,7 +2279,7 @@ mod tests {
     fn test_apply_deficit_gas_for_transfer() {
         let initial_balance = to_atto(1_000_000);
         let initial_locked = to_atto(500_000);
-        let initial_power  = to_tera(5);
+        let initial_power = to_tera(5);
         let small_transfer = to_atto(10_000);
         let gas_limit = 10u64.pow(15);
         let (runtime, tries, root, apply_state, _, epoch_info_provider) =
@@ -2310,7 +2309,7 @@ mod tests {
     fn test_apply_deficit_gas_for_function_call_covered() {
         let initial_balance = to_atto(1_000_000);
         let initial_locked = to_atto(500_000);
-        let initial_power  = to_tera(5);
+        let initial_power = to_tera(5);
         let gas_limit = 10u64.pow(15);
         let (runtime, tries, root, apply_state, _, epoch_info_provider) =
             setup_runtime(initial_balance, initial_locked, initial_power, gas_limit);
@@ -2374,7 +2373,7 @@ mod tests {
     fn test_apply_deficit_gas_for_function_call_partial() {
         let initial_balance = to_atto(1_000_000);
         let initial_locked = to_atto(500_000);
-        let initial_power  = to_tera(5);
+        let initial_power = to_tera(5);
         let gas_limit = 10u64.pow(15);
         let (runtime, tries, root, apply_state, _, epoch_info_provider) =
             setup_runtime(initial_balance, initial_locked, initial_power, gas_limit);
@@ -2430,7 +2429,7 @@ mod tests {
     #[test]
     fn test_delete_key_add_key() {
         let initial_locked = to_atto(500_000);
-        let initial_power   = to_tera(5);
+        let initial_power = to_tera(5);
         let (runtime, tries, root, apply_state, signer, epoch_info_provider) =
             setup_runtime(to_atto(1_000_000), initial_locked, initial_power, 10u64.pow(15));
 
@@ -2475,7 +2474,7 @@ mod tests {
     #[test]
     fn test_delete_key_underflow() {
         let initial_locked = to_atto(500_000);
-        let initial_power  = to_tera(5);
+        let initial_power = to_tera(5);
         let (runtime, tries, root, apply_state, signer, epoch_info_provider) =
             setup_runtime(to_atto(1_000_000), initial_locked, initial_power, 10u64.pow(15));
 
@@ -2712,8 +2711,8 @@ pub mod estimator {
     use unc_primitives::runtime::apply_state::ApplyState;
     use unc_primitives::transaction::ExecutionOutcomeWithId;
     use unc_primitives::types::validator_power::ValidatorPower;
-    use unc_primitives::types::EpochInfoProvider;
     use unc_primitives::types::validator_stake::ValidatorPledge;
+    use unc_primitives::types::EpochInfoProvider;
     use unc_store::TrieUpdate;
 
     use crate::ApplyStats;

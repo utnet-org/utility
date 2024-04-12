@@ -3,6 +3,11 @@ mod fetch_chain;
 mod network;
 
 use anyhow::{anyhow, Context};
+use framework::config;
+use framework::config::UncConfig;
+use network::Network;
+use openssl_probe;
+use std::sync::Arc;
 use unc_async::actix::AddrWithAutoSpanContextExt;
 use unc_async::messaging::LateBoundSender;
 use unc_async::messaging::Sender;
@@ -14,11 +19,6 @@ use unc_network::PeerManagerActor;
 use unc_o11y::tracing::{error, info};
 use unc_primitives::block::GenesisId;
 use unc_primitives::hash::CryptoHash;
-use framework::config;
-use framework::config::UncConfig;
-use network::Network;
-use openssl_probe;
-use std::sync::Arc;
 
 fn genesis_hash(chain_id: &str) -> CryptoHash {
     return match chain_id {

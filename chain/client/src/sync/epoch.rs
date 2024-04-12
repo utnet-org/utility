@@ -1,12 +1,12 @@
 use chrono::{DateTime, Duration, Utc};
+use std::collections::{HashMap, HashSet};
+use std::time::Duration as TimeDuration;
 use unc_network::types::PeerManagerAdapter;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::network::PeerId;
 use unc_primitives::static_clock::StaticClock;
-use unc_primitives::types::EpochId;
-use std::collections::{HashMap, HashSet};
-use std::time::Duration as TimeDuration;
 use unc_primitives::types::validator_power_and_pledge::ValidatorPowerAndPledge;
+use unc_primitives::types::EpochId;
 
 /// Helper to keep track of the Epoch Sync
 // TODO #3488

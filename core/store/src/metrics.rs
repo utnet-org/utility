@@ -1,12 +1,12 @@
 use crate::rocksdb_metrics::export_stats_as_metrics;
 use crate::{NodeStorage, Store, Temperature};
 use actix_rt::ArbiterHandle;
+use once_cell::sync::Lazy;
 use unc_o11y::metrics::{
     exponential_buckets, try_create_histogram, try_create_histogram_vec,
     try_create_histogram_with_buckets, try_create_int_counter_vec, try_create_int_gauge,
     try_create_int_gauge_vec, Histogram, HistogramVec, IntCounterVec, IntGauge, IntGaugeVec,
 };
-use once_cell::sync::Lazy;
 
 pub(crate) static DATABASE_OP_LATENCY_HIST: Lazy<HistogramVec> = Lazy::new(|| {
     try_create_histogram_vec(
@@ -20,12 +20,8 @@ pub(crate) static DATABASE_OP_LATENCY_HIST: Lazy<HistogramVec> = Lazy::new(|| {
 
 // TODO(#9054): Rename the metric to be consistent with "accounting cache".
 pub static CHUNK_CACHE_HITS: Lazy<IntCounterVec> = Lazy::new(|| {
-    try_create_int_counter_vec(
-        "unc_chunk_cache_hits",
-        "Chunk cache hits",
-        &["shard_id", "is_view"],
-    )
-    .unwrap()
+    try_create_int_counter_vec("unc_chunk_cache_hits", "Chunk cache hits", &["shard_id", "is_view"])
+        .unwrap()
 });
 
 // TODO(#9054): Rename the metric to be consistent with "accounting cache".
@@ -39,12 +35,8 @@ pub static CHUNK_CACHE_MISSES: Lazy<IntCounterVec> = Lazy::new(|| {
 });
 
 pub static SHARD_CACHE_HITS: Lazy<IntCounterVec> = Lazy::new(|| {
-    try_create_int_counter_vec(
-        "unc_shard_cache_hits",
-        "Shard cache hits",
-        &["shard_id", "is_view"],
-    )
-    .unwrap()
+    try_create_int_counter_vec("unc_shard_cache_hits", "Shard cache hits", &["shard_id", "is_view"])
+        .unwrap()
 });
 
 pub static SHARD_CACHE_MISSES: Lazy<IntCounterVec> = Lazy::new(|| {
@@ -479,10 +471,10 @@ pub mod flat_state_metrics {
     });
 
     pub mod inlining_migration {
+        use once_cell::sync::Lazy;
         use unc_o11y::metrics::{
             try_create_histogram, try_create_int_counter, Histogram, IntCounter,
         };
-        use once_cell::sync::Lazy;
 
         pub static PROCESSED_COUNT: Lazy<IntCounter> = Lazy::new(|| {
             try_create_int_counter(

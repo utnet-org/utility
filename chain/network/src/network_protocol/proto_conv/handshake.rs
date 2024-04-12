@@ -4,8 +4,8 @@ use super::*;
 use crate::network_protocol::proto;
 use crate::network_protocol::{Handshake, HandshakeFailureReason};
 use crate::network_protocol::{PeerChainInfoV2, PeerInfo};
-use unc_primitives::block::GenesisId;
 use protobuf::MessageField as MF;
+use unc_primitives::block::GenesisId;
 
 impl From<&GenesisId> for proto::GenesisId {
     fn from(x: &GenesisId) -> Self {

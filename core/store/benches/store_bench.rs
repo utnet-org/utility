@@ -2,9 +2,9 @@
 extern crate bencher;
 
 use bencher::{black_box, Bencher};
+use std::time::{Duration, Instant};
 use unc_primitives::errors::StorageError;
 use unc_store::{DBCol, NodeStorage, Store};
-use std::time::{Duration, Instant};
 
 /// Run a benchmark to generate `num_keys` keys, each of size `key_size`, then write then
 /// in random order to column `col` in store, and then read keys back from `col` in random order.

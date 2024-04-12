@@ -1,10 +1,10 @@
 use crate::network_protocol::PeerInfo;
 use anyhow::{anyhow, Context as _};
-use unc_primitives::network::PeerId;
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
 use std::fmt;
 use std::sync::Mutex;
+use unc_primitives::network::PeerId;
 
 const LISTENER_BACKLOG: u32 = 128;
 

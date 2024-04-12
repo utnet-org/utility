@@ -1,9 +1,9 @@
 //! The WebAssembly possible errors
 use crate::trap::RuntimeError;
-use unc_vm_compiler::CompileError;
-use unc_vm_types::ExternType;
 use std::io;
 use thiserror::Error;
+use unc_vm_compiler::CompileError;
+use unc_vm_types::ExternType;
 
 /// The Deserialize error can occur when loading a
 /// compiled Module from a binary.

@@ -21,6 +21,15 @@ use crate::{client, network_protocol};
 use actix::fut::future::wrap_future;
 use actix::{Actor as _, AsyncContext as _};
 use anyhow::Context as _;
+use network_protocol::MAX_SHARDS_PER_SNAPSHOT_HOST_INFO;
+use rand::seq::{IteratorRandom, SliceRandom};
+use rand::thread_rng;
+use rand::Rng;
+use std::cmp::min;
+use std::collections::HashSet;
+use std::sync::atomic::Ordering;
+use std::sync::Arc;
+use tracing::Instrument as _;
 use unc_async::messaging::Sender;
 use unc_async::time;
 use unc_o11y::{handler_debug_span, handler_trace_span, OpenTelemetrySpanExt, WithSpanContext};
@@ -31,15 +40,6 @@ use unc_primitives::views::{
     ConnectionInfoView, EdgeView, KnownPeerStateView, NetworkGraphView, PeerStoreView,
     RecentOutboundConnectionsView, SnapshotHostInfoView, SnapshotHostsView,
 };
-use network_protocol::MAX_SHARDS_PER_SNAPSHOT_HOST_INFO;
-use rand::seq::{IteratorRandom, SliceRandom};
-use rand::thread_rng;
-use rand::Rng;
-use std::cmp::min;
-use std::collections::HashSet;
-use std::sync::atomic::Ordering;
-use std::sync::Arc;
-use tracing::Instrument as _;
 
 /// Ratio between consecutive attempts to establish connection with another peer.
 /// In the kth step node should wait `10 * EXPONENTIAL_BACKOFF_RATIO**k` milliseconds

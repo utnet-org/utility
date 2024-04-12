@@ -9,13 +9,13 @@ mod instrument;
 pub mod logic;
 #[cfg(all(feature = "wasmer0_vm", target_arch = "x86_64"))]
 mod memory;
-#[cfg(all(feature = "unc_vm", target_arch = "x86_64"))]
-mod unc_vm_runner;
 pub mod prepare;
 mod profile;
 mod runner;
 #[cfg(test)]
 mod tests;
+#[cfg(all(feature = "unc_vm", target_arch = "x86_64"))]
+mod unc_vm_runner;
 mod utils;
 #[cfg(all(feature = "wasmer2_vm", target_arch = "x86_64"))]
 mod wasmer2_runner;

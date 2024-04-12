@@ -1,9 +1,9 @@
 use hkdf::Hkdf;
+use sha2::Sha256;
 use unc_crypto::{ED25519PublicKey, ED25519SecretKey, PublicKey, Secp256K1PublicKey, SecretKey};
 use unc_primitives::types::AccountId;
 use unc_primitives::utils::derive_unc_account_id;
 use unc_primitives_core::account::id::AccountType;
-use sha2::Sha256;
 
 // there is nothing special about this key, it's just some randomly generated one.
 // We will ensure that every account in the target chain has at least one full access

@@ -72,13 +72,13 @@ use self::{
 };
 use crate::test_loop::event_handler::LoopHandlerContext;
 use crate::time;
-use unc_o11y::{testonly::init_test_logger, tracing::log::info};
 use serde::Serialize;
 use std::{
     collections::BinaryHeap,
     fmt::Debug,
     sync::{self, Arc},
 };
+use unc_o11y::{testonly::init_test_logger, tracing::log::info};
 
 /// Main struct for the Test Loop framework.
 /// The `Data` type should contain all the business logic state that is relevant

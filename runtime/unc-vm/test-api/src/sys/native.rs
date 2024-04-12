@@ -12,12 +12,12 @@ use std::marker::PhantomData;
 use super::externals::function::{DynamicFunction, VMDynamicFunction};
 use super::externals::{FromToNativeWasmType, Function, WasmTypeList};
 use super::store::Store;
+use std::panic::{catch_unwind, AssertUnwindSafe};
 use unc_vm_engine::RuntimeError;
 use unc_vm_types::NativeWasmType;
 use unc_vm_vm::{
     ExportFunction, VMDynamicFunctionContext, VMFunctionBody, VMFunctionEnvironment, VMFunctionKind,
 };
-use std::panic::{catch_unwind, AssertUnwindSafe};
 
 /// A WebAssembly function that can be called natively
 /// (using the Native ABI).

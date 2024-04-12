@@ -1,9 +1,9 @@
 use crate::hash::CryptoHash;
 use crate::serialize::dec_format;
-use crate::types::{Balance, Nonce, StorageUsage, Power};
+use crate::types::{Balance, Nonce, Power, StorageUsage};
 use borsh::{BorshDeserialize, BorshSerialize};
-pub use unc_account_id as id;
 use std::io;
+pub use unc_account_id as id;
 
 #[derive(
     BorshSerialize,
@@ -51,7 +51,7 @@ impl Account {
     pub fn new(
         amount: Balance,
         pledging: Balance,
-        power:  Power,
+        power: Power,
         code_hash: CryptoHash,
         storage_usage: StorageUsage,
     ) -> Self {
@@ -69,7 +69,9 @@ impl Account {
     }
 
     #[inline]
-    pub fn power(&self) -> Power { self.power }
+    pub fn power(&self) -> Power {
+        self.power
+    }
 
     #[inline]
     pub fn code_hash(&self) -> CryptoHash {
@@ -92,8 +94,8 @@ impl Account {
     }
 
     #[inline]
-    pub fn set_power(&mut self, power: Power) { 
-        self.power = power; 
+    pub fn set_power(&mut self, power: Power) {
+        self.power = power;
     }
 
     #[inline]
@@ -147,7 +149,7 @@ impl BorshSerialize for Account {
             AccountVersion::V1 => LegacyAccount {
                 amount: self.amount,
                 pledging: self.pledging,
-                power:  self.power,
+                power: self.power,
                 code_hash: self.code_hash,
                 storage_usage: self.storage_usage,
             }
@@ -175,7 +177,6 @@ impl BorshSerialize for Account {
 pub struct AccessKey {
     /// Nonce for this access key, used for tx nonce generation. When access key is created, nonce
     /// is set to `(block_height - 1) * 1e6` to avoid tx hash collision on access key re-creation.
-    /// See <https://github.com/utnet-org/utility/issues/3779> for more details.
     pub nonce: Nonce,
 
     /// Defines permissions for this access key.
@@ -236,7 +237,7 @@ pub struct FunctionCallPermission {
     pub allowance: Option<Balance>,
 
     // This isn't an AccountId because already existing records in testnet genesis have invalid
-    // values for this field (see: https://github.com/utnet-org/utility/pull/4621#issuecomment-892099860)
+    // values for this field
     // we accomodate those by using a string, allowing us to read and parse genesis.
     /// The access key only allows transactions with the given receiver's account id.
     pub receiver_id: String,

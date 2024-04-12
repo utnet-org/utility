@@ -1,5 +1,6 @@
 #![no_main]
 
+use std::sync::Arc;
 use unc_parameters::{RuntimeConfig, RuntimeConfigStore};
 use unc_primitives::version::PROTOCOL_VERSION;
 use unc_vm_runner::internal::VMKindExt;
@@ -7,7 +8,6 @@ use unc_vm_runner::logic::mocks::mock_external::MockedExternal;
 use unc_vm_runner::logic::VMOutcome;
 use unc_vm_runner::ContractCode;
 use unc_vm_runner_fuzz::{create_context, find_entry_point, ArbitraryModule};
-use std::sync::Arc;
 
 libfuzzer_sys::fuzz_target!(|module: ArbitraryModule| {
     let code = ContractCode::new(module.0.module.to_bytes(), None);

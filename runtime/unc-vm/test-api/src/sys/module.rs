@@ -2,16 +2,16 @@
 
 use super::instance::InstantiationError;
 use super::store::Store;
+use std::fmt;
+use std::io;
+use std::sync::Arc;
+use thiserror::Error;
 use unc_vm_compiler::CompileError;
 #[cfg(feature = "wat")]
 use unc_vm_compiler::WasmError;
 use unc_vm_engine::RuntimeError;
 use unc_vm_types::InstanceConfig;
 use unc_vm_vm::{InstanceHandle, Instantiatable, Resolver};
-use std::fmt;
-use std::io;
-use std::sync::Arc;
-use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum IoCompileError {

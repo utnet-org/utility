@@ -3,6 +3,9 @@ use crate::trie::prefetching_trie_storage::PrefetcherResult;
 use crate::trie::POISONED_LOCK_ERR;
 use crate::{metrics, DBCol, MissingTrieValueContext, PrefetchApi, StorageError, Store};
 use lru::LruCache;
+use std::cell::RefCell;
+use std::collections::{HashMap, HashSet, VecDeque};
+use std::sync::{Arc, Mutex};
 use unc_o11y::log_assert;
 use unc_o11y::metrics::prometheus;
 use unc_o11y::metrics::prometheus::core::{GenericCounter, GenericGauge};
@@ -10,9 +13,6 @@ use unc_primitives::challenge::PartialState;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::shard_layout::ShardUId;
 use unc_primitives::types::ShardId;
-use std::cell::RefCell;
-use std::collections::{HashMap, HashSet, VecDeque};
-use std::sync::{Arc, Mutex};
 
 pub(crate) struct BoundedQueue<T> {
     queue: VecDeque<T>,

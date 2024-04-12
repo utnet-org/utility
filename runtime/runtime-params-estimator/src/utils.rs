@@ -2,16 +2,16 @@ use crate::apply_block_cost;
 use crate::estimator_context::EstimatorContext;
 use crate::gas_cost::{GasCost, NonNegativeTolerance};
 use crate::transaction_builder::TransactionBuilder;
-use unc_parameters::vm::{Config as VMConfig, VMKind};
-use unc_parameters::ExtCosts;
-use unc_primitives::transaction::{
-    Action, DeployContractAction, FunctionCallAction, SignedTransaction,
-};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
 use rand_xorshift::XorShiftRng;
 use std::collections::HashMap;
 use std::iter;
+use unc_parameters::vm::{Config as VMConfig, VMKind};
+use unc_parameters::ExtCosts;
+use unc_primitives::transaction::{
+    Action, DeployContractAction, FunctionCallAction, SignedTransaction,
+};
 
 pub fn read_resource(path: &str) -> Vec<u8> {
     let dir = env!("CARGO_MANIFEST_DIR");

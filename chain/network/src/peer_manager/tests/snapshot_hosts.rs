@@ -10,6 +10,12 @@ use crate::types::NetworkRequests;
 use crate::types::PeerManagerMessageRequest;
 use crate::types::PeerMessage;
 use crate::{network_protocol::testonly as data, peer::testonly::PeerHandle};
+use peer_manager::testonly::FDS_PER_PEER;
+use pretty_assertions::assert_eq;
+use rand::seq::IteratorRandom;
+use rand::Rng;
+use std::collections::HashSet;
+use std::sync::Arc;
 use unc_async::time;
 use unc_crypto::SecretKey;
 use unc_o11y::testonly::init_test_logger;
@@ -18,12 +24,6 @@ use unc_primitives::hash::CryptoHash;
 use unc_primitives::network::PeerId;
 use unc_primitives::types::EpochHeight;
 use unc_primitives::types::ShardId;
-use peer_manager::testonly::FDS_PER_PEER;
-use pretty_assertions::assert_eq;
-use rand::seq::IteratorRandom;
-use rand::Rng;
-use std::collections::HashSet;
-use std::sync::Arc;
 
 /// Create an instance of SnapshotHostInfo for testing purposes
 fn make_snapshot_host_info(

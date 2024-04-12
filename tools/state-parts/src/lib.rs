@@ -1,4 +1,9 @@
 use anyhow::Context;
+use sha2::Digest;
+use sha2::Sha256;
+use std::collections::HashMap;
+use std::fmt::Write;
+use std::net::SocketAddr;
 use unc_async::time;
 use unc_network::raw::{ConnectError, Connection, DirectMessage, Message};
 use unc_network::types::HandshakeFailureReason;
@@ -6,11 +11,6 @@ use unc_primitives::hash::CryptoHash;
 use unc_primitives::network::PeerId;
 use unc_primitives::types::{AccountId, BlockHeight, ShardId};
 use unc_primitives::version::ProtocolVersion;
-use sha2::Digest;
-use sha2::Sha256;
-use std::collections::HashMap;
-use std::fmt::Write;
-use std::net::SocketAddr;
 
 pub mod cli;
 

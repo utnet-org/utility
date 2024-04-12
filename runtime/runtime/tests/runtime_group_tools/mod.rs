@@ -1,3 +1,9 @@
+use node_runtime::{ApplyState, Runtime};
+use random_config::random_config;
+use std::collections::{HashMap, HashSet};
+use std::sync::{Arc, Condvar, Mutex};
+use std::thread;
+use std::thread::JoinHandle;
 use unc_chain_configs::{get_initial_supply, Genesis, GenesisConfig, GenesisRecords};
 use unc_crypto::{InMemorySigner, KeyType};
 use unc_parameters::ActionCosts;
@@ -15,12 +21,6 @@ use unc_primitives_core::account::id::AccountIdRef;
 use unc_store::genesis::GenesisStateApplier;
 use unc_store::test_utils::TestTriesBuilder;
 use unc_store::ShardTries;
-use node_runtime::{ApplyState, Runtime};
-use random_config::random_config;
-use std::collections::{HashMap, HashSet};
-use std::sync::{Arc, Condvar, Mutex};
-use std::thread;
-use std::thread::JoinHandle;
 
 pub mod random_config;
 
@@ -198,9 +198,8 @@ impl RuntimeGroup {
     }
 
     pub fn new(num_runtimes: u64, num_existing_accounts: u64, contract_code: &[u8]) -> Arc<Self> {
-        let account_ids = (0..num_runtimes)
-            .map(|i| AccountId::try_from(format!("unc_{}", i)).unwrap())
-            .collect();
+        let account_ids =
+            (0..num_runtimes).map(|i| AccountId::try_from(format!("unc_{}", i)).unwrap()).collect();
         Self::new_with_account_ids(account_ids, num_existing_accounts, contract_code)
     }
 
@@ -223,7 +222,13 @@ impl RuntimeGroup {
             if (i as u64) < num_existing_accounts {
                 state_records.push(StateRecord::Account {
                     account_id: account_id.clone(),
-                    account: Account::new(TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE, TESTING_INIT_POWER, code_hash, 0),
+                    account: Account::new(
+                        TESTING_INIT_BALANCE,
+                        TESTING_INIT_PLEDGE,
+                        TESTING_INIT_POWER,
+                        code_hash,
+                        0,
+                    ),
                 });
                 state_records.push(StateRecord::AccessKey {
                     account_id: account_id.clone(),

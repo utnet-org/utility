@@ -7,10 +7,10 @@ mod peer;
 mod proto_conv;
 mod state_sync;
 pub use edge::*;
-use unc_primitives::chunk_validation::ChunkEndorsement;
-use unc_primitives::chunk_validation::ChunkStateWitness;
 pub use peer::*;
 pub use state_sync::*;
+use unc_primitives::chunk_validation::ChunkEndorsement;
+use unc_primitives::chunk_validation::ChunkStateWitness;
 
 #[cfg(test)]
 pub(crate) mod testonly;
@@ -27,6 +27,12 @@ use crate::network_protocol::proto_conv::trace_context::{
     extract_span_context, inject_trace_context,
 };
 use borsh::BorshDeserialize as _;
+use protobuf::Message as _;
+use std::collections::HashSet;
+use std::fmt;
+use std::fmt::Debug;
+use std::sync::Arc;
+use tracing::Span;
 use unc_async::time;
 use unc_crypto::PublicKey;
 use unc_crypto::Signature;
@@ -45,12 +51,6 @@ use unc_primitives::types::AccountId;
 use unc_primitives::types::{BlockHeight, ShardId};
 use unc_primitives::validator_signer::ValidatorSigner;
 use unc_primitives::views::FinalExecutionOutcomeView;
-use protobuf::Message as _;
-use std::collections::HashSet;
-use std::fmt;
-use std::fmt::Debug;
-use std::sync::Arc;
-use tracing::Span;
 
 #[derive(PartialEq, Eq, Clone, Debug, Hash)]
 pub struct PeerAddr {

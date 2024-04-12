@@ -3,10 +3,10 @@ use crate::routing::graph_v2::AdvertisedPeerDistance;
 use crate::routing::graph_v2::Inner;
 use crate::routing::{GraphV2, NetworkTopologyChange, NextHopTable};
 use crate::types::Edge;
-use unc_async::time;
-use unc_primitives::network::PeerId;
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
+use unc_async::time;
+use unc_primitives::network::PeerId;
 
 impl Inner {
     pub(crate) fn verify_and_cache_edge_nonces(&mut self, edges: &Vec<Edge>) -> bool {

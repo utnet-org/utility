@@ -4,11 +4,11 @@ use crate::logic::{CompiledContract, CompiledContractCache, Config};
 use crate::runner::VMKindExt;
 use crate::ContractCode;
 use borsh::BorshSerialize;
-use unc_parameters::vm::VMKind;
-use unc_primitives_core::hash::CryptoHash;
 use std::collections::HashMap;
 use std::fmt;
 use std::sync::{Arc, Mutex};
+use unc_parameters::vm::VMKind;
+use unc_primitives_core::hash::CryptoHash;
 
 #[derive(Debug, Clone, BorshSerialize)]
 enum ContractCacheKey {

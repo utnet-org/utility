@@ -3,11 +3,11 @@ mod metrics;
 use actix::{Actor, Addr, Context, Handler};
 use awc::{Client, Connector};
 use futures::FutureExt;
+use std::ops::Sub;
+use std::time::{Duration, Instant};
 use unc_o11y::{handler_debug_span, OpenTelemetrySpanExt, WithSpanContext, WithSpanContextExt};
 use unc_performance_metrics_macros::perf;
 use unc_primitives::static_clock::StaticClock;
-use std::ops::Sub;
-use std::time::{Duration, Instant};
 
 /// Timeout for establishing connection.
 const CONNECT_TIMEOUT: Duration = Duration::from_secs(10);

@@ -3,6 +3,11 @@ use anyhow;
 use anyhow::Context;
 use borsh::BorshDeserialize;
 use clap;
+use framework::UncConfig;
+use rand::seq::SliceRandom;
+use std::io::Result;
+use std::path::Path;
+use strum::IntoEnumIterator;
 use unc_epoch_manager::{EpochManager, EpochManagerAdapter, EpochManagerHandle};
 use unc_primitives::block::Tip;
 use unc_primitives::epoch_manager::block_info::BlockInfo;
@@ -11,11 +16,6 @@ use unc_store::cold_storage::{copy_all_data_to_cold, update_cold_db, update_cold
 use unc_store::metadata::DbKind;
 use unc_store::{DBCol, NodeStorage, Store, StoreOpener};
 use unc_store::{COLD_HEAD_KEY, FINAL_HEAD_KEY, HEAD_KEY, TAIL_KEY};
-use framework::UncConfig;
-use rand::seq::SliceRandom;
-use std::io::Result;
-use std::path::Path;
-use strum::IntoEnumIterator;
 
 #[derive(clap::Parser)]
 pub struct ColdStoreCommand {
@@ -286,11 +286,7 @@ fn check_key(
 /// Checks that `first_store`'s column `col` is fully included in `second_store`
 /// with same values for every key.
 /// Return number of checks performed == number of keys in column `col` of the `first_store`.
-fn check_iter(
-    first_store: &unc_store::Store,
-    second_store: &unc_store::Store,
-    col: DBCol,
-) -> u64 {
+fn check_iter(first_store: &unc_store::Store, second_store: &unc_store::Store, col: DBCol) -> u64 {
     let mut num_checks = 0;
     for (key, _value) in first_store.iter(col).map(Result::unwrap) {
         check_key(first_store, second_store, col, &key);

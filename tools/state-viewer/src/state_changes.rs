@@ -1,4 +1,6 @@
 use borsh::BorshDeserialize;
+use framework::{NightshadeRuntime, UncConfig};
+use std::path::{Path, PathBuf};
 use unc_chain::types::RuntimeAdapter;
 use unc_chain::{ChainStore, ChainStoreAccess};
 use unc_epoch_manager::{EpochManager, EpochManagerAdapter};
@@ -10,8 +12,6 @@ use unc_primitives::types::{
 };
 use unc_primitives_core::types::BlockHeight;
 use unc_store::{KeyForStateChanges, Store, WrappedTrieChanges};
-use framework::{UncConfig, NightshadeRuntime};
-use std::path::{Path, PathBuf};
 
 #[derive(clap::Subcommand, Debug, Clone)]
 pub(crate) enum StateChangesSubCommand {
@@ -135,12 +135,8 @@ fn apply_state_changes(
     store: Store,
 ) {
     let epoch_manager = EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
-    let runtime = NightshadeRuntime::from_config(
-        home_dir,
-        store.clone(),
-        &unc_config,
-        epoch_manager.clone(),
-    );
+    let runtime =
+        NightshadeRuntime::from_config(home_dir, store.clone(), &unc_config, epoch_manager.clone());
     let mut chain_store = ChainStore::new(
         store,
         unc_config.genesis.config.genesis_height,

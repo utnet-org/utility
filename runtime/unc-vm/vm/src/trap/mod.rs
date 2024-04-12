@@ -9,6 +9,6 @@ pub mod traphandlers;
 pub use trapcode::TrapCode;
 pub use traphandlers::resume_panic;
 pub use traphandlers::{
-    catch_traps, catch_traps_with_result, unc_vm_call_trampoline, raise_lib_trap, raise_user_trap,
+    catch_traps, catch_traps_with_result, raise_lib_trap, raise_user_trap, unc_vm_call_trampoline,
     TlsRestore, Trap,
 };

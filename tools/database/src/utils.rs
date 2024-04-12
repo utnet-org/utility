@@ -2,11 +2,11 @@ use std::fs;
 use std::path::Path;
 
 use anyhow::anyhow;
+use strum::IntoEnumIterator;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::shard_layout::get_block_shard_uid;
 use unc_store::flat::{store_helper, BlockInfo};
 use unc_store::{DBCol, NodeStorage, ShardUId, Store};
-use strum::IntoEnumIterator;
 
 pub(crate) fn open_rocksdb(
     home: &Path,

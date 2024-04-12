@@ -1,9 +1,9 @@
 use crate::types::validator_power::{ValidatorPower, ValidatorPowerIter, ValidatorPowerV1};
+use crate::types::validator_stake::{ValidatorPledge, ValidatorPledgeIter};
 use crate::types::{StateRoot, ValidatorPledgeV1};
 use borsh::{BorshDeserialize, BorshSerialize};
 use unc_primitives_core::hash::CryptoHash;
 use unc_primitives_core::types::{Balance, BlockHeight, Gas, ShardId};
-use crate::types::validator_stake::{ValidatorPledge, ValidatorPledgeIter};
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, PartialEq, Eq, Debug)]
 pub enum ShardChunkHeaderInner {

@@ -1,18 +1,18 @@
 use anyhow::Context;
 use clap;
+use framework::NightshadeRuntime;
+use std::collections::{HashMap, HashSet};
+use std::path::{Path, PathBuf};
 use unc_chain::{ChainStore, ChainStoreAccess, ChainUpdate, DoomslugThresholdMode};
 use unc_epoch_manager::shard_tracker::ShardTracker;
 use unc_epoch_manager::EpochManager;
 use unc_primitives::block::BlockHeader;
 use unc_primitives::borsh::BorshDeserialize;
 use unc_primitives::epoch_manager::block_info::BlockInfo;
+use unc_primitives::epoch_manager::block_summary::{BlockSummary, BlockSummaryV1};
 use unc_primitives::epoch_manager::AGGREGATOR_KEY;
 use unc_primitives::hash::CryptoHash;
 use unc_store::{checkpoint_hot_storage_and_cleanup_columns, DBCol, NodeStorage};
-use framework::NightshadeRuntime;
-use std::collections::{HashMap, HashSet};
-use std::path::{Path, PathBuf};
-use unc_primitives::epoch_manager::block_summary::{BlockSummary, BlockSummaryV1};
 
 #[derive(clap::Parser)]
 pub struct EpochSyncCommand {
@@ -106,9 +106,7 @@ impl ValidateEpochSyncInfoCmd {
 
         let epoch_manager =
             EpochManager::new_arc_handle(storage.get_hot_store(), &config.genesis.config);
-        let shard_tracker = ShardTracker::new(
-            epoch_manager.clone(),
-        );
+        let shard_tracker = ShardTracker::new(epoch_manager.clone());
         let runtime = NightshadeRuntime::from_config(
             home_dir,
             storage.get_hot_store(),
@@ -177,24 +175,25 @@ impl ValidateEpochSyncInfoCmd {
                 }
 
                 let first_block_hash = cur_hash;
-                let BlockSummary::V1(BlockSummaryV1{
-                                                                              random_value:_random_value,
-                                                                              validators,
-                                                                              validator_to_index,
-                                                                              block_producers_settlement,
-                                                                              chunk_producers_settlement,
-                                                                              fishermen,
-                                                                              fishermen_to_index,
-                                                                              power_change,
-                                                                              pledge_change,
-                                                                              validator_reward,
-                                                                              seat_price,
-                                                                              minted_amount,
-                                                                              all_power_proposals,
-                                                                              all_pledge_proposals,
-                                                                              validator_kickout,
-                                                                              validator_mandates, ..
-                                                                          }) =  BlockSummary::default();
+                let BlockSummary::V1(BlockSummaryV1 {
+                    random_value: _random_value,
+                    validators,
+                    validator_to_index,
+                    block_producers_settlement,
+                    chunk_producers_settlement,
+                    fishermen,
+                    fishermen_to_index,
+                    power_change,
+                    pledge_change,
+                    validator_reward,
+                    seat_price,
+                    minted_amount,
+                    all_power_proposals,
+                    all_pledge_proposals,
+                    validator_kickout,
+                    validator_mandates,
+                    ..
+                }) = BlockSummary::default();
                 let mut last_block_info = BlockInfo::new(
                     *last_header.hash(),
                     last_header.height(),
@@ -224,8 +223,7 @@ impl ValidateEpochSyncInfoCmd {
                     all_power_proposals,
                     all_pledge_proposals,
                     validator_kickout,
-                    validator_mandates
-                    // end customized by James Savechives
+                    validator_mandates, // end customized by James Savechives
                 );
 
                 *last_block_info.epoch_id_mut() = last_header.epoch_id().clone();

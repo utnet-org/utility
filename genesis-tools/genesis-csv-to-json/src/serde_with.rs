@@ -1,8 +1,8 @@
 /// `PeerInfo` as `str`.
 pub mod peer_info_to_str {
-    use unc_network::types::PeerInfo;
     use serde::{Deserialize, Deserializer, Serializer};
     use std::str::FromStr;
+    use unc_network::types::PeerInfo;
 
     pub fn serialize<S>(peer_info: &Option<PeerInfo>, serializer: S) -> Result<S::Ok, S::Error>
     where
@@ -29,8 +29,8 @@ pub mod peer_info_to_str {
 
 /// `Vec<PublicKey>` as str.
 pub mod pks_as_str {
-    use unc_crypto::PublicKey;
     use serde::{Deserialize, Deserializer, Serializer};
+    use unc_crypto::PublicKey;
 
     pub fn serialize<S>(peer_info: &[PublicKey], serializer: S) -> Result<S::Ok, S::Error>
     where

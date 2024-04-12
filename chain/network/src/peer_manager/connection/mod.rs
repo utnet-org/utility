@@ -12,17 +12,17 @@ use crate::stats::metrics;
 use crate::tcp;
 use crate::types::{BlockInfo, FullPeerInfo, PeerChainInfo, PeerType, ReasonForBan};
 use arc_swap::ArcSwap;
+use std::collections::{hash_map::Entry, HashMap};
+use std::fmt;
+use std::future::Future;
+use std::sync::atomic::AtomicU64;
+use std::sync::{Arc, Weak};
 use unc_async::time;
 use unc_crypto::PublicKey;
 use unc_o11y::WithSpanContextExt;
 use unc_primitives::block::GenesisId;
 use unc_primitives::network::PeerId;
 use unc_primitives::types::ShardId;
-use std::collections::{hash_map::Entry, HashMap};
-use std::fmt;
-use std::future::Future;
-use std::sync::atomic::AtomicU64;
-use std::sync::{Arc, Weak};
 
 #[cfg(test)]
 mod tests;

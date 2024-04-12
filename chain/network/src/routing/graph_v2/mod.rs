@@ -5,13 +5,13 @@ use crate::routing::edge_cache::EdgeCache;
 use crate::routing::routing_table_view::RoutingTableView;
 use crate::stats::metrics;
 use arc_swap::ArcSwap;
-use unc_async::time;
-use unc_primitives::network::PeerId;
-use unc_primitives::views::{EdgeView, NetworkRoutesView, PeerDistancesView};
 use parking_lot::Mutex;
 use std::collections::VecDeque;
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
+use unc_async::time;
+use unc_primitives::network::PeerId;
+use unc_primitives::views::{EdgeView, NetworkRoutesView, PeerDistancesView};
 
 #[cfg(not(test))]
 use crate::concurrency;

@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 
 use derive_enum_from_into::{EnumFrom, EnumTryInto};
+use tracing::log::info;
 use unc_async::time;
 use unc_async::{
     messaging::{CanSend, IntoSender, Sender},
@@ -17,7 +18,6 @@ use unc_network::{
 };
 use unc_primitives::types::{AccountId, BlockHeight};
 use unc_store::test_utils::create_test_store;
-use tracing::log::info;
 
 use crate::{
     adapter::ShardsManagerRequestFromClient,

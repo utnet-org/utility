@@ -1,4 +1,7 @@
 use borsh::{BorshDeserialize, BorshSerialize};
+use framework::NightshadeRuntime;
+use std::fs;
+use std::path::Path;
 use unc_chain::types::{ChainConfig, Tip};
 use unc_chain::{Chain, ChainGenesis, DoomslugThresholdMode};
 use unc_chain_configs::{GenesisValidationMode, MutableConfigValue, ReshardingConfig};
@@ -16,9 +19,6 @@ use unc_primitives::types::EpochId;
 use unc_primitives::utils::index_to_bytes;
 use unc_store::HEADER_HEAD_KEY;
 use unc_store::{DBCol, Mode, NodeStorage, Store, StoreUpdate};
-use framework::NightshadeRuntime;
-use std::fs;
-use std::path::Path;
 
 #[derive(serde::Serialize, BorshSerialize, BorshDeserialize)]
 pub struct BlockCheckpoint {
@@ -229,8 +229,7 @@ fn load_snapshot(load_cmd: LoadCmd) {
         .get_hot_store();
     let chain_genesis = ChainGenesis::new(&config.genesis);
     let epoch_manager = EpochManager::new_arc_handle(store.clone(), &config.genesis.config);
-    let shard_tracker =
-        ShardTracker::new(epoch_manager.clone());
+    let shard_tracker = ShardTracker::new(epoch_manager.clone());
     let runtime =
         NightshadeRuntime::from_config(home_dir, store.clone(), &config, epoch_manager.clone());
     // This will initialize the database (add genesis block etc)

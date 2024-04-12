@@ -1,9 +1,9 @@
 use crate::cost::{ExtCostsConfig, ParameterCost};
 use borsh::BorshSerialize;
-use unc_primitives_core::config::AccountIdValidityRulesVersion;
-use unc_primitives_core::types::Gas;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
+use unc_primitives_core::config::AccountIdValidityRulesVersion;
+use unc_primitives_core::types::Gas;
 
 // NOTE that VMKind is part of serialization protocol, so we cannot remove entries from this list
 // if particular VM reached publicly visible networks.

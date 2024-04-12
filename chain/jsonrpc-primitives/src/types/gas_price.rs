@@ -1,5 +1,5 @@
-use unc_primitives::types::MaybeBlockId;
 use serde_json::Value;
+use unc_primitives::types::MaybeBlockId;
 
 #[derive(serde::Serialize, serde::Deserialize, Debug, arbitrary::Arbitrary)]
 pub struct RpcGasPriceRequest {

@@ -25,4 +25,4 @@ fn fuzz(scenario: Scenario) {
     }
 }
 
-fuzz_target!(|scenario: Scenario| fuzz(scenario) );
+fuzz_target!(|scenario: Scenario| fuzz(scenario));

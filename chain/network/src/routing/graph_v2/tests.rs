@@ -5,10 +5,10 @@ use crate::routing::{GraphConfigV2, GraphV2, NetworkTopologyChange};
 use crate::test_utils::expected_routing_tables;
 use crate::test_utils::random_peer_id;
 use crate::types::Edge;
-use unc_async::time;
-use unc_primitives::network::PeerId;
 use std::collections::HashMap;
 use std::sync::Arc;
+use unc_async::time;
+use unc_primitives::network::PeerId;
 
 // Calls `calculate_tree_distances` on the given `root` and `edges`.
 // Verifies that the calculated distances and first steps match those in `expected`.

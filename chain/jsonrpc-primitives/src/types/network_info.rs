@@ -1,6 +1,6 @@
+use std::net::SocketAddr;
 use unc_primitives::network::PeerId;
 use unc_primitives::types::AccountId;
-use std::net::SocketAddr;
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct RpcPeerInfo {

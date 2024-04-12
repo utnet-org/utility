@@ -9,9 +9,9 @@ use unc_o11y::metrics::{
     IntCounterVec, IntGauge, IntGaugeVec,
 };
 
+use once_cell::sync::Lazy;
 use unc_primitives::{shard_layout::ShardLayout, state_record::StateRecord, trie_key};
 use unc_store::{ShardUId, Store, Trie, TrieDBStorage};
-use once_cell::sync::Lazy;
 
 use crate::UncConfig;
 

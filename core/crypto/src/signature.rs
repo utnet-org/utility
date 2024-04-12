@@ -2,6 +2,8 @@ use borsh::{BorshDeserialize, BorshSerialize};
 use ed25519_dalek::ed25519::signature::{Signer, Verifier};
 use once_cell::sync::Lazy;
 use primitive_types::U256;
+use rsa::pkcs8::{DecodePrivateKey, DecodePublicKey, EncodePrivateKey, EncodePublicKey};
+use rsa::Pkcs1v15Sign;
 use secp256k1::rand::rngs::OsRng;
 use secp256k1::Message;
 use std::convert::AsRef;
@@ -9,8 +11,6 @@ use std::fmt::{Debug, Display, Formatter};
 use std::hash::{Hash, Hasher};
 use std::io::{Error, ErrorKind, Read, Write};
 use std::str::FromStr;
-use rsa::Pkcs1v15Sign;
-use rsa::pkcs8::{EncodePrivateKey, EncodePublicKey, DecodePublicKey, DecodePrivateKey};
 
 pub static SECP256K1: Lazy<secp256k1::Secp256k1<secp256k1::All>> =
     Lazy::new(secp256k1::Secp256k1::new);
@@ -171,8 +171,12 @@ impl PublicKey {
             KeyType::ED25519 => {
                 PublicKey::ED25519(ED25519PublicKey([0u8; ed25519_dalek::PUBLIC_KEY_LENGTH]))
             }
-            KeyType::SECP256K1 => PublicKey::SECP256K1(Secp256K1PublicKey([0u8; PUBLIC_KEY_SECP256K1_LENGTH])),
-            KeyType::RSA2048 => PublicKey::RSA(Rsa2048PublicKey([0u8; RAW_PUBLIC_KEY_RSA_2048_LENGTH])),
+            KeyType::SECP256K1 => {
+                PublicKey::SECP256K1(Secp256K1PublicKey([0u8; PUBLIC_KEY_SECP256K1_LENGTH]))
+            }
+            KeyType::RSA2048 => {
+                PublicKey::RSA(Rsa2048PublicKey([0u8; RAW_PUBLIC_KEY_RSA_2048_LENGTH]))
+            }
         }
     }
 
@@ -283,9 +287,9 @@ impl BorshDeserialize for PublicKey {
             KeyType::SECP256K1 => Ok(PublicKey::SECP256K1(Secp256K1PublicKey(
                 BorshDeserialize::deserialize_reader(rd)?,
             ))),
-            KeyType::RSA2048 => Ok(PublicKey::RSA(Rsa2048PublicKey(
-                BorshDeserialize::deserialize_reader(rd)?,
-            ))),
+            KeyType::RSA2048 => {
+                Ok(PublicKey::RSA(Rsa2048PublicKey(BorshDeserialize::deserialize_reader(rd)?)))
+            }
         }
     }
 }
@@ -362,7 +366,6 @@ impl std::fmt::Debug for ED25519SecretKey {
     }
 }
 
-
 pub(crate) const PRIVTAE_KEY_DEFAULT_RSA_KEY_BITS: usize = 2048;
 
 /// Secret key container supporting different curves.
@@ -389,9 +392,9 @@ impl SecretKey {
                 SecretKey::ED25519(ED25519SecretKey(keypair.to_keypair_bytes()))
             }
             KeyType::SECP256K1 => SecretKey::SECP256K1(secp256k1::SecretKey::new(&mut OsRng)),
-            KeyType::RSA2048 => {
-                SecretKey::RSA(rsa::RsaPrivateKey::new(&mut OsRng, PRIVTAE_KEY_DEFAULT_RSA_KEY_BITS).unwrap())
-            }
+            KeyType::RSA2048 => SecretKey::RSA(
+                rsa::RsaPrivateKey::new(&mut OsRng, PRIVTAE_KEY_DEFAULT_RSA_KEY_BITS).unwrap(),
+            ),
         }
     }
 
@@ -415,9 +418,10 @@ impl SecretKey {
             }
             SecretKey::RSA(secret_key) => {
                 let sign_data = secret_key.sign(Pkcs1v15Sign::new_unprefixed(), data).unwrap();
-                Signature::RSA(Rsa2048Signature(<[u8; 256]>::try_from(sign_data.as_slice()).unwrap()))
+                Signature::RSA(Rsa2048Signature(
+                    <[u8; 256]>::try_from(sign_data.as_slice()).unwrap(),
+                ))
             }
-
         }
     }
 
@@ -432,7 +436,7 @@ impl SecretKey {
                 let mut public_key = Secp256K1PublicKey([0; 64]);
                 public_key.0.copy_from_slice(&serialized[1..65]);
                 PublicKey::SECP256K1(public_key)
-            },
+            }
             SecretKey::RSA(secret_key) => {
                 let pk = secret_key.to_public_key();
                 let mut public_key = [0; RAW_PUBLIC_KEY_RSA_2048_LENGTH];
@@ -455,16 +459,16 @@ impl std::fmt::Display for SecretKey {
         match self {
             SecretKey::ED25519(secret_key) => {
                 write!(f, "{}:{}", KeyType::ED25519, Bs58(&secret_key.0[..]))
-            },
+            }
             SecretKey::SECP256K1(secret_key) => {
                 write!(f, "{}:{}", KeyType::SECP256K1, Bs58(&secret_key[..]))
-            },
+            }
             SecretKey::RSA(secret_key) => {
                 // 先将 DER 编码的密钥存储在一个变量中
                 let pkcs8_bytes = secret_key.to_pkcs8_der().unwrap().to_bytes();
                 // 然后获取它的切片
                 write!(f, "{}:{}", KeyType::RSA2048, Bs58(&pkcs8_bytes.as_slice()))
-            },
+            }
         }
     }
 }
@@ -481,7 +485,7 @@ impl FromStr for SecretKey {
                 let sk = secp256k1::SecretKey::from_slice(&data)
                     .map_err(|err| Self::Err::InvalidData { error_message: err.to_string() })?;
                 Self::SECP256K1(sk)
-            },
+            }
             KeyType::RSA2048 => {
                 let buffer = parse_bs58_data(2048, key_data)?;
                 let sk = rsa::RsaPrivateKey::from_pkcs8_der(&buffer)
@@ -590,7 +594,6 @@ impl Debug for Secp256K1Signature {
     }
 }
 
-
 // RSA Signature
 const RSA2048_SIGNATURE_LENGTH: usize = 256;
 
@@ -655,11 +658,13 @@ impl Signature {
                     },
                 )?))
             }
-            KeyType::RSA2048 => Ok(Signature::RSA(Rsa2048Signature::try_from(signature_data).map_err(
-                |_| crate::errors::ParseSignatureError::InvalidData {
-                    error_message: "invalid RSA2048 signature length".to_string(),
-                },
-            )?)),
+            KeyType::RSA2048 => {
+                Ok(Signature::RSA(Rsa2048Signature::try_from(signature_data).map_err(|_| {
+                    crate::errors::ParseSignatureError::InvalidData {
+                        error_message: "invalid RSA2048 signature length".to_string(),
+                    }
+                })?))
+            }
         }
     }
 
@@ -890,7 +895,7 @@ fn parse_bs58_data(max_len: usize, encoded: &str) -> Result<Vec<u8>, DecodeBs58E
     let mut data = vec![0u8; max_len.min(encoded.len())];
     let expected = data.len();
     match bs58::decode(encoded.as_bytes()).into(data.as_mut_slice()) {
-        Ok(len)  => {
+        Ok(len) => {
             data.truncate(len);
             Ok(data)
         }

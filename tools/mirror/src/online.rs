@@ -2,6 +2,9 @@ use crate::{ChainError, SourceBlock, SourceChunk};
 use actix::Addr;
 use anyhow::Context;
 use async_trait::async_trait;
+use std::path::Path;
+use std::sync::Arc;
+use std::time::Duration;
 use unc_chain_configs::GenesisValidationMode;
 use unc_client::ViewClientActor;
 use unc_client_primitives::types::{
@@ -18,9 +21,6 @@ use unc_primitives::views::{
     AccessKeyPermissionView, ExecutionOutcomeWithIdView, QueryRequest, QueryResponseKind,
 };
 use unc_primitives_core::types::ShardId;
-use std::path::Path;
-use std::sync::Arc;
-use std::time::Duration;
 
 pub(crate) struct ChainAccess {
     view_client: Addr<ViewClientActor>,

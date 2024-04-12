@@ -8,11 +8,11 @@ use crate::concurrency;
 use crate::network_protocol::SnapshotHostInfo;
 use crate::network_protocol::SnapshotHostInfoVerificationError;
 use lru::LruCache;
-use unc_primitives::network::PeerId;
 use parking_lot::Mutex;
 use rayon::iter::ParallelBridge;
 use std::collections::HashMap;
 use std::sync::Arc;
+use unc_primitives::network::PeerId;
 
 #[cfg(test)]
 mod tests;

@@ -1,11 +1,11 @@
 use std::path::PathBuf;
 use std::sync::Arc;
 
+use framework::{start_with_config, UncConfig};
 use unc_actix_test_utils::ShutdownableThread;
 use unc_chain_configs::Genesis;
 use unc_crypto::{InMemorySigner, KeyType, Signer};
 use unc_primitives::types::AccountId;
-use framework::{start_with_config, UncConfig};
 
 use crate::node::Node;
 use crate::user::rpc_user::RpcUser;

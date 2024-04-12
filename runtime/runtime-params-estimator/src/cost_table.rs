@@ -1,9 +1,9 @@
 use anyhow::Context;
-use unc_primitives::types::Gas;
 use num_rational::Ratio;
 use std::collections::BTreeMap;
 use std::fmt;
 use std::str::FromStr;
+use unc_primitives::types::Gas;
 
 use crate::cost::Cost;
 

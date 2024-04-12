@@ -1,7 +1,7 @@
 use crate::utils::{open_rocksdb, resolve_column};
 use clap::Parser;
-use unc_store::db::Database;
 use std::path::PathBuf;
+use unc_store::db::Database;
 
 #[derive(Parser)]
 pub(crate) struct RunCompactionCommand {

@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+use std::sync::Arc;
 use unc_async::messaging::{CanSend, Sender};
 use unc_chain::migrations::check_if_block_is_first_with_chunk_of_version;
 use unc_chain::sharding::shuffle_receipt_proofs;
@@ -23,8 +25,6 @@ use unc_primitives::types::chunk_extra::ChunkExtra;
 use unc_primitives::types::{EpochId, ShardId};
 use unc_primitives::validator_signer::ValidatorSigner;
 use unc_store::PartialStorage;
-use std::collections::HashMap;
-use std::sync::Arc;
 
 use crate::Client;
 
@@ -309,7 +309,9 @@ fn validate_chunk_state_witness(
                 .is_first_block_with_chunk_of_version,
             is_new_chunk: true,
             last_validator_power_proposals: main_transition.chunk.prev_validator_power_proposals(),
-            last_validator_pledge_proposals: main_transition.chunk.prev_validator_pledge_proposals(),
+            last_validator_pledge_proposals: main_transition
+                .chunk
+                .prev_validator_pledge_proposals(),
             shard_id: main_transition.chunk.shard_id(),
         },
         ApplyChunkBlockContext::from_header(&main_transition.block, main_transition.gas_price),
@@ -348,8 +350,12 @@ fn validate_chunk_state_witness(
                 is_first_block_with_chunk_of_version: transition_params
                     .is_first_block_with_chunk_of_version,
                 is_new_chunk: false,
-                last_validator_power_proposals: transition_params.chunk.prev_validator_power_proposals(),
-                last_validator_pledge_proposals: transition_params.chunk.prev_validator_pledge_proposals(),
+                last_validator_power_proposals: transition_params
+                    .chunk
+                    .prev_validator_power_proposals(),
+                last_validator_pledge_proposals: transition_params
+                    .chunk
+                    .prev_validator_pledge_proposals(),
                 shard_id: transition_params.chunk.shard_id(),
             },
             ApplyChunkBlockContext::from_header(

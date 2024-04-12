@@ -41,6 +41,7 @@
 //! in the prefetcher. Implementation details for most limits are in
 //! `core/store/src/trie/prefetching_trie_storage.rs`
 
+use tracing::{debug, warn};
 use unc_o11y::metrics::prometheus;
 use unc_o11y::metrics::prometheus::core::GenericCounter;
 use unc_primitives::receipt::{Receipt, ReceiptEnum};
@@ -48,7 +49,6 @@ use unc_primitives::transaction::SignedTransaction;
 use unc_primitives::trie_key::TrieKey;
 use unc_primitives::types::StateRoot;
 use unc_store::{PrefetchApi, PrefetchError, Trie};
-use tracing::{debug, warn};
 
 use crate::metrics;
 /// Transaction runtime view of the prefetching subsystem.
@@ -160,17 +160,16 @@ impl TriePrefetcher {
         };
         res
     }
-
 }
 
 #[cfg(test)]
 mod tests {
     use super::TriePrefetcher;
+    use std::str::FromStr;
+    use std::time::{Duration, Instant};
     use unc_primitives::{trie_key::TrieKey, types::AccountId};
     use unc_store::test_utils::{create_test_store, test_populate_trie};
     use unc_store::{ShardTries, ShardUId, StateSnapshotConfig, Trie, TrieConfig};
-    use std::str::FromStr;
-    use std::time::{Duration, Instant};
 
     #[test]
     fn test_basic_prefetch_account() {

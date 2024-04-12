@@ -21,15 +21,15 @@ use crate::types::{
     ReasonForBan,
 };
 use crate::PeerManagerActor;
+use std::collections::HashSet;
+use std::future::Future;
+use std::pin::Pin;
+use std::sync::Arc;
 use unc_async::messaging::IntoSender;
 use unc_async::time;
 use unc_o11y::WithSpanContextExt;
 use unc_primitives::network::{AnnounceAccount, PeerId};
 use unc_primitives::types::AccountId;
-use std::collections::HashSet;
-use std::future::Future;
-use std::pin::Pin;
-use std::sync::Arc;
 
 /// Each actix arbiter (in fact, the underlying tokio runtime) creates 4 file descriptors:
 /// 1. eventfd2()

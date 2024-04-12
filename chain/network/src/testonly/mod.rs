@@ -1,9 +1,9 @@
-use unc_o11y::testonly::init_test_logger;
 use pretty_assertions::Comparison;
 use std::cmp::Eq;
 use std::collections::HashSet;
 use std::fmt::Debug;
 use std::hash::Hash;
+use unc_o11y::testonly::init_test_logger;
 
 pub use super::actix;
 pub mod fake_client;

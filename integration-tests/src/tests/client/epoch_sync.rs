@@ -1,8 +1,14 @@
-use crate::unc_utils::{add_blocks, setup_configs_with_epoch_length};
 use crate::test_helpers::heavy_test;
+use crate::unc_utils::{add_blocks, setup_configs_with_epoch_length};
 use actix::Actor;
 use actix_rt::System;
+use framework::config::GenesisExt;
+use framework::test_utils::TestEnvNightshadeSetupExt;
+use framework::{start_with_config, UncConfig};
 use futures::{future, FutureExt};
+use std::collections::HashSet;
+use std::path::Path;
+use std::sync::{Arc, RwLock};
 use unc_actix_test_utils::run_actix;
 use unc_chain::{BlockProcessingArtifact, ChainStoreAccess};
 use unc_chain::{ChainGenesis, Provenance};
@@ -28,12 +34,6 @@ use unc_primitives_core::hash::CryptoHash;
 use unc_primitives_core::types::BlockHeight;
 use unc_store::Mode::ReadOnly;
 use unc_store::{DBCol, NodeStorage};
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
-use framework::{start_with_config, UncConfig};
-use std::collections::HashSet;
-use std::path::Path;
-use std::sync::{Arc, RwLock};
 
 fn generate_transactions(last_hash: &CryptoHash, h: BlockHeight) -> Vec<SignedTransaction> {
     let mut txs = vec![];

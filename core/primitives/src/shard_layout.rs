@@ -1,9 +1,9 @@
 use crate::hash::CryptoHash;
 use crate::types::{AccountId, NumShards};
 use borsh::{BorshDeserialize, BorshSerialize};
-use unc_primitives_core::types::ShardId;
 use std::collections::HashMap;
 use std::{fmt, str};
+use unc_primitives_core::types::ShardId;
 
 /// This file implements two data structure `ShardLayout` and `ShardUId`
 ///
@@ -427,11 +427,11 @@ impl<'de> serde::de::Visitor<'de> for ShardUIdVisitor {
 #[cfg(test)]
 mod tests {
     use crate::shard_layout::{account_id_to_shard_id, ShardLayout, ShardLayoutV1, ShardUId};
-    use unc_primitives_core::types::{AccountId, ShardId};
     use rand::distributions::Alphanumeric;
     use rand::rngs::StdRng;
     use rand::{Rng, SeedableRng};
     use std::collections::HashMap;
+    use unc_primitives_core::types::{AccountId, ShardId};
 
     use super::{ShardSplitMap, ShardVersion};
 

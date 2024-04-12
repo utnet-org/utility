@@ -1,4 +1,9 @@
 use chrono::{DateTime, Duration, Utc};
+use rand::seq::SliceRandom;
+use rand::thread_rng;
+use std::cmp::min;
+use std::time::Duration as TimeDuration;
+use tracing::{debug, warn};
 use unc_async::messaging::CanSend;
 use unc_chain::{Chain, ChainStoreAccess};
 use unc_client_primitives::types::SyncStatus;
@@ -8,11 +13,6 @@ use unc_primitives::block::Tip;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::static_clock::StaticClock;
 use unc_primitives::types::BlockHeight;
-use rand::seq::SliceRandom;
-use rand::thread_rng;
-use std::cmp::min;
-use std::time::Duration as TimeDuration;
-use tracing::{debug, warn};
 
 /// Maximum number of block headers send over the network.
 pub const MAX_BLOCK_HEADERS: u64 = 512;
@@ -386,11 +386,11 @@ mod test {
     use unc_primitives::test_utils::TestBlockBuilder;
 
     use super::*;
+    use num_rational::Ratio;
     use unc_network::types::{BlockInfo, FullPeerInfo, PeerInfo};
     use unc_primitives::merkle::PartialMerkleTree;
     use unc_primitives::types::EpochId;
     use unc_primitives::version::PROTOCOL_VERSION;
-    use num_rational::Ratio;
 
     #[test]
     fn test_get_locator_ordinals() {

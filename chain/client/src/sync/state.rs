@@ -27,11 +27,21 @@ use crate::sync::external::{
 use actix_rt::ArbiterHandle;
 use chrono::{DateTime, Duration, Utc};
 use futures::{future, FutureExt};
+use rand::seq::SliceRandom;
+use rand::{thread_rng, Rng};
+use std::collections::HashMap;
+use std::ops::Add;
+use std::sync::atomic::Ordering;
+use std::sync::mpsc::{channel, Receiver, Sender};
+use std::sync::Arc;
+use std::time::Duration as TimeDuration;
+use tokio::sync::{Semaphore, TryAcquireError};
+use tracing::info;
 use unc_async::messaging::CanSendAsync;
 use unc_chain::chain::ApplyStatePartsRequest;
-use unc_chain::unc_chain_primitives;
 use unc_chain::resharding::ReshardingRequest;
 use unc_chain::types::RuntimeAdapter;
+use unc_chain::unc_chain_primitives;
 use unc_chain::Chain;
 use unc_chain_configs::{ExternalStorageConfig, ExternalStorageLocation, SyncConfig};
 use unc_client_primitives::types::{
@@ -50,16 +60,6 @@ use unc_primitives::state_sync::{ShardStateSyncResponse, StatePartKey};
 use unc_primitives::static_clock::StaticClock;
 use unc_primitives::types::{AccountId, EpochHeight, EpochId, ShardId, StateRoot};
 use unc_store::DBCol;
-use rand::seq::SliceRandom;
-use rand::{thread_rng, Rng};
-use std::collections::HashMap;
-use std::ops::Add;
-use std::sync::atomic::Ordering;
-use std::sync::mpsc::{channel, Receiver, Sender};
-use std::sync::Arc;
-use std::time::Duration as TimeDuration;
-use tokio::sync::{Semaphore, TryAcquireError};
-use tracing::info;
 
 /// Maximum number of state parts to request per peer on each round when node is trying to download the state.
 pub const MAX_STATE_PART_REQUEST: u64 = 16;

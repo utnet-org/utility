@@ -7,10 +7,10 @@ use std::time::Duration;
 use borsh::BorshDeserialize;
 use crossbeam::channel;
 use itertools::Itertools;
+use tracing::{debug, info};
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::shard_layout::ShardUId;
 use unc_primitives::state::FlatStateValue;
-use tracing::{debug, info};
 
 use crate::flat::store_helper::set_flat_state_values_inlining_migration_status;
 use crate::metrics::flat_state_metrics::inlining_migration::{
@@ -313,12 +313,12 @@ mod tests {
     use crate::flat::{FlatStateValuesInliningMigrationHandle, FlatStorageManager};
     use crate::{DBCol, NodeStorage, Store, TrieCachingStorage};
     use borsh::BorshDeserialize;
+    use std::sync::atomic::AtomicBool;
+    use std::time::Duration;
     use unc_o11y::testonly::init_test_logger;
     use unc_primitives::hash::{hash, CryptoHash};
     use unc_primitives::shard_layout::{ShardLayout, ShardUId};
     use unc_primitives::state::FlatStateValue;
-    use std::sync::atomic::AtomicBool;
-    use std::time::Duration;
 
     #[test]
     fn full_migration() {

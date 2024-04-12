@@ -8,16 +8,16 @@ use super::super::types::{Val, ValFuncRef};
 pub use inner::{FromToNativeWasmType, HostFunction, WasmTypeList, WithEnv, WithoutEnv};
 use unc_vm_engine::RuntimeError;
 
-use unc_vm_vm::{
-    unc_vm_call_trampoline, raise_user_trap, resume_panic, Export, ExportFunction,
-    ExportFunctionMetadata, ImportInitializerFuncPtr, TableElement, VMCallerCheckedAnyfunc,
-    VMDynamicFunctionContext, VMFuncRef, VMFunction, VMFunctionBody, VMFunctionEnvironment,
-    VMFunctionKind, VMTrampoline,
-};
 use std::cmp::max;
 use std::ffi::c_void;
 use std::fmt;
 use std::sync::Arc;
+use unc_vm_vm::{
+    raise_user_trap, resume_panic, unc_vm_call_trampoline, Export, ExportFunction,
+    ExportFunctionMetadata, ImportInitializerFuncPtr, TableElement, VMCallerCheckedAnyfunc,
+    VMDynamicFunctionContext, VMFuncRef, VMFunction, VMFunctionBody, VMFunctionEnvironment,
+    VMFunctionKind, VMTrampoline,
+};
 
 /// A WebAssembly `function` instance.
 ///
@@ -844,13 +844,13 @@ impl<T: VMDynamicFunction> VMDynamicFunctionCall<T> for VMDynamicFunctionContext
 /// This private inner module contains the low-level implementation
 /// for `Function` and its siblings.
 mod inner {
-    use unc_vm_types::{FunctionType, NativeWasmType, Type};
-    use unc_vm_vm::{raise_user_trap, resume_panic, VMFunctionBody};
     use std::array::TryFromSliceError;
     use std::convert::{Infallible, TryInto};
     use std::error::Error;
     use std::marker::PhantomData;
     use std::panic::{self, AssertUnwindSafe};
+    use unc_vm_types::{FunctionType, NativeWasmType, Type};
+    use unc_vm_vm::{raise_user_trap, resume_panic, VMFunctionBody};
 
     /// A trait to convert a Rust value to a `WasmNativeType` value,
     /// or to convert `WasmNativeType` value to a Rust value.

@@ -3,8 +3,8 @@ use crate::logic::tests::helpers::*;
 use crate::logic::tests::vm_logic_builder::VMLogicBuilder;
 use crate::logic::types::PromiseResult;
 
-use unc_crypto::PublicKey;
 use serde_json;
+use unc_crypto::PublicKey;
 
 fn vm_receipts<'a>(ext: &'a MockedExternal) -> Vec<impl serde::Serialize + 'a> {
     ext.action_log.clone()

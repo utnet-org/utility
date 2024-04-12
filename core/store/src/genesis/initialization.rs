@@ -5,6 +5,7 @@ use rayon::prelude::*;
 use std::{collections::HashSet, fs, path::Path};
 
 use borsh::BorshDeserialize;
+use tracing::{error, info, warn};
 use unc_chain_configs::{Genesis, GenesisContents};
 use unc_parameters::RuntimeConfigStore;
 use unc_primitives::{
@@ -13,7 +14,6 @@ use unc_primitives::{
     state_record::{state_record_to_account_id, StateRecord},
     types::{AccountId, NumShards, ShardId, StateRoot},
 };
-use tracing::{error, info, warn};
 
 use crate::{
     flat::FlatStorageManager, genesis::GenesisStateApplier, get_genesis_hash,

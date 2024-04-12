@@ -4,12 +4,12 @@
 //! transactions. The output tps -- is how fast the nodes propagate transactions into the blocks.
 use crate::node::{create_nodes, sample_queryable_node, sample_two_nodes, Node};
 use crate::test_helpers::heavy_test;
-use unc_primitives::transaction::SignedTransaction;
 use std::io::stdout;
 use std::io::Write;
 use std::sync::{Arc, RwLock};
 use std::thread;
 use std::time::{Duration, Instant};
+use unc_primitives::transaction::SignedTransaction;
 
 /// Creates and sends a random transaction.
 /// Args:

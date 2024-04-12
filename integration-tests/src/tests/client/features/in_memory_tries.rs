@@ -1,5 +1,8 @@
 use std::collections::{HashMap, HashSet};
 
+use framework::test_utils::TestEnvNightshadeSetupExt;
+use rand::seq::IteratorRandom;
+use rand::{thread_rng, Rng};
 use unc_chain::{ChainGenesis, Provenance};
 use unc_chain_configs::{Genesis, GenesisConfig, GenesisRecords};
 use unc_client::test_utils::TestEnv;
@@ -17,9 +20,6 @@ use unc_primitives_core::types::AccountId;
 use unc_primitives_core::version::PROTOCOL_VERSION;
 use unc_store::test_utils::create_test_store;
 use unc_store::{ShardUId, TrieConfig};
-use framework::test_utils::TestEnvNightshadeSetupExt;
-use rand::seq::IteratorRandom;
-use rand::{thread_rng, Rng};
 
 const ONE_NEAR: u128 = 1_000_000_000_000_000_000_000_000;
 
@@ -104,7 +104,7 @@ fn test_in_memory_trie_node_consistency() {
         let pledging = if i < 2 { validator_stake } else { 0 };
         records.push(StateRecord::Account {
             account_id: account.clone(),
-            account: Account::new(initial_balance, pledging, 0,  CryptoHash::default(), 0),
+            account: Account::new(initial_balance, pledging, 0, CryptoHash::default(), 0),
         });
         records.push(StateRecord::AccessKey {
             account_id: account.clone(),

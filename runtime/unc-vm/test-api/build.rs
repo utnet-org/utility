@@ -4,13 +4,13 @@
 //!
 //! Please try to keep this file as clean as possible.
 
-use unc_vm_test_generator::{
-    test_directory, test_directory_module, wast_processor, with_test_module, Testsuite,
-};
 use std::env;
 use std::fs;
 use std::path::PathBuf;
 use std::process::Command;
+use unc_vm_test_generator::{
+    test_directory, test_directory_module, wast_processor, with_test_module, Testsuite,
+};
 
 fn main() -> anyhow::Result<()> {
     // As rerun-if-changed doesn't support globs, we use another crate

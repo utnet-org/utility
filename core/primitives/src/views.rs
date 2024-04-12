@@ -27,24 +27,24 @@ use crate::transaction::{
     Action, AddKeyAction, CreateAccountAction, DeleteAccountAction, DeleteKeyAction,
     DeployContractAction, ExecutionMetadata, ExecutionOutcome, ExecutionOutcomeWithIdAndProof,
     ExecutionStatus, FunctionCallAction, PartialExecutionOutcome, PartialExecutionStatus,
-    SignedTransaction, PledgeAction, TransferAction,
+    PledgeAction, SignedTransaction, TransferAction,
 };
 use crate::types::{
     AccountId, AccountWithPublicKey, Balance, BlockHeight, EpochHeight, EpochId, FunctionArgs, Gas,
-    Nonce, NumBlocks, ShardId, StateChangeCause, StateChangeKind, StateChangeValue,
+    Nonce, NumBlocks, Power, ShardId, StateChangeCause, StateChangeKind, StateChangeValue,
     StateChangeWithCause, StateChangesRequest, StateRoot, StorageUsage, StoreKey, StoreValue,
-    ValidatorKickoutReason, Power,
+    ValidatorKickoutReason,
 };
 
-use crate::action::{RegisterRsa2048KeysAction, CreateRsa2048ChallengeAction};
+use crate::action::{CreateRsa2048ChallengeAction, RegisterRsa2048KeysAction};
+use crate::types::validator_power_and_pledge::{
+    ValidatorPowerAndPledge, ValidatorPowerAndPledgeIter,
+};
 use crate::version::{ProtocolVersion, Version};
+use crate::views::validator_pledge_view::ValidatorPledgeView;
+use crate::views::validator_power_and_pledge_view::ValidatorPowerAndPledgeView;
 use borsh::{BorshDeserialize, BorshSerialize};
 use chrono::DateTime;
-use unc_crypto::{PublicKey, Signature};
-use unc_fmt::{AbbrBytes, Slice};
-use unc_parameters::{ActionCosts, ExtCosts};
-use unc_vm_runner::logic::CompiledContractCache;
-use unc_vm_runner::ContractCode;
 use serde_with::base64::Base64;
 use serde_with::serde_as;
 use std::collections::HashMap;
@@ -52,10 +52,12 @@ use std::fmt;
 use std::ops::Range;
 use std::sync::Arc;
 use strum::IntoEnumIterator;
+use unc_crypto::{PublicKey, Signature};
+use unc_fmt::{AbbrBytes, Slice};
+use unc_parameters::{ActionCosts, ExtCosts};
+use unc_vm_runner::logic::CompiledContractCache;
+use unc_vm_runner::ContractCode;
 use validator_power_view::ValidatorPowerView;
-use crate::types::validator_power_and_pledge::{ValidatorPowerAndPledge, ValidatorPowerAndPledgeIter};
-use crate::views::validator_pledge_view::ValidatorPledgeView;
-use crate::views::validator_power_and_pledge_view::ValidatorPowerAndPledgeView;
 
 /// A view of the account
 #[derive(serde::Serialize, serde::Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -125,7 +127,7 @@ impl From<Account> for AccountView {
 
 impl From<&AccountView> for Account {
     fn from(view: &AccountView) -> Self {
-        Account::new(view.amount, view.pledging, view.power,  view.code_hash, view.storage_usage)
+        Account::new(view.amount, view.pledging, view.power, view.code_hash, view.storage_usage)
     }
 }
 
@@ -263,7 +265,6 @@ pub struct AccessKeyList {
     pub keys: Vec<AccessKeyInfoView>,
 }
 
-
 impl FromIterator<AccessKeyInfoView> for AccessKeyList {
     fn from_iter<I: IntoIterator<Item = AccessKeyInfoView>>(iter: I) -> Self {
         Self { keys: iter.into_iter().collect() }
@@ -276,21 +277,16 @@ pub struct ChipsList {
     pub chips: Vec<ChipView>,
 }
 
-
 impl FromIterator<ChipView> for ChipsList {
-    fn from_iter<I: IntoIterator<Item=ChipView>>(iter: I) -> Self {
+    fn from_iter<I: IntoIterator<Item = ChipView>>(iter: I) -> Self {
         let chips: Vec<ChipView> = iter.into_iter().collect();
 
         // Calculate total power by summing up the power of each chip
         let total_power: u64 = chips.iter().map(|chip| chip.power).sum();
 
-        ChipsList {
-            total_power,
-            chips,
-        }
+        ChipsList { total_power, chips }
     }
 }
-
 
 #[cfg_attr(feature = "deepsize_feature", derive(deepsize::DeepSizeOf))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, PartialEq, Eq, Clone)]
@@ -842,8 +838,14 @@ impl From<BlockHeader> for BlockHeaderView {
             timestamp: header.raw_timestamp(),
             timestamp_nanosec: header.raw_timestamp(),
             random_value: *header.random_value(),
-            validator_power_proposals: header.prev_validator_power_proposals().map(Into::into).collect(),
-            validator_pledge_proposals: header.prev_validator_pledge_proposals().map(Into::into).collect(),
+            validator_power_proposals: header
+                .prev_validator_power_proposals()
+                .map(Into::into)
+                .collect(),
+            validator_pledge_proposals: header
+                .prev_validator_pledge_proposals()
+                .map(Into::into)
+                .collect(),
             chunk_mask: header.chunk_mask().to_vec(),
             block_ordinal: if header.block_ordinal() != 0 {
                 Some(header.block_ordinal())
@@ -1145,8 +1147,14 @@ impl From<ShardChunkHeader> for ChunkHeaderView {
             balance_burnt: inner.prev_balance_burnt(),
             outgoing_receipts_root: *inner.prev_outgoing_receipts_root(),
             tx_root: *inner.tx_root(),
-            validator_power_proposals: inner.prev_validator_power_proposals().map(Into::into).collect(),
-            validator_pledge_proposals: inner.prev_validator_pledge_proposals().map(Into::into).collect(),
+            validator_power_proposals: inner
+                .prev_validator_power_proposals()
+                .map(Into::into)
+                .collect(),
+            validator_pledge_proposals: inner
+                .prev_validator_pledge_proposals()
+                .map(Into::into)
+                .collect(),
             signature,
         }
     }
@@ -1205,26 +1213,21 @@ impl From<ValidatorPowerAndPledgeIter<'_>> for AllMinersView {
                 // Assuming we only deal with V1 here, similar logic could apply for other versions
                 ValidatorPowerAndPledge::V1(v) => {
                     total_power += v.power; // Accumulate the total power
-                    // Convert ValidatorPowerAndPledge to ValidatorPowerView
+                                            // Convert ValidatorPowerAndPledge to ValidatorPowerView
                     let miner = ValidatorPowerView::V1(ValidatorPowerViewV1 {
                         account_id: v.account_id,
                         public_key: v.public_key,
                         power: v.power,
                     });
                     miners.push(miner); // Add the converted ValidatorPowerView to the miners vector
-                },
-                // Handle other variants as needed
+                } // Handle other variants as needed
             }
         }
 
         // Create an instance of AllMinersView with the aggregated data
-        AllMinersView {
-            total_power,
-            miners,
-        }
+        AllMinersView { total_power, miners }
     }
 }
-
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct BlockView {
@@ -1816,7 +1819,7 @@ impl ExecutionOutcomeWithIdView {
         self.outcome.to_hashes(self.id)
     }
 }
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct TxStatusView {
     pub execution_outcome: Option<FinalExecutionOutcomeViewEnum>,
     pub status: TxExecutionStatus,
@@ -1832,8 +1835,6 @@ pub struct TxStatusView {
     Default,
     Eq,
     PartialEq,
-    Ord,
-    PartialOrd,
 )]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum TxExecutionStatus {
@@ -1841,6 +1842,11 @@ pub enum TxExecutionStatus {
     None,
     /// Transaction is included into the block. The block may be not finalised yet
     Included,
+    /// Transaction is included into the block +
+    /// All non-refund transaction receipts finished their execution.
+    /// The corresponding blocks for tx and each receipt may be not finalised yet
+    #[default]
+    ExecutedOptimistic,
     /// Transaction is included into finalised block
     IncludedFinal,
     /// Transaction is included into finalised block +
@@ -1849,7 +1855,6 @@ pub enum TxExecutionStatus {
     Executed,
     /// Transaction is included into finalised block +
     /// Execution of transaction receipts is finalised
-    #[default]
     Final,
 }
 
@@ -1933,13 +1938,13 @@ pub struct FinalExecutionOutcomeWithReceiptView {
 
 pub mod validator_pledge_view {
     pub use super::ValidatorPowerViewV1;
-    use borsh::{BorshDeserialize, BorshSerialize};
-    use unc_primitives_core::types::AccountId;
-    use serde::Deserialize;
     use crate::types::validator_stake::ValidatorPledge;
+    use borsh::{BorshDeserialize, BorshSerialize};
+    use serde::Deserialize;
+    use unc_primitives_core::types::AccountId;
 
     #[derive(
-    BorshSerialize, BorshDeserialize, serde::Serialize, Deserialize, Debug, Clone, Eq, PartialEq,
+        BorshSerialize, BorshDeserialize, serde::Serialize, Deserialize, Debug, Clone, Eq, PartialEq,
     )]
     #[serde(tag = "validator_pledge_struct_version")]
     pub enum ValidatorPledgeView {
@@ -1981,21 +1986,23 @@ pub mod validator_pledge_view {
     impl From<crate::views::validator_pledge_view::ValidatorPledgeView> for ValidatorPledge {
         fn from(view: crate::views::validator_pledge_view::ValidatorPledgeView) -> Self {
             match view {
-                crate::views::validator_pledge_view::ValidatorPledgeView::V1(v1) => Self::new_v1(v1.account_id, v1.public_key, v1.pledge),
+                crate::views::validator_pledge_view::ValidatorPledgeView::V1(v1) => {
+                    Self::new_v1(v1.account_id, v1.public_key, v1.pledge)
+                }
             }
         }
     }
 }
 
 #[derive(
-BorshSerialize,
-BorshDeserialize,
-Debug,
-Clone,
-Eq,
-PartialEq,
-serde::Serialize,
-serde::Deserialize,
+    BorshSerialize,
+    BorshDeserialize,
+    Debug,
+    Clone,
+    Eq,
+    PartialEq,
+    serde::Serialize,
+    serde::Deserialize,
 )]
 pub struct ValidatorPledgeViewV1 {
     pub account_id: AccountId,
@@ -2007,8 +2014,8 @@ pub mod validator_power_view {
     pub use super::ValidatorPowerViewV1;
     use crate::types::validator_power::ValidatorPower;
     use borsh::{BorshDeserialize, BorshSerialize};
-    use unc_primitives_core::types::AccountId;
     use serde::Deserialize;
+    use unc_primitives_core::types::AccountId;
 
     #[derive(
         BorshSerialize, BorshDeserialize, serde::Serialize, Deserialize, Debug, Clone, Eq, PartialEq,
@@ -2078,13 +2085,13 @@ pub struct ValidatorPowerViewV1 {
 
 pub mod validator_power_and_pledge_view {
     pub use super::ValidatorPowerViewV1;
-    use borsh::{BorshDeserialize, BorshSerialize};
-    use unc_primitives_core::types::AccountId;
-    use serde::Deserialize;
     use crate::types::validator_power_and_pledge::ValidatorPowerAndPledge;
+    use borsh::{BorshDeserialize, BorshSerialize};
+    use serde::Deserialize;
+    use unc_primitives_core::types::AccountId;
 
     #[derive(
-    BorshSerialize, BorshDeserialize, serde::Serialize, Deserialize, Debug, Clone, Eq, PartialEq,
+        BorshSerialize, BorshDeserialize, serde::Serialize, Deserialize, Debug, Clone, Eq, PartialEq,
     )]
     #[serde(tag = "validator_power_and_pledge_struct_version")]
     pub enum ValidatorPowerAndPledgeView {
@@ -2111,37 +2118,47 @@ pub mod validator_power_and_pledge_view {
         }
     }
 
-    impl From<ValidatorPowerAndPledge> for crate::views::validator_power_and_pledge_view::ValidatorPowerAndPledgeView {
+    impl From<ValidatorPowerAndPledge>
+        for crate::views::validator_power_and_pledge_view::ValidatorPowerAndPledgeView
+    {
         fn from(power_pledge: ValidatorPowerAndPledge) -> Self {
             match power_pledge {
-                ValidatorPowerAndPledge::V1(v1) => Self::V1(crate::views::ValidatorPowerAndPledgeViewV1 {
-                    account_id: v1.account_id,
-                    public_key: v1.public_key,
-                    power: v1.power,
-                    pledge: v1.pledge,
-                }),
+                ValidatorPowerAndPledge::V1(v1) => {
+                    Self::V1(crate::views::ValidatorPowerAndPledgeViewV1 {
+                        account_id: v1.account_id,
+                        public_key: v1.public_key,
+                        power: v1.power,
+                        pledge: v1.pledge,
+                    })
+                }
             }
         }
     }
 
-    impl From<crate::views::validator_power_and_pledge_view::ValidatorPowerAndPledgeView> for ValidatorPowerAndPledge {
-        fn from(view: crate::views::validator_power_and_pledge_view::ValidatorPowerAndPledgeView) -> Self {
+    impl From<crate::views::validator_power_and_pledge_view::ValidatorPowerAndPledgeView>
+        for ValidatorPowerAndPledge
+    {
+        fn from(
+            view: crate::views::validator_power_and_pledge_view::ValidatorPowerAndPledgeView,
+        ) -> Self {
             match view {
-                crate::views::validator_power_and_pledge_view::ValidatorPowerAndPledgeView::V1(v1) => Self::new_v1(v1.account_id, v1.public_key, v1.power, v1.pledge,),
+                crate::views::validator_power_and_pledge_view::ValidatorPowerAndPledgeView::V1(
+                    v1,
+                ) => Self::new_v1(v1.account_id, v1.public_key, v1.power, v1.pledge),
             }
         }
     }
 }
 
 #[derive(
-BorshSerialize,
-BorshDeserialize,
-Debug,
-Clone,
-Eq,
-PartialEq,
-serde::Serialize,
-serde::Deserialize,
+    BorshSerialize,
+    BorshDeserialize,
+    Debug,
+    Clone,
+    Eq,
+    PartialEq,
+    serde::Serialize,
+    serde::Deserialize,
 )]
 pub struct ValidatorPowerAndPledgeViewV1 {
     pub account_id: AccountId,
@@ -2491,9 +2508,7 @@ impl From<StateChangeKind> for StateChangeKindView {
             StateChangeKind::AccessKeyTouched { account_id } => {
                 Self::AccessKeyTouched { account_id }
             }
-            StateChangeKind::RsaKeyTouched { account_id } => {
-                Self::RsaKeyTouched { account_id }
-            }
+            StateChangeKind::RsaKeyTouched { account_id } => Self::RsaKeyTouched { account_id },
             StateChangeKind::DataTouched { account_id } => Self::DataTouched { account_id },
             StateChangeKind::ContractCodeTouched { account_id } => {
                 Self::ContractCodeTouched { account_id }

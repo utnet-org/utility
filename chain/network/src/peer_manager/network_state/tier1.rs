@@ -8,14 +8,14 @@ use crate::peer_manager::connection;
 use crate::stun;
 use crate::tcp;
 use crate::types::PeerType;
-use unc_async::time;
-use unc_crypto::PublicKey;
-use unc_o11y::log_assert;
-use unc_primitives::network::PeerId;
 use rand::seq::IteratorRandom as _;
 use rand::seq::SliceRandom as _;
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
+use unc_async::time;
+use unc_crypto::PublicKey;
+use unc_o11y::log_assert;
+use unc_primitives::network::PeerId;
 
 impl super::NetworkState {
     // Returns ValidatorConfig of this node iff it belongs to TIER1 according to `accounts_data`.

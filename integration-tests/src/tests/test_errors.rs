@@ -1,6 +1,9 @@
 use std::sync::Arc;
 
 use crate::node::{Node, ThreadNode};
+use framework::config::{GenesisExt, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
+use framework::load_test_config;
+use testlib::runtime_utils::{alice_account, bob_account};
 use unc_chain_configs::Genesis;
 use unc_crypto::{InMemorySigner, KeyType};
 use unc_jsonrpc::RpcInto;
@@ -13,9 +16,6 @@ use unc_primitives::transaction::{
     Action, AddKeyAction, CreateAccountAction, SignedTransaction, TransferAction,
 };
 use unc_primitives::version::PROTOCOL_VERSION;
-use framework::config::{GenesisExt, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
-use framework::load_test_config;
-use testlib::runtime_utils::{alice_account, bob_account};
 
 fn start_node() -> ThreadNode {
     init_integration_logger();

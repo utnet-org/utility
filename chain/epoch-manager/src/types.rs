@@ -1,17 +1,17 @@
 use borsh::{BorshDeserialize, BorshSerialize};
+use std::collections::{BTreeMap, HashMap};
+use tracing::{debug, debug_span};
 use unc_primitives::block_header::BlockHeader;
 use unc_primitives::challenge::SlashedValidator;
 use unc_primitives::epoch_manager::block_info::BlockInfo;
 use unc_primitives::epoch_manager::epoch_info::EpochInfo;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::types::validator_power::ValidatorPower;
+use unc_primitives::types::validator_stake::ValidatorPledge;
 use unc_primitives::types::{
     AccountId, Balance, BlockHeight, EpochId, ShardId, ValidatorId, ValidatorStats,
 };
 use unc_primitives::version::ProtocolVersion;
-use std::collections::{BTreeMap, HashMap};
-use tracing::{debug, debug_span};
-use unc_primitives::types::validator_stake::ValidatorPledge;
 
 use crate::EpochManager;
 

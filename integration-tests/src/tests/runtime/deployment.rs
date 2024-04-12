@@ -1,11 +1,11 @@
 use crate::node::{Node, RuntimeNode};
+use framework::config::GenesisExt;
 use unc_chain_configs::Genesis;
 use unc_parameters::RuntimeConfigStore;
 use unc_primitives::transaction::{Action, DeployContractAction, SignedTransaction};
 use unc_primitives::types::AccountId;
 use unc_primitives::version::PROTOCOL_VERSION;
 use unc_primitives::views::FinalExecutionStatus;
-use framework::config::GenesisExt;
 
 const ONE_NEAR: u128 = 10u128.pow(24);
 

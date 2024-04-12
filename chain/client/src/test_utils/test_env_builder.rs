@@ -3,6 +3,9 @@ use super::test_env::TestEnv;
 use super::{AccountIndices, TEST_SEED};
 use actix_rt::System;
 use itertools::{multizip, Itertools};
+use std::collections::HashMap;
+use std::path::PathBuf;
+use std::sync::Arc;
 use unc_async::messaging::IntoSender;
 use unc_chain::state_snapshot_actor::SnapshotCallbacks;
 use unc_chain::test_utils::{KeyValueRuntime, MockEpochManager, ValidatorSchedule};
@@ -19,9 +22,6 @@ use unc_primitives::types::{AccountId, NumShards};
 use unc_store::config::StateSnapshotType;
 use unc_store::test_utils::create_test_store;
 use unc_store::{NodeStorage, ShardUId, Store, StoreConfig, TrieConfig};
-use std::collections::HashMap;
-use std::path::PathBuf;
-use std::sync::Arc;
 
 #[derive(derive_more::From, Clone)]
 enum EpochManagerKind {
@@ -346,9 +346,7 @@ impl TestEnvBuilder {
             .as_ref()
             .unwrap()
             .iter()
-            .map(|epoch_manager| {
-                ShardTracker::new(epoch_manager.clone().into_adapter())
-            })
+            .map(|epoch_manager| ShardTracker::new(epoch_manager.clone().into_adapter()))
             .collect();
         ret.shard_trackers(shard_trackers)
     }
@@ -364,9 +362,7 @@ impl TestEnvBuilder {
             .as_ref()
             .unwrap()
             .iter()
-            .map(|epoch_manager| {
-                ShardTracker::new(epoch_manager.clone().into_adapter())
-            })
+            .map(|epoch_manager| ShardTracker::new(epoch_manager.clone().into_adapter()))
             .collect();
         ret.shard_trackers(shard_trackers)
     }

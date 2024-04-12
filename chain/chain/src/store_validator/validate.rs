@@ -1,5 +1,6 @@
 use crate::StoreValidator;
 
+use std::collections::{HashMap, HashSet};
 use unc_primitives::block::{Block, BlockHeader, Tip};
 use unc_primitives::epoch_manager::block_info::BlockInfo;
 use unc_primitives::epoch_manager::epoch_info::EpochInfo;
@@ -14,7 +15,6 @@ use unc_primitives::utils::{get_block_shard_id, get_outcome_id_block_hash, index
 use unc_store::{
     DBCol, TrieChanges, CHUNK_TAIL_KEY, FORK_TAIL_KEY, HEADER_HEAD_KEY, HEAD_KEY, TAIL_KEY,
 };
-use std::collections::{HashMap, HashSet};
 
 #[derive(thiserror::Error, Debug)]
 pub enum StoreValidatorError {

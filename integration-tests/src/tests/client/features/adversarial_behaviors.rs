@@ -1,5 +1,8 @@
 use std::{collections::HashSet, sync::Arc};
 
+use framework::config::GenesisExt;
+use framework::test_utils::TestEnvNightshadeSetupExt;
+use tracing::log::debug;
 use unc_async::messaging::CanSend;
 use unc_chain::{ChainGenesis, Provenance};
 use unc_chain_configs::Genesis;
@@ -13,9 +16,6 @@ use unc_primitives::{
     shard_layout::ShardLayout,
     types::{AccountId, EpochId, ShardId},
 };
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
-use tracing::log::debug;
 
 struct AdversarialBehaviorTestData {
     num_validators: usize,

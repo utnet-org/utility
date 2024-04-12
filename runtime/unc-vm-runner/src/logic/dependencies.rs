@@ -6,10 +6,10 @@ use super::VMLogicError;
 use unc_crypto::PublicKey;
 use unc_parameters::vm::StorageGetMode;
 use unc_primitives_core::hash::CryptoHash;
-use unc_primitives_core::types::{Gas, Power};
 use unc_primitives_core::types::GasWeight;
 use unc_primitives_core::types::Nonce;
 use unc_primitives_core::types::{AccountId, Balance};
+use unc_primitives_core::types::{Gas, Power};
 
 use std::borrow::Cow;
 

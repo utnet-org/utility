@@ -1,7 +1,7 @@
 use crate::rocksdb::RocksDBTestConfig;
 use crate::Cost;
-use unc_parameters::vm::VMKind;
 use std::path::PathBuf;
+use unc_parameters::vm::VMKind;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum GasMetric {

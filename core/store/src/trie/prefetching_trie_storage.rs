@@ -4,6 +4,10 @@ use crate::{
     TrieCachingStorage, TrieConfig, TrieStorage,
 };
 use crossbeam::select;
+use std::collections::HashMap;
+use std::rc::Rc;
+use std::sync::Arc;
+use std::thread;
 use unc_o11y::metrics::prometheus;
 use unc_o11y::metrics::prometheus::core::GenericGauge;
 use unc_o11y::tracing::error;
@@ -11,10 +15,6 @@ use unc_primitives::hash::CryptoHash;
 use unc_primitives::shard_layout::ShardUId;
 use unc_primitives::trie_key::TrieKey;
 use unc_primitives::types::{ShardId, StateRoot};
-use std::collections::HashMap;
-use std::rc::Rc;
-use std::sync::Arc;
-use std::thread;
 
 const MAX_QUEUED_WORK_ITEMS: usize = 16 * 1024;
 const MAX_PREFETCH_STAGING_MEMORY: usize = 200 * 1024 * 1024;

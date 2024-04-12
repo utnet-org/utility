@@ -1,9 +1,9 @@
 use crate::vmcontext::VMGlobalDefinition;
-use unc_vm_types::{GlobalType, Mutability, Type, Value, WasmValueType};
 use std::cell::UnsafeCell;
 use std::ptr::NonNull;
 use std::sync::Mutex;
 use thiserror::Error;
+use unc_vm_types::{GlobalType, Mutability, Type, Value, WasmValueType};
 
 #[derive(Debug)]
 /// A Global instance

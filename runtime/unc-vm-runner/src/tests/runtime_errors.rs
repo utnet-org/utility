@@ -1,7 +1,7 @@
 use super::test_builder::test_builder;
 use expect_test::expect;
-use unc_primitives_core::version::ProtocolFeature;
 use std::fmt::Write;
+use unc_primitives_core::version::ProtocolFeature;
 
 const FIX_CONTRACT_LOADING_COST: u32 = 129;
 

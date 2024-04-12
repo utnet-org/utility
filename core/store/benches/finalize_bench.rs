@@ -16,6 +16,7 @@ extern crate bencher;
 
 use bencher::{black_box, Bencher};
 use borsh::BorshSerialize;
+use rand::prelude::SliceRandom;
 use unc_chain::Chain;
 use unc_chunks::ShardsManager;
 use unc_crypto::{InMemorySigner, KeyType, Signer};
@@ -32,7 +33,6 @@ use unc_primitives::transaction::{Action, FunctionCallAction, SignedTransaction}
 use unc_primitives::types::AccountId;
 use unc_primitives::validator_signer::InMemoryValidatorSigner;
 use unc_store::DBCol;
-use rand::prelude::SliceRandom;
 
 /// `ShardChunk` -> `StoreUpdate::insert_ser`.
 ///

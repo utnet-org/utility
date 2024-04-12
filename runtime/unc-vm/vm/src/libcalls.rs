@@ -43,11 +43,11 @@ use crate::table::{RawTableElement, TableElement};
 use crate::trap::{raise_lib_trap, Trap, TrapCode};
 use crate::vmcontext::VMContext;
 use crate::VMExternRef;
+use std::fmt;
 use unc_vm_types::{
     DataIndex, ElemIndex, FunctionIndex, LocalMemoryIndex, LocalTableIndex, MemoryIndex,
     TableIndex, Type,
 };
-use std::fmt;
 
 /// Implementation of f32.ceil
 #[no_mangle]

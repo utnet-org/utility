@@ -1,17 +1,17 @@
-use crate::unc_chain_primitives::error::BlockKnownError;
 use crate::test_utils::{setup, wait_for_all_blocks_in_processing};
+use crate::unc_chain_primitives::error::BlockKnownError;
 use crate::{Block, BlockProcessingArtifact, ChainStoreAccess, Error};
 use assert_matches::assert_matches;
 use chrono;
 use chrono::TimeZone;
+use num_rational::Ratio;
+use std::sync::Arc;
+use std::time::Instant;
 use unc_o11y::testonly::init_test_logger;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::static_clock::MockClockGuard;
 use unc_primitives::test_utils::TestBlockBuilder;
 use unc_primitives::version::PROTOCOL_VERSION;
-use num_rational::Ratio;
-use std::sync::Arc;
-use std::time::Instant;
 
 fn timestamp(hour: u32, min: u32, sec: u32, millis: u32) -> chrono::DateTime<chrono::Utc> {
     chrono::Utc.with_ymd_and_hms(2020, 10, 1, hour, min, sec).single().unwrap()

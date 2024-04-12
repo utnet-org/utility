@@ -1,3 +1,4 @@
+use framework::NightshadeRuntime;
 use unc_chain::types::RuntimeAdapter;
 use unc_crypto::PublicKey;
 use unc_primitives::account::{AccessKey, Account};
@@ -9,7 +10,6 @@ use unc_primitives::trie_key::TrieKey;
 use unc_primitives::types::{AccountId, StateRoot};
 use unc_primitives::types::{StoreKey, StoreValue};
 use unc_store::{flat::FlatStateChanges, DBCol, ShardTries};
-use framework::NightshadeRuntime;
 
 /// Object that updates the existing state. Combines all changes, commits them
 /// and returns new state roots.

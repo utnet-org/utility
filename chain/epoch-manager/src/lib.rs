@@ -1,7 +1,15 @@
-use num_bigint::{BigInt, ToBigInt};
 use crate::proposals::proposals_to_block_summary;
 use crate::proposals::proposals_to_epoch_info;
 use crate::types::EpochInfoAggregator;
+use num_bigint::{BigInt, ToBigInt};
+use num_rational::Rational64;
+use num_traits::Zero;
+use primitive_types::U256;
+use std::cmp::Ordering;
+use std::collections::{BTreeMap, HashMap, HashSet};
+use std::sync::{Arc, RwLock, RwLockReadGuard, RwLockWriteGuard};
+use tracing::{debug, warn};
+use types::BlockHeaderInfo;
 use unc_cache::SyncLruCache;
 use unc_chain_configs::GenesisConfig;
 use unc_primitives::checked_feature;
@@ -15,22 +23,23 @@ use unc_primitives::epoch_manager::{
 use unc_primitives::errors::{BlockError, EpochError};
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::shard_layout::ShardLayout;
-use unc_primitives::types::validator_stake::ValidatorPledge;
 use unc_primitives::types::validator_power::ValidatorPower;
-use unc_primitives::types::validator_power_and_pledge::{ValidatorPowerAndPledge, ValidatorPowerAndPledgeIter};
-use unc_primitives::types::{AccountId, ApprovalPledge, Balance, BlockChunkValidatorStats, BlockHeight, EpochId, EpochInfoProvider, NumBlocks, NumSeats, Power, ShardId, ValidatorId, ValidatorInfoIdentifier, ValidatorKickoutReason, ValidatorStats};
+use unc_primitives::types::validator_power_and_pledge::{
+    ValidatorPowerAndPledge, ValidatorPowerAndPledgeIter,
+};
+use unc_primitives::types::validator_stake::ValidatorPledge;
+use unc_primitives::types::{
+    AccountId, ApprovalPledge, Balance, BlockChunkValidatorStats, BlockHeight, EpochId,
+    EpochInfoProvider, NumBlocks, NumSeats, Power, ShardId, ValidatorId, ValidatorInfoIdentifier,
+    ValidatorKickoutReason, ValidatorStats,
+};
 use unc_primitives::validator_mandates::AssignmentWeight;
 use unc_primitives::version::{ProtocolVersion, UPGRADABILITY_FIX_PROTOCOL_VERSION};
-use unc_primitives::views::{AllMinersView, CurrentEpochValidatorInfo, EpochValidatorInfo, NextEpochValidatorInfo, ValidatorKickoutView};
+use unc_primitives::views::{
+    AllMinersView, CurrentEpochValidatorInfo, EpochValidatorInfo, NextEpochValidatorInfo,
+    ValidatorKickoutView,
+};
 use unc_store::{DBCol, Store, StoreUpdate};
-use num_rational::Rational64;
-use primitive_types::U256;
-use std::cmp::Ordering;
-use std::collections::{BTreeMap, HashMap, HashSet};
-use std::sync::{Arc, RwLock, RwLockReadGuard, RwLockWriteGuard};
-use num_traits::Zero;
-use tracing::{debug, warn};
-use types::BlockHeaderInfo;
 
 pub use crate::adapter::EpochManagerAdapter;
 pub use crate::reward_calculator::RewardCalculator;
@@ -146,7 +155,6 @@ impl EpochInfoProvider for EpochManagerHandle {
         let epoch_manager = self.read();
         epoch_manager.minimum_pledge(prev_block_hash)
     }
-
 }
 
 /// Tracks epoch information across different forks, such as validators.
@@ -163,7 +171,7 @@ pub struct EpochManager {
     epochs_info: SyncLruCache<EpochId, Arc<EpochInfo>>,
     /// Cache of block information.
     blocks_info: SyncLruCache<CryptoHash, Arc<BlockInfo>>,
-        /// Cache of epoch id to epoch start height
+    /// Cache of epoch id to epoch start height
     epoch_id_to_start: SyncLruCache<EpochId, BlockHeight>,
     /// Epoch validators ordered by `block_producer_settlement`.
     epoch_validators_ordered: SyncLruCache<EpochId, Arc<[(ValidatorPowerAndPledge, bool)]>>,
@@ -205,20 +213,24 @@ impl EpochManager {
             Self::new_all_epoch_config_with_test_overrides(genesis_config, test_overrides);
         let validators = genesis_config.validators();
         // Transforming ValidatorPowerAndPledge to ValidatorPower
-        let power_validators: Vec<ValidatorPower> = validators.clone().into_iter().map(|validator| {
-            match validator {
+        let power_validators: Vec<ValidatorPower> = validators
+            .clone()
+            .into_iter()
+            .map(|validator| match validator {
                 ValidatorPowerAndPledge::V1(v) => {
                     ValidatorPower::new_v1(v.account_id, v.public_key, v.power)
-                },
-            }
-            }).collect();
-        let pledge_validators: Vec<ValidatorPledge> = validators.clone().into_iter().map(|validator| {
-            match validator {
+                }
+            })
+            .collect();
+        let pledge_validators: Vec<ValidatorPledge> = validators
+            .clone()
+            .into_iter()
+            .map(|validator| match validator {
                 ValidatorPowerAndPledge::V1(v) => {
                     ValidatorPledge::new_v1(v.account_id, v.public_key, v.pledge)
-},
                 }
-            }).collect();
+            })
+            .collect();
         Self::new(
             store,
             all_epoch_config,
@@ -249,7 +261,6 @@ impl EpochManager {
         )
     }
 
-
     fn new_all_epoch_config_with_test_overrides(
         genesis_config: &GenesisConfig,
         test_overrides: Option<AllEpochConfigTestOverrides>,
@@ -279,7 +290,7 @@ impl EpochManager {
             .map_err(EpochError::from)?
             .unwrap_or_default();
         let genesis_num_block_producer_seats =
-        config.for_protocol_version(genesis_protocol_version).num_block_producer_seats;
+            config.for_protocol_version(genesis_protocol_version).num_block_producer_seats;
         let mut epoch_manager = EpochManager {
             store,
             config,
@@ -302,7 +313,18 @@ impl EpochManager {
             // Missing genesis epoch, means that there is no validator initialize yet.
             let genesis_epoch_config =
                 epoch_manager.config.for_protocol_version(genesis_protocol_version);
-            let epoch_info = proposals_to_epoch_info(&genesis_epoch_config, [0; 32], &EpochInfo::default(), power_validators.clone(), pledge_validators.clone(), HashMap::default(), validator_reward.clone(), 0, genesis_protocol_version, genesis_protocol_version)?;
+            let epoch_info = proposals_to_epoch_info(
+                &genesis_epoch_config,
+                [0; 32],
+                &EpochInfo::default(),
+                power_validators.clone(),
+                pledge_validators.clone(),
+                HashMap::default(),
+                validator_reward.clone(),
+                0,
+                genesis_protocol_version,
+                genesis_protocol_version,
+            )?;
             // Dummy block info.
             // Artificial block we add to simplify implementation: dummy block is the
             // parent of genesis block that points to itself.
@@ -337,7 +359,7 @@ impl EpochManager {
                 power_validators,
                 pledge_validators,
                 Default::default(),
-                Default::default()
+                Default::default(),
             );
             let block_info = Arc::new(the_block_info);
             let mut store_update = epoch_manager.store.store_update();
@@ -348,7 +370,6 @@ impl EpochManager {
             )?;
             epoch_manager.save_block_info(&mut store_update, block_info.clone())?;
             store_update.commit()?;
-
         }
         Ok(epoch_manager)
     }
@@ -753,25 +774,29 @@ impl EpochManager {
         last_block_hash: &CryptoHash,
         rng_seed: RngSeed,
     ) -> Result<BlockSummary, BlockError> {
-
         let validator_stake =
             block_info.validators_iter().map(|r| r.account_and_pledge()).collect::<HashMap<_, _>>();
 
-        let (
-            all_power_proposals,
-            all_pledge_proposals,
-            validator_kickout
-        ) = match block_info { // Assuming last_block_summary is wrapped in an Arc
+        let (all_power_proposals, all_pledge_proposals, validator_kickout) = match block_info {
+            // Assuming last_block_summary is wrapped in an Arc
             BlockInfo::V1(summary) => {
                 // Now you can access the fields of BlockSummaryV1 through `summary`
-                (&summary.all_power_proposals,&summary.all_pledge_proposals,&summary.validator_kickout)
+                (
+                    &summary.all_power_proposals,
+                    &summary.all_pledge_proposals,
+                    &summary.validator_kickout,
+                )
                 // Add more fields as needed
-            },
+            }
             BlockInfo::V2(summary) => {
                 // Now you can access the fields of BlockSummaryV1 through `summary`
-                (&summary.all_power_proposals,&summary.all_pledge_proposals,&summary.validator_kickout)
+                (
+                    &summary.all_power_proposals,
+                    &summary.all_pledge_proposals,
+                    &summary.validator_kickout,
+                )
                 // Add more fields as needed
-            },
+            }
         };
 
         //FIXME: This is a hack to get the block reward and minted amount
@@ -852,29 +877,38 @@ impl EpochManager {
         self.save_epoch_validator_info(store_update, block_info.epoch_id(), &epoch_summary)?;
 
         let EpochSummary {
-        //    all_power_proposals,
-        //    all_pledge_proposals,
-        //    validator_kickout,
+            //    all_power_proposals,
+            //    all_pledge_proposals,
+            //    validator_kickout,
             validator_block_chunk_stats,
             next_version,
             ..
         } = epoch_summary;
         // start james savechives
-        let (
-            all_power_proposals,
-            all_pledge_proposals,
-            validator_kickout,
-        ): (Vec<ValidatorPower>, Vec<ValidatorPledge>, HashMap<AccountId, ValidatorKickoutReason>) = match block_info { // Assuming last_block_summary is wrapped in an Arc
+        let (all_power_proposals, all_pledge_proposals, validator_kickout): (
+            Vec<ValidatorPower>,
+            Vec<ValidatorPledge>,
+            HashMap<AccountId, ValidatorKickoutReason>,
+        ) = match block_info {
+            // Assuming last_block_summary is wrapped in an Arc
             BlockInfo::V1(summary) => {
                 // Now you can access the fields of BlockSummaryV1 through `summary`
-                (summary.clone().all_power_proposals, summary.clone().all_pledge_proposals, summary.clone().validator_kickout)
+                (
+                    summary.clone().all_power_proposals,
+                    summary.clone().all_pledge_proposals,
+                    summary.clone().validator_kickout,
+                )
                 // Add more fields as needed
-            },
+            }
             BlockInfo::V2(summary) => {
                 // Now you can access the fields of BlockSummaryV1 through `summary`
-                (summary.clone().all_power_proposals, summary.clone().all_pledge_proposals, summary.clone().validator_kickout)
+                (
+                    summary.clone().all_power_proposals,
+                    summary.clone().all_pledge_proposals,
+                    summary.clone().validator_kickout,
+                )
                 // Add more fields as needed
-            },
+            }
         };
         // end james savechives
         let (validator_reward, minted_amount) = {
@@ -954,7 +988,7 @@ impl EpochManager {
                     &EpochId(current_hash),
                     genesis_epoch_info,
                 )?;
-                            } else {
+            } else {
                 let prev_block_info = self.get_block_info(block_info.prev_hash())?;
 
                 let mut is_epoch_start = false;
@@ -1018,7 +1052,7 @@ impl EpochManager {
                 let block_info = Arc::new(block_info);
                 // Save current block info.
                 self.save_block_info(&mut store_update, Arc::clone(&block_info))?;
-                
+
                 // let block_summary = Arc::new(block_summary);
                 // // Save current block summary
                 // self.save_block_summary(&mut store_update, &block_info.hash().clone(), Arc::clone(&block_summary))?;
@@ -1038,9 +1072,13 @@ impl EpochManager {
 
                 // If this is the last block in the epoch, finalize this epoch.
                 if self.is_next_block_in_next_epoch(&block_info)? {
-                    self.finalize_epoch(&mut store_update, &block_info.clone(), &current_hash.clone(), rng_seed.clone())?;
+                    self.finalize_epoch(
+                        &mut store_update,
+                        &block_info.clone(),
+                        &current_hash.clone(),
+                        rng_seed.clone(),
+                    )?;
                 }
-
             }
         }
         Ok(store_update)
@@ -1072,51 +1110,58 @@ impl EpochManager {
     }
 
     pub fn get_block_producer_info_by_hash(
-    &self,
-    block_hash: &CryptoHash,
-    // height: BlockHeight,
+        &self,
+        block_hash: &CryptoHash,
+        // height: BlockHeight,
     ) -> Result<ValidatorPowerAndPledge, BlockError> {
-    let block_info = self.get_block_info(block_hash)?;
-    // let current_height = block_info.height();
-    // if current_height +1 != height {
+        let block_info = self.get_block_info(block_hash)?;
+        // let current_height = block_info.height();
+        // if current_height +1 != height {
         //     return Err(BlockError::BlockOutOfBounds(*block_hash));
-    // }
+        // }
         let random_value = block_info.random_value();
-    let validators = block_info.validators_iter();
-    Self::choose_validator_vrf(validators,Self::hash_to_bigint(random_value))
+        let validators = block_info.validators_iter();
+        Self::choose_validator_vrf(validators, Self::hash_to_bigint(random_value))
     }
 
     fn hash_to_bigint(hash: &CryptoHash) -> BigInt {
         BigInt::from_bytes_be(num_bigint::Sign::Plus, hash.as_ref())
     }
 
-    fn choose_validator_vrf(validators_iter: ValidatorPowerAndPledgeIter, random_value: BigInt) -> Result<ValidatorPowerAndPledge, BlockError> {
-    let mut total_weight: BigInt = Zero::zero();
-    for validator in validators_iter.clone() {
-    let validator_power = match validator {
-    ValidatorPowerAndPledge::V1(v) => v.power.to_bigint().unwrap_or_else(Zero::zero),
-    };
-    total_weight += validator_power;
-    }
-
-        if total_weight.is_zero() {
-    return Err(BlockError::ValidatorTotalPowerError(String::from("Total Power is zero")));
-    }
-
-        let mut cumulative_weight = Zero::zero();
-    let target = random_value % &total_weight;
-    
-        for validator in validators_iter {
-    let validator_power = match validator {
-    ValidatorPowerAndPledge::V1(ref v) => v.power.to_bigint().unwrap_or_else(Zero::zero),
+    fn choose_validator_vrf(
+        validators_iter: ValidatorPowerAndPledgeIter,
+        random_value: BigInt,
+    ) -> Result<ValidatorPowerAndPledge, BlockError> {
+        let mut total_weight: BigInt = Zero::zero();
+        for validator in validators_iter.clone() {
+            let validator_power = match validator {
+                ValidatorPowerAndPledge::V1(v) => v.power.to_bigint().unwrap_or_else(Zero::zero),
             };
-    cumulative_weight += &validator_power;
-    if target < cumulative_weight {
-    return Ok(validator.clone());
-    }
+            total_weight += validator_power;
         }
 
-        return Err(BlockError::NoAvailableValidator(String::from("Block Producer is not available")));
+        if total_weight.is_zero() {
+            return Err(BlockError::ValidatorTotalPowerError(String::from("Total Power is zero")));
+        }
+
+        let mut cumulative_weight = Zero::zero();
+        let target = random_value % &total_weight;
+
+        for validator in validators_iter {
+            let validator_power = match validator {
+                ValidatorPowerAndPledge::V1(ref v) => {
+                    v.power.to_bigint().unwrap_or_else(Zero::zero)
+                }
+            };
+            cumulative_weight += &validator_power;
+            if target < cumulative_weight {
+                return Ok(validator.clone());
+            }
+        }
+
+        return Err(BlockError::NoAvailableValidator(String::from(
+            "Block Producer is not available",
+        )));
     }
 
     /// Returns settlement of all block producers in current epoch, with indicator on whether they are slashed or not.
@@ -1433,7 +1478,12 @@ impl EpochManager {
         &self,
         last_block_hash: &CryptoHash,
     ) -> Result<
-        (HashMap<AccountId, Power>, HashMap<AccountId, Balance>, HashMap<AccountId, Balance>, HashMap<AccountId, Balance>),
+        (
+            HashMap<AccountId, Power>,
+            HashMap<AccountId, Balance>,
+            HashMap<AccountId, Balance>,
+            HashMap<AccountId, Balance>,
+        ),
         EpochError,
     > {
         let last_block_info = self.get_block_info(last_block_hash)?;
@@ -1446,7 +1496,7 @@ impl EpochManager {
         // Power changes are similar like pledge changes
         let power_change = last_block_info.power_change().clone();
 
-        let all_power_changes =power_change.iter();
+        let all_power_changes = power_change.iter();
         let all_power_keys: HashSet<&AccountId> = all_power_changes.map(|(key, _)| key).collect();
 
         let mut power_info = HashMap::new();
@@ -1461,8 +1511,7 @@ impl EpochManager {
         let mut pledge_info = HashMap::new();
         for account_id in all_pledge_keys {
             if last_block_info.slashed().contains_key(account_id) {
-                if  !pledge_change.contains_key(account_id)
-                {
+                if !pledge_change.contains_key(account_id) {
                     // slashed in prev_prev epoch so it is safe to return the remaining pledge in case of
                     // a double sign without violating the staking invariant.
                 } else {
@@ -1482,7 +1531,12 @@ impl EpochManager {
         &self,
         last_block_hash: &CryptoHash,
     ) -> Result<
-        (HashMap<AccountId, Power>, HashMap<AccountId, Balance>, HashMap<AccountId, Balance>, HashMap<AccountId, Balance>),
+        (
+            HashMap<AccountId, Power>,
+            HashMap<AccountId, Balance>,
+            HashMap<AccountId, Balance>,
+            HashMap<AccountId, Balance>,
+        ),
         EpochError,
     > {
         let next_next_epoch_id = EpochId(*last_block_hash);
@@ -1526,10 +1580,8 @@ impl EpochManager {
             power_info.insert(account_id.clone(), max_of_power);
         }
 
-        let all_pledge_changes = prev_prev_pledge_change
-            .iter()
-            .chain(&prev_pledge_change)
-            .chain(&pledge_change);
+        let all_pledge_changes =
+            prev_prev_pledge_change.iter().chain(&prev_pledge_change).chain(&pledge_change);
         let all_pledge_keys: HashSet<&AccountId> = all_pledge_changes.map(|(key, _)| key).collect();
 
         let mut pledge_info = HashMap::new();
@@ -1630,7 +1682,8 @@ impl EpochManager {
         // This ugly code arises because of the incompatible types between `block_tracker` in `EpochInfoAggregator`
         // and `validator_block_chunk_stats` in `EpochSummary`. Rust currently has no support for Either type
         // in std.
-        let (current_validators, next_epoch_id, all_power_proposals, all_pledge_proposals) = match &epoch_identifier {
+        let (current_validators, next_epoch_id, all_power_proposals, all_pledge_proposals) =
+            match &epoch_identifier {
                 ValidatorInfoIdentifier::EpochId(id) => {
                     let epoch_summary = self.get_epoch_validator_info(id)?;
                     let cur_validators = cur_epoch_info
@@ -1722,19 +1775,29 @@ impl EpochManager {
                                 num_expected_chunks: chunk_stats.expected,
                                 num_produced_chunks_per_shard: shards
                                     .iter()
-                                    .map(|shard| *chunks_produced_by_shard.entry(*shard).or_default())
+                                    .map(|shard| {
+                                        *chunks_produced_by_shard.entry(*shard).or_default()
+                                    })
                                     .collect(),
                                 num_expected_chunks_per_shard: shards
                                     .iter()
-                                    .map(|shard| *chunks_expected_by_shard.entry(*shard).or_default())
+                                    .map(|shard| {
+                                        *chunks_expected_by_shard.entry(*shard).or_default()
+                                    })
                                     .collect(),
                             })
                         })
                         .collect::<Result<Vec<CurrentEpochValidatorInfo>, EpochError>>()?;
-                    let all_power_proposals =
-                    aggregator.all_power_proposals.iter().map(|(_, p)| p.clone().into()).collect();
-                    let all_pledge_proposals =
-                    aggregator.all_pledge_proposals.iter().map(|(_, p)| p.clone().into()).collect();
+                    let all_power_proposals = aggregator
+                        .all_power_proposals
+                        .iter()
+                        .map(|(_, p)| p.clone().into())
+                        .collect();
+                    let all_pledge_proposals = aggregator
+                        .all_pledge_proposals
+                        .iter()
+                        .map(|(_, p)| p.clone().into())
+                        .collect();
                     let next_epoch_id = self.get_next_epoch_id(h)?;
                     (cur_validators, next_epoch_id, all_power_proposals, all_pledge_proposals)
                 }
@@ -1795,8 +1858,8 @@ impl EpochManager {
         assert!(
             block_header_info.height > 0
                 || (block_header_info.power_proposals.is_empty()
-                && block_header_info.pledge_proposals.is_empty()
-                && block_header_info.slashed_validators.is_empty())
+                    && block_header_info.pledge_proposals.is_empty()
+                    && block_header_info.slashed_validators.is_empty())
         );
         debug!(target: "epoch_manager",
             height = block_header_info.height,
@@ -1832,7 +1895,8 @@ impl EpochManager {
             vec![],
             vec![],
             Default::default(),
-            Default::default());
+            Default::default(),
+        );
         let rng_seed = block_header_info.random_value.0;
         self.record_block_info(block_info, rng_seed)
     }
@@ -1856,8 +1920,8 @@ impl EpochManager {
             "add_validator_proposals");
         let rng_seed = block_header_info.random_value.0;
         // start customized by James Savechives
-        let BlockSummary::V1(BlockSummaryV1{
-            random_value : _random_value,
+        let BlockSummary::V1(BlockSummaryV1 {
+            random_value: _random_value,
             validators,
             validator_to_index,
             block_producers_settlement,
@@ -1872,12 +1936,12 @@ impl EpochManager {
             all_power_proposals,
             all_pledge_proposals,
             validator_kickout,
-            validator_mandates, ..
-        }) =
-            if block_header_info.hash ==  CryptoHash::default() {
+            validator_mandates,
+            ..
+        }) = if block_header_info.hash == CryptoHash::default() {
             BlockSummary::default()
         } else {
-            let BlockInfo::V2(BlockInfoV2{
+            let BlockInfo::V2(BlockInfoV2 {
                 validators,
                 validator_to_index,
                 block_producers_settlement,
@@ -1892,10 +1956,26 @@ impl EpochManager {
                 all_power_proposals,
                 all_pledge_proposals,
                 validator_kickout,
-                validator_mandates, ..
-            }) = &*self.get_block_info(&block_header_info.prev_hash)? else { todo!() };
-            let all_power_proposals : Vec<_> = remove_duplicate_power_proposals(all_power_proposals.clone().into_iter().chain(block_header_info.power_proposals.clone().into_iter()).collect());
-            let all_pledge_proposals : Vec<_> = remove_duplicate_pledge_proposals(all_pledge_proposals.clone().into_iter().chain(block_header_info.pledge_proposals.clone().into_iter()).collect());
+                validator_mandates,
+                ..
+            }) = &*self.get_block_info(&block_header_info.prev_hash)?
+            else {
+                todo!()
+            };
+            let all_power_proposals: Vec<_> = remove_duplicate_power_proposals(
+                all_power_proposals
+                    .clone()
+                    .into_iter()
+                    .chain(block_header_info.power_proposals.clone().into_iter())
+                    .collect(),
+            );
+            let all_pledge_proposals: Vec<_> = remove_duplicate_pledge_proposals(
+                all_pledge_proposals
+                    .clone()
+                    .into_iter()
+                    .chain(block_header_info.pledge_proposals.clone().into_iter())
+                    .collect(),
+            );
 
             let block_info = BlockInfo::new(
                 block_header_info.hash,
@@ -1967,8 +2047,7 @@ impl EpochManager {
             all_power_proposals,
             all_pledge_proposals,
             validator_kickout,
-            validator_mandates
-            // end customized by James Savechives
+            validator_mandates, // end customized by James Savechives
         );
 
         debug!(target: "epoch_manager", "the random value is: {:?}, the validators value is: {:?}, the block producers settlement from block_info is: {:?}",
@@ -1977,7 +2056,6 @@ impl EpochManager {
         block_producers_settlement);
 
         self.record_block_info(block_info, rng_seed)
-
     }
 
     /// Compare two epoch ids based on their start height. This works because finality gadget
@@ -2016,7 +2094,7 @@ impl EpochManager {
 
     /// Get minimum power allowed at current block. Attempts to pledge with a lower power will be
     /// rejected.
-    pub fn minimum_power(&self,_prev_block_hash: &CryptoHash) -> Result<Power, EpochError> {
+    pub fn minimum_power(&self, _prev_block_hash: &CryptoHash) -> Result<Power, EpochError> {
         // To Do
         Ok(0)
     }
@@ -2036,7 +2114,9 @@ fn remove_duplicate_power_proposals(power_proposals: Vec<ValidatorPower>) -> Vec
     unique_proposals
 }
 
-fn remove_duplicate_pledge_proposals(pledge_proposals: Vec<ValidatorPledge>) -> Vec<ValidatorPledge> {
+fn remove_duplicate_pledge_proposals(
+    pledge_proposals: Vec<ValidatorPledge>,
+) -> Vec<ValidatorPledge> {
     let mut unique_proposals_map: HashMap<_, _> = HashMap::new();
 
     for proposal in pledge_proposals {
@@ -2214,7 +2294,7 @@ impl EpochManager {
             Err(err) => Err(err),
         }
     }
-    
+
     /// Get BlockInfo for a block
     /// # Errors
     /// EpochError::IOErr if storage returned an error
@@ -2486,6 +2566,4 @@ impl EpochManager {
 
         Ok(result)
     }
-
-
 }

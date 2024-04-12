@@ -5,8 +5,8 @@ use crate::store;
 use crate::testonly::make_rng;
 use crate::testonly::AsSet;
 use crate::types::ConnectionInfo;
-use unc_async::time;
 use rand::Rng;
+use unc_async::time;
 
 /// Returns a ConnectionInfo with the given value for time_connected_until,
 /// and with randomly generated peer_info and time_established

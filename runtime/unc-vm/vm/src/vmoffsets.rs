@@ -8,11 +8,11 @@
 
 use crate::VMBuiltinFunctionIndex;
 use more_asserts::assert_lt;
+use std::convert::TryFrom;
 use unc_vm_types::{
     FunctionIndex, GlobalIndex, LocalGlobalIndex, LocalMemoryIndex, LocalTableIndex, MemoryIndex,
     ModuleInfo, SignatureIndex, TableIndex,
 };
-use std::convert::TryFrom;
 
 #[cfg(target_pointer_width = "32")]
 fn cast_to_u32(sz: usize) -> u32 {

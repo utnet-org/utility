@@ -1,10 +1,10 @@
 // This file contains code from external sources.
 // Attributions: https://github.com/wasmerio/wasmer/blob/master/ATTRIBUTIONS.md
 
-use unc_vm_types::entity::PrimaryMap;
-use unc_vm_types::{FunctionIndex, ImportIndex, ModuleInfo, SignatureIndex};
 use std::boxed::Box;
 use std::collections::HashMap;
+use unc_vm_types::entity::PrimaryMap;
+use unc_vm_types::{FunctionIndex, ImportIndex, ModuleInfo, SignatureIndex};
 
 /// Map of signatures to a function's parameter and return types.
 pub(crate) type WasmTypes =

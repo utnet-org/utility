@@ -17,15 +17,15 @@ use crate::tcp;
 use crate::testonly::{abort_on_panic, make_rng, Rng};
 use crate::types::PeerMessage;
 use crate::types::{PeerInfo, ReasonForBan};
-use unc_async::time;
-use unc_primitives::network::PeerId;
-use unc_store::db::TestDB;
 use pretty_assertions::assert_eq;
 use rand::seq::IteratorRandom;
 use rand::Rng as _;
 use std::collections::HashSet;
 use std::net::Ipv6Addr;
 use std::sync::Arc;
+use unc_async::time;
+use unc_primitives::network::PeerId;
+use unc_store::db::TestDB;
 
 // test routing in a two-node network before and after connecting the nodes
 #[tokio::test]

@@ -8,11 +8,11 @@ use crate::tcp;
 use crate::testonly::make_rng;
 use crate::testonly::stream;
 use crate::types::Edge;
+use std::sync::Arc;
 use unc_async::time;
 use unc_o11y::testonly::init_test_logger;
 use unc_primitives::network::PeerId;
 use unc_primitives::version;
-use std::sync::Arc;
 
 // Nonces must be odd (as even ones are reserved for tombstones).
 fn to_active_nonce(timestamp: time::Utc) -> u64 {

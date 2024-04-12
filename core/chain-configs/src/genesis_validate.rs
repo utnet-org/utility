@@ -1,10 +1,10 @@
 use crate::genesis_config::{Genesis, GenesisConfig, GenesisContents};
+use num_rational::Rational32;
+use std::collections::{HashMap, HashSet};
 use unc_config_utils::{ValidationError, ValidationErrors};
 use unc_crypto::key_conversion::is_valid_staking_key;
 use unc_primitives::state_record::StateRecord;
 use unc_primitives::types::AccountId;
-use num_rational::Rational32;
-use std::collections::{HashMap, HashSet};
 
 /// Validate genesis config and records. Returns ValidationError if semantic checks of genesis failed.
 pub fn validate_genesis(genesis: &Genesis) -> Result<(), ValidationError> {
@@ -46,7 +46,7 @@ impl<'a> GenesisValidator<'a> {
             account_ids: HashSet::new(),
             access_key_account_ids: HashSet::new(),
             contract_account_ids: HashSet::new(),
-            validation_errors: validation_errors,
+            validation_errors,
         }
     }
 
@@ -110,7 +110,10 @@ impl<'a> GenesisValidator<'a> {
         }
 
         if validators != self.pledged_accounts {
-            let error_message = format!("Validator accounts: {:?} do not match pledging accounts: {:?}.", validators, self.pledged_accounts);
+            let error_message = format!(
+                "Validator accounts: {:?} do not match pledging accounts: {:?}.",
+                validators, self.pledged_accounts
+            );
             self.validation_errors.push_genesis_semantics_error(error_message)
         }
 

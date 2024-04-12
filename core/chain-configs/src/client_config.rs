@@ -1,13 +1,13 @@
 //! Chain Client Configuration
 use crate::ExternalStorageLocation::GCS;
 use crate::MutableConfigValue;
-use unc_primitives::types::{BlockHeight, BlockHeightDelta, Gas, NumBlocks, NumSeats, ShardId,};
-use unc_primitives::version::Version;
 use std::cmp::{max, min};
 use std::path::PathBuf;
 use std::sync::atomic::AtomicBool;
 use std::sync::Arc;
 use std::time::Duration;
+use unc_primitives::types::{BlockHeight, BlockHeightDelta, Gas, NumBlocks, NumSeats, ShardId};
+use unc_primitives::version::Version;
 
 pub const TEST_STATE_SYNC_TIMEOUT: u64 = 5;
 

@@ -3,8 +3,8 @@ use crate::logic::tests::vm_logic_builder::VMLogicBuilder;
 use crate::logic::HostError;
 use crate::logic::VMLogicError;
 use crate::map;
-use unc_parameters::ExtCosts;
 use std::collections::HashMap;
+use unc_parameters::ExtCosts;
 
 const SIGNATURE: [u8; 64] = [
     145, 193, 203, 18, 114, 227, 14, 117, 33, 213, 121, 66, 130, 14, 25, 4, 36, 120, 46, 142, 226,

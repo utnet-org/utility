@@ -1,8 +1,8 @@
 use crate::logic::errors::VMLogicError;
 use crate::logic::tests::TestVMLogic;
+use std::collections::HashMap;
 use unc_parameters::ExtCosts;
 use unc_primitives_core::types::Gas;
-use std::collections::HashMap;
 
 type Result<T> = ::std::result::Result<T, VMLogicError>;
 
