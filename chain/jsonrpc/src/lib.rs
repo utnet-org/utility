@@ -596,6 +596,7 @@ impl JsonRpcHandler {
                 target: "jsonrpc", "Timeout: tx_status_fetch method. tx_info {:?} fetch_receipt {:?} result {:?}",
                 tx_info,
                 fetch_receipt,
+                tx_status_result
             );
             unc_jsonrpc_primitives::types::transactions::RpcTransactionError::TimeoutError
         })?
@@ -875,32 +876,6 @@ impl JsonRpcHandler {
             total_power: all_miners.total_power,
             miners: all_miners.miners,
         })
-    }
-
-    fn tx_execution_status_meets_expectations(
-        expected: &TxExecutionStatus,
-        actual: &TxExecutionStatus,
-    ) -> bool {
-        match expected {
-            TxExecutionStatus::None => true,
-            TxExecutionStatus::Included => actual != &TxExecutionStatus::None,
-            TxExecutionStatus::ExecutedOptimistic => [
-                TxExecutionStatus::ExecutedOptimistic,
-                TxExecutionStatus::Executed,
-                TxExecutionStatus::Final,
-            ]
-            .contains(actual),
-            TxExecutionStatus::IncludedFinal => [
-                TxExecutionStatus::IncludedFinal,
-                TxExecutionStatus::Executed,
-                TxExecutionStatus::Final,
-            ]
-            .contains(actual),
-            TxExecutionStatus::Executed => {
-                [TxExecutionStatus::Executed, TxExecutionStatus::Final].contains(actual)
-            }
-            TxExecutionStatus::Final => actual == &TxExecutionStatus::Final,
-        }
     }
 
     async fn block(
@@ -1507,6 +1482,32 @@ async fn display_debug_html(
             Ok(HttpResponse::Ok().insert_header(header::ContentType::html()).body(content))
         }
         None => Ok(HttpResponse::NotFound().finish()),
+    }
+}
+
+fn tx_execution_status_meets_expectations(
+    expected: &TxExecutionStatus,
+    actual: &TxExecutionStatus,
+) -> bool {
+    match expected {
+        TxExecutionStatus::None => true,
+        TxExecutionStatus::Included => actual != &TxExecutionStatus::None,
+        TxExecutionStatus::ExecutedOptimistic => [
+            TxExecutionStatus::ExecutedOptimistic,
+            TxExecutionStatus::Executed,
+            TxExecutionStatus::Final,
+        ]
+        .contains(actual),
+        TxExecutionStatus::IncludedFinal => [
+            TxExecutionStatus::IncludedFinal,
+            TxExecutionStatus::Executed,
+            TxExecutionStatus::Final,
+        ]
+        .contains(actual),
+        TxExecutionStatus::Executed => {
+            [TxExecutionStatus::Executed, TxExecutionStatus::Final].contains(actual)
+        }
+        TxExecutionStatus::Final => actual == &TxExecutionStatus::Final,
     }
 }
 
