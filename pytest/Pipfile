@@ -1,0 +1,29 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pygithub = "*"
+base58 = "*"
+cython = "*"
+deepdiff = "*"
+ed25519 = "*"
+numpy = "*"
+prometheus-client = "*"
+psutil = "*"
+pynacl = "*"
+python-rc = "==0.3.9"
+requests = "*"
+retrying = "*"
+scikit-learn = "*"
+scipy = "*"
+semver = "*"
+toml = "*"
+tqdm = "*"
+urllib3 = "<2"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"

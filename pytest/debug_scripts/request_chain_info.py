@@ -8,7 +8,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='This is a script to request for blockchain info')
     parser.add_argument('--chain',
-                        choices=['mainnet', 'testnet', 'betanet'],
+                        choices=['mainnet', 'testnet', 'localnet'],
                         required=True)
     parser.add_argument('--archive',
                         action='store_true',

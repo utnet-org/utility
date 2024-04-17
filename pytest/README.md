@@ -18,6 +18,8 @@ then execute the test file using python.  For example:
 
     cargo build
     cd pytest
+    python3 -m venv myenv
+    source myenv/bin/activate
     python3 -m pip install -U -r requirements.txt
     python3 tests/loadtest/loadtest.py
 
