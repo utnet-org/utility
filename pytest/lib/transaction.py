@@ -128,7 +128,7 @@ def create_payment_action(amount):
     return action
 
 
-def create_staking_action(amount, pk):
+def create_pledging_action(amount, pk):
     pledge = Pledge()
     pledge.pledge = amount
     pledge.publicKey = PublicKey()
@@ -230,8 +230,8 @@ def sign_payment_tx_and_get_hash(key, to, amount, nonce, block_hash):
     return signed_tx, base58.b58encode(hash_bytes).decode('utf8')
 
 
-def sign_staking_tx(signer_key, validator_key, amount, nonce, blockHash):
-    action = create_staking_action(amount, validator_key.decoded_pk())
+def sign_pledging_tx(signer_key, validator_key, amount, nonce, blockHash):
+    action = create_pledging_action(amount, validator_key.decoded_pk())
     return sign_and_serialize_transaction(signer_key.account_id, nonce,
                                           [action], blockHash,
                                           signer_key.account_id,
@@ -239,13 +239,13 @@ def sign_staking_tx(signer_key, validator_key, amount, nonce, blockHash):
                                           signer_key.decoded_sk())
 
 
-def sign_staking_tx_and_get_hash(signer_key, validator_key, amount, nonce,
+def sign_pledging_tx_and_get_hash(signer_key, validator_key, amount, nonce,
                                  block_hash):
-    action = create_staking_action(amount, validator_key.decoded_pk())
+    action = create_pledging_action(amount, validator_key.decoded_pk())
     _, hash_bytes = compute_tx_hash(signer_key.account_id, nonce, [action],
                                     block_hash, signer_key.account_id,
                                     signer_key.decoded_pk())
-    signed_tx = sign_staking_tx(signer_key, validator_key, amount, nonce,
+    signed_tx = sign_pledging_tx(signer_key, validator_key, amount, nonce,
                                 block_hash)
     return signed_tx, base58.b58encode(hash_bytes).decode('utf8')
 

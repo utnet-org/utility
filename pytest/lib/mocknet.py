@@ -17,7 +17,7 @@ from cluster import GCPNode
 from configured_logger import logger
 from key import Key
 from metrics import Metrics
-from transaction import sign_payment_tx_and_get_hash, sign_staking_tx_and_get_hash
+from transaction import sign_payment_tx_and_get_hash, sign_pledging_tx_and_get_hash
 
 DEFAULT_KEY_TARGET = '/tmp/mocknet'
 KEY_TARGET_ENV_VAR = 'unc_PYTEST_KEY_TARGET'
@@ -442,7 +442,7 @@ def pledge_node(node):
     latest_block_hash = node.get_status()['sync_info']['latest_block_hash']
     last_block_hash_decoded = base58.b58decode(latest_block_hash.encode('utf8'))
 
-    staking_tx, staking_tx_hash = sign_staking_tx_and_get_hash(
+    staking_tx, staking_tx_hash = sign_pledging_tx_and_get_hash(
         account, account, pledge_amount, nonce + 1, last_block_hash_decoded)
     send_transaction(node, staking_tx, staking_tx_hash, account.account_id)
 

@@ -6,7 +6,7 @@ import time
 
 from transaction import (
     sign_payment_tx, sign_deploy_contract_tx, sign_function_call_tx,
-    sign_create_account_with_full_access_key_and_balance_tx, sign_staking_tx)
+    sign_create_account_with_full_access_key_and_balance_tx, sign_pledging_tx)
 from key import Key
 from utils import load_binary_file
 from configured_logger import logger
@@ -129,7 +129,7 @@ class Account:
 
     def send_pledge_tx(self, pledge_amount, base_block_hash=None):
         self.prep_tx()
-        tx = sign_staking_tx(self.key, self.key, pledge_amount, self.nonce,
+        tx = sign_pledging_tx(self.key, self.key, pledge_amount, self.nonce,
                              base_block_hash or self.base_block_hash)
         return self.send_tx(tx)
 

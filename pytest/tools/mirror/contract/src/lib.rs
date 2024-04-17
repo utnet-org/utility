@@ -1,7 +1,7 @@
 //! Contract that adds keys and creates accounts
 
 use unc_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use unc_sdk::{env, unc_bindgen, AccountId, Balance, Promise, PublicKey};
+use unc_sdk::{env, unc_bindgen, AccountId, UncToken, Promise, PublicKey};
 use std::str::FromStr;
 
 #[unc_bindgen]
@@ -35,7 +35,7 @@ impl KeyAdder {
         p.transfer(env::attached_deposit())
     }
 
-    pub fn pledge(&mut self, amount: Balance, public_key: PublicKey) -> Promise {
-        Promise::new(env::current_account_id()).pledge(amount, public_key)
+    pub fn pledge(&mut self, amount: UncToken, public_key: PublicKey) -> Promise {
+        Promise::new(env::current_account_id()).stake(amount, public_key)
     }
 }
