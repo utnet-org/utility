@@ -142,7 +142,7 @@ jobs:
       - run: echo "CARGO=1" >> "$GITHUB_ENV"
       - run: cargo build --locked --profile dev-release -p uncd --bin uncd
       - run: echo "CURRENT_UNCD=$PWD/target/dev-release/uncd" >> "$GITHUB_ENV"
-      - run: echo "UNC_ROOT=$PWD" >> "$GITHUB_ENV"
+      - run: echo "UTILITY_ROOT=$PWD" >> "$GITHUB_ENV"
       - run: cd pytest && python3 tests/sanity/db_migration.py
       - run: mkdir -p coverage/codecov
       - run: cargo llvm-cov report --profile dev-release --codecov --output-path coverage/codecov/py-db-migration.json
@@ -178,7 +178,7 @@ jobs:
       # by other steps in the CI, e.g. upgradable.
       - run: python3 pytest/tests/sanity/spin_up_cluster.py
         env:
-          UNC_ROOT: "target/dev-release"
+          UTILITY_ROOT: "target/dev-release"
       - run: mkdir -p coverage/codecov
       - run: cargo llvm-cov report --profile dev-release --codecov --output-path coverage/codecov/py-sanity-checks.json
       - uses: actions/upload-artifact@v3

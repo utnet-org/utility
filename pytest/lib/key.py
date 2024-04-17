@@ -30,7 +30,7 @@ class Key:
 
     @classmethod
     def from_json(cls, j: typing.Dict[str, str]):
-        return cls(j['account_id'], j['public_key'], j['secret_key'])
+        return cls(j['account_id'], j['public_key'], j['private_key'])
 
     @classmethod
     def from_json_file(cls, filename: str):
@@ -70,7 +70,7 @@ class Key:
         return {
             'account_id': self.account_id,
             'public_key': self.pk,
-            'secret_key': self.sk
+            'private_key': self.sk
         }
 
     def sign_bytes(self, data: typing.Union[bytes, bytearray]) -> bytes:

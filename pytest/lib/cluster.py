@@ -935,7 +935,7 @@ ROOT_DIR = pathlib.Path(__file__).resolve().parents[2]
 def get_unc_root():
     cargo_target_dir = os.environ.get('CARGO_TARGET_DIR', 'target')
     default_root = (ROOT_DIR / cargo_target_dir / 'debug').resolve()
-    return os.environ.get('UNC_ROOT', str(default_root))
+    return os.environ.get('UTILITY_ROOT', str(default_root))
 
 
 DEFAULT_CONFIG = {

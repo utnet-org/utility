@@ -2,10 +2,8 @@
 //! Based on the rust-counter example.
 
 use unc_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use unc_sdk::collections::LookupMap;
+use unc_sdk::store::LookupMap;
 use unc_sdk::{env, unc_bindgen};
-
-unc_sdk::setup_alloc!();
 
 #[unc_bindgen]
 #[derive(BorshDeserialize, BorshSerialize)]
@@ -28,7 +26,7 @@ impl Counter {
     pub fn increment(&mut self) {
         self.val += 1;
         let log_message = format!("Increased number to {}", self.val);
-        env::log(log_message.as_bytes());
+        env::log_str(log_message.as_str());
     }
 
     pub fn reset(&mut self) {
@@ -46,13 +44,13 @@ impl Counter {
     pub fn increment_many(&mut self, how_many: u64) {
         for i in 1..how_many {
             let previous_val = self.get_previous_val(i);
-            self.records.insert(&i.to_string(), &(previous_val + 1).to_string());
+            self.records.insert(i.to_string(), (previous_val + 1).to_string());
         }
     }
 
     pub fn reset_increment_many(&mut self, how_many: u64) {
         for i in 1..how_many {
-            self.records.insert(&i.to_string(), &(0).to_string());
+            self.records.insert(i.to_string(), (0).to_string());
         }
     }
     pub fn get_increment_many(&self) -> u64 {
@@ -65,7 +63,7 @@ impl Counter {
 
     pub fn write_many(&mut self, how_many: u64) {
         for i in self.val..self.val + how_many {
-            self.records.insert(&i.to_string(), &"a".to_string());
+            self.records.insert(i.to_string(), "a".to_string());
         }
         self.val += how_many;
     }

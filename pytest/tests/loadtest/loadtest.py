@@ -1,4 +1,8 @@
 from tqdm import tqdm
+
+import sys
+import pathlib
+sys.path.append(str(pathlib.Path(__file__).resolve().parents[2] / 'lib'))
 import mocknet_helpers
 import account
 import key
@@ -20,7 +24,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--num_accounts',
         type=int,
-        default=5,
+        default=1,
         help=
         "Accounts that contain the contract to run (either set the --num_accounts or comma separated list in --account_ids)"
     )

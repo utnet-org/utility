@@ -1,4 +1,8 @@
 import subprocess
+
+import sys
+import pathlib
+sys.path.append(str(pathlib.Path(__file__).resolve().parents[2] / 'lib'))
 import mocknet_helpers
 import account
 import key
@@ -9,12 +13,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Setup loadtest')
 
     parser.add_argument('--home', type=str, required=True)
-    parser.add_argument('--num_accounts', type=int, default=5)
+    parser.add_argument('--num_accounts', type=int, default=1)
     parser.add_argument('--host', type=str, default='127.0.0.1')
     parser.add_argument('--account_id', type=str, default=None)
     parser.add_argument('--contract_dir',
                         type=str,
-                        default='pytest/tests/loadtest/contract')
+                        default='contract')
     args = parser.parse_args()
 
     print("Compiling contract")
@@ -24,7 +28,7 @@ if __name__ == '__main__':
                           cwd=args.contract_dir)
 
     for i in range(args.num_accounts):
-        account_name = args.account_id or f"shard{i}"
+        account_name = args.account_id or f"validator"
 
         shard_key = key.Key.from_json_file(
             join(args.home, f"{account_name}_key.json"))
