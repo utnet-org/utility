@@ -232,7 +232,7 @@ def prepare_ab_test(chain_id: str = 'mainnet') -> ABExecutables:
     release, deploy, stable = __get_executables_for(chain_id)
 
     if _IS_DONDUCK:
-        # On NayDuck the file is fetched from a builder host so there’s no need
+        # On Pytest the file is fetched from a builder host so there’s no need
         # to build it.
         current = Executables(_OUT_DIR, _OUT_DIR / 'uncd')
     else:
@@ -255,7 +255,7 @@ def __get_executables_for(chain_id: str) -> typing.Tuple[str, str, Executables]:
         executable = __download_binary(release, deploy)
     except Exception as e:
         if _IS_DONDUCK:
-            logger.exception('RC binary should be downloaded for NayDuck.', e)
+            logger.exception('RC binary should be downloaded for Pytest.', e)
         else:
             logger.exception(e)
         executable = _compile_binary(release)

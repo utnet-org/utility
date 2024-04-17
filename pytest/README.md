@@ -55,7 +55,7 @@ likely want to make use of `start_cluster` function defined in the
 Rather than assuming location a temporary directory, well-behaved test
 should use `tempfile` module instead which will automatically take
 `TEMPDIR` variable into consideration.  This is especially important
-for NayDuck which will automatically cleanup after a test which
+for Pytest which will automatically cleanup after a test which
 respects `TEMPDIR` directory even if that tests ends up not cleaning
 up its temporary files.
 

@@ -508,7 +508,7 @@ def figure_out_sandbox_binary():
         'release': False,
     }
     repo_dir = pathlib.Path(__file__).resolve().parents[2]
-    # When run on NayDuck we end up with a binary called uncd in target/debug
+    # When run on Pytest we end up with a binary called uncd in target/debug
     # but when run locally the binary might be uncd-sandbox or unc-sandbox
     # instead.  Try to figure out whichever binary is available and use that.
     for release in ('release', 'debug'):

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Checks whether all pytest tests are mentioned in NayDuck or Buildkite
+"""Checks whether all pytest tests are mentioned in Pytest or Buildkite
 
 Lists all Python scripts inside of pytest/tests directory and checks whether
-they are referenced in NayDuck test list files (the nightly/*.txt files) or
+they are referenced in Pytest test list files (the nightly/*.txt files) or
 Buildkite pipeline configuration (the .buildkite/pipeline.yml file).  Returns
 with success if that's the case; with failure otherwise.
 """
@@ -20,7 +20,7 @@ import nayduck
 
 # List of globs of Python scripts in the pytest/tests directory which are not
 # test but rather helper scripts and libraries.  The entire mocknet/ directory
-# is covered here as well since those tests are not run on NayDuck any more.
+# is covered here as well since those tests are not run on Pytest any more.
 HELPER_SCRIPTS = [
     'delete_remote_nodes.py',
     'loadtest/*',
@@ -65,10 +65,10 @@ def list_test_files(topdir: pathlib.Path) -> StrGenerator:
                 yield str(dirpath / filename)
 
 
-def read_nayduck_tests(path: pathlib.Path) -> StrGenerator:
-    """Reads NayDuck test file and yields all tests mentioned there.
+def read_all_tests(path: pathlib.Path) -> StrGenerator:
+    """Reads Pytest test file and yields all tests mentioned there.
 
-    The NayDuck test list files are ones with .txt extension.  Only pytest and
+    The Pytest test list files are ones with .txt extension.  Only pytest and
     mocknet tests are taken into account and returned.  Enabled tests as well as
     those commented out with a corresponding TODO comment are considered.
 
@@ -147,7 +147,7 @@ def main() -> int:
     missing = set(list_test_files(PYTEST_TESTS_DIRECTORY))
     count = len(missing)
     missing.difference_update(
-        read_nayduck_tests(pathlib.Path(nayduck.DEFAULT_TEST_FILE)))
+        read_all_tests(pathlib.Path(nayduck.DEFAULT_TEST_FILE)))
     missing.difference_update(GHA_TESTS)
     missing = set(filename for filename in missing if not any(
         fnmatch.fnmatch(filename, pattern) for pattern in HELPER_SCRIPTS))

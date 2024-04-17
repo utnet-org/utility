@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Checks whether all expensive tests are mentioned in NayDuck tests list
+"""Checks whether all expensive tests are mentioned in Pytest tests list
 
 Scans all Rust source files looking for expensive tests and than makes sure that
-they are all referenced in NayDuck test list files (the nightly/*.txt files).
+they are all referenced in Pytest test list files (the nightly/*.txt files).
 Returns with success if that's the case; with failure otherwise.
 
 An expensive test is one which is marked with expensive_tests feature as
@@ -20,7 +20,7 @@ something more complicated in the `cfg_attr` will confuse it.
 
 Expensive tests are not executed when running `cargo test` nor are they run in
 CI and it’s the purpose of this script to make sure that they are listed for
-NayDuck to run.
+Pytest to run.
 """
 
 import os
