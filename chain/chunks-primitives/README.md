@@ -1,3 +1,3 @@
 # unc-chunk-primitives
 
-This crate hosts UNC chunks-related error types.
+This crate hosts Utility chunks-related error types.

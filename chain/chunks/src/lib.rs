@@ -2140,7 +2140,7 @@ mod test {
             2,
         );
         let epoch_manager = Arc::new(epoch_manager.into_handle());
-        let shard_tracker = ShardTracker::new(TrackedConfig::AllShards, epoch_manager.clone());
+        let shard_tracker = ShardTracker::new(epoch_manager.clone());
         let network_adapter = Arc::new(MockPeerManagerAdapter::default());
         let client_adapter = Arc::new(MockClientAdapterForShardsManager::default());
         let clock = FakeClock::default();
@@ -2185,7 +2185,7 @@ mod test {
     #[test]
     fn test_resend_chunk_requests() {
         // Test that resending chunk requests won't request for parts the node already received
-        let mut fixture = ChunkTestFixture::new(true, 3, 6, 1, true);
+        let mut fixture = ChunkTestFixture::new(true, 1, 6, 1);
         let clock = FakeClock::default();
         let mut shards_manager = ShardsManager::new(
             clock.clock(),
@@ -2401,7 +2401,7 @@ mod test {
     // will wait for chunks being forwarded
     fn test_chunk_forward_non_validator() {
         // A non-validator that tracks all shards should request immediately.
-        let mut fixture = ChunkTestFixture::new(false, 3, 12, 12, true);
+        let mut fixture = ChunkTestFixture::new(false, 1, 12, 12);
         assert_eq!(
             run_request_chunks_with_account(&mut fixture, None),
             RequestChunksResult {
@@ -2441,7 +2441,7 @@ mod test {
         // Here we test the case when the chunk is received, its previous block is not processed yet
         // We want to verify that the chunk forward can be stored and wait to be processed in this
         // case too
-        let fixture = ChunkTestFixture::new(true, 2, 4, 4, false);
+        let fixture = ChunkTestFixture::new(true, 1, 4, 4);
         let clock = FakeClock::default();
         let mut shards_manager = ShardsManager::new(
             clock.clock(),
