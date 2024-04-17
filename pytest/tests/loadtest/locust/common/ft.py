@@ -8,13 +8,13 @@ from locust import events
 sys.path.append(str(pathlib.Path(__file__).resolve().parents[4] / 'lib'))
 
 import key
-from common.base import Account, Deploy, UncNodeProxy, NearUser, FunctionCall, INIT_DONE
+from common.base import Account, Deploy, UncNodeProxy, NodeUser, FunctionCall, INIT_DONE
 
 
 class FTContract:
     # UNC balance given to contracts, doesn't have to be much since users are
     # going to pay for storage
-    INIT_BALANCE = NearUser.INIT_BALANCE
+    INIT_BALANCE = NodeUser.INIT_BALANCE
 
     def __init__(self, account: Account, ft_distributor: Account, code: str):
         self.account = account
@@ -38,7 +38,7 @@ class FTContract:
     def init_contract(self, node: UncNodeProxy):
         node.send_tx_retry(InitFT(self.account), "init ft")
 
-    def register_user(self, user: NearUser):
+    def register_user(self, user: NodeUser):
         user.send_tx_retry(InitFTAccount(self.account, user.account),
                            locust_name="Init FT Account")
         user.send_tx_retry(TransferFT(self.account,
@@ -164,7 +164,7 @@ def on_locust_init(environment, **kwargs):
     node = UncNodeProxy(environment)
     ft_contract_code = environment.parsed_options.fungible_token_wasm
     num_ft_contracts = environment.parsed_options.num_ft_contracts
-    funding_account = NearUser.funding_account
+    funding_account = NodeUser.funding_account
     parent_id = funding_account.key.account_id
 
     funding_account.refresh_nonce(node.node)

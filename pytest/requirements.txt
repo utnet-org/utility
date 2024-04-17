@@ -17,3 +17,4 @@ toml
 tqdm
 urllib3<2
 boto3
+locust

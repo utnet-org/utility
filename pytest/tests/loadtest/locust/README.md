@@ -33,7 +33,7 @@ KEY=~/.unc/localnet/node0/validator_key.json
 For a quick demo, you can also run a localnet using [uncd](https://github.com/unc/uncd).
 
 ```sh
-uncd run localnet --binary-path ../framework/target/release/ --num-nodes 4 --num-shards 4 --override
+uncd run localnet --binary-path ../framework/target/release/ --num-nodes 4 --override
 ```
 
 Then to actually run it, this is the command. (Update ports and IP according to your localnet, uncd will print it.)
@@ -131,8 +131,6 @@ Currently supported load types:
 | Fungible Token | ft.py | (`--fungible-token-wasm $WASM_PATH`) <br> (`--num-ft-contracts $N`) |  Creates `$N` FT contracts per worker, registers each user in one of them. Users transfer FTs between each other. |
 | Social DB  | social.py | (`--social-db-wasm $WASM_PATH`) | Creates a single instance of SocialDB and registers users to it. Users post messages and follow other users. (More workload TBD) |
 | Congestion | congestion.py | (`--congestion-wasm $WASM_PATH`) | Creates a single instance of Congestion contract. Users run large and long transactions. |
-| Sweat (normal load) | sweat.py | (`--sweat-wasm $WASM_PATH`) | Creates a single instance of the SWEAT contract. A mix of FT transfers and batch minting with batch sizes comparable to mainnet observations in summer 2023. |
-| Sweat (storage stress test) | sweat.py | `--tags=storage-stress-test` <br> (`--sweat-wasm $WASM_PATH`) | Creates a single instance of the SWEAT contract. Sends maximally large batches to mint more tokens, thereby touching many storage nodes per receipt. This load will take a while to initialize enough Sweat users on chain. |
 
 ## Notes on Storage Stress Test
 

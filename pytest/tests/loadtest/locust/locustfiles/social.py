@@ -11,13 +11,13 @@ sys.path.append(str(pathlib.Path(__file__).resolve().parents[4] / 'lib'))
 
 from configured_logger import new_logger
 from locust import between, task
-from common.base import NearUser
+from common.base import NodeUser
 from common.social import Follow, InitSocialDbAccount, SubmitPost
 
 logger = new_logger(level=logging.WARN)
 
 
-class SocialDbUser(NearUser):
+class SocialDbUser(NodeUser):
     """
     Registers itself on unc.social in the setup phase, then starts posting,
     following, and liking posts.

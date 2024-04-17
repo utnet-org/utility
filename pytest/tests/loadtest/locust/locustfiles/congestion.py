@@ -10,13 +10,13 @@ sys.path.append(str(pathlib.Path(__file__).resolve().parents[4] / 'lib'))
 
 from configured_logger import new_logger
 from locust import between, task
-from common.base import NearUser
+from common.base import NodeUser
 from common.congestion import ComputeSha256, ComputeSum
 
 logger = new_logger(level=logging.WARN)
 
 
-class CongestionUser(NearUser):
+class CongestionUser(NodeUser):
     """
     Runs a resource-heavy workload that is likely to cause congestion.
     """

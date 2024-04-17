@@ -463,7 +463,7 @@ class UncNodeProxy:
         logger.info(f"done preparing {len(accounts)} accounts")
 
 
-class NearUser(User):
+class NodeUser(User):
     abstract = True
     id_counter = 0
     INIT_BALANCE = 100.0
@@ -483,9 +483,9 @@ class NearUser(User):
         super().__init__(environment)
         assert self.host is not None, "unc user requires the RPC node address"
         self.node = UncNodeProxy(environment)
-        self.id = NearUser.get_next_id()
+        self.id = NodeUser.get_next_id()
         user_suffix = f"{self.id}_run{environment.parsed_options.run_id}"
-        self.account_id = NearUser.generate_account_id(
+        self.account_id = NodeUser.generate_account_id(
             environment.account_generator, user_suffix)
 
     def on_start(self):
@@ -495,9 +495,9 @@ class NearUser(User):
         self.account = Account(key.Key.from_random(self.account_id))
         if not self.node.account_exists(self.account_id):
             self.send_tx_retry(
-                CreateSubAccount(NearUser.funding_account,
+                CreateSubAccount(NodeUser.funding_account,
                                  self.account.key,
-                                 balance=NearUser.INIT_BALANCE))
+                                 balance=NodeUser.INIT_BALANCE))
         self.account.refresh_nonce(self.node.node)
 
     def send_tx(self, tx: Transaction, locust_name="generic send_tx"):
@@ -723,7 +723,7 @@ def do_on_locust_init(environment):
     # every worker needs a funding account to create its users, eagerly create them in the master
     if isinstance(environment.runner, runners.MasterRunner):
         num_funding_accounts = environment.parsed_options.max_workers
-        funding_balance = 10000 * NearUser.INIT_BALANCE
+        funding_balance = 10000 * NodeUser.INIT_BALANCE
 
         def create_account(id):
             account_id = f"funds_worker_{id}.{master_funding_account.key.account_id}"
@@ -747,7 +747,7 @@ def do_on_locust_init(environment):
         raise SystemExit(
             f"unexpected runner class {environment.runner.__class__.__name__}")
 
-    NearUser.funding_account = funding_account
+    NodeUser.funding_account = funding_account
     environment.master_funding_account = master_funding_account
 
 

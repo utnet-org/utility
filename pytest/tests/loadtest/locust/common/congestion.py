@@ -77,7 +77,7 @@ def on_locust_init(environment, **kwargs):
         return
 
     node = base.UncNodeProxy(environment)
-    funding_account = base.NearUser.funding_account
+    funding_account = base.NodeUser.funding_account
     funding_account.refresh_nonce(node.node)
 
     account = base.Account(
