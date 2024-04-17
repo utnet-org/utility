@@ -24,21 +24,21 @@ And lastly, run the test:
 python3 pytest/tests/loadtest/loadtest.py --home ~/.unc_tmp --num_accounts=5 --num_requests=1000
 ```
 
-# Load Test version 2
+## Load Test version 2
 
 The newer loadtest2.py script currently runs an intense load test with the FT contract.
 
 Much like with the earlier version you will want to build a `uncd`. This script can set up a (2
 node) cluster for you (nice for testing):
 
-```
-env unc_ROOT=../target/release/ python3 tests/loadtest/loadtest2.py --fungible-token-wasm=$PWD/../../FT/res/fungible_token.wasm --setup-cluster --accounts=1000 --executors=4
+```sh
+env UNC_ROOT=../target/release/ python3 tests/loadtest/loadtest2.py --fungible-token-wasm=$PWD/../../FT/res/fungible_token.wasm --setup-cluster --accounts=1000 --executors=4
 ```
 
 Or, you can set up a network yourself, and point the script at your local node’s RPC endpoint:
 
-```
-env unc_ROOT=../target/release/ python3 tests/stress/perf_ft_transfer.py --fungible-token-wasm=$PWD/../../FT/res/fungible_token.wasm --accounts=1000 --executors=4 --contract-key=~/.unc/node.json
+```sh
+env UNC_ROOT=../target/release/ python3 tests/stress/perf_ft_transfer.py --fungible-token-wasm=$PWD/../../FT/res/fungible_token.wasm --accounts=1000 --executors=4 --contract-key=~/.unc/node.json
 ```
 
 As seen in commands above, you will need a fungible token contract to test with. There's one you

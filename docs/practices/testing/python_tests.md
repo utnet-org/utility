@@ -69,7 +69,7 @@ following config:
 and run the test with the following command:
 
 ```shell
-unc_PYTEST_CONFIG=<path to config> python tests/sanity/block_production.py
+UNC_PYTEST_CONFIG=<path to config> python tests/sanity/block_production.py
 ```
 
 # Writing tests

@@ -11,7 +11,7 @@ instrumentation as needed.
 To run:
 
 ```
-env unc_ROOT=../target/release/ \
+env UNC_ROOT=../target/release/ \
     python3 tests/loadtest/loadtest2.py \
     --fungible-token-wasm=$PWD/../../FT/res/fungible_token.wasm \
     --setup-cluster --accounts=1000 --executors=4

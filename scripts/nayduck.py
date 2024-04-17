@@ -28,7 +28,7 @@ import typing
 REPO_DIR = pathlib.Path(__file__).resolve().parents[1]
 
 DEFAULT_TEST_FILE = 'nightly/nightly.txt'
-NAYDUCK_BASE_HREF = 'https://nayduck.unc.org'
+DONDUCK_BASE_HREF = 'https://nayduck.unc.org'
 
 
 def _parse_args():
@@ -202,7 +202,7 @@ def __read_tests(
 
 def github_auth(code_path: pathlib.Path):
     print('Go to the following link in your browser:\n\n{}/login/cli\n'.format(
-        NAYDUCK_BASE_HREF))
+        DONDUCK_BASE_HREF))
     code = getpass.getpass('Enter authorisation code: ')
     code_path.parent.mkdir(parents=True, exist_ok=True)
     code_path.write_text(code)
@@ -322,11 +322,11 @@ def run_command(args, tests):
     while True:
         print('Sending request ...')
         if args.cancel:
-            res = requests.post(NAYDUCK_BASE_HREF +
+            res = requests.post(DONDUCK_BASE_HREF +
                                 f'/api/run/{args.cancel}/cancel',
                                 cookies={'nay-code': code})
         else:
-            res = requests.post(NAYDUCK_BASE_HREF + '/api/run/new',
+            res = requests.post(DONDUCK_BASE_HREF + '/api/run/new',
                                 json=post,
                                 cookies={'nay-code': code})
         if res.status_code != 401:

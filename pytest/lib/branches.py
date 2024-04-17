@@ -14,7 +14,7 @@ _IS_DARWIN = _UNAME == 'Darwin'
 _BASEHREF = 'https://s3-us-west-1.amazonaws.com/build.utility.com'
 _REPO_DIR = pathlib.Path(__file__).resolve().parents[2]
 _OUT_DIR = _REPO_DIR / 'target/debug'
-_IS_NAYDUCK = bool(os.getenv('NAYDUCK'))
+_IS_DONDUCK = bool(os.getenv('DONDUCK'))
 
 
 def current_branch() -> str:
@@ -231,7 +231,7 @@ def prepare_ab_test(chain_id: str = 'mainnet') -> ABExecutables:
     """
     release, deploy, stable = __get_executables_for(chain_id)
 
-    if _IS_NAYDUCK:
+    if _IS_DONDUCK:
         # On NayDuck the file is fetched from a builder host so there’s no need
         # to build it.
         current = Executables(_OUT_DIR, _OUT_DIR / 'uncd')
@@ -254,7 +254,7 @@ def __get_executables_for(chain_id: str) -> typing.Tuple[str, str, Executables]:
     try:
         executable = __download_binary(release, deploy)
     except Exception as e:
-        if _IS_NAYDUCK:
+        if _IS_DONDUCK:
             logger.exception('RC binary should be downloaded for NayDuck.', e)
         else:
             logger.exception(e)

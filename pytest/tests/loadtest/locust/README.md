@@ -7,6 +7,7 @@ to set up the network under test is outside the scope of this document. This is
 only about generating the load.
 
 ## Install
+
 ```sh
 pip3 install locust
 # Run in framework directory.
@@ -23,17 +24,20 @@ error messages involving `X509_V_FLAG_CB_ISSUER_CHECK`.*
 
 The load generator needs access to an account key with plenty of tokens.
 For a local test setup, this works just fine.
+
 ```sh
 # This assumes you are running against localnet
 KEY=~/.unc/localnet/node0/validator_key.json
 ```
 
 For a quick demo, you can also run a localnet using [uncd](https://github.com/unc/uncd).
+
 ```sh
 uncd run localnet --binary-path ../framework/target/release/ --num-nodes 4 --num-shards 4 --override
 ```
 
 Then to actually run it, this is the command. (Update ports and IP according to your localnet, uncd will print it.)
+
 ```sh
 cd pytest/tests/loadtest/locust/
 locust -H 127.0.0.1:3030 \
@@ -155,7 +159,6 @@ Hence on restart they add new accounts again. And you have to wait again. To
 avoid this, you can stop and restart tests from within the UI. This way, they
 will remember the account list and start the next test immediately, without long
 setup.
-
 
 ### Master Key Requirements
 
