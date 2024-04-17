@@ -24,7 +24,7 @@ def compute_cumulative(xs):
     return result
 
 
-def liunc_regression(xs, ys):
+def linear_regression(xs, ys):
     '''
     Fits a line `y = mx + b` to the given data points
     '''
@@ -47,5 +47,5 @@ def compute_rate(timestamps):
     be `events/s`.
     '''
     cumulative_events = [i for i in range(1, len(timestamps) + 1)]
-    fit = liunc_regression(timestamps, cumulative_events)
+    fit = linear_regression(timestamps, cumulative_events)
     return fit['slope']

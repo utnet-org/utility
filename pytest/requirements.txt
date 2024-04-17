@@ -16,3 +16,4 @@ semver
 toml
 tqdm
 urllib3<2
+boto3

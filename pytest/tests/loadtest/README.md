@@ -9,19 +9,19 @@ make uncd-release
 Secondly, initialise your own localnet:
 
 ```shell
-./target/release/uncd --home ~/.unc_tmp init --chain-id localnet --num-shards=5
+./target/release/uncd --home ~/.unc_tmp init --chain-id localnet
 ```
 
 Thirdly, create accounts and deploy the contract:
 
 ```shell
-python3 pytest/tests/loadtest/setup.py --home ~/.unc_tmp --num_accounts=5
+python3 pytest/tests/loadtest/setup.py --home ~/.unc_tmp --num_accounts=1
 ```
 
 And lastly, run the test:
 
 ```shell
-python3 pytest/tests/loadtest/loadtest.py --home ~/.unc_tmp --num_accounts=5 --num_requests=1000
+python3 pytest/tests/loadtest/loadtest.py --home ~/.unc_tmp --num_accounts=1 --num_requests=1000
 ```
 
 ## Load Test version 2

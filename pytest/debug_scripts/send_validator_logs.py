@@ -38,12 +38,12 @@ def filter_log_file(log_file: str, start_time: datetime.datetime,
 
 def upload_to_s3(file_lines: list, account: str) -> str:
     """
-    Upload File like object to S3 bucket unc-protocol-validator-logs-public.
+    Upload File like object to S3 bucket utility-validator-logs-public.
     file_obj: io.BytesIO
     account: str
     return string with S3 file path
     """
-    BUCKET = "unc-protocol-validator-logs-public"
+    BUCKET = "utility-validator-logs-public"
     current_time = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
     s3_destination = f"{account}/{current_time}.log.gzip"
     file_string = io.StringIO()

@@ -545,7 +545,7 @@ class LocalNode(BaseNode):
         network.resume_network(self._pid)
 
 
-class GCloudNode(BaseNode):
+class GCPNode(BaseNode):
 
     def __init__(self, *args, username=None, project=None, ssh_key_path=None):
         if len(args) == 1:
@@ -712,7 +712,7 @@ def spin_up_node(config,
             uuid.uuid4())
         zones = config['remote']['zones']
         zone = zones[ordinal % len(zones)]
-        node = GCloudNode(instance_name, zone, node_dir,
+        node = GCPNode(instance_name, zone, node_dir,
                           config['remote']['binary'])
         with remote_nodes_lock:
             remote_nodes.append(node)

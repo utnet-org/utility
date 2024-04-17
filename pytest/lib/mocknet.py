@@ -13,7 +13,7 @@ import requests
 from rc import run, pmap, gcloud
 
 import data
-from cluster import GCloudNode
+from cluster import GCPNode
 from configured_logger import logger
 from key import Key
 from metrics import Metrics
@@ -90,7 +90,7 @@ ACCOUNTS = {
 
 def get_node(hostname):
     instance_name = hostname
-    n = GCloudNode(
+    n = GCPNode(
         instance_name,
         username=NODE_USERNAME,
         project=PROJECT,
@@ -107,7 +107,7 @@ def get_nodes(pattern=None):
         ssh_key_path=NODE_SSH_KEY_PATH,
     )
     nodes = pmap(
-        lambda machine: GCloudNode(
+        lambda machine: GCPNode(
             machine.name,
             username=NODE_USERNAME,
             project=PROJECT,

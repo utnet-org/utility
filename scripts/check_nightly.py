@@ -29,7 +29,7 @@ import re
 import sys
 import typing
 
-import nayduck
+import canary
 
 IGNORED_SUBDIRS = ('target', 'target_expensive', 'sandbox')
 
@@ -80,8 +80,8 @@ def expensive_tests_in_file(path: pathlib.Path) -> typing.Iterable[str]:
 
 def nightly_tests(repo_dir: pathlib.Path) -> typing.Iterable[str]:
     """Yields expensive tests mentioned in the nightly configuration file."""
-    for test in nayduck.read_tests_from_file(repo_dir /
-                                             nayduck.DEFAULT_TEST_FILE,
+    for test in canary.read_tests_from_file(repo_dir /
+                                             canary.DEFAULT_TEST_FILE,
                                              include_comments=True):
         t = test.split()
         try:

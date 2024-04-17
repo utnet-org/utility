@@ -11,5 +11,5 @@ Feel free to link other pull requests or issues here.
 Describe the testing plan for this protocol and why you are confident that it is ready to be stabilized.
 
 # Checklist
-- [ ] Link to nightly nayduck run (`./scripts/nayduck.py`, [docs](https://github.com/utnet-org/utility/blob/master/nightly/README.md#scheduling-a-run)):  https://nayduck.unc.org/
+- [ ] Link to nightly canary run (`./scripts/canary.py`, [docs](https://github.com/utnet-org/utility/blob/master/nightly/README.md#scheduling-a-run)):  https://canary.unc.org/
 - [ ] Update CHANGELOG.md to include this protocol feature in the `Unreleased` section.

@@ -148,7 +148,7 @@ or enable some specific protocol feature by
 cargo build -p uncd --release --features nightly_protocol,<protocol_feature>
 ```
 
-In practice, we have all nightly protocol features enabled for Nayduck tests and
+In practice, we have all nightly protocol features enabled for Canary tests and
 on betanet, which is updated daily.
 
 ### Feature Stabilization

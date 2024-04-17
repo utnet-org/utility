@@ -16,7 +16,7 @@ import typing
 
 import yaml
 
-import nayduck
+import canary
 
 # List of globs of Python scripts in the pytest/tests directory which are not
 # test but rather helper scripts and libraries.  The entire mocknet/ directory
@@ -32,7 +32,7 @@ HELPER_SCRIPTS = [
 ]
 
 PYTEST_TESTS_DIRECTORY = pathlib.Path('pytest/tests')
-NIGHTLY_TESTS_FILE = pathlib.Path(nayduck.DEFAULT_TEST_FILE)
+NIGHTLY_TESTS_FILE = pathlib.Path(canary.DEFAULT_TEST_FILE)
 
 # TODO: this should read ci.yml and fetch the list of tests from there
 # Currently, the list of tests is hardcoded, so if a test is removed/added to ci.yml then the list
@@ -87,7 +87,7 @@ def read_all_tests(path: pathlib.Path) -> StrGenerator:
             yield tokens[idx]
 
     found_todo = False
-    for line in nayduck.read_tests_from_file(path, include_comments=True):
+    for line in canary.read_tests_from_file(path, include_comments=True):
         line = re.sub(r'\s+', ' ', line.strip())
         if re.search(r'^(?:pytest|mocknet) ', line):
             found_todo = False
@@ -147,7 +147,7 @@ def main() -> int:
     missing = set(list_test_files(PYTEST_TESTS_DIRECTORY))
     count = len(missing)
     missing.difference_update(
-        read_all_tests(pathlib.Path(nayduck.DEFAULT_TEST_FILE)))
+        read_all_tests(pathlib.Path(canary.DEFAULT_TEST_FILE)))
     missing.difference_update(GHA_TESTS)
     missing = set(filename for filename in missing if not any(
         fnmatch.fnmatch(filename, pattern) for pattern in HELPER_SCRIPTS))

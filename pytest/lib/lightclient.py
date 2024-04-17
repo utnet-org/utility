@@ -55,7 +55,6 @@ def compute_block_hash(inner_lite_view, inner_rest_hash, prev_hash):
     return base58.b58encode(final_hash)
 
 
-# follows the spec from NEP 25 (https://github.com/utility/UEPs/pull/25)
 def validate_light_client_block(last_known_block,
                                 new_block,
                                 block_producers_map,
