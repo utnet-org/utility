@@ -21,14 +21,14 @@ use unc_primitives_core::version::PROTOCOL_VERSION;
 use unc_store::test_utils::create_test_store;
 use unc_store::{ShardUId, TrieConfig};
 
-const ONE_NEAR: u128 = 1_000_000_000_000_000_000_000_000;
+const ONE_UNC: u128 = 1_000_000_000_000_000_000_000_000;
 
 #[test]
 fn test_in_memory_trie_node_consistency() {
     // Recommended to run with RUST_LOG=memtrie=debug,chunks=error,info
     init_test_logger();
-    let validator_stake = 1000000 * ONE_NEAR;
-    let initial_balance = 10000 * ONE_NEAR;
+    let validator_stake = 1000000 * ONE_UNC;
+    let initial_balance = 10000 * ONE_UNC;
     let accounts =
         (0..100).map(|i| format!("account{}", i).parse().unwrap()).collect::<Vec<AccountId>>();
     let mut genesis_config = GenesisConfig {
@@ -290,7 +290,7 @@ fn run_chain_for_some_blocks_while_sending_money_around(
                     sender.clone(),
                     receiver.clone(),
                     &create_user_test_signer(&sender),
-                    ONE_NEAR,
+                    ONE_UNC,
                     tip.last_block_hash,
                 );
                 match env.clients[0].process_tx(txn, false, false) {
@@ -298,8 +298,8 @@ fn run_chain_for_some_blocks_while_sending_money_around(
                     ProcessTxResponse::InvalidTx(err) => panic!("Invalid tx: {}", err),
                     _ => {}
                 }
-                *balances.get_mut(&sender).unwrap() -= ONE_NEAR;
-                *balances.get_mut(&receiver).unwrap() += ONE_NEAR;
+                *balances.get_mut(&sender).unwrap() -= ONE_UNC;
+                *balances.get_mut(&receiver).unwrap() += ONE_UNC;
             }
         }
 

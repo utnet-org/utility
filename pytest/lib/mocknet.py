@@ -62,7 +62,7 @@ cd {PYTHON_DIR}
 ./venv/bin/pip install -r requirements.txt
 '''
 
-ONE_NEAR = 10**24
+ONE_UNC = 10**24
 MIN_STAKE = 64 * (10**3)
 STAKE_STEP = 15 * (10**3)
 OTHER_STAKE = 10**6
@@ -78,13 +78,13 @@ MAINNET_STAKES = [
 ]
 
 ACCOUNTS = {
-    TREASURY_ACCOUNT: (10**7) * ONE_NEAR,
-    MASTER_ACCOUNT: (10**7) * ONE_NEAR,
-    SKYWARD_ACCOUNT: (10**6) * ONE_NEAR,
-    TOKEN1_ACCOUNT: (10**6) * ONE_NEAR,
-    TOKEN2_ACCOUNT: (10**6) * ONE_NEAR,
-    TOKEN2_OWNER_ACCOUNT: (10**6) * ONE_NEAR,
-    ACCOUNT1_ACCOUNT: (10**6) * ONE_NEAR,
+    TREASURY_ACCOUNT: (10**7) * ONE_UNC,
+    MASTER_ACCOUNT: (10**7) * ONE_UNC,
+    SKYWARD_ACCOUNT: (10**6) * ONE_UNC,
+    TOKEN1_ACCOUNT: (10**6) * ONE_UNC,
+    TOKEN2_ACCOUNT: (10**6) * ONE_UNC,
+    TOKEN2_OWNER_ACCOUNT: (10**6) * ONE_UNC,
+    ACCOUNT1_ACCOUNT: (10**6) * ONE_UNC,
 }
 
 
@@ -580,9 +580,9 @@ def extra_genesis_records(validator_keys, rpc_node_names, node_pks,
                           seen_accounts, num_seats, increasing_pledges):
     records = []
 
-    VALIDATOR_BALANCE = (10**2) * ONE_NEAR
-    RPC_BALANCE = (10**1) * ONE_NEAR
-    LOAD_TESTER_BALANCE = (10**4) * ONE_NEAR
+    VALIDATOR_BALANCE = (10**2) * ONE_UNC
+    RPC_BALANCE = (10**1) * ONE_UNC
+    LOAD_TESTER_BALANCE = (10**4) * ONE_UNC
 
     for account_id, balance in ACCOUNTS.items():
         if account_id not in seen_accounts:
@@ -619,13 +619,13 @@ def extra_genesis_records(validator_keys, rpc_node_names, node_pks,
         logger.info(f'Adding account {account_id}')
         if increasing_pledges:
             if i * 5 < num_seats * 3 and i < len(MAINNET_STAKES):
-                pledging = MAINNET_STAKES[i] * ONE_NEAR
+                pledging = MAINNET_STAKES[i] * ONE_UNC
             elif prev_pledge is None:
                 prev_pledge = MIN_STAKE - STAKE_STEP
-                pledging = prev_pledge * ONE_NEAR
+                pledging = prev_pledge * ONE_UNC
             else:
                 prev_pledge = prev_pledge + STAKE_STEP
-                pledging = prev_pledge * ONE_NEAR
+                pledging = prev_pledge * ONE_UNC
         else:
             pledging = MIN_STAKE
         pledges.append((pledging, account_id))
@@ -792,17 +792,17 @@ def create_and_upload_genesis_file_from_empty_genesis(
         node0, "/home/ubuntu/.unc-tmp/genesis.json")
     records = []
 
-    VALIDATOR_BALANCE = (10**2) * ONE_NEAR
-    RPC_BALANCE = (10**1) * ONE_NEAR
+    VALIDATOR_BALANCE = (10**2) * ONE_UNC
+    RPC_BALANCE = (10**1) * ONE_UNC
     TREASURY_ACCOUNT = 'test.unc'
-    TREASURY_BALANCE = (10**7) * ONE_NEAR
-    LOAD_TESTER_BALANCE = (10**4) * ONE_NEAR
+    TREASURY_BALANCE = (10**7) * ONE_UNC
+    LOAD_TESTER_BALANCE = (10**4) * ONE_UNC
 
-    SKYWARD_CONTRACT_BALANCE = (10**6) * ONE_NEAR
-    TOKEN1_BALANCE = (10**6) * ONE_NEAR
-    TOKEN2_BALANCE = (10**6) * ONE_NEAR
-    TOKEN2_OWNER_BALANCE = (10**6) * ONE_NEAR
-    ACCOUNT1_BALANCE = (10**6) * ONE_NEAR
+    SKYWARD_CONTRACT_BALANCE = (10**6) * ONE_UNC
+    TOKEN1_BALANCE = (10**6) * ONE_UNC
+    TOKEN2_BALANCE = (10**6) * ONE_UNC
+    TOKEN2_OWNER_BALANCE = (10**6) * ONE_UNC
+    ACCOUNT1_BALANCE = (10**6) * ONE_UNC
 
     genesis_config['chain_id'] = chain_id
 
@@ -1296,13 +1296,13 @@ def create_upgrade_schedule(
             for i, node in enumerate(validator_nodes):
                 if (i * 5 < num_block_producer_seats * 3 and
                         i < len(MAINNET_STAKES)):
-                    pledging = MAINNET_STAKES[i] * ONE_NEAR
+                    pledging = MAINNET_STAKES[i] * ONE_UNC
                 elif prev_pledge is None:
                     prev_pledge = MIN_STAKE - STAKE_STEP
-                    pledging = prev_pledge * ONE_NEAR
+                    pledging = prev_pledge * ONE_UNC
                 else:
                     prev_pledge = prev_pledge + STAKE_STEP
-                    pledging = prev_pledge * ONE_NEAR
+                    pledging = prev_pledge * ONE_UNC
                 pledges.append((pledging, node.instance_name))
 
         else:
@@ -1460,7 +1460,7 @@ def pledge_available_amount(node_account, last_staking):
                 logger.info(
                     f'Amount of {node_account.key.account_id} is {pledge_amount}'
                 )
-                if pledge_amount > (10**3) * ONE_NEAR:
+                if pledge_amount > (10**3) * ONE_UNC:
                     logger.info(
                         f'Pledging{pledge_amount} for {node_account.key.account_id}'
                     )

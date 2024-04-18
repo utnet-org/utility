@@ -120,6 +120,7 @@ pub(crate) fn produce_blocks_from_height(
     produce_blocks_from_height_with_protocol_version(env, blocks_number, height, PROTOCOL_VERSION)
 }
 
+#[allow(dead_code)]
 pub(crate) fn create_account(
     env: &mut TestEnv,
     old_account_id: AccountId,

@@ -442,7 +442,6 @@ pub(crate) fn action_implicit_account_creation_transfer(
         AccountType::UtilityAccount => {
             let mut access_key = AccessKey::full_access();
             // Set default nonce for newly created access key to avoid transaction hash collision.
-            // See <https://github.com/utnet-org/utility/issues/3779>.
             if checked_feature!(
                 "stable",
                 AccessKeyNonceForImplicitAccounts,

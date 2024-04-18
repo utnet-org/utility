@@ -563,7 +563,7 @@ fn test_cold_loop_on_gc_boundary() {
         unc_crypto::KeyFile {
             account_id: signer.account_id,
             public_key: signer.public_key,
-            secret_key: signer.secret_key,
+            private_key: signer.secret_key,
         },
         None,
     )

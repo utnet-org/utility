@@ -15,7 +15,7 @@ use unc_primitives_core::hash::CryptoHash;
 use unc_primitives_core::types::AccountId;
 use unc_primitives_core::version::PROTOCOL_VERSION;
 
-const ONE_NEAR: u128 = 1_000_000_000_000_000_000_000_000;
+const ONE_UNC: u128 = 1_000_000_000_000_000_000_000_000;
 
 #[test]
 // TODO(#9292): This does not pass yet because state witness production
@@ -29,7 +29,7 @@ fn test_chunk_validation_basic() {
         return;
     }
 
-    let validator_stake = 1000000 * ONE_NEAR;
+    let validator_stake = 1000000 * ONE_UNC;
     let accounts =
         (0..9).map(|i| format!("account{}", i).parse().unwrap()).collect::<Vec<AccountId>>();
     let mut genesis_config = GenesisConfig {

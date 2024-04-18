@@ -261,7 +261,7 @@ fn assert_view_state(
 #[test]
 fn test_view_state() {
     // in order to ensure determinism under all conditions (compiler, build output, etc)
-    // avoid deploying a test contract. See issue #7238
+    // avoid deploying a test contract.
     let (_, tries, root) = get_runtime_and_trie();
     let shard_uid = TEST_SHARD_UID;
     let mut state_update = tries.new_trie_update(shard_uid, root);
@@ -291,11 +291,11 @@ fn test_view_state() {
     let trie_viewer = TrieViewer::default();
 
     let proof = [
-        "AwMAAAAWFsbwm2TFX4GHLT5G1LSpF8UkG7zQV1ohXBMR/OQcUAKZ3gwDAAAAAAAA",
-        "ASAC7S1KwgLNl0HPdSo8soL8sGOmPhL7O0xTSR8sDDR5pZrzu0ty3UPYJ5UKrFGKxXoyyyNG75AF9hnJHO3xxFkf5NQCAAAAAAAA",
-        "AwEAAAAW607KPj2q3O8dF6XkfALiIrd9mqGir2UlYIcZuLNksTsvAgAAAAAAAA==",
-        "AQhAP4sMdbiWZPtV6jz8hYKzRFSgwaSlQKiGsQXogAmMcrLOl+SJfiCOXMTEZ2a1ebmQOEGkRYa30FaIlB46sLI2IPsBAAAAAAAA",
-        "AwwAAAAWUubmVhcix0ZXN0PKtrEndk0LxM+qpzp0PVtjf+xlrzz4TT0qA+hTtm6BLlYBAAAAAAAA",
+        "AwMAAAAWFsZYWRVguIrh4BGaeHe9E3fuQ1Z+k9ytizC6dJHNgOwuVgIDAAAAAAAA",
+        "ASAC7S1KwgLNl0HPdSo8soL8sGOmPhL7O0xTSR8sDDR5pZrvt7RWkl0nxPr28h0k9ZNvSzkAz/Av4q+U5RqW9yTXgcoCAAAAAAAA",
+        "AwEAAAAWi51UZIaa8X2CYZAiNySglZzzVIXrFxuM1rViYo7tXVolAgAAAAAAAA==",
+        "AQhAS1nOU/0F0IsKHClAXDd15ukMru6W/Xt+x4GZSJv+4KXOl+SJfiCOXMTEZ2a1ebmQOEGkRYa30FaIlB46sLI2IPEBAAAAAAAA",
+        "AwcAAAAWUsdGVzdDyraxJ3ZNC8TPqqc6dD1bY3/sZa88+E09KgPoU7ZugS5MAQAAAAAAAA==",
         "AQoAVWCdny7wv/M1LvZASC3Fw0D/NNhI1NYwch9Ux+KZ2qRdQXPC1rNsCGRJ7nd66SfcNmRUVVvQY6EYCbsIiugO6gwBAAAAAAAA",
         "AAMAAAAgMjMDAAAApmWkWSBCL51Bfkhn79xPuKBKHz//H6B+mY6G9/eieuNtAAAAAAAAAA==",
         "AAMAAAAgMjEDAAAAjSPPbIboNKeqbt7VTCbOK7LnSQNTjGG91dIZeZerL3JtAAAAAAAAAA==",
@@ -305,11 +305,11 @@ fn test_view_state() {
     assert_view_state(&trie_viewer, &state_update, b"test", &values, &proof);
 
     assert_view_state(&trie_viewer, &state_update, b"xyz", &[], &[
-        "AwMAAAAWFsbwm2TFX4GHLT5G1LSpF8UkG7zQV1ohXBMR/OQcUAKZ3gwDAAAAAAAA",
-        "ASAC7S1KwgLNl0HPdSo8soL8sGOmPhL7O0xTSR8sDDR5pZrzu0ty3UPYJ5UKrFGKxXoyyyNG75AF9hnJHO3xxFkf5NQCAAAAAAAA",
-        "AwEAAAAW607KPj2q3O8dF6XkfALiIrd9mqGir2UlYIcZuLNksTsvAgAAAAAAAA==",
-        "AQhAP4sMdbiWZPtV6jz8hYKzRFSgwaSlQKiGsQXogAmMcrLOl+SJfiCOXMTEZ2a1ebmQOEGkRYa30FaIlB46sLI2IPsBAAAAAAAA",
-        "AwwAAAAWUubmVhcix0ZXN0PKtrEndk0LxM+qpzp0PVtjf+xlrzz4TT0qA+hTtm6BLlYBAAAAAAAA",
+        "AwMAAAAWFsZYWRVguIrh4BGaeHe9E3fuQ1Z+k9ytizC6dJHNgOwuVgIDAAAAAAAA",
+        "ASAC7S1KwgLNl0HPdSo8soL8sGOmPhL7O0xTSR8sDDR5pZrvt7RWkl0nxPr28h0k9ZNvSzkAz/Av4q+U5RqW9yTXgcoCAAAAAAAA",
+        "AwEAAAAWi51UZIaa8X2CYZAiNySglZzzVIXrFxuM1rViYo7tXVolAgAAAAAAAA==",
+        "AQhAS1nOU/0F0IsKHClAXDd15ukMru6W/Xt+x4GZSJv+4KXOl+SJfiCOXMTEZ2a1ebmQOEGkRYa30FaIlB46sLI2IPEBAAAAAAAA",
+        "AwcAAAAWUsdGVzdDyraxJ3ZNC8TPqqc6dD1bY3/sZa88+E09KgPoU7ZugS5MAQAAAAAAAA==",
     ][..]);
 
     let proof_verifier = assert_view_state(
@@ -318,11 +318,11 @@ fn test_view_state() {
         b"test123",
         &[(&b"test123"[..], &b"123"[..])],
         &[
-            "AwMAAAAWFsbwm2TFX4GHLT5G1LSpF8UkG7zQV1ohXBMR/OQcUAKZ3gwDAAAAAAAA",
-            "ASAC7S1KwgLNl0HPdSo8soL8sGOmPhL7O0xTSR8sDDR5pZrzu0ty3UPYJ5UKrFGKxXoyyyNG75AF9hnJHO3xxFkf5NQCAAAAAAAA",
-            "AwEAAAAW607KPj2q3O8dF6XkfALiIrd9mqGir2UlYIcZuLNksTsvAgAAAAAAAA==",
-            "AQhAP4sMdbiWZPtV6jz8hYKzRFSgwaSlQKiGsQXogAmMcrLOl+SJfiCOXMTEZ2a1ebmQOEGkRYa30FaIlB46sLI2IPsBAAAAAAAA",
-            "AwwAAAAWUubmVhcix0ZXN0PKtrEndk0LxM+qpzp0PVtjf+xlrzz4TT0qA+hTtm6BLlYBAAAAAAAA",
+            "AwMAAAAWFsZYWRVguIrh4BGaeHe9E3fuQ1Z+k9ytizC6dJHNgOwuVgIDAAAAAAAA",
+            "ASAC7S1KwgLNl0HPdSo8soL8sGOmPhL7O0xTSR8sDDR5pZrvt7RWkl0nxPr28h0k9ZNvSzkAz/Av4q+U5RqW9yTXgcoCAAAAAAAA",
+            "AwEAAAAWi51UZIaa8X2CYZAiNySglZzzVIXrFxuM1rViYo7tXVolAgAAAAAAAA==",
+            "AQhAS1nOU/0F0IsKHClAXDd15ukMru6W/Xt+x4GZSJv+4KXOl+SJfiCOXMTEZ2a1ebmQOEGkRYa30FaIlB46sLI2IPEBAAAAAAAA",
+            "AwcAAAAWUsdGVzdDyraxJ3ZNC8TPqqc6dD1bY3/sZa88+E09KgPoU7ZugS5MAQAAAAAAAA==",
             "AQoAVWCdny7wv/M1LvZASC3Fw0D/NNhI1NYwch9Ux+KZ2qRdQXPC1rNsCGRJ7nd66SfcNmRUVVvQY6EYCbsIiugO6gwBAAAAAAAA",
             "AAMAAAAgMjMDAAAApmWkWSBCL51Bfkhn79xPuKBKHz//H6B+mY6G9/eieuNtAAAAAAAAAA==",
         ]

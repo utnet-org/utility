@@ -1460,14 +1460,12 @@ impl ShardsManager {
         let num_total_parts = self.rs.total_shard_count();
         for part_info in partial_encoded_chunk.parts.iter() {
             // TODO: only validate parts we care about
-            // https://github.com/utnet-org/utility/issues/5885
             self.validate_part(header.encoded_merkle_root(), part_info, num_total_parts)?;
         }
 
         // 1.e Checking receipts validity
         for proof in partial_encoded_chunk.receipts.iter() {
             // TODO: only validate receipts we care about
-            // https://github.com/utnet-org/utility/issues/5885
             // we can't simply use prev_block_hash to check if the node tracks this shard or not
             // because prev_block_hash may not be ready
             if !proof.verify_against_receipt_root(header.prev_outgoing_receipts_root()) {

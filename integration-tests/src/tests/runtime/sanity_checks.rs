@@ -91,7 +91,7 @@ fn get_receipts_status_with_clear_hash(
 /// Calls method `sanity_check` on `test-contract-rs` and verifies that the
 /// resulting gas profile matches expectations.
 ///
-/// This test intends to catch accidental configuration changes, see #4961.
+/// This test intends to catch accidental configuration changes.
 #[test]
 fn test_cost_sanity() {
     let test_contract = if cfg!(feature = "nightly") {
@@ -214,8 +214,6 @@ fn test_cost_sanity_nondeterministic() {
 
 /// Verifies the operation of host function `used_gas` according to
 /// [gas instrumentation].
-///
-/// [gas instrumentation]: https://nomicon.io/RuntimeSpec/Preparation#gas-instrumentation
 #[test]
 fn test_sanity_used_gas() {
     use unc_parameters::vm::ContractPrepareVersion;
@@ -272,8 +270,6 @@ fn test_sanity_used_gas() {
 ///
 /// This contract is written in `wat` to avoid depending on the output generated
 /// by a compiler (e.g. `rustc`).
-///
-/// [metered block]: https://nomicon.io/RuntimeSpec/Preparation#gas-instrumentation
 fn contract_sanity_check_used_gas() -> Vec<u8> {
     wat::parse_str(
         r#"

@@ -16,7 +16,6 @@ mod increase_storage_compute_cost;
 mod limit_contract_functions_number;
 mod lower_storage_key_limit;
 mod restore_receipts_after_fix_apply_chunks;
-mod restrict_tla;
 mod uncvm;
 mod wallet_contract;
 mod zero_balance_account;
