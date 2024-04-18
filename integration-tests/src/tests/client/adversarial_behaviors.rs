@@ -12,10 +12,7 @@ use unc_network::{
     types::{NetworkRequests, PeerManagerMessageRequest},
 };
 use unc_o11y::testonly::init_test_logger;
-use unc_primitives::{
-    shard_layout::ShardLayout,
-    types::{AccountId, EpochId, ShardId},
-};
+use unc_primitives::types::{AccountId, EpochId, ShardId};
 
 struct AdversarialBehaviorTestData {
     num_validators: usize,
@@ -37,13 +34,6 @@ impl AdversarialBehaviorTestData {
         {
             let config = &mut genesis.config;
             config.epoch_length = epoch_length;
-            config.shard_layout = ShardLayout::v1_test();
-            config.num_block_producer_seats_per_shard = vec![
-                num_block_producers as u64,
-                num_block_producers as u64,
-                num_block_producers as u64,
-                num_block_producers as u64,
-            ];
             config.num_block_producer_seats = num_block_producers as u64;
             // Configure kickout threshold at 50%.
             config.block_producer_kickout_threshold = 50;

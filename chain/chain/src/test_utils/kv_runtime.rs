@@ -483,7 +483,7 @@ impl EpochManagerAdapter for MockEpochManager {
             fishermen_threshold: 1,
             minimum_pledge_divisor: 1,
             protocol_upgrade_pledge_threshold: Ratio::new(3i32, 4i32),
-            shard_layout: ShardLayout::v1_test(),
+            shard_layout: ShardLayout::v0_test(),
             validator_selection_config: ValidatorSelectionConfig::default(),
         })
     }

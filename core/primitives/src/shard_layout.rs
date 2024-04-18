@@ -134,13 +134,9 @@ impl ShardLayout {
         })
     }
 
-    /// Returns a V1 ShardLayout. It is only used in tests
-    pub fn v1_test() -> Self {
-        ShardLayout::v1(
-            vec!["abc", "foo", "test0"].into_iter().map(|s| s.parse().unwrap()).collect(),
-            Some(vec![vec![0, 1, 2, 3]]),
-            1,
-        )
+    /// Returns a V0 ShardLayout. It is only used in tests
+    pub fn v0_test() -> Self {
+        ShardLayout::v0(1, 0)
     }
 
     /// Given a parent shard id, return the shard uids for the shards in the current shard layout that

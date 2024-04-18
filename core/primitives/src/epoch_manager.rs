@@ -1405,7 +1405,7 @@ pub mod epoch_info {
             }
         }
 
-        pub fn v1_test() -> Self {
+        pub fn v0_test() -> Self {
             Self::V1(EpochInfoV1 {
                 epoch_height: 10,
                 validators: vec![
