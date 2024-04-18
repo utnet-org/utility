@@ -396,7 +396,7 @@ fn test_tx_not_enough_balance_must_return_error() {
                         serde_json::json!({"TxExecutionError": {
                             "InvalidTxError": {
                                 "NotEnoughBalance": {
-                                    "signer_id": "unc.0",
+                                    "signer_id": "unc",
                                     "balance": "950000000000000000000000000000000", // If something changes in setup just update this value
                                     "cost": "1100000000000045306060187500000000",
                                 }

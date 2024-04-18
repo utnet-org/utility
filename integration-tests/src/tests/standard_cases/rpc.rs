@@ -12,10 +12,10 @@ use unc_o11y::testonly::init_test_module_logger;
 fn create_thread_nodes_rpc() -> Vec<ThreadNode> {
     init_test_module_logger("runtime");
     let nodes = create_nodes_from_seeds(vec![
-        "alice.unc".to_string(),
-        "bob.unc".to_string(),
-        "carol.unc".to_string(),
-        "dan.unc".to_string(),
+        "alice".to_string(),
+        "bob".to_string(),
+        "carol".to_string(),
+        "dan".to_string(),
     ]);
     let mut nodes: Vec<_> = nodes
         .into_iter()

@@ -27,7 +27,7 @@ use crate::node::Node;
 use crate::user::User;
 use testlib::fees_utils::FeeHelper;
 use testlib::runtime_utils::{
-    alice_account, bob_account, eve_dot_alice_account, x_dot_y_dot_alice_account,
+    alice_account, bob_account, eve_dot_alice_account, x_dot_y_dot_z_account,
 };
 use unc_parameters::RuntimeConfig;
 use unc_primitives::receipt::{ActionReceipt, Receipt, ReceiptEnum};
@@ -977,6 +977,7 @@ pub fn test_delete_access_key_with_allowance(node: impl Node) {
     assert_ne!(new_root, root);
 
     let account = node_user.view_account(account_id).unwrap();
+    assert_eq!(account.amount, initial_balance);
     assert_eq!(account.amount, initial_balance - add_access_key_cost - delete_access_key_cost);
 
     assert!(node_user.get_access_key(account_id, &node.signer().public_key()).is_ok());
@@ -1226,7 +1227,7 @@ pub fn test_creating_invalid_subaccount_fail(node: impl Node) {
     let result = node_user
         .create_account(
             alice_account(),
-            x_dot_y_dot_alice_account(),
+            x_dot_y_dot_z_account(),
             node.signer().public_key(),
             money_used,
         )
@@ -1237,7 +1238,7 @@ pub fn test_creating_invalid_subaccount_fail(node: impl Node) {
             ActionError {
                 index: Some(0),
                 kind: ActionErrorKind::CreateAccountNotAllowed {
-                    account_id: x_dot_y_dot_alice_account(),
+                    account_id: x_dot_y_dot_z_account(),
                     predecessor_id: alice_account()
                 }
             }

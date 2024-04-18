@@ -12,14 +12,14 @@ pub fn bob_account() -> AccountId {
     "bob".parse().unwrap()
 }
 pub fn carol_account() -> AccountId {
-    "carol".parse().unwrap()
+    "carl".parse().unwrap()
 }
 pub fn eve_dot_alice_account() -> AccountId {
     "eve".parse().unwrap()
 }
 
-pub fn x_dot_y_dot_alice_account() -> AccountId {
-    "x.y".parse().unwrap()
+pub fn x_dot_y_dot_z_account() -> AccountId {
+    "x.y.z".parse().unwrap()
 }
 
 /// Pre-deploy in genesis the standard test contract for a given account.
