@@ -101,7 +101,7 @@ fn compare_node_counts() {
     deploy_test_contract(
         &mut env,
         "test0".parse().unwrap(),
-        unc_test_contracts::backwards_compatible_rs_contract(),
+        unc_test_contracts::rs_contract(),
         num_blocks,
         1,
     );

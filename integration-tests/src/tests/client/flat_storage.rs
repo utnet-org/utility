@@ -612,7 +612,7 @@ fn test_flat_storage_upgrade() {
     deploy_test_contract_with_protocol_version(
         &mut env,
         "test0".parse().unwrap(),
-        unc_test_contracts::backwards_compatible_rs_contract(),
+        unc_test_contracts::rs_contract(),
         blocks_to_process_txn,
         1,
         old_protocol_version,

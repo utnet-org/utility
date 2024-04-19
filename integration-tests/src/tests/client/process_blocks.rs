@@ -222,7 +222,7 @@ pub(crate) fn prepare_env_with_congestion(
         "test0".parse().unwrap(),
         &signer,
         vec![Action::DeployContract(DeployContractAction {
-            code: unc_test_contracts::backwards_compatible_rs_contract().to_vec(),
+            code: unc_test_contracts::rs_contract().to_vec(),
         })],
         *genesis_block.hash(),
     );

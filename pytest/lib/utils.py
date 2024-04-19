@@ -242,7 +242,7 @@ def load_binary_file(filepath):
 
 
 def load_test_contract(
-        filename: str = 'backwards_compatible_rs_contract.wasm') -> bytearray:
+        filename: str = 'rs_contract.wasm') -> bytearray:
     """Loads a WASM file from unc-test-contracts package.
 
     This is just a convenience function around load_binary_file which loads

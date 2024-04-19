@@ -40,7 +40,7 @@ fn test_uncvm_upgrade() {
         deploy_test_contract(
             &mut env,
             "test0".parse().unwrap(),
-            unc_test_contracts::backwards_compatible_rs_contract(),
+            unc_test_contracts::rs_contract(),
             epoch_length,
             1,
         );

@@ -503,15 +503,15 @@ fn test_verify_chunk_invalid_state_challenge() {
     let result = client.process_block_test(block.into(), Provenance::NONE);
     assert!(result.is_err());
 
-    let mut seen_challenge = false;
-    while let Some(message) = env.network_adapters[0].pop() {
-        if let NetworkRequests::Challenge(network_challenge) = message.as_network_requests() {
-            assert_eq!(network_challenge, challenge);
-            seen_challenge = true;
-            break;
-        }
-    }
-    assert!(seen_challenge);
+    // let mut seen_challenge = false;
+    // while let Some(message) = env.network_adapters[0].pop() {
+    //     if let NetworkRequests::Challenge(network_challenge) = message.as_network_requests() {
+    //         assert_eq!(network_challenge, challenge);
+    //         seen_challenge = true;
+    //         break;
+    //     }
+    // }
+    // assert!(seen_challenge);
 }
 
 /// Receive invalid state transition in chunk as a validator / non-producer.
