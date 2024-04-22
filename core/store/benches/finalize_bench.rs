@@ -127,6 +127,7 @@ fn create_chunk_header(height: u64, shard_id: u64) -> ShardChunkHeader {
         CryptoHash::default(),
         CryptoHash::default(),
         vec![],
+        vec![],
         &validator_signer(),
     ))
 }
@@ -189,6 +190,7 @@ fn create_encoded_shard_chunk(
         Default::default(),
         Default::default(),
         Default::default(),
+        Default::default(),
         transactions,
         receipts,
         Default::default(),
@@ -207,7 +209,7 @@ fn encoded_chunk_to_partial_encoded_chunk(
 ) -> PartialEncodedChunk {
     let header = encoded_chunk.cloned_header();
     let shard_id = header.shard_id();
-    let shard_layout = ShardLayout::get_simple_nightshade_layout_v2();
+    let shard_layout = ShardLayout::v0_single_shard();
 
     let hashes = Chain::build_receipts_hashes(&receipts, &shard_layout);
     let (_root, proofs) = merklize(&hashes);
