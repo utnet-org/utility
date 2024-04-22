@@ -1854,7 +1854,7 @@ impl<'a> VMLogic<'a> {
         let public_key = self.get_public_key(public_key_ptr, public_key_len)?;
         let (receipt_idx, sir) = self.promise_idx_to_receipt_idx_with_sir(promise_idx)?;
         self.pay_action_base(ActionCosts::pledge, sir)?;
-        self.ext.append_action_stake(receipt_idx, amount, public_key.decode()?);
+        self.ext.append_action_pledge(receipt_idx, amount, public_key.decode()?);
         Ok(())
     }
 

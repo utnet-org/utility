@@ -9,6 +9,7 @@ use unc_client::test_utils::TestEnv;
 use unc_client::ProcessTxResponse;
 use unc_o11y::testonly::init_test_logger;
 use unc_primitives::block::Tip;
+use unc_primitives::num_rational::Ratio;
 use unc_primitives::shard_layout::ShardLayout;
 use unc_primitives::state_record::StateRecord;
 use unc_primitives::test_utils::{create_test_signer, create_user_test_signer};
@@ -22,6 +23,7 @@ use unc_store::test_utils::create_test_store;
 use unc_store::{ShardUId, TrieConfig};
 
 const ONE_UNC: u128 = 1_000_000_000_000_000_000_000_000;
+const ONE_TERA: u64 = 1_000_000_000_000;
 
 #[test]
 fn test_in_memory_trie_node_consistency() {
@@ -29,6 +31,7 @@ fn test_in_memory_trie_node_consistency() {
     init_test_logger();
     let validator_stake = 1000000 * ONE_UNC;
     let initial_balance = 10000 * ONE_UNC;
+    let validator_power = 1000 * ONE_TERA;
     let accounts =
         (0..100).map(|i| format!("account{}", i).parse().unwrap()).collect::<Vec<AccountId>>();
     let mut genesis_config = GenesisConfig {
@@ -40,13 +43,9 @@ fn test_in_memory_trie_node_consistency() {
         // We'll test with 4 shards. This can be any number, but we want to test
         // the case when some shards are loaded into memory and others are not.
         // We pick the boundaries so that each shard would get some transactions.
-        shard_layout: ShardLayout::v1(
-            vec!["account3", "account5", "account7"]
-                .into_iter()
-                .map(|a| a.parse().unwrap())
-                .collect(),
-            None,
+        shard_layout: ShardLayout::v0(
             1,
+            0,
         ),
         // We're going to send UNC between accounts and then assert at the end
         // that these transactions have been processed correctly, so here we set
@@ -65,13 +64,13 @@ fn test_in_memory_trie_node_consistency() {
         validators: vec![
             AccountInfo {
                 account_id: accounts[0].clone(),
-                power: 0,
+                power: validator_power,
                 pledging: validator_stake,
                 public_key: create_test_signer(accounts[0].as_str()).public_key(),
             },
             AccountInfo {
                 account_id: accounts[1].clone(),
-                power: 0,
+                power: validator_power,
                 pledging: validator_stake,
                 public_key: create_test_signer(accounts[1].as_str()).public_key(),
             },
@@ -87,11 +86,12 @@ fn test_in_memory_trie_node_consistency() {
         // Simply make all validators block producers.
         num_block_producer_seats: 2,
         // Make all validators produce chunks for all shards.
-        minimum_validators_per_shard: 2,
+        minimum_validators_per_shard:1,
         // Even though not used for the most recent protocol version,
         // this must still have the same length as the number of shards,
         // or else the genesis fails validation.
-        num_block_producer_seats_per_shard: vec![2, 2, 2, 2],
+        num_block_producer_seats_per_shard: vec![1],
+        max_inflation_rate: Ratio::new_raw(1, 10),
         ..Default::default()
     };
 
@@ -133,7 +133,6 @@ fn test_in_memory_trie_node_consistency() {
                     // client 1 loads two of four shards into in-memory tries
                     load_mem_tries_for_shards: vec![
                         ShardUId { version: 1, shard_id: 0 },
-                        ShardUId { version: 1, shard_id: 2 },
                     ],
                     ..Default::default()
                 },
@@ -191,7 +190,6 @@ fn test_in_memory_trie_node_consistency() {
                 TrieConfig {
                     load_mem_tries_for_shards: vec![
                         ShardUId { version: 1, shard_id: 0 },
-                        ShardUId { version: 1, shard_id: 1 }, // shard 2 changed to shard 1.
                     ],
                     ..Default::default()
                 },
@@ -221,8 +219,7 @@ fn test_in_memory_trie_node_consistency() {
                 // client 0 now loads in-memory tries
                 TrieConfig {
                     load_mem_tries_for_shards: vec![
-                        ShardUId { version: 1, shard_id: 1 },
-                        ShardUId { version: 1, shard_id: 3 },
+                        ShardUId { version: 0, shard_id: 0 },
                     ],
                     ..Default::default()
                 },

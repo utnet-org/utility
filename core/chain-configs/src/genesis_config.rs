@@ -139,6 +139,7 @@ pub struct GenesisConfig {
     #[serde(with = "dec_format")]
     pub total_supply: Balance,
     /// Expected number of blocks per year
+    #[default(31536000)]
     pub num_blocks_per_year: NumBlocks,
     /// Protocol treasury account
     #[default("unc".parse().unwrap())]
@@ -166,7 +167,6 @@ pub struct GenesisConfig {
     /// Max pledge percentage of the validators we will kick out.
     pub max_kickout_pledge_perc: u8,
     /// The lowest ratio s/s_total any block producer can have.
-    /// See <https://github.com/Utility/UEPs/pull/167> for details
     #[serde(default = "default_minimum_pledge_ratio")]
     #[default(Rational32::new(160, 1_000_000))]
     pub minimum_pledge_ratio: Rational32,

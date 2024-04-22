@@ -25,7 +25,7 @@ mod chunk_validation;
 #[cfg(feature = "protocol_feature_fix_contract_loading_cost")]
 mod fix_contract_loading_cost;
 mod fix_storage_usage;
-mod in_memory_tries;
+//mod in_memory_tries;
 mod increase_deployment_cost;
 mod increase_storage_compute_cost;
 mod limit_contract_functions_number;

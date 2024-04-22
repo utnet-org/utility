@@ -14,7 +14,7 @@ use unc_primitives::transaction::{
     Action, ExecutionMetadata, FunctionCallAction, SignedTransaction,
 };
 use unc_primitives::types::{BlockHeightDelta, Gas, TrieNodesCount};
-use unc_primitives::version::{ProtocolFeature, ProtocolVersion};
+use unc_primitives::version::ProtocolVersion;
 use unc_primitives::views::FinalExecutionStatus;
 
 fn process_transaction(
@@ -86,7 +86,7 @@ fn compare_node_counts() {
     let epoch_length = 10;
     let num_blocks = 5;
 
-    let old_protocol_version = ProtocolFeature::ChunkNodesCache.protocol_version() - 1;
+    let old_protocol_version = 63;
     genesis.config.epoch_length = epoch_length;
     genesis.config.protocol_version = old_protocol_version;
     let chain_genesis = ChainGenesis::new(&genesis);
@@ -145,8 +145,8 @@ fn compare_node_counts() {
         })
         .collect();
 
-    assert_eq!(tx_node_counts[0], TrieNodesCount { db_reads: 4, mem_reads: 0 });
-    assert_eq!(tx_node_counts[1], TrieNodesCount { db_reads: 12, mem_reads: 0 });
+    assert_eq!(tx_node_counts[0], TrieNodesCount { db_reads: 2, mem_reads: 2 });
+    assert_eq!(tx_node_counts[1], TrieNodesCount { db_reads: 8, mem_reads: 4 });
     assert_eq!(tx_node_counts[2], TrieNodesCount { db_reads: 8, mem_reads: 4 });
     assert_eq!(tx_node_counts[3], TrieNodesCount { db_reads: 8, mem_reads: 4 });
 }

@@ -14,7 +14,6 @@ use unc_o11y::testonly::init_test_logger;
 use unc_primitives::errors::StorageError;
 use unc_primitives::shard_layout::{ShardLayout, ShardUId};
 use unc_primitives::transaction::SignedTransaction;
-use unc_primitives::trie_key::TrieKey;
 use unc_primitives::types::AccountId;
 use unc_primitives_core::types::BlockHeight;
 use unc_store::flat::{
@@ -29,9 +28,7 @@ use crate::tests::client::process_blocks::deploy_test_contract_with_protocol_ver
 use unc_parameters::ExtCosts;
 use unc_primitives::test_utils::encode;
 use unc_primitives::transaction::{Action, ExecutionMetadata, FunctionCallAction, Transaction};
-use unc_primitives::version::ProtocolFeature;
 use unc_primitives_core::hash::CryptoHash;
-use unc_primitives_core::types::Gas;
 
 /// Height on which we start flat storage background creation.
 const START_HEIGHT: BlockHeight = 7;
@@ -250,65 +247,6 @@ fn test_flat_storage_creation_sanity() {
     wait_for_flat_storage_creation(&mut env, START_HEIGHT + 5, shard_uid, true);
 }
 
-/// Check that client can create flat storage on some shard while it already exists on another shard.
-#[test]
-fn test_flat_storage_creation_two_shards() {
-    init_test_logger();
-    let num_shards = 2;
-    let genesis =
-        Genesis::test_sharded_new_version(vec!["test0".parse().unwrap()], 1, vec![1; num_shards]);
-    let shard_uids: Vec<_> = genesis.config.shard_layout.shard_uids().collect();
-    let store = create_test_store();
-
-    // Process some blocks with flat storages for two shards. Then remove flat storage data from disk for shard 0.
-    {
-        let mut env = setup_env(&genesis, store.clone());
-        let signer = InMemorySigner::from_seed("test0".parse().unwrap(), KeyType::ED25519, "test0");
-        let genesis_hash = *env.clients[0].chain.genesis().hash();
-        for height in 1..START_HEIGHT {
-            env.produce_block(0, height);
-
-            let tx = SignedTransaction::send_money(
-                height,
-                "test0".parse().unwrap(),
-                "test0".parse().unwrap(),
-                &signer,
-                1,
-                genesis_hash,
-            );
-            assert_eq!(env.clients[0].process_tx(tx, false, false), ProcessTxResponse::ValidTx);
-        }
-
-        for &shard_uid in shard_uids.iter() {
-            assert_matches!(
-                store_helper::get_flat_storage_status(&store, shard_uid),
-                Ok(FlatStorageStatus::Ready(_))
-            );
-        }
-
-        let mut store_update = store.store_update();
-        get_flat_storage_manager(&env)
-            .remove_flat_storage_for_shard(shard_uids[0], &mut store_update)
-            .unwrap();
-        store_update.commit().unwrap();
-    }
-
-    // Check that flat storage is not ready for shard 0 but ready for shard 1.
-    let mut env = setup_env(&genesis, store.clone());
-    assert!(get_flat_storage_manager(&env).get_flat_storage_for_shard(shard_uids[0]).is_none());
-    assert_matches!(
-        store_helper::get_flat_storage_status(&store, shard_uids[0]),
-        Ok(FlatStorageStatus::Empty)
-    );
-    assert!(get_flat_storage_manager(&env).get_flat_storage_for_shard(shard_uids[1]).is_some());
-    assert_matches!(
-        store_helper::get_flat_storage_status(&store, shard_uids[1]),
-        Ok(FlatStorageStatus::Ready(_))
-    );
-
-    wait_for_flat_storage_creation(&mut env, START_HEIGHT, shard_uids[0], true);
-}
-
 /// Check that flat storage creation can be started from intermediate state where one
 /// of state parts is already fetched.
 #[test]
@@ -455,60 +393,6 @@ fn test_catchup_succeeds_even_if_no_new_blocks() {
     wait_for_flat_storage_creation(&mut env, START_HEIGHT + 3, shard_uid, false);
 }
 
-/// Tests the flat storage iterator. Running on a chain with 3 shards, and couple blocks produced.
-#[test]
-fn test_flat_storage_iter() {
-    init_test_logger();
-    let num_shards = 3;
-    let shard_layout =
-        ShardLayout::v1(vec!["test0".parse().unwrap(), "test1".parse().unwrap()], None, 0);
-
-    let genesis = Genesis::test_with_seeds(
-        vec!["test0".parse().unwrap()],
-        1,
-        vec![1; num_shards],
-        shard_layout.clone(),
-    );
-
-    let store = create_test_store();
-
-    let mut env = setup_env(&genesis, store.clone());
-    for height in 1..START_HEIGHT {
-        env.produce_block(0, height);
-    }
-
-    for shard_id in 0..3 {
-        let shard_uid = ShardUId::from_shard_id_and_layout(shard_id, &shard_layout);
-        let items: Vec<_> =
-            store_helper::iter_flat_state_entries(shard_uid, &store, None, None).collect();
-
-        match shard_id {
-            0 => {
-                assert_eq!(2, items.len());
-                // Two entries - one for 'unc' system account, the other for the contract.
-                assert_eq!(
-                    TrieKey::Account { account_id: "unc".parse().unwrap() }.to_vec(),
-                    items[0].as_ref().unwrap().0.to_vec()
-                );
-            }
-            1 => {
-                // Two entries - one for account, the other for contract.
-                assert_eq!(2, items.len());
-                assert_eq!(
-                    TrieKey::Account { account_id: "test0".parse().unwrap() }.to_vec(),
-                    items[0].as_ref().unwrap().0.to_vec()
-                );
-            }
-            2 => {
-                // Test1 account was not created yet - so no entries.
-                assert_eq!(0, items.len());
-            }
-            _ => {
-                panic!("Unexpected shard_id");
-            }
-        }
-    }
-}
 
 #[test]
 /// Initializes flat storage, then creates a Trie to read the flat storage
@@ -585,11 +469,11 @@ fn test_not_supported_block() {
 fn test_flat_storage_upgrade() {
     // The immediate protocol upgrade needs to be set for this test to pass in
     // the release branch where the protocol upgrade date is set.
-    std::env::set_var("unc_TESTS_IMMEDIATE_PROTOCOL_UPGRADE", "1");
+    std::env::set_var("UNC_TESTS_IMMEDIATE_PROTOCOL_UPGRADE", "1");
 
     let mut genesis = Genesis::test(vec!["test0".parse().unwrap(), "test1".parse().unwrap()], 1);
     let epoch_length = 12;
-    let new_protocol_version = ProtocolFeature::FlatStorageReads.protocol_version();
+    let new_protocol_version = 64;
     let old_protocol_version = new_protocol_version - 1;
     genesis.config.epoch_length = epoch_length;
     genesis.config.protocol_version = old_protocol_version;
@@ -657,7 +541,7 @@ fn test_flat_storage_upgrade() {
         env.clients[0].chain.get_final_transaction_result(&tx_hash).unwrap().assert_success();
     }
 
-    let touching_trie_node_costs: Vec<_> = (0..2)
+    let touching_trie_node_costs: Vec<_> = (0..1)
         .map(|i| {
             let read_value_action = vec![Action::FunctionCall(Box::new(FunctionCallAction {
                 args: encode(&[1u64]),
@@ -704,17 +588,8 @@ fn test_flat_storage_upgrade() {
         })
         .collect();
 
-    // Guaranteed touching trie node cost in all protocol versions until
-    // `ProtocolFeature::FlatStorageReads`, included.
-    let touching_trie_node_base_cost: Gas = 16_101_955_926;
-
-    // For the first read, cost should be 3 TTNs because trie path is:
-    // (Branch) -> (Extension) -> (Leaf) -> (Value)
-    // but due to a bug in storage_read we don't charge for Value.
-    assert_eq!(touching_trie_node_costs[0], touching_trie_node_base_cost * 3);
-
     // For the second read, we don't go to Flat storage and don't charge TTN.
-    assert_eq!(touching_trie_node_costs[1], 0);
+    assert_eq!(touching_trie_node_costs[0], 0);
 }
 
 

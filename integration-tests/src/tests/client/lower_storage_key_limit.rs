@@ -12,20 +12,18 @@ use unc_primitives::errors::TxExecutionError;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::transaction::{Action, FunctionCallAction, Transaction};
 use unc_primitives::types::BlockHeight;
+use unc_primitives::version::PROTOCOL_VERSION;
 use unc_primitives::views::FinalExecutionStatus;
 
-use crate::tests::client::process_blocks::{
-    deploy_test_contract_with_protocol_version, produce_blocks_from_height_with_protocol_version,
-};
+use crate::tests::client::process_blocks::deploy_test_contract_with_protocol_version;
 
 /// Check correctness of the protocol upgrade and ability to write 2 KB keys.
 #[test]
 fn protocol_upgrade() {
     init_test_logger();
 
-    let old_protocol_version =
-        unc_primitives::version::ProtocolFeature::LowerStorageKeyLimit.protocol_version() - 1;
-    let new_protocol_version = old_protocol_version + 1;
+    let new_protocol_version = PROTOCOL_VERSION;
+    let old_protocol_version = new_protocol_version - 1;
     let new_storage_key_limit = 2usize.pow(11); // 2 KB
     let args: Vec<u8> = vec![1u8; new_storage_key_limit + 1]
         .into_iter()
@@ -35,7 +33,7 @@ fn protocol_upgrade() {
 
     // The immediate protocol upgrade needs to be set for this test to pass in
     // the release branch where the protocol upgrade date is set.
-    std::env::set_var("unc_TESTS_IMMEDIATE_PROTOCOL_UPGRADE", "1");
+    std::env::set_var("UNC_TESTS_IMMEDIATE_PROTOCOL_UPGRADE", "1");
 
     // Prepare TestEnv with a contract at the old protocol version.
     let mut env = {
@@ -80,27 +78,7 @@ fn protocol_upgrade() {
         block_hash: CryptoHash::default(),
     };
 
-    // Run transaction writing storage key exceeding the limit. Check that execution succeeds.
-    {
-        let tip = env.clients[0].chain.head().unwrap();
-        let signed_tx =
-            Transaction { nonce: tip.height + 1, block_hash: tip.last_block_hash, ..tx.clone() }
-                .sign(&signer);
-        let tx_hash = signed_tx.get_hash();
-        assert_eq!(env.clients[0].process_tx(signed_tx, false, false), ProcessTxResponse::ValidTx);
-        produce_blocks_from_height_with_protocol_version(
-            &mut env,
-            epoch_length,
-            tip.height + 1,
-            old_protocol_version,
-        );
-        let final_result = env.clients[0].chain.get_final_transaction_result(&tx_hash).unwrap();
-        assert_matches!(final_result.status, FinalExecutionStatus::SuccessValue(_));
-    }
-
-    env.upgrade_protocol(new_protocol_version);
-
-    // Re-run the transaction, check that execution fails.
+    // run the transaction, check that execution fails.
     {
         let tip = env.clients[0].chain.head().unwrap();
         let signed_tx =

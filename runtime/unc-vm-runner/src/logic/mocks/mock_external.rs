@@ -225,7 +225,7 @@ impl External for MockedExternal {
         Ok(())
     }
 
-    fn append_action_stake(
+    fn append_action_pledge(
         &mut self,
         receipt_index: ReceiptIndex,
         stake: Balance,

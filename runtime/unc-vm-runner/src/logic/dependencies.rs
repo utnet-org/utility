@@ -357,7 +357,7 @@ pub trait External {
     /// # Panics
     ///
     /// Panics if the `receipt_index` does not refer to a known receipt.
-    fn append_action_stake(
+    fn append_action_pledge(
         &mut self,
         receipt_index: ReceiptIndex,
         stake: Balance,

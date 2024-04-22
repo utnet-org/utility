@@ -13,7 +13,6 @@ pub enum ProtocolFeature {
     ImplicitAccountCreation,
     RectifyInflation,
     /// Add `AccessKey` nonce range by setting nonce to `(block_height - 1) * 1e6`, see
-    /// <https://github.com/utnet-org/utility/issues/3779>.
     AccessKeyNonceRange,
     /// Don't process any receipts for shard when chunk is not present.
     /// Always use gas price computed in the previous block.
@@ -31,7 +30,6 @@ pub enum ProtocolFeature {
     /// Add `ripemd60` and `ecrecover` host function
     MathExtension,
     /// Restore receipts that were previously stuck because of
-    /// <https://github.com/utnet-org/utility/pull/4228>.
     RestoreReceiptsAfterFixApplyChunks,
     /// This feature switch our WASM engine implementation from wasmer 0.* to
     /// wasmer 2.*, bringing better performance and reliability.
@@ -51,13 +49,10 @@ pub enum ProtocolFeature {
     /// compiler-intrinsics based gas counter.
     LowerRegularOpCost2,
     /// Limit number of wasm functions in one contract. See
-    /// <https://github.com/utnet-org/utility/pull/4954> for more details.
     LimitContractFunctionsNumber,
     BlockHeaderV3,
     /// Changes how we select validators for epoch and how we select validators
-    /// within epoch.  See <https://github.com/Utility/UEPs/pull/167> for general
-    /// description, note that we would not introduce chunk-only validators with
-    /// this feature
+    /// within epoch.
     AliasValidatorSelectionAlgorithm,
     /// Make block producers produce chunks for the same block they would later produce to avoid
     /// network delays
@@ -86,29 +81,27 @@ pub enum ProtocolFeature {
     MaxKickoutPledge,
     /// Validate account id for function call access keys.
     AccountIdInFunctionCallPermission,
-    /// Zero Balance Account NEP 448: https://github.com/Utility/UEPs/pull/448
     ZeroBalanceAccount,
     /// Execute a set of actions on behalf of another account.
     ///
-    /// Meta Transaction NEP-366: https://github.com/Utility/UEPs/blob/master/neps/nep-0366.md
+    /// Meta Transaction
     DelegateAction,
     Ed25519Verify,
     /// Decouple compute and gas costs of operations to safely limit the compute time it takes to
     /// process the chunk.
-    ///
-    /// Compute Costs NEP-455: https://github.com/Utility/UEPs/blob/master/neps/nep-0455.md
+
     ComputeCosts,
     /// Enable flat storage for reads, reducing number of DB accesses from `2 * key.len()` in
     /// the worst case to 2.
     ///
-    /// Flat Storage NEP-399: https://github.com/Utility/UEPs/blob/master/neps/nep-0399.md
+    /// Flat Storage
     FlatStorageReads,
     /// Enables preparation V2. Note that this setting is not supported in production settings
-    /// without NearVmRuntime enabled alongside it, as the VM runner would be too slow.
+    /// without UncVmRuntime enabled alongside it, as the VM runner would be too slow.
     PreparationV2,
     /// Enables unc-Vm. Note that this setting is not at all supported without PreparationV2,
     /// as it hardcodes preparation v2 code into the generated assembly.
-    NearVmRuntime,
+    UncVmRuntime,
     BlockHeaderV4,
     /// Resharding V2. A new implementation for resharding and a new shard
     /// layout for the production networks.
@@ -127,7 +120,6 @@ pub enum ProtocolFeature {
     /// Increases the number of chunk producers.
     TestnetFewerBlockProducers,
     /// Enables chunk validation which is introduced with stateless validation.
-    /// NEP: https://github.com/Utility/UEPs/pull/509
     ChunkValidation,
     EthAccounts,
 }
@@ -171,7 +163,7 @@ impl ProtocolFeature {
             | ProtocolFeature::ZeroBalanceAccount
             | ProtocolFeature::DelegateAction => 59,
             ProtocolFeature::ComputeCosts | ProtocolFeature::FlatStorageReads => 61,
-            ProtocolFeature::PreparationV2 | ProtocolFeature::NearVmRuntime => 62,
+            ProtocolFeature::PreparationV2 | ProtocolFeature::UncVmRuntime => 62,
             ProtocolFeature::BlockHeaderV4 => 63,
             ProtocolFeature::RestrictTla
             | ProtocolFeature::TestnetFewerBlockProducers

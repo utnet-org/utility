@@ -267,7 +267,7 @@ impl<'a> External for RuntimeExt<'a> {
         self.receipt_manager.append_action_transfer(receipt_index, deposit)
     }
 
-    fn append_action_stake(
+    fn append_action_pledge(
         &mut self,
         receipt_index: ReceiptIndex,
         pledge: Balance,

@@ -18,7 +18,7 @@ fn test_uncvm_upgrade() {
     let mut capture = unc_o11y::testonly::TracingCapture::enable();
 
     let old_protocol_version =
-        unc_primitives::version::ProtocolFeature::NearVmRuntime.protocol_version() - 1;
+        unc_primitives::version::ProtocolFeature::UncVmRuntime.protocol_version() - 1;
     let new_protocol_version = old_protocol_version + 1;
 
     // Prepare TestEnv with a contract at the old protocol version.
