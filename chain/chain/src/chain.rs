@@ -1939,7 +1939,7 @@ impl Chain {
             // A heuristic to prevent block height to jump too fast towards BlockHeight::max and cause
             // overflow-related problems
             let block_height = header.height();
-            if block_height > head.height + self.epoch_length * 1000 {
+            if block_height > head.height + self.epoch_length * 100 {
                 return Err(Error::InvalidBlockHeight(block_height));
             }
         }

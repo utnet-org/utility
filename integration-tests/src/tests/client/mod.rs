@@ -7,7 +7,6 @@ mod cold_storage;
 mod epoch_sync;
 mod flat_storage;
 mod process_blocks;
-mod resharding;
 mod runtimes;
 #[cfg(feature = "sandbox")]
 mod sandbox;

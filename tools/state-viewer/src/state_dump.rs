@@ -358,7 +358,7 @@ mod test {
             KeyFile {
                 account_id: "test".parse().unwrap(),
                 public_key: PublicKey::empty(KeyType::ED25519),
-                secret_key: SecretKey::from_random(KeyType::ED25519),
+                private_key: SecretKey::from_random(KeyType::ED25519),
             },
             Some(Arc::new(InMemoryValidatorSigner::from_random(
                 "test".parse().unwrap(),
@@ -654,7 +654,7 @@ mod test {
         let head = env.clients[0].chain.head().unwrap();
         assert_eq!(
             env.clients[0].epoch_manager.get_shard_layout(&head.epoch_id).unwrap(),
-            ShardLayout::get_simple_nightshade_layout(),
+            ShardLayout::v0_single_shard(),
         );
         let last_block = env.clients[0].chain.get_block(&head.last_block_hash).unwrap();
 
@@ -676,7 +676,7 @@ mod test {
         );
         let new_genesis = new_unc_config.genesis;
 
-        assert_eq!(new_genesis.config.shard_layout, ShardLayout::get_simple_nightshade_layout());
+        assert_eq!(new_genesis.config.shard_layout, ShardLayout::v0_single_shard());
         assert_eq!(new_genesis.config.num_block_producer_seats_per_shard, vec![2; 4]);
         assert_eq!(new_genesis.config.avg_hidden_validator_seats_per_shard, vec![0; 4]);
     }
@@ -746,7 +746,7 @@ mod test {
             KeyFile {
                 account_id: "test".parse().unwrap(),
                 public_key: PublicKey::empty(KeyType::ED25519),
-                secret_key: SecretKey::from_random(KeyType::ED25519),
+                private_key: SecretKey::from_random(KeyType::ED25519),
             },
             Some(Arc::new(InMemoryValidatorSigner::from_random(
                 "test".parse().unwrap(),
@@ -816,7 +816,7 @@ mod test {
             KeyFile {
                 account_id: "test".parse().unwrap(),
                 public_key: PublicKey::empty(KeyType::ED25519),
-                secret_key: SecretKey::from_random(KeyType::ED25519),
+                private_key: SecretKey::from_random(KeyType::ED25519),
             },
             Some(Arc::new(InMemoryValidatorSigner::from_random(
                 "test".parse().unwrap(),
