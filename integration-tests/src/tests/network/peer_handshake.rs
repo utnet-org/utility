@@ -1,6 +1,7 @@
 use crate::tests::network::runner::*;
 use actix::Actor;
 use actix::System;
+use anyhow::Context;
 use futures::{future, FutureExt};
 use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use std::sync::Arc;
@@ -67,6 +68,12 @@ fn peer_handshake() {
 #[test]
 fn peers_connect_all() {
     init_test_logger();
+
+    const FD_LIMIT: u64 = 65535;
+    let (_, hard) = rlimit::Resource::NOFILE.get().context("rlimit::Resource::NOFILE::get()").unwrap();
+    rlimit::Resource::NOFILE.set(FD_LIMIT, FD_LIMIT).context(format!(
+        "couldn't set the file descriptor limit to {FD_LIMIT}, hard limit = {hard}"
+    )).unwrap();
 
     run_actix(async {
         let addr = tcp::ListenerAddr::reserve_for_test();

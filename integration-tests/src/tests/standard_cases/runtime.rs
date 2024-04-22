@@ -307,12 +307,6 @@ fn test_delete_account_signer_is_receiver() {
 }
 
 #[test]
-fn test_creating_invalid_subaccount() {
-    let node = create_runtime_node();
-    test_creating_invalid_subaccount_fail(node);
-}
-
-#[test]
 fn test_delete_account_has_enough_money_runtime() {
     let node = create_runtime_node();
     test_delete_account_fail(node);

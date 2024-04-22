@@ -445,6 +445,13 @@ impl Runner {
 /// start_test will block until test is complete.
 pub(crate) fn start_test(runner: Runner) -> anyhow::Result<()> {
     init_test_logger();
+    
+    const FD_LIMIT: u64 = 65535;
+    let (_, hard) = rlimit::Resource::NOFILE.get().context("rlimit::Resource::NOFILE::get()")?;
+    rlimit::Resource::NOFILE.set(FD_LIMIT, FD_LIMIT).context(format!(
+        "couldn't set the file descriptor limit to {FD_LIMIT}, hard limit = {hard}"
+    ))?;
+
     let r = tokio::runtime::Builder::new_current_thread().enable_all().build()?;
     r.block_on(async {
         let mut info = runner.build().await?;

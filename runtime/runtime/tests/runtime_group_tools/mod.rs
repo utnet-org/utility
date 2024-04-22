@@ -436,11 +436,11 @@ macro_rules! assert_receipts {
 
 /// A short form for refunds.
 /// ```
-/// assert_refund!(group, ref1 @ "unc_0");
+/// assert_refund!(group, ref1 @ "alice");
 /// ```
 /// expands into:
 /// ```
-/// assert_receipts!(group, "system" => ref1 @ "unc_0",
+/// assert_receipts!(group, "system" => ref1 @ "alice",
 ///                  ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
 ///                  actions,
 ///                  a0, Action::Transfer(TransferAction{..}), {}

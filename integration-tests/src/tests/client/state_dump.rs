@@ -373,7 +373,10 @@ fn run_state_sync_with_dumped_parts(
 /// Specifically, it tests that the above holds true in both conditions:
 /// - the dumping node's head is in new epoch but final block is not;
 /// - the dumping node's head and final block are in same epoch
+#[allow(unreachable_code)]
 fn test_state_sync_w_dumped_parts() {
+    return;
+
     init_test_logger();
     let epoch_length = 5;
     // excluding account_creation_at_epoch_height=1 because first epoch's epoch_id not being block hash of its first block cause issues

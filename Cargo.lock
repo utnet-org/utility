@@ -2964,6 +2964,7 @@ dependencies = [
  "parking_lot 0.12.1",
  "primitive-types",
  "rand 0.8.5",
+ "rlimit",
  "rlp",
  "serde",
  "serde_json",

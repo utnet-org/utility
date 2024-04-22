@@ -76,7 +76,7 @@ fn init_test_staking(
         }
         if i != 0 {
             config.network_config.peer_store.boot_nodes =
-                convert_boot_nodes(vec![("unc.0", *first_node)]);
+                convert_boot_nodes(vec![("alice", *first_node)]);
         }
         config.client_config.min_num_peers = num_node_seats as usize - 1;
         config
@@ -160,11 +160,11 @@ fn test_pledge_nodes() {
                         if validators
                             == vec![
                                 ValidatorInfo {
-                                    account_id: "unc.0".parse().unwrap(),
+                                    account_id: "alice".parse().unwrap(),
                                     is_slashed: false,
                                 },
                                 ValidatorInfo {
-                                    account_id: "unc.1".parse().unwrap(),
+                                    account_id: "bob".parse().unwrap(),
                                     is_slashed: false,
                                 },
                             ]
@@ -431,7 +431,7 @@ fn test_validator_join() {
                     let actor = actor.then(move |res| {
                         let expected = vec![
                             ValidatorInfo {
-                                account_id: "unc.0".parse().unwrap(),
+                                account_id: "alice".parse().unwrap(),
                                 is_slashed: false,
                             },
                             ValidatorInfo {

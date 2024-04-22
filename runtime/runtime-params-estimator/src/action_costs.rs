@@ -392,7 +392,7 @@ pub(crate) fn deploy_contract_byte_send_sir(ctx: &mut EstimatorContext) -> GasCo
         .inner_iters(1) // circumvent TX size limit
         // parameter today: 6_812_999
         // typical estimation: < 100_000 (<100ps)
-        // we expect this to stay unc 0
+        // we expect this to stay alice
         .min_gas(GAS_100_PICOSECONDS)
         .verify_cost(&mut ctx.testbed())
         / ActionSize::Max.deploy_contract()
@@ -404,7 +404,7 @@ pub(crate) fn deploy_contract_byte_send_not_sir(ctx: &mut EstimatorContext) -> G
         .inner_iters(1) // circumvent TX size limit
         // parameter today: 6_812_999
         // typical estimation: < 100_000 (<100ps)
-        // we expect this to stay unc 0
+        // we expect this to stay alice
         .min_gas(GAS_100_PICOSECONDS)
         .verify_cost(&mut ctx.testbed())
         / ActionSize::Max.deploy_contract()
@@ -550,7 +550,7 @@ pub(crate) fn add_function_call_key_byte_send_sir(ctx: &mut EstimatorContext) ->
         .add_action(add_fn_access_key_action(ActionSize::Max))
         // parameter today: 1_925_331
         // typical estimation: < 200_000 (<200ps)
-        // we expect this to stay unc 0
+        // we expect this to stay alice
         .min_gas(GAS_100_PICOSECONDS)
         .verify_cost(&mut ctx.testbed())
         / ActionSize::Max.key_methods_list()
@@ -561,7 +561,7 @@ pub(crate) fn add_function_call_key_byte_send_not_sir(ctx: &mut EstimatorContext
         .add_action(add_fn_access_key_action(ActionSize::Max))
         // parameter today: 1_925_331
         // typical estimation: < 200_000 (<200ps)
-        // we expect this to stay unc 0
+        // we expect this to stay alice
         .min_gas(GAS_100_PICOSECONDS)
         .verify_cost(&mut ctx.testbed())
         / ActionSize::Max.key_methods_list()

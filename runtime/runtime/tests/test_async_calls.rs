@@ -46,12 +46,12 @@ fn test_simple_func_call() {
 
     use unc_primitives::transaction::*;
     assert_receipts!(group, signed_transaction => [r0]);
-    assert_receipts!(group, "unc_0" => r0 @ "unc_1",
+    assert_receipts!(group, "alice" => r0 @ "bob",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(_function_call_action), {}
                      => [ref1] );
-    assert_refund!(group, ref1 @ "unc_0");
+    assert_refund!(group, ref1 @ "alice");
 }
 
 // single promise, no callback (A->B)
@@ -92,7 +92,7 @@ fn test_single_promise_no_callback() {
 
     use unc_primitives::transaction::*;
     assert_receipts!(group, signed_transaction => [r0]);
-    assert_receipts!(group, "unc_0" => r0 @ "unc_1",
+    assert_receipts!(group, "alice" => r0 @ "bob",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -100,7 +100,7 @@ fn test_single_promise_no_callback() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [r1, ref0] );
-    assert_receipts!(group, "unc_1" => r1 @ "unc_2",
+    assert_receipts!(group, "bob" => r1 @ "unc_2",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -108,8 +108,8 @@ fn test_single_promise_no_callback() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [ref1]);
-    assert_refund!(group, ref0 @ "unc_0");
-    assert_refund!(group, ref1 @ "unc_0");
+    assert_refund!(group, ref0 @ "alice");
+    assert_refund!(group, ref1 @ "alice");
 }
 
 // single promise with callback (A->B=>C)
@@ -158,7 +158,7 @@ fn test_single_promise_with_callback() {
 
     use unc_primitives::transaction::*;
     assert_receipts!(group, signed_transaction => [r0]);
-    assert_receipts!(group, "unc_0" => r0 @ "unc_1",
+    assert_receipts!(group, "alice" => r0 @ "bob",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -167,7 +167,7 @@ fn test_single_promise_with_callback() {
                      }
                      => [r1, r2, ref0] );
     let data_id;
-    assert_receipts!(group, "unc_1" => r1 @ "unc_2",
+    assert_receipts!(group, "bob" => r1 @ "unc_2",
                      ReceiptEnum::Action(ActionReceipt{actions, output_data_receivers, ..}), {
                         assert_eq!(output_data_receivers.len(), 1);
                         data_id = output_data_receivers[0].data_id;
@@ -178,7 +178,7 @@ fn test_single_promise_with_callback() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [ref1]);
-    assert_receipts!(group, "unc_1" => r2 @ "unc_3",
+    assert_receipts!(group, "bob" => r2 @ "unc_3",
                      ReceiptEnum::Action(ActionReceipt{actions, input_data_ids, ..}), {
                         assert_eq!(input_data_ids.len(), 1);
                         assert_eq!(data_id, input_data_ids[0].clone());
@@ -190,9 +190,9 @@ fn test_single_promise_with_callback() {
                      }
                      => [ref2]);
 
-    assert_refund!(group, ref0 @ "unc_0");
-    assert_refund!(group, ref1 @ "unc_0");
-    assert_refund!(group, ref2 @ "unc_0");
+    assert_refund!(group, ref0 @ "alice");
+    assert_refund!(group, ref1 @ "alice");
+    assert_refund!(group, ref2 @ "alice");
 }
 
 // two promises, no callbacks (A->B->C)
@@ -242,7 +242,7 @@ fn test_two_promises_no_callbacks() {
 
     use unc_primitives::transaction::*;
     assert_receipts!(group, signed_transaction => [r0]);
-    assert_receipts!(group, "unc_0" => r0 @ "unc_1",
+    assert_receipts!(group, "alice" => r0 @ "bob",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -250,7 +250,7 @@ fn test_two_promises_no_callbacks() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [r1, ref0] );
-    assert_receipts!(group, "unc_1" => r1 @ "unc_2",
+    assert_receipts!(group, "bob" => r1 @ "unc_2",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), { },
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -267,9 +267,9 @@ fn test_two_promises_no_callbacks() {
                      }
                      => [ref2]);
 
-    assert_refund!(group, ref0 @ "unc_0");
-    assert_refund!(group, ref1 @ "unc_0");
-    assert_refund!(group, ref2 @ "unc_0");
+    assert_refund!(group, ref0 @ "alice");
+    assert_refund!(group, ref1 @ "alice");
+    assert_refund!(group, ref2 @ "alice");
 }
 
 // two promises, with two callbacks (A->B->C=>D=>E) where call to E is initialized by completion of D.
@@ -336,7 +336,7 @@ fn test_two_promises_with_two_callbacks() {
 
     use unc_primitives::transaction::*;
     assert_receipts!(group, signed_transaction => [r0]);
-    assert_receipts!(group, "unc_0" => r0 @ "unc_1",
+    assert_receipts!(group, "alice" => r0 @ "bob",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -344,7 +344,7 @@ fn test_two_promises_with_two_callbacks() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [r1, cb1, ref0] );
-    assert_receipts!(group, "unc_1" => r1 @ "unc_2",
+    assert_receipts!(group, "bob" => r1 @ "unc_2",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), { },
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -368,7 +368,7 @@ fn test_two_promises_with_two_callbacks() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [ref3]);
-    assert_receipts!(group, "unc_1" => cb1 @ "unc_5",
+    assert_receipts!(group, "bob" => cb1 @ "unc_5",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), { },
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -377,11 +377,11 @@ fn test_two_promises_with_two_callbacks() {
                      }
                      => [ref4]);
 
-    assert_refund!(group, ref0 @ "unc_0");
-    assert_refund!(group, ref1 @ "unc_0");
-    assert_refund!(group, ref2 @ "unc_0");
-    assert_refund!(group, ref3 @ "unc_0");
-    assert_refund!(group, ref4 @ "unc_0");
+    assert_refund!(group, ref0 @ "alice");
+    assert_refund!(group, ref1 @ "alice");
+    assert_refund!(group, ref2 @ "alice");
+    assert_refund!(group, ref3 @ "alice");
+    assert_refund!(group, ref4 @ "alice");
 }
 
 // Batch actions tests
@@ -427,7 +427,7 @@ fn test_single_promise_no_callback_batch() {
 
     use unc_primitives::transaction::*;
     assert_receipts!(group, signed_transaction => [r0]);
-    assert_receipts!(group, "unc_0" => r0 @ "unc_1",
+    assert_receipts!(group, "alice" => r0 @ "bob",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -435,7 +435,7 @@ fn test_single_promise_no_callback_batch() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [r1, ref0] );
-    assert_receipts!(group, "unc_1" => r1 @ "unc_2",
+    assert_receipts!(group, "bob" => r1 @ "unc_2",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -443,8 +443,8 @@ fn test_single_promise_no_callback_batch() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [ref1]);
-    assert_refund!(group, ref0 @ "unc_0");
-    assert_refund!(group, ref1 @ "unc_0");
+    assert_refund!(group, ref0 @ "alice");
+    assert_refund!(group, ref1 @ "alice");
 }
 
 // single promise with callback (A->B=>C) with batch actions
@@ -499,7 +499,7 @@ fn test_single_promise_with_callback_batch() {
 
     use unc_primitives::transaction::*;
     assert_receipts!(group, signed_transaction => [r0]);
-    assert_receipts!(group, "unc_0" => r0 @ "unc_1",
+    assert_receipts!(group, "alice" => r0 @ "bob",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -508,7 +508,7 @@ fn test_single_promise_with_callback_batch() {
                      }
                      => [r1, r2, ref0] );
     let data_id;
-    assert_receipts!(group, "unc_1" => r1 @ "unc_2",
+    assert_receipts!(group, "bob" => r1 @ "unc_2",
                      ReceiptEnum::Action(ActionReceipt{actions, output_data_receivers, ..}), {
                         assert_eq!(output_data_receivers.len(), 1);
                         data_id = output_data_receivers[0].data_id;
@@ -519,7 +519,7 @@ fn test_single_promise_with_callback_batch() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [ref1]);
-    assert_receipts!(group, "unc_1" => r2 @ "unc_3",
+    assert_receipts!(group, "bob" => r2 @ "unc_3",
                      ReceiptEnum::Action(ActionReceipt{actions, input_data_ids, ..}), {
                         assert_eq!(input_data_ids.len(), 1);
                         assert_eq!(data_id, input_data_ids[0].clone());
@@ -531,9 +531,9 @@ fn test_single_promise_with_callback_batch() {
                      }
                      => [ref2]);
 
-    assert_refund!(group, ref0 @ "unc_0");
-    assert_refund!(group, ref1 @ "unc_0");
-    assert_refund!(group, ref2 @ "unc_0");
+    assert_refund!(group, ref0 @ "alice");
+    assert_refund!(group, ref1 @ "alice");
+    assert_refund!(group, ref2 @ "alice");
 }
 
 #[test]
@@ -573,7 +573,7 @@ fn test_simple_transfer() {
 
     use unc_primitives::transaction::*;
     assert_receipts!(group, signed_transaction => [r0]);
-    assert_receipts!(group, "unc_0" => r0 @ "unc_1",
+    assert_receipts!(group, "alice" => r0 @ "bob",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -581,7 +581,7 @@ fn test_simple_transfer() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [r1, ref0] );
-    assert_receipts!(group, "unc_1" => r1 @ "unc_2",
+    assert_receipts!(group, "bob" => r1 @ "unc_2",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::Transfer(TransferAction{deposit}), {
@@ -589,9 +589,9 @@ fn test_simple_transfer() {
                      }
                      => [ref1] );
 
-    assert_refund!(group, ref0 @ "unc_0");
+    assert_refund!(group, ref0 @ "alice");
     // For gas price difference
-    assert_refund!(group, ref1 @ "unc_0");
+    assert_refund!(group, ref1 @ "alice");
 }
 
 #[test]
@@ -640,7 +640,7 @@ fn test_create_account_with_transfer_and_full_key() {
 
     use unc_primitives::transaction::*;
     assert_receipts!(group, signed_transaction => [r0]);
-    assert_receipts!(group, "unc_0" => r0 @ "unc_1",
+    assert_receipts!(group, "alice" => r0 @ "bob",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -648,7 +648,7 @@ fn test_create_account_with_transfer_and_full_key() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [r1, ref0] );
-    assert_receipts!(group, "unc_1" => r1 @ "unc_2",
+    assert_receipts!(group, "bob" => r1 @ "unc_2",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::CreateAccount(CreateAccountAction{}), {},
@@ -662,9 +662,9 @@ fn test_create_account_with_transfer_and_full_key() {
                      }
                      => [ref1] );
 
-    assert_refund!(group, ref0 @ "unc_0");
+    assert_refund!(group, ref0 @ "alice");
     // For gas price difference
-    assert_refund!(group, ref1 @ "unc_0");
+    assert_refund!(group, ref1 @ "alice");
 }
 
 #[test]
@@ -690,7 +690,7 @@ fn test_account_factory() {
             "public_key": to_base64(&borsh::to_vec(&signer_new_account.public_key).unwrap()),
             "nonce": 0,
             "allowance": (TESTING_INIT_BALANCE / 2).to_string(),
-            "receiver_id": "unc_1",
+            "receiver_id": "bob",
             "method_names": "call_promise,hello"
         }, "id": 0 },
         {"action_deploy_contract": {
@@ -702,7 +702,7 @@ fn test_account_factory() {
             "method_name": "call_promise",
             "arguments": [
                 {"create": {
-                "account_id": "unc_0",
+                "account_id": "alice",
                 "method_name": "call_promise",
                 "arguments": [],
                 "amount": "0",
@@ -719,7 +719,7 @@ fn test_account_factory() {
         "method_name": "call_promise",
         "arguments": [
             {"create": {
-            "account_id": "unc_1",
+            "account_id": "bob",
             "method_name": "call_promise",
             "arguments": [],
             "amount": "0",
@@ -752,7 +752,7 @@ fn test_account_factory() {
 
     use unc_primitives::transaction::*;
     assert_receipts!(group, signed_transaction => [r0]);
-    assert_receipts!(group, "unc_0" => r0 @ "unc_1",
+    assert_receipts!(group, "alice" => r0 @ "bob",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -762,7 +762,7 @@ fn test_account_factory() {
                      => [r1, r2, ref0] );
 
     let data_id;
-    assert_receipts!(group, "unc_1" => r1 @ "unc_2",
+    assert_receipts!(group, "bob" => r1 @ "unc_2",
                      ReceiptEnum::Action(ActionReceipt{actions, output_data_receivers, ..}), {
                         assert_eq!(output_data_receivers.len(), 1);
                         data_id = output_data_receivers[0].data_id;
@@ -778,7 +778,7 @@ fn test_account_factory() {
                         assert_eq!(add_key_action.access_key.nonce, 0);
                         assert_eq!(add_key_action.access_key.permission, AccessKeyPermission::FunctionCall(FunctionCallPermission {
                             allowance: Some(TESTING_INIT_BALANCE / 2),
-                            receiver_id: "unc_1".parse().unwrap(),
+                            receiver_id: "bob".parse().unwrap(),
                             method_names: vec!["call_promise".to_string(), "hello".to_string()],
                         }));
                      },
@@ -790,7 +790,7 @@ fn test_account_factory() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [r3, ref1] );
-    assert_receipts!(group, "unc_1" => r2 @ "unc_2",
+    assert_receipts!(group, "bob" => r2 @ "unc_2",
                      ReceiptEnum::Action(ActionReceipt{actions, input_data_ids, ..}), {
                         assert_eq!(input_data_ids, &[data_id]);
                      },
@@ -800,7 +800,7 @@ fn test_account_factory() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [r4, ref2] );
-    assert_receipts!(group, "unc_2" => r3 @ "unc_0",
+    assert_receipts!(group, "unc_2" => r3 @ "alice",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -808,7 +808,7 @@ fn test_account_factory() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [ref3] );
-    assert_receipts!(group, "unc_2" => r4 @ "unc_1",
+    assert_receipts!(group, "unc_2" => r4 @ "bob",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -817,11 +817,11 @@ fn test_account_factory() {
                      }
                      => [ref4] );
 
-    assert_refund!(group, ref0 @ "unc_0");
-    assert_refund!(group, ref1 @ "unc_0");
-    assert_refund!(group, ref2 @ "unc_0");
-    assert_refund!(group, ref3 @ "unc_0");
-    assert_refund!(group, ref4 @ "unc_0");
+    assert_refund!(group, ref0 @ "alice");
+    assert_refund!(group, ref1 @ "alice");
+    assert_refund!(group, ref2 @ "alice");
+    assert_refund!(group, ref3 @ "alice");
+    assert_refund!(group, ref4 @ "alice");
 }
 
 #[test]
@@ -856,7 +856,7 @@ fn test_create_account_add_key_call_delete_key_delete_account() {
             "method_name": "call_promise",
             "arguments": [
                 {"create": {
-                "account_id": "unc_0",
+                "account_id": "alice",
                 "method_name": "call_promise",
                 "arguments": [],
                 "amount": "0",
@@ -898,7 +898,7 @@ fn test_create_account_add_key_call_delete_key_delete_account() {
 
     use unc_primitives::transaction::*;
     assert_receipts!(group, signed_transaction => [r0]);
-    assert_receipts!(group, "unc_0" => r0 @ "unc_1",
+    assert_receipts!(group, "alice" => r0 @ "bob",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -906,7 +906,7 @@ fn test_create_account_add_key_call_delete_key_delete_account() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [r1, ref0] );
-    assert_receipts!(group, "unc_1" => r1 @ "unc_3",
+    assert_receipts!(group, "bob" => r1 @ "unc_3",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::CreateAccount(CreateAccountAction{}), {},
@@ -933,7 +933,7 @@ fn test_create_account_add_key_call_delete_key_delete_account() {
                      }
                      => [r2, r3, ref1] );
 
-    assert_receipts!(group, "unc_3" => r2 @ "unc_0",
+    assert_receipts!(group, "unc_3" => r2 @ "alice",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -943,9 +943,9 @@ fn test_create_account_add_key_call_delete_key_delete_account() {
                      => [ref2] );
     assert_refund!(group, r3 @ "unc_2");
 
-    assert_refund!(group, ref0 @ "unc_0");
-    assert_refund!(group, ref1 @ "unc_0");
-    assert_refund!(group, ref2 @ "unc_0");
+    assert_refund!(group, ref0 @ "alice");
+    assert_refund!(group, ref1 @ "alice");
+    assert_refund!(group, ref2 @ "alice");
 }
 
 #[test]
@@ -954,7 +954,7 @@ fn test_transfer_64len_hex() {
     let account_id = AccountId::try_from(hex::encode(pk.public_key.unwrap_as_ed25519().0)).unwrap();
 
     let group = RuntimeGroup::new_with_account_ids(
-        vec!["unc_0".parse().unwrap(), "unc_1".parse().unwrap(), account_id.clone()],
+        vec!["alice".parse().unwrap(), "bob".parse().unwrap(), account_id.clone()],
         2,
         unc_test_contracts::rs_contract(),
     );
@@ -992,7 +992,7 @@ fn test_transfer_64len_hex() {
 
     use unc_primitives::transaction::*;
     assert_receipts!(group, signed_transaction => [r0]);
-    assert_receipts!(group, "unc_0" => r0 @ "unc_1",
+    assert_receipts!(group, "alice" => r0 @ "bob",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -1000,15 +1000,15 @@ fn test_transfer_64len_hex() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [r1, ref0] );
-    assert_receipts!(group, "unc_1" => r1 @ account_id.as_str(),
+    assert_receipts!(group, "bob" => r1 @ account_id.as_str(),
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::Transfer(TransferAction{deposit}), {
                         assert_eq!(*deposit, TESTING_INIT_BALANCE / 2);
                      }
                      => [ref1] );
-    assert_refund!(group, ref0 @ "unc_0");
-    assert_refund!(group, ref1 @ "unc_0");
+    assert_refund!(group, ref0 @ "alice");
+    assert_refund!(group, ref1 @ "alice");
 }
 
 #[test]
@@ -1017,7 +1017,7 @@ fn test_create_transfer_64len_hex_fail() {
     let account_id = AccountId::try_from(hex::encode(pk.public_key.unwrap_as_ed25519().0)).unwrap();
 
     let group = RuntimeGroup::new_with_account_ids(
-        vec!["unc_0".parse().unwrap(), "unc_1".parse().unwrap(), account_id.clone()],
+        vec!["alice".parse().unwrap(), "bob".parse().unwrap(), account_id.clone()],
         2,
         unc_test_contracts::rs_contract(),
     );
@@ -1058,7 +1058,7 @@ fn test_create_transfer_64len_hex_fail() {
 
     use unc_primitives::transaction::*;
     assert_receipts!(group, signed_transaction => [r0]);
-    assert_receipts!(group, "unc_0" => r0 @ "unc_1",
+    assert_receipts!(group, "alice" => r0 @ "bob",
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::FunctionCall(function_call_action), {
@@ -1066,7 +1066,7 @@ fn test_create_transfer_64len_hex_fail() {
                         assert_eq!(function_call_action.deposit, 0);
                      }
                      => [r1, ref0] );
-    assert_receipts!(group, "unc_1" => r1 @ account_id.as_str(),
+    assert_receipts!(group, "bob" => r1 @ account_id.as_str(),
                      ReceiptEnum::Action(ActionReceipt{actions, ..}), {},
                      actions,
                      a0, Action::CreateAccount(CreateAccountAction{}), {},
@@ -1074,7 +1074,7 @@ fn test_create_transfer_64len_hex_fail() {
                         assert_eq!(*deposit, TESTING_INIT_BALANCE / 2);
                      }
                      => [ref1, ref2] );
-    assert_refund!(group, ref0 @ "unc_0");
-    assert_refund!(group, ref1 @ "unc_1");
-    assert_refund!(group, ref2 @ "unc_0");
+    assert_refund!(group, ref0 @ "alice");
+    assert_refund!(group, ref1 @ "bob");
+    assert_refund!(group, ref2 @ "alice");
 }

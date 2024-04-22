@@ -32,7 +32,6 @@ fn test_get_validator_info_rpc() {
     init_integration_logger();
 
     let cluster = NodeCluster::default()
-        .set_num_shards(1)
         .set_num_validator_seats(1)
         .set_num_lightclients(0)
         .set_epoch_length(10)
@@ -60,7 +59,7 @@ fn test_get_validator_info_rpc() {
                         assert!(invalid_res.is_err());
                         let res = client.validators(None).await.unwrap();
                         assert_eq!(res.current_validators.len(), 1);
-                        assert!(res.current_validators.iter().any(|r| r.account_id == "unc.0"));
+                        assert!(res.current_validators.iter().any(|r| r.account_id == "alice"));
                         System::current().stop();
                     }
                 });
@@ -96,7 +95,6 @@ fn test_get_execution_outcome(is_tx_successful: bool) {
     init_integration_logger();
 
     let cluster = NodeCluster::default()
-        .set_num_shards(1)
         .set_num_validator_seats(1)
         .set_num_lightclients(1)
         .set_epoch_length(1000)
@@ -106,12 +104,12 @@ fn test_get_execution_outcome(is_tx_successful: bool) {
         let view_client = clients[0].1.clone();
 
         let genesis_hash = *genesis_block(&genesis).hash();
-        let signer = InMemorySigner::from_seed("unc.0".parse().unwrap(), KeyType::ED25519, "unc.0");
+        let signer = InMemorySigner::from_seed("alice".parse().unwrap(), KeyType::ED25519, "alice");
         let transaction = if is_tx_successful {
             SignedTransaction::send_money(
                 1,
-                "unc.0".parse().unwrap(),
-                "unc.1".parse().unwrap(),
+                "alice".parse().unwrap(),
+                "bob".parse().unwrap(),
                 &signer,
                 10000,
                 genesis_hash,
@@ -119,8 +117,8 @@ fn test_get_execution_outcome(is_tx_successful: bool) {
         } else {
             SignedTransaction::create_account(
                 1,
-                "unc.0".parse().unwrap(),
-                "unc.1".parse().unwrap(),
+                "alice".parse().unwrap(),
+                "bob".parse().unwrap(),
                 10,
                 signer.public_key.clone(),
                 &signer,
@@ -143,14 +141,14 @@ fn test_get_execution_outcome(is_tx_successful: bool) {
                             let mut futures = vec![];
                             for id in vec![TransactionOrReceiptId::Transaction {
                                 transaction_hash: final_transaction_outcome.transaction_outcome.id,
-                                sender_id: "unc.0".parse().unwrap(),
+                                sender_id: "alice".parse().unwrap(),
                             }]
                             .into_iter()
                             .chain(
                                 final_transaction_outcome.receipts_outcome.into_iter().map(|r| {
                                     TransactionOrReceiptId::Receipt {
                                         receipt_id: r.id,
-                                        receiver_id: "unc.1".parse().unwrap(),
+                                        receiver_id: "bob".parse().unwrap(),
                                     }
                                 }),
                             ) {
@@ -224,7 +222,6 @@ fn test_protocol_config_rpc() {
     init_integration_logger();
 
     let cluster = NodeCluster::default()
-        .set_num_shards(1)
         .set_num_validator_seats(1)
         .set_num_lightclients(0)
         .set_epoch_length(10)
@@ -266,7 +263,6 @@ fn test_query_rpc_account_view_must_succeed() {
     init_integration_logger();
 
     let cluster = NodeCluster::default()
-        .set_num_shards(1)
         .set_num_validator_seats(1)
         .set_num_lightclients(0)
         .set_epoch_length(10)
@@ -278,7 +274,7 @@ fn test_query_rpc_account_view_must_succeed() {
             .query(unc_jsonrpc_primitives::types::query::RpcQueryRequest {
                 block_reference: unc_primitives::types::BlockReference::Finality(Finality::Final),
                 request: unc_primitives::views::QueryRequest::ViewAccount {
-                    account_id: "unc.0".parse().unwrap(),
+                    account_id: "alice".parse().unwrap(),
                 },
             })
             .await
@@ -305,7 +301,6 @@ fn test_query_rpc_account_view_account_doesnt_exist_must_return_error() {
     init_integration_logger();
 
     let cluster = NodeCluster::default()
-        .set_num_shards(1)
         .set_num_validator_seats(1)
         .set_num_lightclients(0)
         .set_epoch_length(10)
@@ -355,7 +350,6 @@ fn test_tx_not_enough_balance_must_return_error() {
     init_integration_logger();
 
     let cluster = NodeCluster::default()
-        .set_num_shards(1)
         .set_num_validator_seats(2)
         .set_num_lightclients(0)
         .set_epoch_length(10)
@@ -365,11 +359,11 @@ fn test_tx_not_enough_balance_must_return_error() {
         let view_client = clients[0].1.clone();
 
         let genesis_hash = *genesis_block(&genesis).hash();
-        let signer = InMemorySigner::from_seed("unc.0".parse().unwrap(), KeyType::ED25519, "unc.0");
+        let signer = InMemorySigner::from_seed("alice".parse().unwrap(), KeyType::ED25519, "alice");
         let transaction = SignedTransaction::send_money(
             1,
-            "unc.0".parse().unwrap(),
-            "unc.1".parse().unwrap(),
+            "alice".parse().unwrap(),
+            "bob".parse().unwrap(),
             &signer,
             1100000000000000000000000000000000,
             genesis_hash,
@@ -417,7 +411,6 @@ fn test_check_unknown_tx_must_return_error() {
     init_integration_logger();
 
     let cluster = NodeCluster::default()
-        .set_num_shards(1)
         .set_num_nodes(1)
         .set_num_validator_seats(1)
         .set_num_lightclients(0)
@@ -428,11 +421,11 @@ fn test_check_unknown_tx_must_return_error() {
         let view_client = clients[0].1.clone();
 
         let genesis_hash = *genesis_block(&genesis).hash();
-        let signer = InMemorySigner::from_seed("unc.0".parse().unwrap(), KeyType::ED25519, "unc.0");
+        let signer = InMemorySigner::from_seed("alice".parse().unwrap(), KeyType::ED25519, "alice");
         let transaction = SignedTransaction::send_money(
             1,
-            "unc.0".parse().unwrap(),
-            "unc.0".parse().unwrap(),
+            "alice".parse().unwrap(),
+            "alice".parse().unwrap(),
             &signer,
             10000,
             genesis_hash,
@@ -477,7 +470,6 @@ fn test_tx_status_on_lightclient_must_return_does_not_track_shard() {
     init_integration_logger();
 
     let cluster = NodeCluster::default()
-        .set_num_shards(1)
         .set_num_validator_seats(1)
         .set_num_lightclients(1)
         .set_epoch_length(10)
@@ -487,11 +479,11 @@ fn test_tx_status_on_lightclient_must_return_does_not_track_shard() {
         let view_client = clients[0].1.clone();
 
         let genesis_hash = *genesis_block(&genesis).hash();
-        let signer = InMemorySigner::from_seed("unc.1".parse().unwrap(), KeyType::ED25519, "unc.1");
+        let signer = InMemorySigner::from_seed("bob".parse().unwrap(), KeyType::ED25519, "bob");
         let transaction = SignedTransaction::send_money(
             1,
-            "unc.1".parse().unwrap(),
-            "unc.1".parse().unwrap(),
+            "bob".parse().unwrap(),
+            "bob".parse().unwrap(),
             &signer,
             10000,
             genesis_hash,
@@ -534,7 +526,6 @@ fn test_validators_by_epoch_id_current_epoch_not_fails() {
     init_integration_logger();
 
     let cluster = NodeCluster::default()
-        .set_num_shards(1)
         .set_num_validator_seats(1)
         .set_num_lightclients(0)
         .set_epoch_length(10)

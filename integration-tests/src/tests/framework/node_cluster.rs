@@ -9,11 +9,10 @@ use unc_client::{ClientActor, ViewClientActor};
 use unc_network::tcp;
 use unc_network::test_utils::convert_boot_nodes;
 use unc_o11y::testonly::init_integration_logger;
-use unc_primitives::types::{BlockHeight, BlockHeightDelta, NumSeats, NumShards};
+use unc_primitives::types::{BlockHeight, BlockHeightDelta, NumSeats};
 
 fn start_nodes(
     temp_dir: &std::path::Path,
-    num_shards: NumShards,
     num_nodes: NumSeats,
     num_validator_seats: NumSeats,
     _num_lightclient: NumSeats,
@@ -22,11 +21,11 @@ fn start_nodes(
 ) -> (Genesis, Vec<String>, Vec<(Addr<ClientActor>, Addr<ViewClientActor>, Vec<ArbiterHandle>)>) {
     init_integration_logger();
 
-    let seeds = (0..num_nodes).map(|i| format!("unc.{}", i)).collect::<Vec<_>>();
+    let seeds = (0..num_nodes).map(|i| format!("unc{}", i)).collect::<Vec<_>>();
     let mut genesis = Genesis::test_sharded_new_version(
         seeds.iter().map(|s| s.parse().unwrap()).collect(),
         num_validator_seats,
-        (0..num_shards).map(|_| num_validator_seats).collect(),
+        (0..1).map(|_| num_validator_seats).collect(),
     );
     genesis.config.epoch_length = epoch_length;
     genesis.config.genesis_height = genesis_height;
@@ -45,7 +44,7 @@ fn start_nodes(
         unc_config.client_config.min_num_peers = (num_nodes as usize) - 1;
         if i > 0 {
             unc_config.network_config.peer_store.boot_nodes =
-                convert_boot_nodes(vec![("unc.0", *first_node)]);
+                convert_boot_nodes(vec![("alice", *first_node)]);
         }
         unc_configs.push(unc_config);
     }
@@ -63,7 +62,6 @@ fn start_nodes(
 
 #[derive(Debug, Default)]
 pub struct NodeCluster {
-    num_shards: Option<NumShards>,
     num_nodes: Option<NumSeats>,
     num_validator_seats: Option<NumSeats>,
     num_lightclient: Option<NumSeats>,
@@ -72,11 +70,6 @@ pub struct NodeCluster {
 }
 
 impl NodeCluster {
-    pub fn set_num_shards(mut self, n: NumShards) -> Self {
-        self.num_shards = Some(n);
-        self
-    }
-
     pub fn set_num_nodes(mut self, n: NumSeats) -> Self {
         self.num_nodes = Some(n);
         self
@@ -115,8 +108,7 @@ impl NodeCluster {
             )>,
         ) -> R,
     {
-        let (num_shards, num_validator_seats, num_lightclient, epoch_length, genesis_height) = (
-            self.num_shards.expect("cluster config: [num_shards] undefined"),
+        let (num_validator_seats, num_lightclient, epoch_length, genesis_height) = (
             self.num_validator_seats.expect("cluster config: [num_validator_seats] undefined"),
             self.num_lightclient.expect("cluster config: [num_lightclient] undefined"),
             self.epoch_length.expect("cluster config: [epoch_length] undefined"),
@@ -133,7 +125,6 @@ impl NodeCluster {
             run_actix(async {
                 let (genesis, rpc_addrs, clients) = start_nodes(
                     temp_dir.path(),
-                    num_shards,
                     num_nodes,
                     num_validator_seats,
                     num_lightclient,

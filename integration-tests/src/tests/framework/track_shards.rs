@@ -17,7 +17,6 @@ fn track_shards() {
     init_integration_logger();
 
     let cluster = NodeCluster::default()
-        .set_num_shards(4)
         .set_num_nodes(4)
         .set_num_validator_seats(2)
         .set_num_lightclients(0)
