@@ -40,9 +40,6 @@ jobs:
           name: unc-node
           path: target/release/unc-node
 
-      - name: Display SCCache Stats
-        run: sccache --show-stats
-
   check_features:
     runs-on: self-hosted
     needs: [build]
