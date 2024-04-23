@@ -19,16 +19,16 @@ jobs:
             output_file: output/zips/x86_64-ubuntu-2204-unc-node.tar.gz
           - command: ENGINE=podman DISTRO=ubuntu-2310 ZIP=1 ./scripts/binaries/build.sh
             output_file: output/zips/x86_64-ubuntu-2310-unc-node.tar.gz
-          - command: ENGINE=podman DISTRO=fedora-38 ZIP=1 ./scripts/binaries/build.sh
-            output_file: output/zips/x86_64-fedora-38-unc-node.tar.gz
-          - command: ENGINE=podman DISTRO=fedora-39 ZIP=1 ./scripts/binaries/build.sh
-            output_file: output/zips/x86_64-fedora-39-unc-node.tar.gz
-          - command: ENGINE=podman DISTRO=debian-11 ZIP=1 ./scripts/binaries/build.sh
-            output_file: output/zips/x86_64-debian-11-unc-node.tar.gz
-          - command: ENGINE=podman DISTRO=debian-12 ZIP=1 ./scripts/binaries/build.sh
-            output_file: output/zips/x86_64-debian-12-unc-node.tar.gz
-          - command: ENGINE=podman DISTRO=arch ZIP=1 ./scripts/binaries/build.sh
-            output_file: output/zips/x86_64-arch-unc-node.tar.gz
+          # - command: ENGINE=podman DISTRO=fedora-38 ZIP=1 ./scripts/binaries/build.sh
+          #   output_file: output/zips/x86_64-fedora-38-unc-node.tar.gz
+          # - command: ENGINE=podman DISTRO=fedora-39 ZIP=1 ./scripts/binaries/build.sh
+          #   output_file: output/zips/x86_64-fedora-39-unc-node.tar.gz
+          # - command: ENGINE=podman DISTRO=debian-11 ZIP=1 ./scripts/binaries/build.sh
+          #   output_file: output/zips/x86_64-debian-11-unc-node.tar.gz
+          # - command: ENGINE=podman DISTRO=debian-12 ZIP=1 ./scripts/binaries/build.sh
+          #   output_file: output/zips/x86_64-debian-12-unc-node.tar.gz
+          # - command: ENGINE=podman DISTRO=arch ZIP=1 ./scripts/binaries/build.sh
+          #   output_file: output/zips/x86_64-arch-unc-node.tar.gz
     steps:
       - uses: actions/checkout@v4
 

@@ -39,24 +39,3 @@ jobs:
         with:
           name: unc-node
           path: target/release/unc-node
-
-  check_features:
-    runs-on: self-hosted
-    needs: [build]
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential pkg-config libssl-dev valgrind git clang curl libssl-dev protobuf-compiler unzip python3-pip
-
-      - name: Setup Rust toolchain
-        run: |
-          curl https://sh.rustup.rs -sSf | sh -s -- -y
-          source "$HOME/.cargo/env"
-          rustup show
-
-      - name: Set PATH for cargo
-        run: |
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
