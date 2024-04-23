@@ -17,7 +17,7 @@ WORKDIR "/workdir"
 RUN $HOME/.cargo/bin/rustup show
 
 # This builds the binary.
-RUN $HOME/.cargo/bin/cargo build --locked --release
+RUN $HOME/.cargo/bin/cargo build --locked --release -p unc-node
 
 # Create output folder
 RUN mkdir -p output
