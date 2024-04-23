@@ -8,6 +8,7 @@
 !/runtime
 !/node
 !/utils
+!/tools
 !Cargo.toml
 !Cargo.lock
 !rust-toolchain.toml
