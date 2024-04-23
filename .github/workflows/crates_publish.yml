@@ -1,4 +1,4 @@
-name: Utility Crates Publish
+name: Crates Publish
 
 on:
   workflow_dispatch:
@@ -7,7 +7,6 @@ on:
         type: string
         required: true
         description: Branch name or tag to publish crates from
-
 
 jobs:
   publish-cargo-crates:

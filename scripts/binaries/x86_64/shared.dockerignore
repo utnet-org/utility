@@ -9,6 +9,7 @@
 !/node
 !/utils
 !/tools
+!/test-utils
 !Cargo.toml
 !Cargo.lock
 !rust-toolchain.toml
