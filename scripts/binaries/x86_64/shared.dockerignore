@@ -2,14 +2,11 @@
 *
 
 # Allow files and directories
+!/chain
+!/core
+!/framework
 !/runtime
-!/rpc
-!/patricia-merkle-trie
-!/pallets
 !/node
-!/misc
-!/client
-!/base
 !Cargo.toml
 !Cargo.lock
 !rust-toolchain.toml
