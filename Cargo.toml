@@ -13,7 +13,7 @@ license = "GPL-2.0-or-later"
 # significant developer time expense. Please think thoroughly before adding
 # anything to the list of stable crates.
 version = "0.7.3"
-exclude = ["uncd"]
+exclude = ["unc-node"]
 
 [workspace]
 resolver = "2"
@@ -90,7 +90,7 @@ members = [
     "utils/mainnet-res",
     "utils/unc-cache",
     "utils/stdx",
-    "uncd",
+    "unc-node",
 ]
 
 [workspace.lints.rust]
