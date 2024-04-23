@@ -53,11 +53,11 @@ Overall, *Utility* provides a wide range of tools for developers to easily build
 
 ## Join the Network
 
-The easiest way to join the network, is by using the `make release` command, which you can install as follows:
+The easiest way to join the network, is by using the `make release` command  or download release binaries, which you can install as follows:
 
 ```sh
-# testnet node init
-./target/release/uncd --home ~/.unc  init --chain-id testnet --download-genesis --download-config
+# testnet node init directly use binaries
+unc-node --home ~/.unc  init --chain-id testnet --download-genesis --download-config
 
 # download snapshot data （optional）
 ## install rclone 1.66.0 or beyond
@@ -86,7 +86,7 @@ $ latest=$(cat latest)
 $ rclone copy --no-check-certificate --progress --transfers=6  unc_cf:unc/${latest:?} ~/.unc/data
 
 # node run
-$ ./target/release/uncd --home ~/.unc  run
+$ unc-node --home ~/.unc  run
 ```
 
 To learn how to become validator, checkout [documentation](https://docs.utnet-org/utility.org/docs/develop/node/validator/staking-and-delegation).
