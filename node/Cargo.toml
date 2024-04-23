@@ -1,5 +1,5 @@
 [package]
-name = "uncd"
+name = "unc-node"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
@@ -13,7 +13,7 @@ workspace = true
 
 [[bin]]
 path = "src/main.rs"
-name = "uncd"
+name = "unc-node"
 
 [dependencies]
 actix.workspace = true

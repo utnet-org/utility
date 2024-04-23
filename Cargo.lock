@@ -7255,6 +7255,54 @@ dependencies = [
 ]
 
 [[package]]
+name = "unc-node"
+version = "0.0.0"
+dependencies = [
+ "actix",
+ "anyhow",
+ "clap",
+ "cold-store-tool",
+ "framework",
+ "futures",
+ "once_cell",
+ "openssl-probe",
+ "opentelemetry",
+ "rayon",
+ "rlimit",
+ "rustc_version 0.4.0",
+ "serde",
+ "serde_json",
+ "shell-escape",
+ "state-viewer",
+ "thiserror",
+ "tikv-jemallocator",
+ "tokio",
+ "tracing",
+ "unc-amend-genesis",
+ "unc-chain-configs",
+ "unc-client",
+ "unc-config-utils",
+ "unc-crypto",
+ "unc-database-tool",
+ "unc-dyn-configs",
+ "unc-epoch-sync-tool",
+ "unc-flat-storage",
+ "unc-fork-network",
+ "unc-jsonrpc-primitives",
+ "unc-mirror",
+ "unc-network",
+ "unc-o11y",
+ "unc-performance-metrics",
+ "unc-ping",
+ "unc-primitives",
+ "unc-state-parts",
+ "unc-state-parts-dump-check",
+ "unc-store",
+ "unc-undo-block",
+ "yansi",
+]
+
+[[package]]
 name = "unc-o11y"
 version = "0.0.0"
 dependencies = [
@@ -7822,54 +7870,6 @@ dependencies = [
  "anyhow",
  "unc-primitives-core",
  "unc-vm-runner",
-]
-
-[[package]]
-name = "uncd"
-version = "0.0.0"
-dependencies = [
- "actix",
- "anyhow",
- "clap",
- "cold-store-tool",
- "framework",
- "futures",
- "once_cell",
- "openssl-probe",
- "opentelemetry",
- "rayon",
- "rlimit",
- "rustc_version 0.4.0",
- "serde",
- "serde_json",
- "shell-escape",
- "state-viewer",
- "thiserror",
- "tikv-jemallocator",
- "tokio",
- "tracing",
- "unc-amend-genesis",
- "unc-chain-configs",
- "unc-client",
- "unc-config-utils",
- "unc-crypto",
- "unc-database-tool",
- "unc-dyn-configs",
- "unc-epoch-sync-tool",
- "unc-flat-storage",
- "unc-fork-network",
- "unc-jsonrpc-primitives",
- "unc-mirror",
- "unc-network",
- "unc-o11y",
- "unc-performance-metrics",
- "unc-ping",
- "unc-primitives",
- "unc-state-parts",
- "unc-state-parts-dump-check",
- "unc-store",
- "unc-undo-block",
- "yansi",
 ]
 
 [[package]]

@@ -43,7 +43,7 @@ CLI](https://docs.unc.org/tools/unc-cli) utility.
 To learn more about how framework works, skim through our guide to framework
 development:
 
-https://unc.github.io/framework/
+https://utility.github.io/framework/
 
 If you are looking for relatively simple tasks to familiarise yourself with
 `framework`, please check out issues labeled with the `C-good-first-issue` label

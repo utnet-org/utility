@@ -1,0 +1,67 @@
+name: Release Binaries
+on:
+  push:
+    branches-ignore:
+      - '**'
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  build_binaries:
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        include:
+          - command: ENGINE=podman DISTRO=ubuntu-2004 ZIP=1 ./scripts/binaries/build.sh
+            output_file: output/zips/x86_64-ubuntu-2004-unc-node.tar.gz
+          - command: ENGINE=podman DISTRO=ubuntu-2204 ZIP=1 ./scripts/binaries/build.sh
+            output_file: output/zips/x86_64-ubuntu-2204-unc-node.tar.gz
+          - command: ENGINE=podman DISTRO=ubuntu-2310 ZIP=1 ./scripts/binaries/build.sh
+            output_file: output/zips/x86_64-ubuntu-2310-unc-node.tar.gz
+          - command: ENGINE=podman DISTRO=fedora-38 ZIP=1 ./scripts/binaries/build.sh
+            output_file: output/zips/x86_64-fedora-38-unc-node.tar.gz
+          - command: ENGINE=podman DISTRO=fedora-39 ZIP=1 ./scripts/binaries/build.sh
+            output_file: output/zips/x86_64-fedora-39-unc-node.tar.gz
+          - command: ENGINE=podman DISTRO=debian-11 ZIP=1 ./scripts/binaries/build.sh
+            output_file: output/zips/x86_64-debian-11-unc-node.tar.gz
+          - command: ENGINE=podman DISTRO=debian-12 ZIP=1 ./scripts/binaries/build.sh
+            output_file: output/zips/x86_64-debian-12-unc-node.tar.gz
+          - command: ENGINE=podman DISTRO=arch ZIP=1 ./scripts/binaries/build.sh
+            output_file: output/zips/x86_64-arch-unc-node.tar.gz
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: true
+
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+        with:
+          version: '3.x'
+      
+      - name: install podman
+        run: sudo apt-get update && sudo apt install podman -y
+
+      - uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 60
+          max_attempts: 3
+          command: ${{ matrix.command }}
+
+      - name: Prepare
+        id: prepare
+        run: |
+            TAG=${GITHUB_REF#refs/tags/}
+            echo "tag_name=${TAG}" >> $GITHUB_OUTPUT
+
+      - name: publish binary
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ matrix.output_file }}
+          release_name: ${{ steps.prepare.outputs.tag_name }}
+          tag: ${{ steps.prepare.outputs.tag_name }}
+          overwrite: true
