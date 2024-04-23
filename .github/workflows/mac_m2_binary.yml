@@ -1,4 +1,4 @@
-name: MacOS-m1 binary release
+name: MacOS-m2 binary release
 on:
   workflow_dispatch:
   push:

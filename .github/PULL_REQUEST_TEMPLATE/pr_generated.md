@@ -1,4 +1,5 @@
 ### WHAT
+
 copilot:summary
 ​
 copilot:poem
@@ -7,4 +8,5 @@ copilot:poem
 <!-- author to complete -->
 
 ### HOW
+
 copilot:walkthrough

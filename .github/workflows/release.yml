@@ -43,14 +43,8 @@ jobs:
       - name: Uncd binary build and upload to S3
         run: ./scripts/binary_release.sh
 
-      - name: Update latest version metadata in S3
-        run: |
-          echo $(git rev-parse HEAD) > latest
-          BRANCH=$(git branch --show-current)
-          aws s3 cp --acl public-read latest s3://build.utility.com/unc/$(uname)/${BRANCH}/latest
-
   docker-release:
-    name: "Build and publish unc Docker image"
+    name: "Build and publish utility Docker image"
     runs-on: "self-hosted"
     #environment: deploy
     steps:
@@ -60,7 +54,7 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch }}
 
-      - name: Checkout unc repository
+      - name: Checkout utility repository
         if: ${{ github.event_name != 'workflow_dispatch'}}
         uses: actions/checkout@v4
 
@@ -74,15 +68,15 @@ jobs:
         run: |
           COMMIT=$(git rev-parse HEAD)
           BRANCH=${{ github.ref_name }}
-          make docker-unc
-          docker tag unc utnet-org/utility:${BRANCH}-${COMMIT}
-          docker tag unc utnet-org/utility:${BRANCH}
+          make docker-utility
+          docker tag utility utnet-org/utility:${BRANCH}-${COMMIT}
+          docker tag utility utnet-org/utility:${BRANCH}
 
           docker push utnet-org/utility:${BRANCH}-${COMMIT}
           docker push utnet-org/utility:${BRANCH}
           
           if [[ ${BRANCH} == "main" ]];
           then
-            docker tag unc utnet-org/utility:latest
+            docker tag utility utnet-org/utility:latest
             docker push utnet-org/utility:latest
           fi

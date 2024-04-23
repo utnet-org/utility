@@ -1,4 +1,4 @@
-name: Unc Crates Publish
+name: Utility Crates Publish
 
 on:
   workflow_dispatch:
@@ -11,9 +11,9 @@ on:
 
 jobs:
   publish-cargo-crates:
-    name: "Publish unc-workspaces on crates.io https://crates.io/crates/unc-workspaces"
+    name: "Publish utility-workspaces on crates.io https://crates.io/crates/utility-workspaces"
     runs-on: "self-hosted"
-    #environment: deploy
+    environment: deploy
     permissions:
       contents: write # required for crates push
     timeout-minutes: 30 
