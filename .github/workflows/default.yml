@@ -1,4 +1,4 @@
-name: default check
+name: Default check
 on:
   push:
     branches:
@@ -30,24 +30,6 @@ jobs:
       - name: Set PATH for cargo
         run: |
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-          echo "SCCACHE_DIR=${HOME}/.cache/sccache" >> $GITHUB_ENV
-
-      - name: SCCache
-        run: |
-          # We altered the path to avoid old actions to overwrite it
-          if [ ! -f ~/.cargo/bin/sccache ]; then
-            cargo install sccache \
-              --git https://github.com/purestake/sccache.git \
-              --rev $CARGO_SCCACHE_COMMIT \
-              --force --no-default-features --features=dist-client
-          fi
-
-          if [[ -z `pgrep sccache` ]]; then
-            chmod +x ~/.cargo/bin/sccache
-            sccache --start-server
-          fi
-          sccache -s
-          echo "RUSTC_WRAPPER=${HOME}/.cargo/bin/sccache" >> $GITHUB_ENV
 
       - name: Build node
         run: cargo build --release -p unc-node
@@ -81,21 +63,3 @@ jobs:
       - name: Set PATH for cargo
         run: |
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-          echo "SCCACHE_DIR=${HOME}/.cache/sccache" >> $GITHUB_ENV
-
-      - name: SCCache
-        run: |
-          # We altered the path to avoid old actions to overwrite it
-          if [ ! -f ~/.cargo/bin/sccache ]; then
-            cargo install sccache \
-              --git https://github.com/purestake/sccache.git \
-              --rev $CARGO_SCCACHE_COMMIT \
-              --force --no-default-features --features=dist-client
-          fi
-
-          if [[ -z `pgrep sccache` ]]; then
-            chmod +x ~/.cargo/bin/sccache
-            sccache --start-server
-          fi
-          sccache -s
-          echo "RUSTC_WRAPPER=${HOME}/.cargo/bin/sccache" >> $GITHUB_ENV
