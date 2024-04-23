@@ -90,7 +90,7 @@ members = [
     "utils/mainnet-res",
     "utils/unc-cache",
     "utils/stdx",
-    "unc-node",
+    "node",
 ]
 
 [workspace.lints.rust]
