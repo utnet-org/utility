@@ -1,0 +1,101 @@
+name: default check
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config libssl-dev valgrind git clang curl libssl-dev protobuf-compiler unzip python3-pip
+
+
+      - name: Setup Rust toolchain
+        run: |
+          curl https://sh.rustup.rs -sSf | sh -s -- -y
+          source "$HOME/.cargo/env"
+          rustup show
+
+      - name: Set PATH for cargo
+        run: |
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+          echo "SCCACHE_DIR=${HOME}/.cache/sccache" >> $GITHUB_ENV
+
+      - name: SCCache
+        run: |
+          # We altered the path to avoid old actions to overwrite it
+          if [ ! -f ~/.cargo/bin/sccache ]; then
+            cargo install sccache \
+              --git https://github.com/purestake/sccache.git \
+              --rev $CARGO_SCCACHE_COMMIT \
+              --force --no-default-features --features=dist-client
+          fi
+
+          if [[ -z `pgrep sccache` ]]; then
+            chmod +x ~/.cargo/bin/sccache
+            sccache --start-server
+          fi
+          sccache -s
+          echo "RUSTC_WRAPPER=${HOME}/.cargo/bin/sccache" >> $GITHUB_ENV
+
+      - name: Build node
+        run: cargo build --release -p unc-node
+
+      - name: Upload unc-node binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: unc-node
+          path: target/release/unc-node
+
+      - name: Display SCCache Stats
+        run: sccache --show-stats
+
+  check_features:
+    runs-on: self-hosted
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config libssl-dev valgrind git clang curl libssl-dev protobuf-compiler unzip python3-pip
+
+      - name: Setup Rust toolchain
+        run: |
+          curl https://sh.rustup.rs -sSf | sh -s -- -y
+          source "$HOME/.cargo/env"
+          rustup show
+
+      - name: Set PATH for cargo
+        run: |
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+          echo "SCCACHE_DIR=${HOME}/.cache/sccache" >> $GITHUB_ENV
+
+      - name: SCCache
+        run: |
+          # We altered the path to avoid old actions to overwrite it
+          if [ ! -f ~/.cargo/bin/sccache ]; then
+            cargo install sccache \
+              --git https://github.com/purestake/sccache.git \
+              --rev $CARGO_SCCACHE_COMMIT \
+              --force --no-default-features --features=dist-client
+          fi
+
+          if [[ -z `pgrep sccache` ]]; then
+            chmod +x ~/.cargo/bin/sccache
+            sccache --start-server
+          fi
+          sccache -s
+          echo "RUSTC_WRAPPER=${HOME}/.cargo/bin/sccache" >> $GITHUB_ENV
