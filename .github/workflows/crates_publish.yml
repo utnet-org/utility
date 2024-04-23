@@ -11,7 +11,7 @@ on:
 jobs:
   publish-cargo-crates:
     name: "Publish utility-workspaces on crates.io https://crates.io/crates/utility-workspaces"
-    runs-on: "self-hosted"
+    runs-on: "ubuntu-latest"
     environment: deploy
     permissions:
       contents: write # required for crates push

@@ -12,7 +12,7 @@ permissions:
 jobs:
   monthly-issue-metrics:
     name: past month issue metrics
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
     - name: Get dates for last month
       shell: bash
