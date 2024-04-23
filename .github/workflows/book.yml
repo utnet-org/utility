@@ -34,7 +34,7 @@ jobs:
     permissions:
       contents: write
     needs: book
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
     - uses: actions/download-artifact@v2
       with:
