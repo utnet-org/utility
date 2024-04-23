@@ -1,9 +1,9 @@
-name: Book
+name: Book Pages
 
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
     paths:
     - 'docs/**'
