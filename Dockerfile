@@ -22,12 +22,12 @@ ENV RUSTUP_HOME=/usr/local/rustup \
 RUN curl https://sh.rustup.rs -sSf | \
     sh -s -- -y --no-modify-path --default-toolchain none
 
-VOLUME [ /unc ]
-WORKDIR /unc
+VOLUME [ /workdir ]
+WORKDIR /workdir
 COPY . .
 
 ENV PORTABLE=ON
-ARG make_target=
+ARG make_target=unc-node-release
 RUN make CARGO_TARGET_DIR=/tmp/target \
     "${make_target:?make_target not set}"
 
@@ -41,6 +41,6 @@ RUN apt-get update -qq && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY scripts/run_docker.sh /usr/local/bin/run.sh
-COPY --from=build /tmp/target/release/uncd /usr/local/bin/
+COPY --from=build /tmp/target/release/unc-node /usr/local/bin/
 
 CMD ["/usr/local/bin/run.sh"]
