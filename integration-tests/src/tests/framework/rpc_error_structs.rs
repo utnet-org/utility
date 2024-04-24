@@ -149,13 +149,11 @@ fn test_chunk_unknown_chunk_error() {
 // Queries json-rpc EXPERIMENTAL_protocol_config that doesn't exists
 // Checks if the struct is expected and contains the proper data
 #[test]
-#[allow(unreachable_code)]
 fn test_protocol_config_unknown_block_error() {
-    return;
     init_integration_logger();
 
     let cluster = NodeCluster::default()
-        .set_num_validator_seats(2)
+        .set_num_validator_seats(4)
         .set_num_lightclients(2)
         .set_epoch_length(10)
         .set_genesis_height(0);
@@ -204,7 +202,7 @@ fn test_protocol_config_unknown_block_error() {
                 spawn_interruptible(actor);
             }),
             100,
-            40000,
+            60000,
         )
         .start();
     });

@@ -30,7 +30,7 @@ fn start_nodes(
     genesis.config.epoch_length = epoch_length;
     genesis.config.genesis_height = genesis_height;
 
-    let validators = (0..num_validator_seats).map(|i| format!("unc.{}", i)).collect::<Vec<_>>();
+    let validators = (0..num_validator_seats).map(|i| format!("unc{}", i)).collect::<Vec<_>>();
     let mut unc_configs = vec![];
     let first_node = tcp::ListenerAddr::reserve_for_test();
     let mut rpc_addrs = vec![];
