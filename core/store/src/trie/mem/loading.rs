@@ -528,7 +528,8 @@ mod tests {
         shard_uid: ShardUId,
         state_root: CryptoHash,
     ) {
-        let chunk_extra = ChunkExtra::new(&state_root, CryptoHash::default(), Vec::new(), Vec::new(), 0, 0, 0);
+        let chunk_extra =
+            ChunkExtra::new(&state_root, CryptoHash::default(), Vec::new(), Vec::new(), 0, 0, 0);
         let mut store_update = store.store_update();
         store_update
             .set_ser(DBCol::ChunkExtra, &get_block_shard_uid(&block_hash, &shard_uid), &chunk_extra)

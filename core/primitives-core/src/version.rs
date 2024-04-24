@@ -89,7 +89,6 @@ pub enum ProtocolFeature {
     Ed25519Verify,
     /// Decouple compute and gas costs of operations to safely limit the compute time it takes to
     /// process the chunk.
-
     ComputeCosts,
     /// Enable flat storage for reads, reducing number of DB accesses from `2 * key.len()` in
     /// the worst case to 2.

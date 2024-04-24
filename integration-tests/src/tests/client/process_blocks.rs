@@ -2490,7 +2490,6 @@ fn test_block_execution_outcomes() {
 #[test]
 #[allow(unreachable_code)]
 fn test_refund_receipts_processing() {
-
     return;
     init_test_logger();
 

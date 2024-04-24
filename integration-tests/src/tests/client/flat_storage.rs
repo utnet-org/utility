@@ -393,7 +393,6 @@ fn test_catchup_succeeds_even_if_no_new_blocks() {
     wait_for_flat_storage_creation(&mut env, START_HEIGHT + 3, shard_uid, false);
 }
 
-
 #[test]
 /// Initializes flat storage, then creates a Trie to read the flat storage
 /// exactly at the flat head block.
@@ -460,7 +459,6 @@ fn test_not_supported_block() {
     // For the second result chunk view is valid, so result is Ok.
     assert_matches!(get_ref_results[1], Ok(Some(_)));
 }
-
 
 /// Check that after flat storage upgrade:
 /// - value read from contract is the same;
@@ -591,7 +589,6 @@ fn test_flat_storage_upgrade() {
     // For the second read, we don't go to Flat storage and don't charge TTN.
     assert_eq!(touching_trie_node_costs[0], 0);
 }
-
 
 fn get_flat_storage_manager(env: &TestEnv) -> FlatStorageManager {
     env.clients[0].chain.runtime_adapter.get_flat_storage_manager()

@@ -26,9 +26,7 @@ use unc_primitives::views::{
 use crate::node::Node;
 use crate::user::User;
 use testlib::fees_utils::FeeHelper;
-use testlib::runtime_utils::{
-    alice_account, bob_account, eve_dot_alice_account,
-};
+use testlib::runtime_utils::{alice_account, bob_account, eve_dot_alice_account};
 use unc_parameters::RuntimeConfig;
 use unc_primitives::receipt::{ActionReceipt, Receipt, ReceiptEnum};
 use unc_primitives::test_utils;

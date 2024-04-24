@@ -20,8 +20,7 @@ use unc_primitives::version::PROTOCOL_VERSION;
 fn start_node() -> ThreadNode {
     init_integration_logger();
     let genesis = Genesis::test(vec![alice_account(), bob_account()], 1);
-    let mut unc_config =
-        load_test_config("alice", tcp::ListenerAddr::reserve_for_test(), genesis);
+    let mut unc_config = load_test_config("alice", tcp::ListenerAddr::reserve_for_test(), genesis);
     unc_config.client_config.skip_sync_wait = true;
 
     let mut node = ThreadNode::new(unc_config);
@@ -32,8 +31,7 @@ fn start_node() -> ThreadNode {
 #[test]
 fn test_check_tx_error_log() {
     let node = start_node();
-    let signer =
-        Arc::new(InMemorySigner::from_seed(alice_account(), KeyType::ED25519, "alice"));
+    let signer = Arc::new(InMemorySigner::from_seed(alice_account(), KeyType::ED25519, "alice"));
     let block_hash = node.user().get_best_block_hash().unwrap();
     let tx = SignedTransaction::from_actions(
         1,
@@ -71,8 +69,7 @@ fn test_deliver_tx_error_log() {
         RuntimeConfig::clone(&runtime_config),
         node.genesis().config.min_gas_price,
     );
-    let signer =
-        Arc::new(InMemorySigner::from_seed(alice_account(), KeyType::ED25519, "alice"));
+    let signer = Arc::new(InMemorySigner::from_seed(alice_account(), KeyType::ED25519, "alice"));
     let block_hash = node.user().get_best_block_hash().unwrap();
     let cost = fee_helper.create_account_transfer_full_key_cost_no_reward();
     let tx = SignedTransaction::from_actions(

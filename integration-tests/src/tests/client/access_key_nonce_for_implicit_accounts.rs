@@ -22,13 +22,13 @@ use unc_o11y::testonly::init_test_logger;
 use unc_parameters::RuntimeConfigStore;
 use unc_primitives::account::AccessKey;
 use unc_primitives::errors::InvalidTxError;
+use unc_primitives::num_rational::Rational32;
 use unc_primitives::sharding::ChunkHash;
 use unc_primitives::transaction::SignedTransaction;
 use unc_primitives::types::{AccountId, BlockHeight};
 use unc_primitives::utils::derive_unc_account_id;
 use unc_primitives::version::{ProtocolFeature, ProtocolVersion};
 use unc_primitives::views::FinalExecutionStatus;
-use unc_primitives::num_rational::Rational32;
 
 /// Try to process tx in the next blocks, check that tx and all generated receipts succeed.
 /// Return height of the next block.
