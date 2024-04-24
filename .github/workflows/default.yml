@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
   
 env:
-  CARGO_SCCACHE_COMMIT: cddf52be
+  CARGO_SCCACHE_COMMIT: cddf52b
 
 jobs:
   lint:
