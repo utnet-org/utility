@@ -15,7 +15,7 @@ slow receipts.
 
 ## Setup 
 
-When compiling uncd (or the paramater estimator) with `feature=io_trace` it
+When compiling unc-node (or the paramater estimator) with `feature=io_trace` it
 instruments the binary code with fine-grained database operations tracking.
 
 *Aside: We don't enable it by default because we are afraid the overhead could be
@@ -24,24 +24,24 @@ cache hits. Although we haven't properly evaluated if it really is a performance
 problem.*
 
 This allows using the `--record-io-trace=/path/to/output.io_trace` CLI flag on
-uncd. Run it in combination with the subcommands `uncd run`, `uncd
+unc-node. Run it in combination with the subcommands `unc-node run`, `unc-node
 view-state`, or `runtime-params-estimator` and it will record an IO trace. Make
-sure to provide the flag to `uncd` itself, however, not to the subcommands.
+sure to provide the flag to `unc-node` itself, however, not to the subcommands.
 (See examples below)
 
 ```bash
 # Example command for normal node
 # (Careful! This will quickly fill your disk if you let it run.)
-cargo build --release -p uncd --features=io_trace
-target/release/uncd \
+cargo build --release -p unc-node --features=io_trace
+target/release/unc-node \
     --record-io-trace=/mnt/disks/some_disk_with_enough_space/my.io_trace \
     run
 ```
 
 ```bash
 # Example command for state viewer, applying a range of chunks in shard 0
-cargo build --release -p uncd --features=io_trace
-target/release/uncd \
+cargo build --release -p unc-node --features=io_trace
+target/release/unc-node \
     --record-io-trace=75220100-75220101.s0.io_trace \
     view-state apply-range --start-index 75220100 --end-index 75220101 \
     --sequential --shard-id 0

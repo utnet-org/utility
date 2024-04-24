@@ -52,7 +52,7 @@ impl VerifiedPeer {
 
 #[derive(Clone)]
 pub struct Config {
-    /// A list of nodes to connect to on the first run of the uncd server.
+    /// A list of nodes to connect to on the first run of the unc-node server.
     /// Once it connects to some of them, the server will learn about other
     /// nodes in the network and will try to connect to them as well.
     ///

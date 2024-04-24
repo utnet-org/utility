@@ -289,7 +289,7 @@ factors, most notably the compilation flags used. The quick explanation is that 
 computations may panic (cause side effects) if the result has overflowed, and when built with
 optimizations enabled, these computations will wrap-around instead.
 
-For framework and uncd we have opted to enable the panicking behaviour regardless of the
+For framework and unc-node we have opted to enable the panicking behaviour regardless of the
 optimization level. By doing it this we hope to prevent accidental stabilization of protocol
 mis-features that depend on incorrect handling of these overflows or similarly scary silent bugs.
 The downside to this approach is that any such arithmetic operation now may cause a node to crash,
@@ -449,7 +449,7 @@ for new metrics.
 
 **Rationale:** The `unc_` prefix makes it trivial to separate metrics exported
 by `framework` from other metrics, such as metrics about the state of the machine
-that runs `uncd`.
+that runs `unc-node`.
 
 ### Performance
 

@@ -28,7 +28,7 @@ fn read_trie_items(bench: &mut Bencher, shard_id: usize, mode: Mode) {
     let num_trie_items = 10_000;
 
     bench.iter(move || {
-        tracing::info!(target: "uncd", "{:?}", home_dir);
+        tracing::info!(target: "unc-node", "{:?}", home_dir);
         let store = unc_store::NodeStorage::opener(
             &home_dir,
             unc_config.config.archive,
@@ -60,7 +60,7 @@ fn read_trie_items(bench: &mut Bencher, shard_id: usize, mode: Mode) {
             .enumerate()
             .map(|(i, _)| {
                 if i % 500 == 0 {
-                    tracing::info!(target: "uncd", "{}", i)
+                    tracing::info!(target: "unc-node", "{}", i)
                 }
             })
             .take(num_trie_items)

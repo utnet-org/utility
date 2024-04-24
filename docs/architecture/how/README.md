@@ -1,13 +1,13 @@
-# How uncd works
+# How unc-node works
 
-This chapter describes how uncd works with a focus on implementation details
+This chapter describes how unc-node works with a focus on implementation details
 and practical scenarios. To get a better understanding of how the protocol
 works, please refer to [nomicon](https://nomicon.io). For a high-level code map
 of framework, please refer to this [document](../).
 
 ## High level overview
 
-On the high level, uncd is a daemon that periodically receives messages from
+On the high level, unc-node is a daemon that periodically receives messages from
 the network and sends messages to peers based on different triggers. Uncd is
 implemented using an [actor
 framework](https://en.wikipedia.org/wiki/Actor_model) called
@@ -18,7 +18,7 @@ framework and by no means represents our confidence in actix. On the contrary, w
 have noticed a number of issues with actix and are considering implementing an
 actor framework in house.
 
-There are several important actors in uncd:
+There are several important actors in unc-node:
 
 * `PeerActor` - Each peer is represented by one peer actor and runs in a separate
   thread. It is responsible for sending messages to and receiving messages from
@@ -34,7 +34,7 @@ There are several important actors in uncd:
   handles `RoutedMessage`s. Peer manager would decide whether the `RoutedMessage`s
   should be routed to `ClientActor` or `ViewClientActor`.
 
-* `ClientActor` - Client actor is the “core” of uncd. It contains all the main
+* `ClientActor` - Client actor is the “core” of unc-node. It contains all the main
   logic including consensus, block and chunk processing, state transition, garbage
   collection, etc. Client actor is single threaded.
 
@@ -48,7 +48,7 @@ There are several important actors in uncd:
 
   `ViewClientActor` runs in four threads by default but this number is configurable.
 
-## Data flow within `uncd`
+## Data flow within `unc-node`
 
 Flow for incoming messages:
 
@@ -60,7 +60,7 @@ Flow for outgoing messages:
 ![](https://user-images.githubusercontent.com/1711539/195626792-7697129b-7f9c-4953-b939-0b9bcacaf72c.png)
 
 
-## How uncd operates when it is fully synced
+## How unc-node operates when it is fully synced
 
 When a node is fully synced, the main logic of the node operates in the
 following way (the node is assumed to track all shards, as most nodes on mainnet
@@ -107,7 +107,7 @@ The main logic is illustrated below:
 ![](https://user-images.githubusercontent.com/1711539/195635652-f0c7ebae-a2e5-423f-8e62-b853b815fcec.png)
 
 
-## How uncd works when it is synchronizing
+## How unc-node works when it is synchronizing
 
 `PeerManagerActor` periodically sends a `NetworkInfo` message to `ClientActor`
 to update it on the latest peer information, which includes the height of each

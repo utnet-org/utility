@@ -47,7 +47,7 @@ test-specific features guarded by a feature flag to be available. To compile the
 binary with such features run:
 
 ```
-cargo build -p uncd --features=adversarial
+cargo build -p unc-node --features=adversarial
 ```
 
 The feature is called `adversarial` to highlight that the many functions it enables,

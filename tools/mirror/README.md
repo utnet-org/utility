@@ -4,7 +4,7 @@ This is some code that tries to help with the following: We have some
 chain, let's call it the "source chain", producing blocks and chunks
 with transactions as usual, and we have another chain, let's call it
 the "target chain" that starts from state forked from the source
-chain. Usually this would be done by using the `uncd view-state
+chain. Usually this would be done by using the `unc-node view-state
 dump-state` command, and using the resulting genesis and records file
 as the start of the target chain. What we want is to then periodically
 send the transactions appearing in the source chain after the fork

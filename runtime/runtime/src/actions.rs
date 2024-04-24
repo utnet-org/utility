@@ -472,8 +472,8 @@ pub(crate) fn action_implicit_account_creation_transfer(
         AccountType::EthAccount => {
             if checked_feature!("stable", EthAccounts, current_protocol_version) {
                 // We deploy "unc[wallet contract hash]" magic bytes as the contract code,
-                // to mark that this is a uncd-defined contract. It will not be used on a function call.
-                // Instead, uncd-defined Wallet Contract implementation will be used.
+                // to mark that this is a unc-node-defined contract. It will not be used on a function call.
+                // Instead, unc-node-defined Wallet Contract implementation will be used.
                 let magic_bytes = wallet_contract_magic_bytes();
 
                 let storage_usage = fee_config.storage_usage_config.num_bytes_account

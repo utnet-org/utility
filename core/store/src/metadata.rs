@@ -98,7 +98,7 @@ fn read<T: std::str::FromStr>(
     db: &dyn crate::Database,
     key: &[u8],
 ) -> std::io::Result<T> {
-    let msg = "it’s not a uncd database or database is corrupted";
+    let msg = "it’s not a unc-node database or database is corrupted";
     let result = maybe_read::<T>(what, db, key)?;
 
     match result {
@@ -117,7 +117,7 @@ fn maybe_read<T: std::str::FromStr>(
     db: &dyn crate::Database,
     key: &[u8],
 ) -> std::io::Result<Option<T>> {
-    let msg = "it’s not a uncd database or database is corrupted";
+    let msg = "it’s not a unc-node database or database is corrupted";
     db.get_raw_bytes(crate::DBCol::DbVersion, key)?
         .map(|bytes| {
             let value = std::str::from_utf8(&bytes)

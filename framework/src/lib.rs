@@ -152,14 +152,14 @@ pub fn open_storage(home_dir: &Path, unc_config: &mut UncConfig) -> anyhow::Resu
         Err(StoreOpenerError::DbVersionTooOld { got, latest_release, .. }) => {
             Err(anyhow::anyhow!(
                 "Database version {got} is created by an old version \
-                 of uncd and is no longer supported, please migrate using \
+                 of unc-node and is no longer supported, please migrate using \
                  {latest_release} release"
             ))
         },
         Err(StoreOpenerError::DbVersionTooNew { got, want }) => {
             Err(anyhow::anyhow!(
                 "Database version {got} is higher than the expected version {want}. \
-                It was likely created by newer version of uncd. Please upgrade your uncd."
+                It was likely created by newer version of unc-node. Please upgrade your unc-node."
             ))
         },
         Err(StoreOpenerError::MigrationError(err)) => {

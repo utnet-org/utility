@@ -508,12 +508,12 @@ def figure_out_sandbox_binary():
         'release': False,
     }
     repo_dir = pathlib.Path(__file__).resolve().parents[2]
-    # When run on Pytest we end up with a binary called uncd in target/debug
-    # but when run locally the binary might be uncd-sandbox or unc-sandbox
+    # When run on Pytest we end up with a binary called unc-node in target/debug
+    # but when run locally the binary might be unc-node-sandbox or unc-sandbox
     # instead.  Try to figure out whichever binary is available and use that.
     for release in ('release', 'debug'):
         root = repo_dir / 'target' / release
-        for exe in ('uncd-sandbox', 'unc-sandbox', 'uncd'):
+        for exe in ('unc-node-sandbox', 'unc-sandbox', 'unc-node'):
             if (root / exe).exists():
                 logger.info(
                     f'Using {(root / exe).relative_to(repo_dir)} binary')
@@ -521,5 +521,5 @@ def figure_out_sandbox_binary():
                 config['binary_name'] = exe
                 return config
 
-    assert False, ('Unable to figure out location of uncd-sandbox binary; '
+    assert False, ('Unable to figure out location of unc-node-sandbox binary; '
                    'Did you forget to run `make sandbox`?')

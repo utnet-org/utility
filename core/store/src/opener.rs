@@ -68,7 +68,7 @@ pub enum StoreOpenerError {
     /// perform database migrations.
     #[error(
         "Database version {got} incompatible with expected {want}; \
-         open in read-write mode (to run a migration) or use older uncd"
+         open in read-write mode (to run a migration) or use older unc-node"
     )]
     DbVersionMismatchOnRead { got: DbVersion, want: DbVersion },
 
@@ -76,7 +76,7 @@ pub enum StoreOpenerError {
     /// configured.
     #[error(
         "Database version {got} incompatible with expected {want}; \
-         run node to perform migration or use older uncd"
+         run node to perform migration or use older unc-node"
     )]
     DbVersionMismatch { got: DbVersion, want: DbVersion },
 
@@ -86,18 +86,18 @@ pub enum StoreOpenerError {
 
     /// Database has version which is no longer supported.
     ///
-    /// `latest_release` gives latest uncd release which still supports that
+    /// `latest_release` gives latest unc-node release which still supports that
     /// database version.
     #[error(
         "Database version {got} incompatible with expected {want}; \
-         use uncd {latest_release} to perform database migration"
+         use unc-node {latest_release} to perform database migration"
     )]
     DbVersionTooOld { got: DbVersion, want: DbVersion, latest_release: &'static str },
 
     /// Database has version newer than what we support.
     #[error(
         "Database version {got} incompatible with expected {want}; \
-         update uncd release"
+         update unc-node release"
     )]
     DbVersionTooNew { got: DbVersion, want: DbVersion },
 
@@ -554,7 +554,7 @@ pub trait StoreMigrator {
     /// Checks whether migrator supports database versions starting at given.
     ///
     /// If the `version` is too old and the migrator no longer supports it,
-    /// returns `Err` with the latest uncd release which supported that
+    /// returns `Err` with the latest unc-node release which supported that
     /// version.  Otherwise returns `Ok(())` indicating that the migrator
     /// supports migrating the database from the given version up to the current
     /// version [`DB_VERSION`].

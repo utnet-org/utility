@@ -33,7 +33,7 @@ Note, if you use the plotting functionality you would need to install [gnuplot](
 
 ## Replaying IO traces
 
-Compiling `uncd` with `--features=io_trace` and then running it with
+Compiling `unc-node` with `--features=io_trace` and then running it with
 `--record-io-trace=my_trace.log` produces a trace of all storage and database
 accesses. This trace can be replayed by the estimator. For now only to get
 statistics. But the plan is that it will also give gas estimations based on
@@ -62,10 +62,10 @@ For a list of all options, run `cargo run -p runtime-params-estimator -- replay 
 The test input files `./res/*.io_trace` have been generated based on real mainnet traffic.
 
 ```bash
-cargo build --release -p uncd --features=io_trace
+cargo build --release -p unc-node --features=io_trace
 for shard in 0 1 2 3
 do
-  target/release/uncd \
+  target/release/unc-node \
     --record-io-trace=75220100-75220101.s${shard}.io_trace view-state \
     apply-range --start-index 75220100 --end-index 75220101 \
     --sequential --shard-id ${shard}

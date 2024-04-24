@@ -41,7 +41,7 @@ pub const PEERS_RESPONSE_MAX_PEERS: u32 = 512;
 /// proxy on this list. This way a message from any TIER1 node to this node will require at most 2
 /// hops.
 ///
-/// uncd supports 2 modes for configuring proxy addresses:
+/// unc-node supports 2 modes for configuring proxy addresses:
 /// * [recommended] `Static` list of proxies (public SocketAddr + PeerId), supports up to 10 proxies.
 ///   It is a totally valid setup for a TIER1 validator to be its own (perahaps only) proxy:
 ///   to achieve that, add an entry with the public address of this node to the Static list.
@@ -101,7 +101,7 @@ pub struct NetworkConfig {
     pub whitelist_nodes: Vec<PeerInfo>,
     pub handshake_timeout: time::Duration,
 
-    /// Whether to re-establish connection to known reliable peers from previous uncd run(s).
+    /// Whether to re-establish connection to known reliable peers from previous unc-node run(s).
     /// See unc_network::peer_manager::connection_store for details.
     pub connect_to_reliable_peers_on_startup: bool,
     /// Maximum time between refreshing the peer list.

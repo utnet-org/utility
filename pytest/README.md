@@ -4,7 +4,7 @@ The directory contains Python-based tests.  The tests are run as part
 of nightly testing locally.
 
 There is no set format of what the tests do but they typical start
-a local test cluster using uncd binary at `../target/debug/uncd`.
+a local test cluster using unc-node binary at `../target/debug/unc-node`.
 There is also some capacity of starting the cluster on remote
 machines.
 

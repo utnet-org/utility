@@ -36,7 +36,7 @@ def __get_latest_deploy(chain_id: str) -> typing.Tuple[str, str]:
     """Returns latest (release, deploy) for given chain.
 
     Gets latest release and deploy identifier from S3 for given chain.  Those
-    can be used to uniquely identify a uncd executable running on the chain.
+    can be used to uniquely identify a unc-node executable running on the chain.
     """
 
     def download(url: str) -> str:
@@ -58,13 +58,13 @@ def __get_latest_deploy(chain_id: str) -> typing.Tuple[str, str]:
 
 class Executables(typing.NamedTuple):
     root: pathlib.Path
-    uncd: pathlib.Path
+    unc-node: pathlib.Path
 
     def node_config(self) -> typing.Dict[str, typing.Any]:
         return {
             'local': True,
             'uncd_root': self.root,
-            'binary_name': self.uncd.name
+            'binary_name': self.unc-node.name
         }
 
 
@@ -106,22 +106,22 @@ def _compile_current(branch: str) -> Executables:
     prebuilt_uncd = os.environ.get("CURRENT_UNCD")
     if prebuilt_uncd is not None:
         logger.info(
-            f'Using `CURRENT_UNCD={prebuilt_uncd}` uncd for branch {branch}')
+            f'Using `CURRENT_UNCD={prebuilt_uncd}` unc-node for branch {branch}')
         try:
             path = pathlib.Path(prebuilt_uncd).resolve()
             return Executables(path.parent, path)
         except OSError as e:
             logger.exception('Could not use `CURRENT_UNCD`, will build…')
 
-    logger.info(f'Building uncd for branch {branch}')
-    subprocess.check_call(['cargo', 'build', '-p', 'uncd', '--bin', 'uncd'],
+    logger.info(f'Building unc-node for branch {branch}')
+    subprocess.check_call(['cargo', 'build', '-p', 'unc-node', '--bin', 'unc-node'],
                           cwd=_REPO_DIR)
     subprocess.check_call(['cargo', 'build', '-p', 'unc-test-contracts'],
                           cwd=_REPO_DIR)
     branch = escaped(branch)
-    uncd = _OUT_DIR / f'uncd-{branch}'
-    (_OUT_DIR / 'uncd').rename(uncd)
-    return Executables(_OUT_DIR, uncd)
+    unc-node = _OUT_DIR / f'unc-node-{branch}'
+    (_OUT_DIR / 'unc-node').rename(unc-node)
+    return Executables(_OUT_DIR, unc-node)
 
 
 def patch_binary(binary: pathlib.Path) -> None:
@@ -202,11 +202,11 @@ def __download_file_if_missing(filename: pathlib.Path, url: str) -> None:
 
 def __download_binary(release: str, deploy: str) -> Executables:
     """Download binary for given release and deploy."""
-    logger.info(f'Getting uncd for {release}@{_UNAME} (deploy={deploy})')
-    uncd = _OUT_DIR / f'uncd-{release}-{deploy}'
+    logger.info(f'Getting unc-node for {release}@{_UNAME} (deploy={deploy})')
+    unc-node = _OUT_DIR / f'unc-node-{release}-{deploy}'
     basehref = f'{_BASEHREF}/framework/{_UNAME}/{release}/{deploy}'
-    __download_file_if_missing(uncd, f'{basehref}/uncd')
-    return Executables(_OUT_DIR, uncd)
+    __download_file_if_missing(unc-node, f'{basehref}/unc-node')
+    return Executables(_OUT_DIR, unc-node)
 
 
 class ABExecutables(typing.NamedTuple):
@@ -234,7 +234,7 @@ def prepare_ab_test(chain_id: str = 'mainnet') -> ABExecutables:
     if _IS_CANARY:
         # On Pytest the file is fetched from a builder host so there’s no need
         # to build it.
-        current = Executables(_OUT_DIR, _OUT_DIR / 'uncd')
+        current = Executables(_OUT_DIR, _OUT_DIR / 'unc-node')
     else:
         current = _compile_current(current_branch())
 

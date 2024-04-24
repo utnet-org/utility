@@ -18,7 +18,7 @@ this document the above picture would become much clearer!
 
 ## Overall Operation
 
-`framework` is a blockchain node -- it's a single binary (`uncd`) which runs on
+`framework` is a blockchain node -- it's a single binary (`unc-node`) which runs on
 some machine and talks to other similar binaries running elsewhere. Together,
 the nodes agree (using a distributed consensus algorithm) on a particular
 sequence of transactions. Once transaction sequence is established, each node
@@ -27,7 +27,7 @@ deterministic, each node in the network ends up with identical state. To allow
 greater scalability, UNC protocol uses sharding, which allows a node to hold
 only a small subset (shard) of the whole state.
 
-`uncd` is a stateful, restartable process. When `uncd` starts, the node
+`unc-node` is a stateful, restartable process. When `unc-node` starts, the node
 connects to the network and starts processing blocks (block is a batch of
 transactions, processed together; transactions are batched into blocks for
 greater efficiency). The results of processing are persisted in the database.
@@ -39,7 +39,7 @@ missing bits of history from more up-to-date peer nodes.
 
 Major components of framework:
 
-* **JSON RPC**. This HTTP RPC interface is how `uncd` communicates with
+* **JSON RPC**. This HTTP RPC interface is how `unc-node` communicates with
   non-blockchain outside world. For example, to submit a transaction, some
   client sends an RPC request with it to some node in the network. From that
   node, the transaction propagates through the network, until it is included in
@@ -48,7 +48,7 @@ Major components of framework:
   [here](https://docs.unc.org/api/rpc/introduction).
 
 * **Network**. If RPC is aimed "outside" the blockchain, "network" is how peer
-  `uncd` nodes communicate with each other within the blockchain. RPC carries
+  `unc-node` nodes communicate with each other within the blockchain. RPC carries
   requests from users of the blockchain, while network carries various messages
   needed to implement consensus. Two directly connected nodes communicate by
   sending protobuf-encoded messages over TCP. A node also includes logic to
@@ -99,7 +99,7 @@ Major components of framework:
 
 ## Entry Points
 
-`uncd/src/main.rs` contains the main function that starts a blockchain node.
+`unc-node/src/main.rs` contains the main function that starts a blockchain node.
 However, this file mostly only contains the logic to parse arguments and
 dispatch different commands. `start_with_config` in `framework/src/lib.rs` is the
 actual entry point and it starts all the actors.
@@ -237,9 +237,9 @@ production. The `imports` module exposes host functions defined in
 `unc-vm-logic` to WASM code. In other words, it defines the ABI of the
 contracts on UNC.
 
-### `uncd`
+### `unc-node`
 
-As mentioned before, `uncd` is the crate that contains that main entry points.
+As mentioned before, `unc-node` is the crate that contains that main entry points.
 All the actors are spawned in `start_with_config`. It is also worth noting that
 `NightshadeRuntime` is the struct that implements `RuntimeAdapter`.
 <!-- TODO: Maybe add RuntimeAdapter mention or explanation in runtime/runtime chapter? -->

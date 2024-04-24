@@ -470,7 +470,7 @@ impl Config {
             let s = if unrecognised_fields.len() > 1 { "s" } else { "" };
             let fields = unrecognised_fields.join(", ");
             warn!(
-                target: "uncd",
+                target: "unc-node",
                 "{}: encountered unrecognised field{s}: {fields}",
                 path.display(),
             );

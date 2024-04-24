@@ -25,9 +25,9 @@ and that it doesn't break other parts of the system.
 
 ### Protocol version voting and upgrade
 
-When a new uncd version, containing a new protocol version, is released, all node maintainers need 
-to upgrade their binary. That typically means stopping uncd, downloading or compiling the new uncd
-binary and restarting uncd. However the protocol version of the whole network is not immediately 
+When a new unc-node version, containing a new protocol version, is released, all node maintainers need 
+to upgrade their binary. That typically means stopping unc-node, downloading or compiling the new unc-node
+binary and restarting unc-node. However the protocol version of the whole network is not immediately 
 bumped to the new protocol version. Instead a process called voting takes place and determines if and 
 when the protocol version upgrade will take place. 
 
@@ -40,11 +40,11 @@ protocol version will be upgraded in the first block of epoch X+2.
 
 For mainnet releases, the release on github typically happens on a Monday or Tuesday, the voting 
 typically happens a week later and the protocol version upgrade happens 1-2 epochs after the voting. This 
-gives the node maintainers enough time to upgrade their uncd nodes. The node maintainers can upgrade
+gives the node maintainers enough time to upgrade their unc-node nodes. The node maintainers can upgrade
 their nodes at any time between the release and the voting but it is recommended to upgrade soon after the
 release. This is to accommodate for any database migrations or miscellaneous delays. 
 
-Starting a uncd node with protocol version voting in the future in a network that is already operating 
+Starting a unc-node node with protocol version voting in the future in a network that is already operating 
 at that protocol version is supported as well. This is useful in the scenario where there is a mainnet 
 security release where mainnet has not yet voted or upgraded to the new version. That same binary with
 protocol voting date in the future can be released in testnet even though it has already upgraded to 
@@ -139,13 +139,13 @@ Nightly protocol features allow us to enable the most bleeding-edge code in some
 testing environments. We can choose to enable all nightly protocol features by
 
 ```rust
-cargo build -p uncd --release --features nightly
+cargo build -p unc-node --release --features nightly
 ```
 
 or enable some specific protocol feature by
 
 ```rust
-cargo build -p uncd --release --features nightly_protocol,<protocol_feature>
+cargo build -p unc-node --release --features nightly_protocol,<protocol_feature>
 ```
 
 In practice, we have all nightly protocol features enabled for Canary tests and

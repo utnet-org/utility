@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Shows results of '/home/ubuntu/uncd -V' on provided google cloud machines.
+Shows results of '/home/ubuntu/unc-node -V' on provided google cloud machines.
 Usage: ./show_uncd_version.py project host1 host2 host3 ...
 Example for testnet canaries:
     ./show_uncd_version.py unc-core testnet-canary-rpc-01-europe-north1-a-1f3e1e97 \
@@ -12,7 +12,7 @@ from utils import display_table, run_on_machine
 
 
 def get_uncd_info(project, host, user='ubuntu'):
-    return run_on_machine("./uncd -V", user, host, project)
+    return run_on_machine("./unc-node -V", user, host, project)
 
 
 def display_uncd_info(hosts, uncd_info, user='ubuntu'):

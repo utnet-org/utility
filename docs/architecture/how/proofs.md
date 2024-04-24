@@ -171,7 +171,7 @@ Imagine that we have the following receipt:
 Remember that the outcomes of the execution will be added to the NEXT block, so
 let’s find the next block hash, and the proper chunk.
 
-(in this example, I’ve used the `view-state chain` from uncd)
+(in this example, I’ve used the `view-state chain` from unc-node)
 
 ```
 417 7FtuLHR3VSNhVTDJ8HmrzTffFWoWPAxBusipYa2UfrND |      node0 | parent: 416 C9WnNCbNvkQvnS7jdpaSGrqGvgM7Wwk5nQvkNC9aZFBH | .... 0: E6pfD84bvHmEWgEAaA8USCn2X3XUJAbFfKLmYez8TgZ8 107 Tgas |1: Ch1zr9TECSjDVaCjupNogLcNfnt6fidtevvKGCx8c9aC 104 Tgas |2: 87CmpU6y7soLJGTVHNo4XDHyUdy5aj9Qqy4V7muF5LyF   0 Tgas |3: CtaPWEvtbV4pWem9Kr7Ex3gFMtPcKL4sxDdXD4Pc7wah   0 Tgas
@@ -182,7 +182,7 @@ I know that the receipt should belong to Shard 3 <!-- TODO: how? :) --> so let�
 the chunk header:
 
 ```console
-$ uncd view-state chunks --chunk-hash 5ub8CZMQmzmZYQcJU76hDC3BsajJfryjyShxGF9rzpck
+$ unc-node view-state chunks --chunk-hash 5ub8CZMQmzmZYQcJU76hDC3BsajJfryjyShxGF9rzpck
 ```
 
 ```

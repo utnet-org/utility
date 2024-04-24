@@ -376,7 +376,7 @@ pub(crate) static PRODUCE_AND_DISTRIBUTE_CHUNK_TIME: Lazy<HistogramVec> = Lazy::
     )
     .unwrap()
 });
-/// Exports uncd, protocol and database versions via Prometheus metrics.
+/// Exports unc-node, protocol and database versions via Prometheus metrics.
 ///
 /// Sets metrics which export node’s max supported protocol version, used
 /// database version and build information.  The latter is taken from

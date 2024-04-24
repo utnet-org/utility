@@ -21,8 +21,8 @@ not supported yet.
 To run a local UNC network with one node, use
 
 ```console
-cargo run -p uncd -- init # generates various configs in ~/.unc
-cargo run -p uncd -- run
+cargo run -p unc-node -- init # generates various configs in ~/.unc
+cargo run -p unc-node -- run
 ```
 
 You can now use your own node's HTTP RPC API (e.g.

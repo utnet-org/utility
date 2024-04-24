@@ -1,4 +1,4 @@
-# How uncd will work
+# How unc-node will work
 The documents under this chapter are talking about the future of UNC - what we're planning on improving and how.
 
 (This also means that they can get out of date quickly :-).

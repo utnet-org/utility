@@ -405,7 +405,7 @@ def main():
         nodes = [
             cluster.RpcNode("127.0.0.1", 3030),
         ]
-        # The `uncd` localnet setup stores the keys in this directory.
+        # The `unc-node` localnet setup stores the keys in this directory.
         key_path = args.contract_key
         signer_key = key.Key.from_json_file(key_path)
 

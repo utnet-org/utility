@@ -62,7 +62,7 @@ Since the change of reading genesis method to optimize memory usage. You'd be ab
 
 * Add `InitConfigArgs` and `indexer_init_configs`
 
-As current `uncd::init_configs()` signature is a bit hard to read and use we introduce `InitConfigArgs` struct to make a process of passing arguments more explicit. That's why we introduce `indexer_init_configs` which is just a wrapper on `uncd::init_configs()` but takes `dir` and `InitConfigArgs` as an input.
+As current `unc-node::init_configs()` signature is a bit hard to read and use we introduce `InitConfigArgs` struct to make a process of passing arguments more explicit. That's why we introduce `indexer_init_configs` which is just a wrapper on `unc-node::init_configs()` but takes `dir` and `InitConfigArgs` as an input.
 
 ## 0.8.0
 
@@ -70,7 +70,7 @@ As current `uncd::init_configs()` signature is a bit hard to read and use we int
 
 ## Breaking change
 
-actix update changed the way we used to deal with starting the node and getting necessary data from uncd.
+actix update changed the way we used to deal with starting the node and getting necessary data from unc-node.
 The `start()` method was deleted, `Indexer` struct doesn't have `actix_runtime` anymore and runtime should be
 created and started on the Indexer implementation, not on the Indexer Framework one.
 

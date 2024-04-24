@@ -10,8 +10,8 @@ deploy a contract. You might want to re-read [how to run a node](./run_a_node.md
 to understand what's going one here:
 
 ```console
-$ cargo run --profile dev-release -p uncd -- init
-$ cargo run --profile dev-release -p uncd -- run
+$ cargo run --profile dev-release -p unc-node -- init
+$ cargo run --profile dev-release -p unc-node -- run
 $ UNC_ENV=local unc create-account alice.test.unc --masterAccount test.unc
 ```
 

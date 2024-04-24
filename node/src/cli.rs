@@ -61,7 +61,7 @@ impl UncdCmd {
         .local();
 
         info!(
-            target: "uncd",
+            target: "unc-node",
             version = crate::UNCD_VERSION,
             build = crate::UNCD_BUILD,
             latest_protocol = unc_primitives::version::PROTOCOL_VERSION
@@ -181,7 +181,7 @@ struct UncdOpts {
     #[clap(long, value_parser, default_value_os = crate::DEFAULT_HOME.as_os_str())]
     home: PathBuf,
     /// Skips consistency checks of genesis.json (and records.json) upon startup.
-    /// Let's you start `uncd` slightly faster.
+    /// Let's you start `unc-node` slightly faster.
     #[clap(long)]
     unsafe_fast_startup: bool,
     /// Enables export of span data using opentelemetry protocol.
@@ -193,7 +193,7 @@ impl UncdOpts {
     // TODO(nikurt): Delete in 1.38 or later.
     pub fn verbose_target(&self) -> Option<&str> {
         self.verbose.as_ref().map(|inner| {
-            tracing::error!(target: "uncd", "--verbose flag is deprecated, please use RUST_LOG or log_config.json instead.");
+            tracing::error!(target: "unc-node", "--verbose flag is deprecated, please use RUST_LOG or log_config.json instead.");
             inner.as_ref().map_or("", String::as_str)
         })
     }
@@ -331,7 +331,7 @@ pub(super) struct InitCmd {
 
 /// Warns if unsupported build of the executable is used on mainnet or testnet.
 ///
-/// Verifies that when running on mainnet or testnet chain a uncd binary built
+/// Verifies that when running on mainnet or testnet chain a unc-node binary built
 /// with `make release` command is used.  That Makefile targets enable
 /// optimisation options which aren’t enabled when building with different
 /// methods and is the only officially supported method of building the binary
@@ -349,19 +349,19 @@ fn check_release_build(chain: &str) {
         && [unc_primitives::chains::MAINNET, unc_primitives::chains::TESTNET].contains(&chain)
     {
         warn!(
-            target: "uncd",
-            "Running a uncd executable which wasn’t built with `make release` \
+            target: "unc-node",
+            "Running a unc-node executable which wasn’t built with `make release` \
              command isn’t supported on {}.",
             chain
         );
         warn!(
-            target: "uncd",
+            target: "unc-node",
             "Note that `cargo build --release` builds lack optimisations which \
              may be needed to run properly on {}",
             chain
         );
         warn!(
-            target: "uncd",
+            target: "unc-node",
             "Consider recompiling the binary using `make release` command.");
     }
 }
@@ -576,7 +576,7 @@ impl RunCmd {
                     break sig;
                 }
             };
-            warn!(target: "uncd", "{}, stopping... this may take a few minutes.", sig);
+            warn!(target: "unc-node", "{}, stopping... this may take a few minutes.", sig);
             if let Some(handle) = cold_store_loop_handle {
                 handle.stop()
             }
@@ -587,7 +587,7 @@ impl RunCmd {
             flat_state_migration_handle.stop();
             futures::future::join_all(rpc_servers.iter().map(|(name, server)| async move {
                 server.stop(true).await;
-                debug!(target: "uncd", "{} server stopped", name);
+                debug!(target: "unc-node", "{} server stopped", name);
             }))
             .await;
             actix::System::current().stop();
@@ -595,7 +595,7 @@ impl RunCmd {
             unc_o11y::reload(Some("error"), None, Some(unc_o11y::OpenTelemetryLevel::OFF)).unwrap();
         });
         sys.run().unwrap();
-        info!(target: "uncd", "Waiting for RocksDB to gracefully shutdown");
+        info!(target: "unc-node", "Waiting for RocksDB to gracefully shutdown");
         RocksDB::block_until_all_instances_are_dropped();
     }
 }
@@ -702,7 +702,7 @@ pub(super) struct RecompressStorageSubCommand {
 
 impl RecompressStorageSubCommand {
     pub(super) fn run(self, home_dir: &Path) {
-        warn!(target: "uncd", "Recompressing storage; note that this operation may take up to a day to finish.");
+        warn!(target: "unc-node", "Recompressing storage; note that this operation may take up to a day to finish.");
         let opts = framework::RecompressOpts {
             dest_dir: self.output_dir,
             keep_partial_chunks: self.keep_partial_chunks,

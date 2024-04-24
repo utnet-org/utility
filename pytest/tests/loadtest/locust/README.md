@@ -30,13 +30,13 @@ For a local test setup, this works just fine.
 KEY=~/.unc/localnet/node0/validator_key.json
 ```
 
-For a quick demo, you can also run a localnet using [uncd](https://github.com/unc/uncd).
+For a quick demo, you can also run a localnet using [unc-node](https://github.com/unc/unc-node).
 
 ```sh
-uncd run localnet --binary-path ../framework/target/release/ --num-nodes 4 --override
+unc-node run localnet --binary-path ../framework/target/release/ --num-nodes 4 --override
 ```
 
-Then to actually run it, this is the command. (Update ports and IP according to your localnet, uncd will print it.)
+Then to actually run it, this is the command. (Update ports and IP according to your localnet, unc-node will print it.)
 
 ```sh
 cd pytest/tests/loadtest/locust/

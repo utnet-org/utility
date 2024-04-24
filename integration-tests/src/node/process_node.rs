@@ -128,17 +128,17 @@ impl ProcessNode {
     pub fn get_start_node_command(&self) -> Command {
         if std::env::var("NIGHTLY_RUNNER").is_err() {
             let mut command = Command::new("cargo");
-            command.args(&["run", "-p", "uncd"]);
+            command.args(&["run", "-p", "unc-node"]);
             #[cfg(feature = "nightly_protocol")]
             command.args(&["--features", "nightly_protocol"]);
             #[cfg(feature = "nightly")]
             command.args(&["--features", "nightly"]);
-            command.args(&["--bin", "uncd", "--", "--home"]);
+            command.args(&["--bin", "unc-node", "--", "--home"]);
             command.arg(&self.work_dir);
             command.arg("run");
             command
         } else {
-            let mut command = Command::new("target/debug/uncd");
+            let mut command = Command::new("target/debug/unc-node");
             command.arg("--home");
             command.arg(&self.work_dir);
             command.arg("run");

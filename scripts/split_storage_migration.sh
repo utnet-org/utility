@@ -6,35 +6,35 @@ set -euo pipefail
 # /split_storage_migration.sh (testnet|mainnnet)  >> ./split_storage_migration.log &
 # Takes one argument -- chain_id (mainnet or testnet)
 # Prerequisites:
-# - systemd uncd service
-# - uncd home is in /home/ubuntu/.unc
-# - uncd binary is in /home/ubuntu/uncd
+# - systemd unc-node service
+# - unc-node home is in /home/ubuntu/.unc
+# - unc-node binary is in /home/ubuntu/unc-node
 # - /home/ubuntu/.unc/config.json is initialised
 # - metrics are exported to 3030 port
 # - aws s3 client
 # First, prepares config files using jq.
-# Restarts uncd and waits for cold head to sync with final head
+# Restarts unc-node and waits for cold head to sync with final head
 # Downloads latest rpc db in hot-data
-# Stops uncd, prepares rpc db to be used as hot db, changes config to look at hot db instead of archival db
-# Restarts uncd
+# Stops unc-node, prepares rpc db to be used as hot db, changes config to look at hot db instead of archival db
+# Restarts unc-node
 # After that node is running in split storage mode
 # Legacy archival db can be removed
 
 UNC=/home/ubuntu/.unc
 chain=$1
-service_name=uncd
+service_name=un c
 
 if [ "$chain" != "testnet" ] && [ "$chain" != "mainnet" ]; then
   echo "Chain should be 'mainnet' or 'testnet', got '$chain'"
   exit 1
 fi
 
-function restart_uncd() {
+function restart_unc-node() {
   echo "Restarting the systemd service '$service_name'"
   sudo systemctl restart $service_name
 }
 
-function stop_uncd() {
+function stop_unc-node() {
   echo "Stopping the systemd service '$service_name'"
   sudo systemctl stop $service_name
 }
@@ -100,7 +100,7 @@ function prepare_configs {
 function run_with_trie_changes {
   echo "Starting an archival run with TrieChanges"
   cp $UNC_HOME/config.json.archival $UNC_HOME/config.json
-  restart_uncd
+  restart_unc-node
 
   echo "Waiting 10 minutes"
   sleep 600
@@ -114,7 +114,7 @@ function init_cold_storage {
   echo "Do not interrupt. Any interruption will undo the migration process."
   cp $UNC_HOME/config.json.migration $UNC_HOME/config.json
 
-  restart_uncd
+  restart_unc-node
 
   metrics_url="http://0.0.0.0:3030/metrics"
   # Wait for the migration to complete
@@ -147,9 +147,9 @@ function finish_split_storage_migration {
   # Change hot store type
   while true
   do
-    stop_uncd
+    stop_unc-node
     echo "Trying to change RPC DB kind to Hot"
-    if /home/ubuntu/uncd cold-store prepare-hot --store-relative-path='hot-data'
+    if /home/ubuntu/unc-node cold-store prepare-hot --store-relative-path='hot-data'
     then
       echo "Successfully changed RPC DB kind to Hot"
       break
@@ -157,7 +157,7 @@ function finish_split_storage_migration {
       echo "Failed to change RPC DB king to Hot. Check the error above."
       echo "Assuming the error is cold head being behind rpc tail."
       echo "Restarting the node with legacy archival db and waiting an hour for cold head to increase."
-      restart_uncd
+      restart_unc-node
       sleep 3600
     fi
   done
@@ -165,7 +165,7 @@ function finish_split_storage_migration {
   # Switch to split storage mode
   echo "Starting split storage run"
   cp $UNC_HOME/config.json.split $UNC_HOME/config.json
-  restart_uncd
+  restart_unc-node
 
   echo "Waiting 5 minutes"
   sleep 300

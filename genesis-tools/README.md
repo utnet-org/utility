@@ -15,7 +15,7 @@ benchmarking, loadtesting, and estimating system parameters.
 To start node with 20k accounts first create configs:
 
 ```bash
-cargo run --package uncd --bin uncd -- init --test-seed=alice.unc --account-id=test.unc --fast
+cargo run --package unc-node --bin unc-node -- init --test-seed=alice.unc --account-id=test.unc --fast
 ```
 
 Then create state dump with how many accounts you want:
@@ -30,7 +30,7 @@ use `--home` on all commands here to specify an absolute path to a home director
 Then start a single local node:
 
 ```bash
-cargo run --package uncd --bin uncd -- run --boot-nodes=
+cargo run --package unc-node --bin unc-node -- run --boot-nodes=
 ```
 
 ## `keypair-generator`

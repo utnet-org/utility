@@ -154,7 +154,7 @@ enum ColdStoreInitialMigrationResult {
 /// Migration can be interrupted via `keep_going` flag.
 ///
 /// First, checks that hot store is of kind `Archive`. If not, no migration needed.
-/// Then, captures hot final head BEFORE the migration, as migration is performed during normal uncd run.
+/// Then, captures hot final head BEFORE the migration, as migration is performed during normal unc-node run.
 /// If hot final head is not set, returns Err.
 /// Otherwise:
 /// 1. performed migration

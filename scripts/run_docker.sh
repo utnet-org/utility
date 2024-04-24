@@ -5,7 +5,7 @@ UNC_HOME=${UNC_HOME:-/srv/unc}
 export UNC_HOME
 
 if [ -n "$INIT" ]; then
-    uncd init ${CHAIN_ID:+--chain-id="$CHAIN_ID"} \
+    unc-node init ${CHAIN_ID:+--chain-id="$CHAIN_ID"} \
                ${ACCOUNT_ID:+--account-id="$ACCOUNT_ID"}
 fi
 
@@ -20,5 +20,5 @@ ulimit -c unlimited
 echo "Telemetry: ${TELEMETRY_URL}"
 echo "Bootnodes: ${BOOT_NODES}"
 
-exec uncd run ${TELEMETRY_URL:+--telemetry-url="$TELEMETRY_URL"} \
+exec unc-node run ${TELEMETRY_URL:+--telemetry-url="$TELEMETRY_URL"} \
                ${BOOT_NODES:+--boot-nodes="$BOOT_NODES"} "$@"

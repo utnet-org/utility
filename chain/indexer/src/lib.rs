@@ -128,7 +128,7 @@ impl Indexer {
         receiver
     }
 
-    /// Expose uncd config
+    /// Expose unc-node config
     pub fn unc_config(&self) -> &framework::UncConfig {
         &self.unc_config
     }
@@ -142,7 +142,7 @@ impl Indexer {
 }
 
 /// Function that initializes configs for the node which
-/// accepts `InitConfigWrapper` and calls original `init_configs` from `uncd`
+/// accepts `InitConfigWrapper` and calls original `init_configs` from `unc-node`
 pub fn indexer_init_configs(
     dir: &std::path::PathBuf,
     params: InitConfigArgs,

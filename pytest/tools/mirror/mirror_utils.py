@@ -46,7 +46,7 @@ def copy_genesis(home):
     shutil.copy(dot_unc() / 'test0/forked/records.json', home / 'records.json')
 
 
-def init_target_dir(uncd,
+def init_target_dir(unc-node,
                     home,
                     ordinal,
                     boot_node_home,
@@ -54,12 +54,12 @@ def init_target_dir(uncd,
     mkdir_clean(home)
 
     try:
-        args = [uncd, '--home', home, 'init']
+        args = [unc-node, '--home', home, 'init']
         if validator_account is not None:
             args.extend(['--account-id', validator_account])
         subprocess.check_output(args, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
-        sys.exit(f'"uncd init" command failed: output: {e.stdout}')
+        sys.exit(f'"unc-node init" command failed: output: {e.stdout}')
     shutil.copy(dot_unc() / 'test0/config.json', home / 'config.json')
 
     with open(home / 'config.json', 'r') as f:
@@ -77,7 +77,7 @@ def init_target_dir(uncd,
         os.remove(home / 'validator_key.json')
 
 
-def init_target_dirs(uncd, last_ordinal, target_validators):
+def init_target_dirs(unc-node, last_ordinal, target_validators):
     ordinal = last_ordinal + 1
     dirs = []
 
@@ -89,7 +89,7 @@ def init_target_dirs(uncd, last_ordinal, target_validators):
             boot_node_home = None
         home = dot_unc() / f'test_target_{account_id}'
         dirs.append(home)
-        init_target_dir(uncd,
+        init_target_dir(unc-node,
                         home,
                         ordinal,
                         boot_node_home,
@@ -102,11 +102,11 @@ def init_target_dirs(uncd, last_ordinal, target_validators):
 def create_forked_chain(config, unc_root, source_node_homes,
                         target_validators):
     mkdir_clean(dot_unc() / MIRROR_DIR)
-    binary_name = config.get('binary_name', 'uncd')
-    uncd = os.path.join(unc_root, binary_name)
+    binary_name = config.get('binary_name', 'unc-node')
+    unc-node = os.path.join(unc_root, binary_name)
     try:
         subprocess.check_output([
-            uncd, "--home",
+            unc-node, "--home",
             dot_unc() / 'test0', "view-state", "dump-state", "--stream"
         ],
                                 stderr=subprocess.STDOUT)
@@ -114,7 +114,7 @@ def create_forked_chain(config, unc_root, source_node_homes,
         sys.exit(f'"dump-state" command failed: output: {e.stdout}')
     try:
         subprocess.check_output([
-            uncd,
+            unc-node,
             'mirror',
             'prepare',
             '--records-file-in',
@@ -138,10 +138,10 @@ def create_forked_chain(config, unc_root, source_node_homes,
     with open(dot_unc() / f'{MIRROR_DIR}/source/config.json', 'w') as f:
         json.dump(config, f)
 
-    dirs = init_target_dirs(uncd, ordinal, target_validators)
+    dirs = init_target_dirs(unc-node, ordinal, target_validators)
 
     target_dir = dot_unc() / f'{MIRROR_DIR}/target'
-    init_target_dir(uncd,
+    init_target_dir(unc-node,
                     target_dir,
                     len(source_node_homes) + len(dirs),
                     dirs[0],
@@ -176,7 +176,7 @@ def create_forked_chain(config, unc_root, source_node_homes,
         # setting of transaction_validity_period. Not really worth changing the code since
         # transaction_validity_period is large on mainnet and testnet anyway
         subprocess.check_output([
-            uncd, 'amend-genesis', '--genesis-file-in', genesis_file_in,
+            unc-node, 'amend-genesis', '--genesis-file-in', genesis_file_in,
             '--records-file-in', records_file_in, '--genesis-file-out',
             genesis_file_out, '--records-file-out', records_file_out,
             '--validators', validators_file, '--chain-id', 'foonet',
@@ -220,7 +220,7 @@ class MirrorProcess:
     def __init__(self, unc_root, source_home, online_source):
         self.online_source = online_source
         self.source_home = source_home
-        self.uncd = os.path.join(unc_root, 'uncd')
+        self.unc-node = os.path.join(unc_root, 'unc-node')
         self.start()
         self.start_time = time.time()
         self.restarted = False
@@ -232,7 +232,7 @@ class MirrorProcess:
         with open(dot_unc() / f'{MIRROR_DIR}/stdout', 'ab') as stdout, \
             open(dot_unc() / f'{MIRROR_DIR}/stderr', 'ab') as stderr:
             args = [
-                self.uncd, 'mirror', 'run', "--source-home", self.source_home,
+                self.unc-node, 'mirror', 'run', "--source-home", self.source_home,
                 "--target-home",
                 dot_unc() / f'{MIRROR_DIR}/target/', '--secret-file',
                 dot_unc() / f'{MIRROR_DIR}/target/mirror-secret.json'

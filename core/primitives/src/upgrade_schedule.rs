@@ -31,7 +31,7 @@ impl ProtocolUpgradeVotingSchedule {
     /// It will first check if the UNC_TESTS_IMMEDIATE_PROTOCOL_UPGRADE is
     /// set in the environment and if so return the immediate upgrade schedule.
     /// This should only be used in tests, in particular in tests the in some
-    /// way test uncd upgrades.
+    /// way test unc-node upgrades.
     ///
     /// Otherwise it will parse the given string and return the corresponding
     /// upgrade schedule.

@@ -3,7 +3,7 @@
     "unc_root": "../target/debug/",
     "remote": {
         "instance_name": "unc-pytest",
-        "binary": "uncd",
+        "binary": "unc-node",
         "zones": [
             ""
         ]

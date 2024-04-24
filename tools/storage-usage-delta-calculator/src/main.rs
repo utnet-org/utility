@@ -8,7 +8,7 @@ use unc_store::genesis::compute_genesis_storage_usage;
 
 /// Calculates delta between actual storage usage and one saved in state
 /// output.json should contain dump of current state,
-/// run 'uncd --home ~/.unc/mainnet/ view_state dump_state'
+/// run 'unc-node --home ~/.unc/mainnet/ view_state dump_state'
 /// to get it
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

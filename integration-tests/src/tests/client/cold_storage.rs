@@ -476,7 +476,7 @@ fn test_initial_copy_to_cold_medium_batch() {
 /// - Produce a lot of blocks.
 /// - Manually perform initial migration.
 /// - Produce a lot more blocks for hot tail to reach its boundary.
-/// - Spawn a cold store loop (just like we do in uncd).
+/// - Spawn a cold store loop (just like we do in unc-node).
 /// - Wait 10 seconds.
 /// - Check that cold head progressed.
 #[test]

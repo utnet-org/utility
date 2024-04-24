@@ -1,6 +1,6 @@
-# `uncd view_state`
+# `unc-node view_state`
 
-`uncd view_state` is a tool that helps you look into the state of the blockchain, which includes:
+`unc-node view_state` is a tool that helps you look into the state of the blockchain, which includes:
 
 * apply old blocks with a new version of the code or of the protocol
 * generate a genesis file from the current state of the blockchain
@@ -13,14 +13,14 @@ TODO: Fill out documentation for all available commands
 
 Basic example:
 ```bash
-make uncd
-./target/release/uncd --home ~/.unc/ view_state apply_range \
+make unc-node
+./target/release/unc-node --home ~/.unc/ view_state apply_range \
         --shard-id=0 --start-index=42376889 --end_index=423770101 \
          --verbose-output --csv-file=./apply_range.csv
 ```
 
 This command will:
-* build `uncd` with link-time optimizations
+* build `unc-node` with link-time optimizations
 * open the blockchain state at the location provided by `--home`
 * for each block with height between `--start-index` and `--end-index`
   * Run `apply_transactions` function
@@ -36,7 +36,7 @@ flags. Missing `--start-index` means use chain state starting from the genesis. 
 Enable debug output to print extra details such as individual outcomes:
 
 ```bash
-./target/release/uncd view_state apply_range --verbose ...
+./target/release/unc-node view_state apply_range --verbose ...
 ```
 
 To make more precise time estimations, enable `--sequential` flag, which will also cause slowdown proportional to the 
@@ -51,19 +51,19 @@ obtaining this whole history is the following:
 * Make sure to change `machine-name` and `role` to something unique.
 * Make a Pull Request and ask Mario (@mhalambek) or Sandi (@chefsale) for review.
 * Ask Mario or Sandi to grant you permissions to the GCP project `rpc-prod`.
-* Run `terraform init` and `terraform apply` to start an instance. This instance will have a running `uncd` systemd
+* Run `terraform init` and `terraform apply` to start an instance. This instance will have a running `unc-node` systemd
   service, with `/home/ubuntu/.unc` as the home directory. Follow the `terraform` CLI
   [installation guide](https://learn.hashicorp.com/tutorials/terraform/install-cli) if needed.
 * SSH using `gcloud compute ssh <machine_name>" --project=rpc-prod`. Follow the `gcloud` CLI
   [installation guide](https://cloud.google.com/sdk/docs/install) if needed.
 * It is recommended to run all the following commands as user `ubuntu`: `sudo su ubuntu`.
-* Install tools be able to compile `uncd`:
+* Install tools be able to compile `unc-node`:
   * Install development packages: <https://unc-nodes.io/validator/compile-and-run-a-node>
   * Install Rust: <https://rustup.rs/>
   * Clone the git repository: `git clone http://github.com/utnet-org/utility`
-  * `make uncd`
-* `sudo systemctl stop uncd`, because a running node has a LOCK over the database.
-* Run `uncd view_state` as described above
+  * `make unc-node`
+* `sudo systemctl stop unc-node`, because a running node has a LOCK over the database.
+* Run `unc-node view_state` as described above
 * Enjoy
 
 #### Checking Predicates
@@ -95,7 +95,7 @@ Flags:
 Example:
 
 ```shell
-./target/release/uncd --home ~/.unc/mainnet/ view_state dump_state --height 68874690 --account-ids unc
+./target/release/unc-node --home ~/.unc/mainnet/ view_state dump_state --height 68874690 --account-ids unc
 ```
 
 ### `dump_tx`
@@ -113,7 +113,7 @@ Flags:
 Example:
 
 ```shell
-./target/release/uncd --home ~/.unc/mainnet/ view_state dump_tx --start-height 68701890 --end-height 68701890 --account-ids unc
+./target/release/unc-node --home ~/.unc/mainnet/ view_state dump_tx --start-height 68701890 --end-height 68701890 --account-ids unc
 ```
 
 ### `rocksdb_stats`
@@ -161,7 +161,7 @@ display more information but it will also slow down the process.
 
 To see a list of flags, run 
 ```ignore
-cargo run -p uncd -- view-state contract-accounts --help
+cargo run -p unc-node -- view-state contract-accounts --help
 ```
 
 #### Example
@@ -177,7 +177,7 @@ receipts. This is particularly useful to find contracts that call certain
 actions on-chain.
 
 ```ignore
-cargo run -p uncd -- view-state contract-accounts \
+cargo run -p unc-node -- view-state contract-accounts \
   --skip-accounts "aurora,relay.aurora,token.sweat,oracle.sweat,tge-lockup.unc,sweat_welcome.unc" \
   --receipts-in \
   --receipts-out \

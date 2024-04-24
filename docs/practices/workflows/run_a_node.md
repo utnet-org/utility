@@ -9,10 +9,10 @@ relatively little attention to the various shortcuts we have.
 Start with the following command:
 
 ```console
-$ cargo run --profile dev-release -p uncd -- --help
+$ cargo run --profile dev-release -p unc-node -- --help
 ```
 
-This command builds `uncd` and asks it to show `--help`. Building `uncd` takes
+This command builds `unc-node` and asks it to show `--help`. Building `unc-node` takes
 a while, take a look at [Fast Builds](../fast_builds.md) chapter to learn how to
 speed it up.
 
@@ -27,21 +27,21 @@ Let's dissect the command:
   participate in a real network. The `--release` profile produces a fully
   optimized node, but that's very slow to compile. So `--dev-release`
   is a sweet spot for us! However, never use it for actual production nodes.
-- `-p uncd` asks to build the `uncd` package. We use
+- `-p unc-node` asks to build the `unc-node` package. We use
   [cargo workspaces](https://doc.rust-lang.org/cargo/reference/workspaces.html)
-  to organize our code. The `uncd` package in the top-level `/uncd` directory
+  to organize our code. The `unc-node` package in the top-level `/unc-node` directory
   is the final binary that ties everything together.
-- `--` tells cargo to pass the rest of the arguments through to `uncd`.
-- `--help` instructs `uncd` to list available CLI arguments and subcommands.
+- `--` tells cargo to pass the rest of the arguments through to `unc-node`.
+- `--help` instructs `unc-node` to list available CLI arguments and subcommands.
 
-**Note:** Building `uncd` might fail with an openssl or CC error. This means
+**Note:** Building `unc-node` might fail with an openssl or CC error. This means
 that you lack some non-rust dependencies we use (openssl and rocksdb mainly). We
 currently don't have docs on how to install those, but (basically) you want to
 `sudo apt install` (or whichever distro/package manager you use) missing bits.
 
 ## Preparing Tiny Network
 
-Typically, you want `uncd` to connect to some network, like `mainnet` or
+Typically, you want `unc-node` to connect to some network, like `mainnet` or
 `testnet`. We'll get there in time, but we'll start small. For the current
 chapter, we will run a network consisting of just a single node -- our own.
 
@@ -49,8 +49,8 @@ The first step there is creating the required configuration. Run the `init`
 command to create config files:
 
 ```console
-$ cargo run --profile dev-release -p uncd -- init
-INFO uncd: version="trunk" build="1.1.0-3091-ga8964d200-modified" latest_protocol=57
+$ cargo run --profile dev-release -p unc-node -- init
+INFO unc-node: version="trunk" build="1.1.0-3091-ga8964d200-modified" latest_protocol=57
 INFO unc: Using key ed25519:B41GMfqE2jWHVwrPLbD7YmjZxxeQE9WA9Ua2jffP5dVQ for test.unc
 INFO unc: Using key ed25519:34d4aFJEmc2A96UXMa9kQCF8g2EfzZG9gCkBAPcsVZaz for node
 INFO unc: Generated node key, validator key, genesis file in ~/.unc
@@ -158,7 +158,7 @@ we'll see
 That is, we have a secret key for the sole validator in our network, how
 convenient.
 
-To recap, `uncd init` without arguments creates a config for a new network
+To recap, `unc-node init` without arguments creates a config for a new network
 that starts with a single validator, for which we have the keys.
 
 You might be wondering what `~/.unc/node_key.json` is. That's not too
@@ -193,8 +193,8 @@ is rejected.
 Finally,
 
 ```console
-$ cargo run --profile dev-release -p uncd -- run
-INFO uncd: version="trunk" build="1.1.0-3091-ga8964d200-modified" latest_protocol=57
+$ cargo run --profile dev-release -p unc-node -- run
+INFO unc-node: version="trunk" build="1.1.0-3091-ga8964d200-modified" latest_protocol=57
 INFO unc: Creating a new RocksDB database path=/home/matklad/.unc/data
 INFO db: Created a new RocksDB instance. num_instances=1
 INFO stats: #       0 4xecSHqTKx2q8JNQNapVEi5jxzewjxAnVFhMd4v5LqNh Validator | 1 validator 0 peers ⬇ 0 B/s ⬆ 0 B/s NaN bps 0 gas/s CPU: 0%, Mem: 50.8 MB
@@ -219,8 +219,8 @@ Let's stop the node with `^C` and look around
 
 ```console
 INFO unc_chain::doomslug: ready to produce block @ 42, has enough approvals for 56.759µs, has enough chunks
-^C WARN uncd: SIGINT, stopping... this may take a few minutes.
-INFO uncd: Waiting for RocksDB to gracefully shutdown
+^C WARN unc-node: SIGINT, stopping... this may take a few minutes.
+INFO unc-node: Waiting for RocksDB to gracefully shutdown
 INFO db: Waiting for remaining RocksDB instances to shut down num_instances=1
 INFO db: All RocksDB instances shut down
 $
@@ -246,8 +246,8 @@ here. The important bit here is that the node remembers the state of the network
 so, when we restart it, it continues from around the last block:
 
 ```console
-$ cargo run --profile dev-release -p uncd -- run
-INFO uncd: version="trunk" build="1.1.0-3091-ga8964d200-modified" latest_protocol=57
+$ cargo run --profile dev-release -p unc-node -- run
+INFO unc-node: version="trunk" build="1.1.0-3091-ga8964d200-modified" latest_protocol=57
 INFO db: Created a new RocksDB instance. num_instances=1
 INFO db: Dropped a RocksDB instance. num_instances=0
 INFO unc: Opening an existing RocksDB database path=/home/matklad/.unc/data
@@ -467,8 +467,8 @@ some amount of tokens was deducted to account for transaction fees.
 Great! So we've learned how to run our very own single-node UNC network using a
 binary we've built from source. The steps are:
 
-- Create configs with `cargo run --profile dev-release -p uncd -- init`
-- Run the node with `cargo run --profile dev-release -p uncd -- run`
+- Create configs with `cargo run --profile dev-release -p unc-node -- init`
+- Run the node with `cargo run --profile dev-release -p unc-node -- run`
 - Poke the node with `httpie` or
 - Install `unc-cli` via `npm install -g unc-cli`
 - Submit transactions via `unc_ENV=local unc create-account ...`

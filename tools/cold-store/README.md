@@ -12,7 +12,7 @@ to recover from them.
 ### Localnet
 
 #### Prepare data
-- Run `uncd init` / `uncd localnet`.  
+- Run `unc-node init` / `unc-node localnet`.  
 - Change your config (`--home-dir`/config.json)
 to not garbage collect larger number of epochs.  
 By default it is 5, 
@@ -21,7 +21,7 @@ Epoch lasts 500 blocks on localnet (as specified in `--home-dir`/genesis.json).
 That will give you sort of archival storage of max 500'0000 blocks.
 
 #### Produce blocks
-Start localnet node as usual `uncd run`.
+Start localnet node as usual `unc-node run`.
 Run node WITHOUT `--archive` parameter.  
 In archive mode node will not save `TrieChanges`
 and they are needed to copy blocks to cold.  
@@ -47,16 +47,16 @@ for archival storage.
 #### Produce blocks
 Run that binary for at least `gc_num_epochs_to_keep`.
 Epochs are larger on testnet/mainnet, so just give it a few days.  
-You can use `sudo systemctl start uncd` to run `/home/ubuntu/uncd`  
-and `jornalctl -u uncd` to check logs.  
-Be careful with what binary is at `/home/ubuntu/uncd`.  
+You can use `sudo systemctl start unc-node` to run `/home/ubuntu/unc-node`  
+and `jornalctl -u unc-node` to check logs.  
+Be careful with what binary is at `/home/ubuntu/unc-node`.  
 **TODO** some kind of system to maintain a bunch of local binaries.
 
 #### Migrate
 After archival storage is populated with enough of `TrieChanges`, 
 it should not be experimented with. If we need more block, we should 
 run a binary with that and only that one path -- saving of `TrieChanges`.  
-Archival storage should probably lie NOT in `/home/ubuntu/.uncd/data`.
+Archival storage should probably lie NOT in `/home/ubuntu/.unc-node/data`.
 
 That means, that unlike in real life, hot storage will not be mutated
 archival storage, but rather a brand new one,

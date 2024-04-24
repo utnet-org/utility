@@ -6,15 +6,15 @@ This crate contains utilities that allow to reconfigure the node while it is run
 
 ### Logging and tracing
 
-Make changes to `log_config.json` and send `SIGHUP` signal to the `uncd` process.
+Make changes to `log_config.json` and send `SIGHUP` signal to the `unc-node` process.
 
 ### Other config values
 
-Makes changes to `config.json` and send `SIGHUP` signal to the `uncd` process.
+Makes changes to `config.json` and send `SIGHUP` signal to the `unc-node` process.
 
 #### Fields of config that can be changed while the node is running:
 
-- `expected_shutdown`: the specified block height uncd will gracefully shutdown at.
+- `expected_shutdown`: the specified block height unc-node will gracefully shutdown at.
 
 #### Changing other fields of `config.json`
 

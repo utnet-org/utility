@@ -11,7 +11,7 @@ pub struct KeyFile {
     pub public_key: PublicKey,
     // Credential files generated which unc cli works with have secret_key
     // rather than private_key field.  To make it possible to read those from
-    // uncd add secret_key as an alias to this field so either will work.
+    // unc-node add secret_key as an alias to this field so either will work.
     #[serde(alias = "secret_key")]
     pub private_key: SecretKey,
 }

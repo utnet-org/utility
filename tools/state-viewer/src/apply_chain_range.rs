@@ -421,7 +421,7 @@ pub fn apply_chain_range(
 
 /**
  * With the database migration we can get into the situation where there are different
- * ChunkExtra versions in database and produced by `uncd` playback. Consider them equal as
+ * ChunkExtra versions in database and produced by `unc-node` playback. Consider them equal as
  * long as the content is equal.
  */
 fn smart_equals(extra1: &ChunkExtra, extra2: &ChunkExtra) -> bool {

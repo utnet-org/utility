@@ -40,7 +40,7 @@ def unc_init_genesis():
             subprocess.check_call([prebuilt_uncd] + args)
         else:
             subprocess.check_call(
-                ['cargo', 'run', '-p', 'uncd', '--bin', 'uncd', '--'] + args)
+                ['cargo', 'run', '-p', 'unc-node', '--bin', 'unc-node', '--'] + args)
         with open(os.path.join(tempdir, 'genesis.json')) as rd:
             genesis = json.load(rd, object_pairs_hook=collections.OrderedDict)
     genesis['records'] = []

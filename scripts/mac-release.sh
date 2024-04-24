@@ -66,7 +66,7 @@ function upload_binary {
 	fi
 }
 
-upload_binary uncd
+upload_binary unc-node
 upload_binary store-validator
 
 if [ "$release" == "release" ]

@@ -11,7 +11,7 @@ of keys and values within RocksDB.
 
 To run the script, use the following example:
 ```bash
-cargo run --bin uncd -- --home /home/ubuntu/.unc database analyse-data-size-distribution --column State --top_k 50
+cargo run --bin unc-node -- --home /home/ubuntu/.unc database analyse-data-size-distribution --column State --top_k 50
 ```
 The arguments are as follows:
 
@@ -46,7 +46,7 @@ It is intended as a collection of commands that perform small db modifications.
 Changes DbKind of a DB described in config (cold or hot).  
 Example usage:
 ```bash
-cargo run --bin uncd -- --home /home/ubuntu/.unc database change-db-kind --new-kind RPC change-cold
+cargo run --bin unc-node -- --home /home/ubuntu/.unc database change-db-kind --new-kind RPC change-cold
 ```
 
 In this example we change DbKind of the cold db to RPC (for some reason).  
@@ -57,9 +57,9 @@ If you want to change DbKind of the cold db back, you would have to adjust your 
 - .cold_store = null
 - .archive = false
 
-This way uncd would try to open db at cold path as RPC db.  
+This way unc-node would try to open db at cold path as RPC db.  
 Then you can call
-`uncd database change-db-kind --new-kind Cold change-hot`.
+`unc-node database change-db-kind --new-kind Cold change-hot`.
 Notice that even though in your mind this db is cold, in your config this db hot, so you have to pass `change-hot`.
 
 ## Compact database
@@ -70,7 +70,7 @@ changed.
 
 Example usage:
 ```bash
-cargo run --bin uncd -- database compact-database
+cargo run --bin unc-node -- database compact-database
 ```
 
 
@@ -82,7 +82,7 @@ take no additional disk space due to hardlinking all the files.
 
 Example usage:
 ```bash
-cargo run --bin uncd -- --home /home/ubuntu/.unc database make-snapshot --destination /home/ubuntu/.unc/data/snapshot
+cargo run --bin unc-node -- --home /home/ubuntu/.unc database make-snapshot --destination /home/ubuntu/.unc/data/snapshot
 ```
 
 In this example all `.sst` files from `/home/ubuntu/.unc/data` will be also
@@ -93,10 +93,10 @@ corrupt the database.
 
 ### Run DB Migrations
 
-Opens the DB and runs migrations to bring it to the actual version expected by `uncd`
+Opens the DB and runs migrations to bring it to the actual version expected by `unc-node`
 Example usage:
 ```bash
-cargo run --bin uncd database run-migrations
+cargo run --bin unc-node database run-migrations
 ```
 
 For example, if the binary expects DB version `38`, but the DB is currently
@@ -105,4 +105,4 @@ from version `36` to version `38`, and then exits.
 
 ## State read perf
 A tool for performance testing hot storage RocksDB State column reads.
-Use help to get more details: `uncd database state-perf --help`
+Use help to get more details: `unc-node database state-perf --help`

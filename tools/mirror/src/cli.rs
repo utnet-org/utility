@@ -92,7 +92,7 @@ impl RunCmd {
 /// them from the source chain to the target chain
 #[derive(clap::Parser)]
 struct PrepareCmd {
-    /// A genesis records file as output by `uncd view-state
+    /// A genesis records file as output by `unc-node view-state
     /// dump-state --stream`
     #[clap(long)]
     records_file_in: PathBuf,
@@ -128,7 +128,7 @@ impl PrepareCmd {
     }
 }
 
-// copied from uncd/src/cli.rs
+// copied from unc-node/src/cli.rs
 fn new_actix_system(runtime: tokio::runtime::Runtime) -> actix::SystemRunner {
     // `with_tokio_rt()` accepts an `Fn()->Runtime`, however we know that this function is called exactly once.
     // This makes it safe to move out of the captured variable `runtime`, which is done by a trick

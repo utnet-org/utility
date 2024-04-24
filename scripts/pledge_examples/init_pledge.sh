@@ -1,12 +1,12 @@
 #!/bin/bash
 
-utility/target/debug/uncd  --home "~/.unc/Unc1" run  > "~/.unc/logfiles/logfile1" 2>&1 &
+utility/target/debug/unc-node  --home "~/.unc/Unc1" run  > "~/.unc/logfiles/logfile1" 2>&1 &
 sleep 1
-utility/target/debug/uncd  --home "~/.unc/Unc2" run --boot-nodes "ed25519:9e9JtarsJc3JR1PcnU6ykQgUmEf6LCAQi4ZjZjMuxrip@127.0.0.1:24567" > "~/.unc/logfiles/logfile2" 2>&1 &
+utility/target/debug/unc-node  --home "~/.unc/Unc2" run --boot-nodes "ed25519:9e9JtarsJc3JR1PcnU6ykQgUmEf6LCAQi4ZjZjMuxrip@127.0.0.1:24567" > "~/.unc/logfiles/logfile2" 2>&1 &
 sleep 1
-utility/target/debug/uncd  --home "~/.unc/Unc3" run --boot-nodes "ed25519:9e9JtarsJc3JR1PcnU6ykQgUmEf6LCAQi4ZjZjMuxrip@127.0.0.1:24567" > "~/.unc/logfiles/logfile3" 2>&1 &
+utility/target/debug/unc-node  --home "~/.unc/Unc3" run --boot-nodes "ed25519:9e9JtarsJc3JR1PcnU6ykQgUmEf6LCAQi4ZjZjMuxrip@127.0.0.1:24567" > "~/.unc/logfiles/logfile3" 2>&1 &
 sleep 1
-utility/target/debug/uncd  --home "~/.unc/Unc4" run --boot-nodes "ed25519:9e9JtarsJc3JR1PcnU6ykQgUmEf6LCAQi4ZjZjMuxrip@127.0.0.1:24567" > "~/.unc/logfiles/logfile4" 2>&1 &
+utility/target/debug/unc-node  --home "~/.unc/Unc4" run --boot-nodes "ed25519:9e9JtarsJc3JR1PcnU6ykQgUmEf6LCAQi4ZjZjMuxrip@127.0.0.1:24567" > "~/.unc/logfiles/logfile4" 2>&1 &
 sleep 10
 
 ## create new accounts

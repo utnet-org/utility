@@ -36,7 +36,7 @@ pub fn read_updateable_configs(
         crate::metrics::CONFIG_CORRECT.set(1);
         Ok(UpdateableConfigs { log_config, client_config: updateable_client_config })
     } else {
-        tracing::warn!(target: "uncd", "Dynamically updateable configs are not valid. Please fix this ASAP otherwise the node will be unable to restart: {:?}", &errs);
+        tracing::warn!(target: "unc-node", "Dynamically updateable configs are not valid. Please fix this ASAP otherwise the node will be unable to restart: {:?}", &errs);
         crate::metrics::CONFIG_CORRECT.set(0);
         Err(UpdateableConfigLoaderError::Errors(errs))
     }
@@ -68,7 +68,7 @@ where
             Ok(config_str_without_comments) => {
                 match serde_json::from_str::<T>(&config_str_without_comments) {
                     Ok(config) => {
-                        tracing::info!(target: "uncd", config=?config, "Changing the config {path:?}.");
+                        tracing::info!(target: "unc-node", config=?config, "Changing the config {path:?}.");
                         Ok(Some(config))
                     }
                     Err(err) => {
@@ -82,7 +82,7 @@ where
         },
         Err(err) => match err.kind() {
             std::io::ErrorKind::NotFound => {
-                tracing::info!(target: "uncd", ?err, "Reset the config {path:?} because the config file doesn't exist.");
+                tracing::info!(target: "unc-node", ?err, "Reset the config {path:?} because the config file doesn't exist.");
                 Ok(None)
             }
             _ => Err(UpdateableConfigLoaderError::OpenAndRead { file: path.to_path_buf(), err }),

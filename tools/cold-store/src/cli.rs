@@ -254,7 +254,7 @@ fn copy_all_blocks(storage: &NodeStorage, batch_size: usize, check: bool) {
     .expect("Failed to do migration to cold db");
 
     // Setting cold head to hot_final_head captured BEFORE the start of initial migration.
-    // Doesn't really matter here, but very important in case of migration during `uncd run`.
+    // Doesn't really matter here, but very important in case of migration during `unc-node run`.
     update_cold_head(&*storage.cold_db().unwrap(), &storage.get_hot_store(), &hot_final_head)
         .unwrap_or_else(|_| panic!("Failed to update cold HEAD to {}", hot_final_head));
 
@@ -354,7 +354,7 @@ impl PrepareHotCmd {
         tracing::info!(target : "prepare-hot", "Changing the DbKind of the RPC store to Hot");
         rpc_store.set_db_kind(DbKind::Hot)?;
 
-        tracing::info!(target : "prepare-hot", "Successfully prepared the hot store for migration. You can now set the config.store.path in uncd config to {:#?}", path);
+        tracing::info!(target : "prepare-hot", "Successfully prepared the hot store for migration. You can now set the config.store.path in unc-node config to {:#?}", path);
 
         Ok(())
     }

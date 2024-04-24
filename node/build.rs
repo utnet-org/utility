@@ -1,6 +1,6 @@
-//! Generates uncd version information and stores it in environment variables.
+//! Generates unc-node version information and stores it in environment variables.
 //!
-//! The build script sets `UNCD_VERSION` and `UNCD_BUILD` to be uncd version
+//! The build script sets `UNCD_VERSION` and `UNCD_BUILD` to be unc-node version
 //! and build respectively.  Version is the official semver such as 1.24.1 if
 //! the executable is built from a release branch or `trunk` if it’s built from
 //! master.  Build is a `git describe` of the commit the binary was built at
