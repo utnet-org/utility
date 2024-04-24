@@ -1,4 +1,4 @@
-Thank you for your interest in contributing to the UNC reference client!  We
+Thank you for your interest in contributing to the Utility reference client!  We
 welcome contributions from everyone.  Below are various bits of information to
 help you get started.  If you require additional help, please reach out to us on
 our [zulip channel](https://unc.zulipchat.com/).
@@ -8,7 +8,7 @@ our [zulip channel](https://unc.zulipchat.com/).
 framework is a fairly standard Rust project, so building is as easy as
 
 ```console
-$ cargo build
+cargo build
 ```
 
 Building framework requires a fairly recent Rust compiler (get it
@@ -21,8 +21,8 @@ not supported yet.
 To run a local UNC network with one node, use
 
 ```console
-$ cargo run -p uncd -- init # generates various configs in ~/.unc
-$ cargo run -p uncd -- run
+cargo run -p uncd -- init # generates various configs in ~/.unc
+cargo run -p uncd -- run
 ```
 
 You can now use your own node's HTTP RPC API (e.g.
@@ -43,7 +43,7 @@ CLI](https://docs.unc.org/tools/unc-cli) utility.
 To learn more about how framework works, skim through our guide to framework
 development:
 
-https://utility.github.io/framework/
+<https://utility.github.io/framework/>
 
 If you are looking for relatively simple tasks to familiarise yourself with
 `framework`, please check out issues labeled with the `C-good-first-issue` label
@@ -85,7 +85,7 @@ following steps when creating a PR:
 8. If your PR introduces a user-observable change (e.g. a new protocol feature,
    new configuration option, new Prometheus metric etc.) please document it in
    [CHANGELOG.md](CHANGELOG.md) in the `[unreleased]` section.
-9. It is important to select the ` Allow edits and access to secrets by
+9. It is important to select the `Allow edits and access to secrets by
    maintainers` checkbox on the PR.  Without this option, the merge bot will not
    have sufficient rights to be able to merge the PR when it is approved.  It
    also allows the maintainers to make trivial changes to the PR as necessary.

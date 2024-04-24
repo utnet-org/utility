@@ -4,7 +4,7 @@ target
 /target_expensive/
 /sandbox
 docker-build
-/conf/grafana-dashboard-main-testnet.json
+/grafana-dashboard-testnet.json
 /storage/
 /test-utils/node/storage
 /test-utils/ganache/storage

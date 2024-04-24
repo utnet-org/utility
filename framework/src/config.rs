@@ -568,11 +568,7 @@ impl Genesis {
     }
 
     pub fn test(accounts: Vec<AccountId>, num_validator_seats: NumSeats) -> Self {
-        Self::test_with_seeds(
-            accounts,
-            num_validator_seats,
-            vec![num_validator_seats],
-        )
+        Self::test_with_seeds(accounts, num_validator_seats, vec![num_validator_seats])
     }
 
     pub fn test_sharded(
@@ -580,11 +576,7 @@ impl Genesis {
         num_validator_seats: NumSeats,
         num_validator_seats_per_shard: Vec<NumSeats>,
     ) -> Self {
-        Self::test_with_seeds(
-            accounts,
-            num_validator_seats,
-            num_validator_seats_per_shard,
-        )
+        Self::test_with_seeds(accounts, num_validator_seats, num_validator_seats_per_shard)
     }
 
     pub fn test_sharded_new_version(
@@ -592,11 +584,7 @@ impl Genesis {
         num_validator_seats: NumSeats,
         num_validator_seats_per_shard: Vec<NumSeats>,
     ) -> Self {
-        Self::test_with_seeds(
-            accounts,
-            num_validator_seats,
-            num_validator_seats_per_shard,
-        )
+        Self::test_with_seeds(accounts, num_validator_seats, num_validator_seats_per_shard)
     }
 }
 

@@ -1,4 +1,4 @@
-# UNC Client Attributions
+# Utility Client Attributions
 
 We have taken inspiration and few pieces of code from:
 
