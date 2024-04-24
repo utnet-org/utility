@@ -14,13 +14,13 @@ use unc_store::genesis::GenesisStateApplier;
 use unc_store::test_utils::TestTriesBuilder;
 use unc_store::{ShardTries, TrieUpdate};
 
-pub const TEST_SHARD_UID: ShardUId = ShardUId { version: 1, shard_id: 0 };
+pub const TEST_SHARD_UID: ShardUId = ShardUId { version: 0, shard_id: 0 };
 
 pub fn get_runtime_and_trie() -> (Runtime, ShardTries, StateRoot) {
     let mut genesis = Genesis::test_sharded_new_version(
-        vec![alice_account(), bob_account(), "carol.unc".parse().unwrap()],
+        vec![alice_account(), bob_account(), "carol".parse().unwrap()],
         3,
-        vec![3],
+        vec![1],
     );
     add_test_contract(&mut genesis, &"test.contract".parse().unwrap());
     get_runtime_and_trie_from_genesis(&genesis)

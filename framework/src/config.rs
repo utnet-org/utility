@@ -513,7 +513,6 @@ impl Genesis {
         accounts: Vec<AccountId>,
         num_validator_seats: NumSeats,
         num_validator_seats_per_shard: Vec<NumSeats>,
-        shard_layout: ShardLayout,
     ) -> Self {
         let mut validators = vec![];
         let mut records = vec![];
@@ -563,7 +562,6 @@ impl Genesis {
             chunk_producer_kickout_threshold: CHUNK_PRODUCER_KICKOUT_THRESHOLD,
             fishermen_threshold: FISHERMEN_THRESHOLD,
             min_gas_price: MIN_GAS_PRICE,
-            shard_layout,
             ..Default::default()
         };
         Genesis::new(config, records.into()).unwrap()
@@ -574,7 +572,6 @@ impl Genesis {
             accounts,
             num_validator_seats,
             vec![num_validator_seats],
-            ShardLayout::v0_single_shard(),
         )
     }
 
@@ -583,12 +580,10 @@ impl Genesis {
         num_validator_seats: NumSeats,
         num_validator_seats_per_shard: Vec<NumSeats>,
     ) -> Self {
-        let num_shards = num_validator_seats_per_shard.len() as NumShards;
         Self::test_with_seeds(
             accounts,
             num_validator_seats,
             num_validator_seats_per_shard,
-            ShardLayout::v0(num_shards, 0),
         )
     }
 
@@ -597,12 +592,10 @@ impl Genesis {
         num_validator_seats: NumSeats,
         num_validator_seats_per_shard: Vec<NumSeats>,
     ) -> Self {
-        let num_shards = num_validator_seats_per_shard.len() as NumShards;
         Self::test_with_seeds(
             accounts,
             num_validator_seats,
             num_validator_seats_per_shard,
-            ShardLayout::v0(num_shards, 0),
         )
     }
 }
@@ -1163,7 +1156,6 @@ pub fn create_testnet_configs_from_seeds(
         .map(|seed| InMemorySigner::from_seed("node".parse().unwrap(), KeyType::ED25519, seed))
         .collect::<Vec<_>>();
 
-    let shard_layout = ShardLayout::v0(num_shards, 0);
     let accounts_to_add_to_genesis: Vec<AccountId> =
         seeds.iter().map(|s| s.parse().unwrap()).collect();
 
@@ -1171,7 +1163,6 @@ pub fn create_testnet_configs_from_seeds(
         accounts_to_add_to_genesis,
         num_validator_seats,
         get_num_seats_per_shard(num_shards, num_validator_seats),
-        shard_layout,
     );
     let mut configs = vec![];
     let first_node_addr = tcp::ListenerAddr::reserve_for_test();
