@@ -32,7 +32,7 @@ pub enum VMKind {
     /// Wasmer 2.x VM.
     Wasmer2,
     /// UncVM.
-    NearVm,
+    UncVm,
 }
 
 impl VMKind {
