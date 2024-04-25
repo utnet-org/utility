@@ -830,6 +830,7 @@ impl PeerManagerActor {
                 NetworkResponses::NoResponse
             }
             NetworkRequests::PartialEncodedChunkRequest { target, request, create_time } => {
+                #[allow(deprecated)]
                 metrics::PARTIAL_ENCODED_CHUNK_REQUEST_DELAY
                     .observe((self.clock.now() - create_time.0).as_seconds_f64());
                 let mut success = false;
