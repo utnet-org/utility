@@ -28,6 +28,7 @@ use tokio::sync::watch;
 // TODO: consider wrapping these types to prevent interactions
 // with other time libraries, especially to prevent the direct access
 // to the realtime (i.e. not through the Clock).
+#[allow(deprecated)]
 pub type Instant = time::Instant;
 // TODO: OffsetDateTime stores the timestamp in a decomposed form of
 // (year,month,day,hour,...). If we find it inefficient, we should
@@ -223,11 +224,13 @@ impl Default for FakeClock {
 /// Interval equivalent to tokio::time::Interval with
 /// MissedTickBehavior::Skip.
 pub struct Interval {
+    #[allow(deprecated)]
     next: time::Instant,
     period: time::Duration,
 }
 
 impl Interval {
+    #[allow(deprecated)]
     pub fn new(next: time::Instant, period: time::Duration) -> Self {
         Self { next, period }
     }
