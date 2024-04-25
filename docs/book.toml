@@ -2,7 +2,7 @@
 language = "en"
 multilingual = false
 src = "."
-title = "Guide to Nearcore Development"
+title = "Guide to Utility Development"
 
 [build]
 # Let's re-use the existing target dir for all build artifacts.
