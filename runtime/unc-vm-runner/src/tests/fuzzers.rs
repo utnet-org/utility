@@ -159,7 +159,7 @@ fn current_vm_does_not_crash_fuzzer() {
 fn unc_vm_and_wasmtime_agree_fuzzer() {
     bolero::check!().with_arbitrary::<ArbitraryModule>().for_each(|module: &ArbitraryModule| {
         let code = ContractCode::new(module.0.module.to_bytes(), None);
-        let unc_vm = run_fuzz(&code, VMKind::NearVm).expect("fatal failure");
+        let unc_vm = run_fuzz(&code, VMKind::UncVM).expect("fatal failure");
         let wasmtime = run_fuzz(&code, VMKind::Wasmtime).expect("fatal failure");
         assert_eq!(unc_vm, wasmtime);
     });

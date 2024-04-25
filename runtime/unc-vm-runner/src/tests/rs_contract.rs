@@ -26,7 +26,7 @@ fn test_contract(vm_kind: VMKind) -> ContractCode {
         // testing backwards-compatibility, use an old WASM
         VMKind::Wasmer0 | VMKind::Wasmer2 => unc_test_contracts::rs_contract(),
         // production and developer environment, use a cutting-edge WASM
-        VMKind::Wasmtime | VMKind::NearVm => unc_test_contracts::rs_contract(),
+        VMKind::Wasmtime | VMKind::UncVM => unc_test_contracts::rs_contract(),
     };
     ContractCode::new(code.to_vec(), None)
 }
@@ -241,7 +241,7 @@ pub fn test_out_of_memory() {
         assert_eq!(
             result.aborted,
             match vm_kind {
-                VMKind::Wasmer0 | VMKind::Wasmer2 | VMKind::NearVm =>
+                VMKind::Wasmer0 | VMKind::Wasmer2 | VMKind::UncVM =>
                     Some(FunctionCallError::WasmTrap(WasmTrap::Unreachable)),
                 VMKind::Wasmtime => unreachable!(),
             }

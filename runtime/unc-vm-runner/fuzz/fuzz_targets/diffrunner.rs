@@ -12,7 +12,7 @@ use unc_vm_runner_fuzz::{create_context, find_entry_point, ArbitraryModule};
 
 libfuzzer_sys::fuzz_target!(|module: ArbitraryModule| {
     let code = ContractCode::new(module.0.module.to_bytes(), None);
-    let unc_vm = run_fuzz(&code, VMKind::NearVm);
+    let unc_vm = run_fuzz(&code, VMKind::UncVM);
     let wasmtime = run_fuzz(&code, VMKind::Wasmtime);
     assert_eq!(unc_vm, wasmtime);
 });

@@ -38,9 +38,9 @@ fn vm_hash(vm_kind: VMKind) -> u64 {
         #[cfg(not(feature = "wasmtime_vm"))]
         VMKind::Wasmtime => panic!("Wasmtime is not enabled"),
         #[cfg(all(feature = "unc_vm", target_arch = "x86_64"))]
-        VMKind::NearVm => crate::unc_vm_runner::unc_vm_vm_hash(),
+        VMKind::UncVM => crate::unc_vm_runner::unc_vm_vm_hash(),
         #[cfg(not(all(feature = "unc_vm", target_arch = "x86_64")))]
-        VMKind::NearVm => panic!("UncVM is not enabled"),
+        VMKind::UncVM => panic!("UncVM is not enabled"),
     }
 }
 

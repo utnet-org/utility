@@ -25,7 +25,7 @@ fn test_caches_compilation_error() {
     let config = test_vm_config();
     with_vm_variants(&config, |vm_kind: VMKind| {
         match vm_kind {
-            VMKind::Wasmer0 | VMKind::Wasmer2 | VMKind::NearVm => {}
+            VMKind::Wasmer0 | VMKind::Wasmer2 | VMKind::UncVM => {}
             VMKind::Wasmtime => return,
         }
         let cache = MockCompiledContractCache::default();
@@ -49,7 +49,7 @@ fn test_does_not_cache_io_error() {
     let config = test_vm_config();
     with_vm_variants(&config, |vm_kind: VMKind| {
         match vm_kind {
-            VMKind::Wasmer0 | VMKind::Wasmer2 | VMKind::NearVm => {}
+            VMKind::Wasmer0 | VMKind::Wasmer2 | VMKind::UncVM => {}
             VMKind::Wasmtime => return,
         }
 
@@ -205,7 +205,7 @@ fn test_unc_vm_artifact_output_stability() {
 
         let config = test_vm_config();
         let prepared_code =
-            prepare::prepare_contract(contract.code(), &config, VMKind::NearVm).unwrap();
+            prepare::prepare_contract(contract.code(), &config, VMKind::UncVM).unwrap();
         got_prepared_hashes.push(crate::utils::stable_hash((&contract.code(), &prepared_code)));
 
         let mut features = CpuFeature::set();
