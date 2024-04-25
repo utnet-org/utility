@@ -119,7 +119,6 @@ pub trait VMKindExt {
 }
 
 impl VMKindExt for VMKind {
-
     #[allow(unused_variables)]
     fn runtime(&self, config: Config) -> Option<Box<dyn VM>> {
         match self {
