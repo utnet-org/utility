@@ -1,11 +1,10 @@
 //! Temporary implementation of the Wallet Contract.
-//! See https://github.com/Utility/UEPs/issues/518.
 //! Must not use in production!
 // TODO(eth-implicit) Change to a real Wallet Contract implementation.
 
 use hex;
 use unc_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use unc_sdk::{env, unc_bindgen, AccountId, Promise};
+use unc_sdk::{env, unc_bindgen, AccountId, UncToken, Promise};
 use rlp::Rlp;
 
 #[unc_bindgen]
@@ -48,6 +47,6 @@ impl WalletContract {
             env::panic_str("Public key does not match the Wallet Contract address.");
         }
 
-        Promise::new(target).transfer(value);
+        Promise::new(target).transfer(UncToken::from_attounc(value));
     }
 }

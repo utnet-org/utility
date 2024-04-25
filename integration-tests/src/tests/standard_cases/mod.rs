@@ -26,7 +26,7 @@ use unc_primitives::views::{
 use crate::node::Node;
 use crate::user::User;
 use testlib::fees_utils::FeeHelper;
-use testlib::runtime_utils::{alice_account, bob_account, eve_dot_alice_account};
+use testlib::runtime_utils::{alice_account, bob_account, dan_account};
 use unc_parameters::RuntimeConfig;
 use unc_primitives::receipt::{ActionReceipt, Receipt, ReceiptEnum};
 use unc_primitives::test_utils;
@@ -256,7 +256,7 @@ pub fn test_upload_contract(node: impl Node) {
     let transaction_result = node_user
         .create_account(
             account_id.clone(),
-            eve_dot_alice_account(),
+            dan_account(),
             node.signer().public_key(),
             TESTING_INIT_BALANCE / 2,
         )
@@ -264,22 +264,22 @@ pub fn test_upload_contract(node: impl Node) {
     assert_eq!(transaction_result.status, FinalExecutionStatus::SuccessValue(Vec::new()));
     assert_eq!(transaction_result.receipts_outcome.len(), 2);
 
-    node_user.view_contract_code(&eve_dot_alice_account()).expect_err(
+    node_user.view_contract_code(&dan_account()).expect_err(
         "RpcError { code: -32000, message: \"Server error\", data: Some(String(\"contract code of account eve.alice.unc does not exist while viewing\")) }");
 
     let new_root = node_user.get_state_root();
     assert_ne!(root, new_root);
     let wasm_binary = b"test_binary";
     let transaction_result =
-        node_user.deploy_contract(eve_dot_alice_account(), wasm_binary.to_vec()).unwrap();
+        node_user.deploy_contract(dan_account(), wasm_binary.to_vec()).unwrap();
     assert_eq!(transaction_result.status, FinalExecutionStatus::SuccessValue(Vec::new()));
     assert_eq!(transaction_result.receipts_outcome.len(), 1);
     let new_root = node_user.get_state_root();
     assert_ne!(root, new_root);
-    let account = node_user.view_account(&eve_dot_alice_account()).unwrap();
+    let account = node_user.view_account(&dan_account()).unwrap();
     assert_eq!(account.code_hash, hash(wasm_binary));
 
-    let code = node_user.view_contract_code(&eve_dot_alice_account()).unwrap();
+    let code = node_user.view_contract_code(&dan_account()).unwrap();
     assert_eq!(code.code, wasm_binary.to_vec());
 }
 
@@ -517,13 +517,13 @@ pub fn test_refund_on_send_money_to_non_existent_account(node: impl Node) {
     let fee_helper = fee_helper(&node);
     let transfer_cost = fee_helper.transfer_cost();
     let transaction_result =
-        node_user.send_money(account_id.clone(), eve_dot_alice_account(), money_used).unwrap();
+        node_user.send_money(account_id.clone(), dan_account(), money_used).unwrap();
     assert_eq!(
         transaction_result.status,
         FinalExecutionStatus::Failure(
             ActionError {
                 index: Some(0),
-                kind: ActionErrorKind::AccountDoesNotExist { account_id: eve_dot_alice_account() }
+                kind: ActionErrorKind::AccountDoesNotExist { account_id: dan_account() }
             }
             .into()
         )
@@ -537,7 +537,7 @@ pub fn test_refund_on_send_money_to_non_existent_account(node: impl Node) {
         (TESTING_INIT_BALANCE - TESTING_INIT_PLEDGE - transfer_cost, TESTING_INIT_PLEDGE)
     );
     assert_eq!(node_user.get_access_key_nonce_for_signer(account_id).unwrap(), 1);
-    let result2 = node_user.view_account(&eve_dot_alice_account());
+    let result2 = node_user.view_account(&dan_account());
     assert!(result2.is_err());
 }
 
@@ -547,12 +547,7 @@ pub fn test_create_account(node: impl Node) {
     let root = node_user.get_state_root();
     let money_used = UNC_BASE;
     let transaction_result = node_user
-        .create_account(
-            account_id.clone(),
-            eve_dot_alice_account(),
-            node.signer().public_key(),
-            money_used,
-        )
+        .create_account(account_id.clone(), dan_account(), node.signer().public_key(), money_used)
         .unwrap();
 
     let fee_helper = fee_helper(&node);
@@ -573,7 +568,7 @@ pub fn test_create_account(node: impl Node) {
         )
     );
 
-    let result2 = node_user.view_account(&eve_dot_alice_account()).unwrap();
+    let result2 = node_user.view_account(&dan_account()).unwrap();
     assert_eq!((result2.amount, result2.pledging), (money_used, 0));
 }
 
@@ -583,12 +578,7 @@ pub fn test_create_account_again(node: impl Node) {
     let root = node_user.get_state_root();
     let money_used = UNC_BASE;
     let transaction_result = node_user
-        .create_account(
-            account_id.clone(),
-            eve_dot_alice_account(),
-            node.signer().public_key(),
-            money_used,
-        )
+        .create_account(account_id.clone(), dan_account(), node.signer().public_key(), money_used)
         .unwrap();
 
     assert_eq!(transaction_result.status, FinalExecutionStatus::SuccessValue(Vec::new()));
@@ -602,16 +592,11 @@ pub fn test_create_account_again(node: impl Node) {
     assert_eq!((result1.amount, result1.pledging), (new_expected_balance, TESTING_INIT_PLEDGE));
     assert_eq!(node_user.get_access_key_nonce_for_signer(account_id).unwrap(), 1);
 
-    let result2 = node_user.view_account(&eve_dot_alice_account()).unwrap();
+    let result2 = node_user.view_account(&dan_account()).unwrap();
     assert_eq!((result2.amount, result2.pledging), (money_used, 0));
 
     let transaction_result = node_user
-        .create_account(
-            account_id.clone(),
-            eve_dot_alice_account(),
-            node.signer().public_key(),
-            money_used,
-        )
+        .create_account(account_id.clone(), dan_account(), node.signer().public_key(), money_used)
         .unwrap();
 
     assert_eq!(
@@ -619,7 +604,7 @@ pub fn test_create_account_again(node: impl Node) {
         FinalExecutionStatus::Failure(
             ActionError {
                 index: Some(0),
-                kind: ActionErrorKind::AccountAlreadyExists { account_id: eve_dot_alice_account() }
+                kind: ActionErrorKind::AccountAlreadyExists { account_id: dan_account() }
             }
             .into()
         )
@@ -644,7 +629,7 @@ pub fn test_create_account_failure_no_funds(node: impl Node) {
     let account_id = &node.account_id().unwrap();
     let node_user = node.user();
     let transaction_result = node_user
-        .create_account(account_id.clone(), eve_dot_alice_account(), node.signer().public_key(), 0)
+        .create_account(account_id.clone(), dan_account(), node.signer().public_key(), 0)
         .unwrap();
     assert_matches!(transaction_result.status, FinalExecutionStatus::SuccessValue(_));
 }
@@ -696,19 +681,14 @@ pub fn test_swap_key(node: impl Node) {
     let root = node_user.get_state_root();
     let money_used = TESTING_INIT_BALANCE / 2;
     node_user
-        .create_account(
-            account_id.clone(),
-            eve_dot_alice_account(),
-            node.signer().public_key(),
-            money_used,
-        )
+        .create_account(account_id.clone(), dan_account(), node.signer().public_key(), money_used)
         .unwrap();
     let new_root = node_user.get_state_root();
     assert_ne!(root, new_root);
 
     let transaction_result = node_user
         .swap_key(
-            eve_dot_alice_account(),
+            dan_account(),
             node.signer().public_key(),
             signer2.public_key.clone(),
             AccessKey::full_access(),
@@ -719,10 +699,8 @@ pub fn test_swap_key(node: impl Node) {
     let new_root1 = node_user.get_state_root();
     assert_ne!(new_root, new_root1);
 
-    assert!(node_user
-        .get_access_key(&eve_dot_alice_account(), &node.signer().public_key())
-        .is_err());
-    assert!(node_user.get_access_key(&eve_dot_alice_account(), &signer2.public_key).is_ok());
+    assert!(node_user.get_access_key(&dan_account(), &node.signer().public_key()).is_err());
+    assert!(node_user.get_access_key(&dan_account(), &signer2.public_key).is_ok());
 }
 
 pub fn test_add_key(node: impl Node) {
@@ -1077,20 +1055,13 @@ pub fn test_access_key_smart_contract_reject_contract_id(node: impl Node) {
     node_user.set_signer(Arc::new(signer2));
 
     let transaction_result = node_user
-        .function_call(
-            account_id.clone(),
-            eve_dot_alice_account(),
-            "run_test",
-            vec![],
-            10u64.pow(14),
-            0,
-        )
+        .function_call(account_id.clone(), dan_account(), "run_test", vec![], 10u64.pow(14), 0)
         .unwrap_err();
     assert_eq!(
         transaction_result,
         ServerError::TxExecutionError(TxExecutionError::InvalidTxError(
             InvalidTxError::InvalidAccessKeyError(InvalidAccessKeyError::ReceiverMismatch {
-                tx_receiver: eve_dot_alice_account(),
+                tx_receiver: dan_account(),
                 ak_receiver: bob_account().into()
             })
         ))
@@ -1168,7 +1139,7 @@ pub fn test_unpledge_while_not_pledged(node: impl Node) {
     let transaction_result = node_user
         .create_account(
             alice_account(),
-            eve_dot_alice_account(),
+            dan_account(),
             node.signer().public_key(),
             TESTING_INIT_BALANCE / 2,
         )
@@ -1176,13 +1147,13 @@ pub fn test_unpledge_while_not_pledged(node: impl Node) {
     assert_eq!(transaction_result.status, FinalExecutionStatus::SuccessValue(Vec::new()));
     assert_eq!(transaction_result.receipts_outcome.len(), 2);
     let transaction_result =
-        node_user.pledge(eve_dot_alice_account(), node.block_signer().public_key(), 0).unwrap();
+        node_user.pledge(dan_account(), node.block_signer().public_key(), 0).unwrap();
     assert_eq!(
         transaction_result.status,
         FinalExecutionStatus::Failure(
             ActionError {
                 index: Some(0),
-                kind: ActionErrorKind::TriesToUnpledge { account_id: eve_dot_alice_account() }
+                kind: ActionErrorKind::TriesToUnpledge { account_id: dan_account() }
             }
             .into()
         )
@@ -1208,14 +1179,13 @@ pub fn test_delete_account_ok(node: impl Node) {
     let node_user = node.user();
     let _ = node_user.create_account(
         alice_account(),
-        eve_dot_alice_account(),
+        dan_account(),
         node.signer().public_key(),
         money_used,
     );
-    let transaction_result =
-        node_user.delete_account(eve_dot_alice_account(), eve_dot_alice_account()).unwrap();
+    let transaction_result = node_user.delete_account(dan_account(), dan_account()).unwrap();
     assert_eq!(transaction_result.status, FinalExecutionStatus::SuccessValue(Vec::new()));
-    assert!(node.user().view_account(&eve_dot_alice_account()).is_err());
+    assert!(node.user().view_account(&dan_account()).is_err());
 }
 
 pub fn test_delete_account_fail(node: impl Node) {
@@ -1223,7 +1193,7 @@ pub fn test_delete_account_fail(node: impl Node) {
     let node_user = node.user();
     let _ = node_user.create_account(
         alice_account(),
-        eve_dot_alice_account(),
+        dan_account(),
         node.signer().public_key(),
         money_used,
     );
@@ -1231,15 +1201,14 @@ pub fn test_delete_account_fail(node: impl Node) {
     let fee_helper = fee_helper(&node);
     let delete_account_cost = fee_helper.prepaid_delete_account_cost();
 
-    let transaction_result =
-        node_user.delete_account(alice_account(), eve_dot_alice_account()).unwrap();
+    let transaction_result = node_user.delete_account(alice_account(), dan_account()).unwrap();
     assert_eq!(
         transaction_result.status,
         FinalExecutionStatus::Failure(
             ActionError {
                 index: Some(0),
                 kind: ActionErrorKind::ActorNoPermission {
-                    account_id: eve_dot_alice_account(),
+                    account_id: dan_account(),
                     actor_id: alice_account()
                 }
             }
@@ -1256,14 +1225,13 @@ pub fn test_delete_account_fail(node: impl Node) {
 
 pub fn test_delete_account_no_account(node: impl Node) {
     let node_user = node.user();
-    let transaction_result =
-        node_user.delete_account(alice_account(), eve_dot_alice_account()).unwrap();
+    let transaction_result = node_user.delete_account(alice_account(), dan_account()).unwrap();
     assert_eq!(
         transaction_result.status,
         FinalExecutionStatus::Failure(
             ActionError {
                 index: Some(0),
-                kind: ActionErrorKind::AccountDoesNotExist { account_id: eve_dot_alice_account() }
+                kind: ActionErrorKind::AccountDoesNotExist { account_id: dan_account() }
             }
             .into()
         )
@@ -1276,7 +1244,7 @@ pub fn test_delete_account_while_staking(node: impl Node) {
     let node_user = node.user();
     let _ = node_user.create_account(
         alice_account(),
-        eve_dot_alice_account(),
+        dan_account(),
         node.signer().public_key(),
         money_used,
     );
@@ -1285,29 +1253,26 @@ pub fn test_delete_account_while_staking(node: impl Node) {
     let delete_account_fee = fee_helper.prepaid_delete_account_cost();
     let transaction_result = node_user
         .pledge(
-            eve_dot_alice_account(),
+            dan_account(),
             node.block_signer().public_key(),
             money_used - pledge_fee - delete_account_fee,
         )
         .unwrap();
     assert_eq!(transaction_result.status, FinalExecutionStatus::SuccessValue(Vec::new()));
     assert_eq!(transaction_result.receipts_outcome.len(), 1);
-    let transaction_result =
-        node_user.delete_account(eve_dot_alice_account(), eve_dot_alice_account()).unwrap();
+    let transaction_result = node_user.delete_account(dan_account(), dan_account()).unwrap();
     assert_eq!(
         transaction_result.status,
         FinalExecutionStatus::Failure(
             ActionError {
                 index: Some(0),
-                kind: ActionErrorKind::DeleteAccountPledging {
-                    account_id: eve_dot_alice_account()
-                }
+                kind: ActionErrorKind::DeleteAccountPledging { account_id: dan_account() }
             }
             .into()
         )
     );
     assert_eq!(transaction_result.receipts_outcome.len(), 1);
-    assert!(node.user().view_account(&eve_dot_alice_account()).is_ok());
+    assert!(node.user().view_account(&dan_account()).is_ok());
 }
 
 pub fn test_smart_contract_free(node: impl Node) {

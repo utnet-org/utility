@@ -136,8 +136,8 @@ pub fn proposals_to_block_summary(
         let r_p = ValidatorPowerAndPledge::V1(ValidatorPowerAndPledgeV1 {
             account_id: account_id.clone(),
             public_key: p.public_key().clone(),
-            power: power.clone(),
-            pledge: pledge.clone(),
+            power: *power,
+            pledge,
         });
         if pledge >= epoch_config.fishermen_threshold {
             fishermen.push(r_p);
@@ -367,8 +367,8 @@ pub fn proposals_to_epoch_info(
         let r_p = ValidatorPowerAndPledge::V1(ValidatorPowerAndPledgeV1 {
             account_id: account_id.clone(),
             public_key: p.public_key().clone(),
-            power: power.clone(),
-            pledge: pledge.clone(),
+            power: *power,
+            pledge,
         });
         if pledge >= epoch_config.fishermen_threshold {
             fishermen.push(r_p);
@@ -551,12 +551,12 @@ fn proposals_with_rollover_block(
         let r_f = ValidatorPledge::V1(ValidatorPledgeV1 {
             account_id: account_id.clone(),
             public_key: r.public_key().clone(),
-            pledge: r.pledge().clone(),
+            pledge: r.pledge(),
         });
         let r_p = ValidatorPower::V1(ValidatorPowerV1 {
             account_id: account_id.clone(),
             public_key: r.public_key().clone(),
-            power: r.power().clone(),
+            power: r.power(),
         });
         // The reward will given to the validator in the next epoch,
         // so we need to add it to the balance but not pledge.
@@ -636,12 +636,12 @@ fn proposals_with_rollover(
         let r_f = ValidatorPledge::V1(ValidatorPledgeV1 {
             account_id: account_id.clone(),
             public_key: r.public_key().clone(),
-            pledge: r.pledge().clone(),
+            pledge: r.pledge(),
         });
         let r_p = ValidatorPower::V1(ValidatorPowerV1 {
             account_id: account_id.clone(),
             public_key: r.public_key().clone(),
-            power: r.power().clone(),
+            power: r.power(),
         });
         // The reward will given to the validator in the next epoch,
         //  so we need to add it to the pledge but not power.
@@ -760,8 +760,8 @@ fn select_validators(
         let p_r = ValidatorPowerAndPledge::V1(ValidatorPowerAndPledgeV1 {
             account_id: p.account_id().clone(),
             public_key: p.public_key().clone(),
-            power: power.clone(),
-            pledge: p_pledge.clone(),
+            power: *power,
+            pledge: p_pledge,
         });
         let total_pledge_with_p = total_pledge + p_pledge;
         if total_pledge_with_p != 0 && Ratio::new(p_pledge, total_pledge_with_p) > min_pledge_ratio

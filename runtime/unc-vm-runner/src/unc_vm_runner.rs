@@ -1,5 +1,5 @@
 use crate::errors::ContractPrecompilatonResult;
-use crate::imports::unc_vm::NearVmImports;
+use crate::imports::unc_vm::UncVmImports;
 use crate::logic::errors::{
     CacheError, CompilationError, FunctionCallError, MethodResolveError, VMRunnerError, WasmTrap,
 };
@@ -29,15 +29,15 @@ use unc_vm_vm::{
 };
 
 #[derive(Clone)]
-pub struct NearVmMemory(Arc<LinearMemory>);
+pub struct UncVmMemory(Arc<LinearMemory>);
 
-impl NearVmMemory {
+impl UncVmMemory {
     fn new(
         initial_memory_pages: u32,
         max_memory_pages: u32,
     ) -> Result<Self, unc_vm_vm::MemoryError> {
         let max_pages = Pages(max_memory_pages);
-        Ok(NearVmMemory(Arc::new(LinearMemory::new(
+        Ok(UncVmMemory(Arc::new(LinearMemory::new(
             &MemoryType::new(Pages(initial_memory_pages), Some(max_pages), false),
             &MemoryStyle::Static {
                 bound: max_pages,
@@ -94,7 +94,7 @@ impl NearVmMemory {
     }
 }
 
-impl MemoryLike for NearVmMemory {
+impl MemoryLike for UncVmMemory {
     fn fits_memory(&self, slice: MemSlice) -> Result<(), ()> {
         // SAFETY: Contracts are executed on a single thread thus we know no one
         // will change guest memory mapping under us.
@@ -149,7 +149,7 @@ fn translate_runtime_error(
     logic: &mut VMLogic,
 ) -> Result<FunctionCallError, VMRunnerError> {
     // Errors produced by host function calls also become `RuntimeError`s that wrap a dynamic
-    // instance of `VMLogicError` internally. See the implementation of `NearVmImports`.
+    // instance of `VMLogicError` internally. See the implementation of `UncVmImports`.
     let error = match error.downcast::<crate::logic::VMLogicError>() {
         Ok(vm_logic) => {
             return vm_logic.try_into();
@@ -185,7 +185,7 @@ fn translate_runtime_error(
 
 #[derive(Hash, PartialEq, Debug)]
 #[allow(unused)]
-enum NearVmEngine {
+enum UncVmEngine {
     Universal = 1,
     StaticLib = 2,
     DynamicLib = 3,
@@ -193,33 +193,33 @@ enum NearVmEngine {
 
 #[derive(Hash, PartialEq, Debug)]
 #[allow(unused)]
-enum NearVmCompiler {
+enum UncVmCompiler {
     Singlepass = 1,
     Cranelift = 2,
     Llvm = 3,
 }
 
 #[derive(Hash)]
-struct NearVmConfig {
+struct UncVmConfig {
     seed: u32,
-    engine: NearVmEngine,
-    compiler: NearVmCompiler,
+    engine: UncVmEngine,
+    compiler: UncVmCompiler,
 }
 
-impl NearVmConfig {
+impl UncVmConfig {
     fn config_hash(self: Self) -> u64 {
         crate::utils::stable_hash(&self)
     }
 }
 
 // We use following scheme for the bits forming seed:
-//  kind << 29, kind 2 is for NearVm
+//  kind << 29, kind 2 is for UncVm
 //  major version << 6
 //  minor version
-const VM_CONFIG: NearVmConfig = NearVmConfig {
+const VM_CONFIG: UncVmConfig = UncVmConfig {
     seed: (2 << 29) | (2 << 6) | 1,
-    engine: NearVmEngine::Universal,
-    compiler: NearVmCompiler::Singlepass,
+    engine: UncVmEngine::Universal,
+    compiler: UncVmCompiler::Singlepass,
 };
 
 pub(crate) fn unc_vm_vm_hash() -> u64 {
@@ -228,19 +228,19 @@ pub(crate) fn unc_vm_vm_hash() -> u64 {
 
 pub(crate) type VMArtifact = Arc<unc_vm_engine::universal::UniversalArtifact>;
 
-pub(crate) struct NearVM {
+pub(crate) struct UncVM {
     pub(crate) config: Config,
     pub(crate) engine: UniversalEngine,
 }
 
-impl NearVM {
+impl UncVM {
     pub(crate) fn new_for_target(config: Config, target: unc_vm_compiler::Target) -> Self {
         // We only support singlepass compiler at the moment.
-        assert_eq!(VM_CONFIG.compiler, NearVmCompiler::Singlepass);
+        assert_eq!(VM_CONFIG.compiler, UncVmCompiler::Singlepass);
         let mut compiler = Singlepass::new();
         compiler.set_9393_fix(!config.disable_9393_fix);
         // We only support universal engine at the moment.
-        assert_eq!(VM_CONFIG.engine, NearVmEngine::Universal);
+        assert_eq!(VM_CONFIG.engine, UncVmEngine::Universal);
 
         static CODE_MEMORY_POOL_CELL: OnceLock<LimitedMemoryPool> = OnceLock::new();
         let code_memory_pool = CODE_MEMORY_POOL_CELL
@@ -299,8 +299,8 @@ impl NearVM {
         &self,
         code: &ContractCode,
     ) -> Result<UniversalExecutable, CompilationError> {
-        let _span = tracing::debug_span!(target: "vm", "NearVM::compile_uncached").entered();
-        let prepared_code = prepare::prepare_contract(code.code(), &self.config, VMKind::NearVm)
+        let _span = tracing::debug_span!(target: "vm", "UncVM::compile_uncached").entered();
+        let prepared_code = prepare::prepare_contract(code.code(), &self.config, VMKind::UncVm)
             .map_err(CompilationError::PrepareError)?;
 
         debug_assert!(
@@ -351,7 +351,7 @@ impl NearVM {
         // Caches also cache _compilation_ errors, so that we don't have to
         // re-parse invalid code (invalid code, in a sense, is a normal
         // outcome). And `cache`, being a database, can fail with an `io::Error`.
-        let _span = tracing::debug_span!(target: "vm", "NearVM::compile_and_load").entered();
+        let _span = tracing::debug_span!(target: "vm", "UncVM::compile_and_load").entered();
         let key = get_contract_cache_key(code, &self.config);
         let cache_record = cache
             .map(|cache| cache.get(&key))
@@ -363,7 +363,7 @@ impl NearVM {
             None => None,
             Some(CompiledContract::CompileModuleError(err)) => return Ok(Err(err)),
             Some(CompiledContract::Code(serialized_module)) => {
-                let _span = tracing::debug_span!(target: "vm", "NearVM::read_from_cache").entered();
+                let _span = tracing::debug_span!(target: "vm", "UncVM::read_from_cache").entered();
                 unsafe {
                     // (UN-)SAFETY: the `serialized_module` must have been produced by a prior call to
                     // `serialize`.
@@ -403,12 +403,12 @@ impl NearVM {
     fn run_method(
         &self,
         artifact: &VMArtifact,
-        mut import: NearVmImports<'_, '_, '_>,
+        mut import: UncVmImports<'_, '_, '_>,
         method_name: &str,
     ) -> Result<Result<(), FunctionCallError>, VMRunnerError> {
         let _span = tracing::debug_span!(target: "vm", "run_method").entered();
 
-        // FastGasCounter in Nearcore must be reinterpret_cast-able to the one in NearVm.
+        // FastGasCounter in Nearcore must be reinterpret_cast-able to the one in UncVm.
         assert_eq!(
             size_of::<FastGasCounter>(),
             size_of::<unc_vm_types::FastGasCounter>() + size_of::<u64>()
@@ -519,7 +519,7 @@ impl NearVM {
     }
 }
 
-impl unc_vm_vm::Tunables for &NearVM {
+impl unc_vm_vm::Tunables for &UncVM {
     fn memory_style(&self, memory: &MemoryType) -> MemoryStyle {
         MemoryStyle::Static {
             bound: memory.maximum.unwrap_or(Pages(self.config.limit_config.max_memory_pages)),
@@ -649,7 +649,7 @@ impl<'a> finite_wasm::wasmparser::VisitOperator<'a> for GasCostCfg {
     finite_wasm::wasmparser::for_each_operator!(gas_cost);
 }
 
-impl crate::runner::VM for NearVM {
+impl crate::runner::VM for UncVM {
     fn run(
         &self,
         code: &ContractCode,
@@ -660,7 +660,7 @@ impl crate::runner::VM for NearVM {
         promise_results: &[PromiseResult],
         cache: Option<&dyn CompiledContractCache>,
     ) -> Result<VMOutcome, VMRunnerError> {
-        let mut memory = NearVmMemory::new(
+        let mut memory = UncVmMemory::new(
             self.config.limit_config.initial_memory_pages,
             self.config.limit_config.max_memory_pages,
         )
@@ -715,5 +715,5 @@ impl crate::runner::VM for NearVM {
 
 #[test]
 fn test_memory_like() {
-    crate::logic::test_utils::test_memory_like(|| Box::new(NearVmMemory::new(1, 1).unwrap()));
+    crate::logic::test_utils::test_memory_like(|| Box::new(UncVmMemory::new(1, 1).unwrap()));
 }

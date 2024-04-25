@@ -5,17 +5,17 @@ our [zulip channel](https://unc.zulipchat.com/).
 
 ## Quick Start
 
-framework is a fairly standard Rust project, so building is as easy as
+utility is a fairly standard Rust project, so building is as easy as
 
 ```console
 cargo build
 ```
 
-Building framework requires a fairly recent Rust compiler (get it
+Building utility requires a fairly recent Rust compiler (get it
 [here](https://rustup.rs)), as well as `clang` and `cmake` to build RocksDB
 (`sudo apt install cmake clang`).
 
-Sadly at the moment framework is only compatible with Linux and MacOS, Windows is
+Sadly at the moment utility is only compatible with Linux and MacOS, Windows is
 not supported yet.
 
 To run a local UNC network with one node, use
@@ -40,13 +40,13 @@ CLI](https://docs.unc.org/tools/unc-cli) utility.
 
 ## Next Steps
 
-To learn more about how framework works, skim through our guide to framework
+To learn more about how utility works, skim through our guide to utility
 development:
 
-<https://utility.github.io/framework/>
+<https://utnet-org.github.io/utility/>
 
 If you are looking for relatively simple tasks to familiarise yourself with
-`framework`, please check out issues labeled with the `C-good-first-issue` label
+`utility`, please check out issues labeled with the `C-good-first-issue` label
 [here](https://github.com/utnet-org/utility/labels/C-good-first-issue).  If you see
 one that looks interesting and is unassigned or has not been actively worked on
 in some time, please ask to have the issue assigned to you and someone from
@@ -60,16 +60,16 @@ Proposal](https://github.com/Utility/UEPs/blob/master/neps/nep-0001.md) process.
 
 ## Pull Requests
 
-All the contributions to `framework` happen via Pull Requests.  Please follow the
+All the contributions to `utility` happen via Pull Requests.  Please follow the
 following steps when creating a PR:
 
-1. Fork the `framework` repository and create a new branch there to do your work.
+1. Fork the `utility` repository and create a new branch there to do your work.
 2. The branch can contain any number of commits.  When merged, all commits will
    be squashed into a single commit.
 3. The changes should be thoroughly tested.  Please refer to [this
    document](https://github.com/utnet-org/utility/blob/master/docs/practices/testing/README.md)
    for our testing guidelines and an overview of the testing infrastructure.
-4. When ready, send a pull request against the `master` branch of the `framework`
+4. When ready, send a pull request against the `master` branch of the `utility`
    repository.
 5. Feel free to submit draft PRs to get early feedback and to make sure you are
    on the right track.

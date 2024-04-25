@@ -40,7 +40,7 @@ fn vm_hash(vm_kind: VMKind) -> u64 {
         #[cfg(all(feature = "unc_vm", target_arch = "x86_64"))]
         VMKind::NearVm => crate::unc_vm_runner::unc_vm_vm_hash(),
         #[cfg(not(all(feature = "unc_vm", target_arch = "x86_64")))]
-        VMKind::NearVm => panic!("NearVM is not enabled"),
+        VMKind::NearVm => panic!("UncVM is not enabled"),
     }
 }
 

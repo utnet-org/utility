@@ -223,7 +223,6 @@ impl EpochManager {
             })
             .collect();
         let pledge_validators: Vec<ValidatorPledge> = validators
-            .clone()
             .into_iter()
             .map(|validator| match validator {
                 ValidatorPowerAndPledge::V1(v) => {
@@ -368,7 +367,7 @@ impl EpochManager {
                 &genesis_epoch_id,
                 Arc::new(epoch_info),
             )?;
-            epoch_manager.save_block_info(&mut store_update, block_info.clone())?;
+            epoch_manager.save_block_info(&mut store_update, block_info)?;
             store_update.commit()?;
         }
         Ok(epoch_manager)
@@ -755,7 +754,7 @@ impl EpochManager {
         debug!(
             target: "epoch_manager",
             "All power proposals: {:?}, All pledge proposals: {:?}, Kickouts: {:?}, Block Tracker: {:?}, Shard Tracker: {:?}",
-            all_power_proposals.clone(), all_pledge_proposals.clone(), validator_kickout.clone(), block_validator_tracker.clone(), chunk_validator_tracker.clone()
+            all_power_proposals, all_pledge_proposals, validator_kickout.clone(), block_validator_tracker, chunk_validator_tracker
         );
 
         Ok(EpochSummary {
@@ -1076,7 +1075,7 @@ impl EpochManager {
                         &mut store_update,
                         &block_info.clone(),
                         &current_hash.clone(),
-                        rng_seed.clone(),
+                        rng_seed,
                     )?;
                 }
             }
@@ -1155,7 +1154,7 @@ impl EpochManager {
             };
             cumulative_weight += &validator_power;
             if target < cumulative_weight {
-                return Ok(validator.clone());
+                return Ok(validator);
             }
         }
 
@@ -2001,10 +2000,10 @@ impl EpochManager {
                 power_change.clone(),
                 pledge_change.clone(),
                 validator_reward.clone(),
-                seat_price.clone(),
-                minted_amount.clone(),
-                all_power_proposals.clone(),
-                all_pledge_proposals.clone(),
+                *seat_price,
+                *minted_amount,
+                all_power_proposals,
+                all_pledge_proposals,
                 validator_kickout.clone(),
                 validator_mandates.clone(),
                 // end customized by James Savechives
@@ -2012,7 +2011,7 @@ impl EpochManager {
             self.finalize_block_summary_for_block(
                 &block_info,
                 &block_header_info.prev_hash,
-                rng_seed.clone(),
+                rng_seed,
             )?
         };
 
@@ -2032,7 +2031,7 @@ impl EpochManager {
             block_header_info.latest_protocol_version,
             block_header_info.timestamp_nanosec,
             // start customized by James Savechives
-            block_header_info.random_value.clone(),
+            block_header_info.random_value,
             validators.clone(),
             validator_to_index,
             block_producers_settlement.clone(),

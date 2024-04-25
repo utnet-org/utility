@@ -47,7 +47,7 @@
 //! make imports retroactively available to old transactions. So
 //! `for_each_available_import` takes care to invoke `M!` only for currently
 //! available imports.
-
+#[allow(unused_macros)]
 macro_rules! call_with_name {
     ( $M:ident => @in $mod:ident : $func:ident < [ $( $arg_name:ident : $arg_type:ident ),* ] -> [ $( $returns:ident ),* ] > ) => {
         $M!($mod / $func : $func < [ $( $arg_name : $arg_type ),* ] -> [ $( $returns ),* ] >)
@@ -67,6 +67,7 @@ macro_rules! imports {
         $( @as $name:ident : )?
         $func:ident < [ $( $arg_name:ident : $arg_type:ident ),* ] -> [ $( $returns:ident ),* ] >,)*
     ) => {
+        #[allow(unused_macros)]
         macro_rules! for_each_available_import {
             ($config:expr, $M:ident) => {$(
                 $(#[cfg(feature = $feature_name)])?
@@ -480,7 +481,7 @@ pub(crate) mod unc_vm {
         ExportFunction, ExportFunctionMetadata, Resolver, VMFunction, VMFunctionKind, VMMemory,
     };
 
-    pub(crate) struct NearVmImports<'engine, 'vmlogic, 'vmlogic_refs> {
+    pub(crate) struct UncVmImports<'engine, 'vmlogic, 'vmlogic_refs> {
         pub(crate) memory: VMMemory,
         // Note: this same object is also referenced by the `metadata` field!
         pub(crate) vmlogic: &'vmlogic mut VMLogic<'vmlogic_refs>,
@@ -488,15 +489,15 @@ pub(crate) mod unc_vm {
         pub(crate) engine: &'engine UniversalEngine,
     }
 
-    trait NearVmType {
-        type NearVm;
-        fn to_unc_vm(self) -> Self::NearVm;
+    trait UncVmType {
+        type UncVm;
+        fn to_unc_vm(self) -> Self::UncVm;
         fn ty() -> unc_vm_types::Type;
     }
     macro_rules! unc_vm_types {
         ($($native:ty as $unc_vm:ty => $type_expr:expr;)*) => {
-            $(impl NearVmType for $native {
-                type NearVm = $unc_vm;
+            $(impl UncVmType for $native {
+                type UncVm = $unc_vm;
                 fn to_unc_vm(self) -> $unc_vm {
                     self as _
                 }
@@ -518,12 +519,12 @@ pub(crate) mod unc_vm {
         };
         ($return_type: ident = [ $($returns: ident),* ]) => {
             #[repr(C)]
-            struct $return_type($(<$returns as NearVmType>::NearVm),*);
+            struct $return_type($(<$returns as UncVmType>::UncVm),*);
             fn make_ret($($returns: $returns),*) -> Ret { Ret($($returns.to_unc_vm()),*) }
         }
     }
 
-    impl<'e, 'l, 'lr> Resolver for NearVmImports<'e, 'l, 'lr> {
+    impl<'e, 'l, 'lr> Resolver for UncVmImports<'e, 'l, 'lr> {
         fn resolve(&self, _index: u32, module: &str, field: &str) -> Option<unc_vm_vm::Export> {
             if module == "env" && field == "memory" {
                 return Some(unc_vm_vm::Export::Memory(self.memory.clone()));
@@ -578,15 +579,15 @@ pub(crate) mod unc_vm {
                     }
                     // TODO: a phf hashmap would probably work better here.
                     if module == stringify!($mod) && field == stringify!($name) {
-                        let args = [$(<$arg_type as NearVmType>::ty()),*];
-                        let rets = [$(<$returns as NearVmType>::ty()),*];
+                        let args = [$(<$arg_type as UncVmType>::ty()),*];
+                        let rets = [$(<$returns as UncVmType>::ty()),*];
                         let signature = unc_vm_types::FunctionType::new(&args[..], &rets[..]);
                         let signature = self.engine.register_signature(signature);
                         return Some(unc_vm_vm::Export::Function(ExportFunction {
                             vm_function: VMFunction {
                                 address: $name as *const _,
                                 // SAFETY: here we erase the lifetime of the `vmlogic` reference,
-                                // but we believe that the lifetimes on `NearVmImports` enforce
+                                // but we believe that the lifetimes on `UncVmImports` enforce
                                 // sufficiently that it isn't possible to call this exported
                                 // function when vmlogic is no loger live.
                                 vmctx: unc_vm_vm::VMFunctionEnvironment {
@@ -611,14 +612,14 @@ pub(crate) mod unc_vm {
         memory: VMMemory,
         logic: &'a mut VMLogic<'b>,
         engine: &'e UniversalEngine,
-    ) -> NearVmImports<'e, 'a, 'b> {
+    ) -> UncVmImports<'e, 'a, 'b> {
         let metadata = unsafe {
             // SAFETY: the functions here are thread-safe. We ensure that the lifetime of `VMLogic`
             // is sufficiently long by tying the lifetime of VMLogic to the return type which
             // contains this metadata.
             ExportFunctionMetadata::new(logic as *mut _ as *mut _, None, |ptr| ptr, |_| {})
         };
-        NearVmImports { memory, vmlogic: logic, metadata: Arc::new(metadata), engine }
+        UncVmImports { memory, vmlogic: logic, metadata: Arc::new(metadata), engine }
     }
 }
 
@@ -707,6 +708,7 @@ pub(crate) mod wasmtime {
 
 /// Constant-time string equality, work-around for `"foo" == "bar"` not working
 /// in const context yet.
+#[allow(dead_code)]
 const fn str_eq(s1: &str, s2: &str) -> bool {
     let s1 = s1.as_bytes();
     let s2 = s2.as_bytes();

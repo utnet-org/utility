@@ -151,7 +151,7 @@ pub enum PublicKey {
     /// 512 bit elliptic curve based public-key used in Bitcoin's public-key cryptography.
     SECP256K1(Secp256K1PublicKey),
     /// 2048 bit rsa
-    RSA(Rsa2048PublicKey),
+    RSA(Box<Rsa2048PublicKey>),
 }
 
 impl PublicKey {
@@ -175,7 +175,7 @@ impl PublicKey {
                 PublicKey::SECP256K1(Secp256K1PublicKey([0u8; PUBLIC_KEY_SECP256K1_LENGTH]))
             }
             KeyType::RSA2048 => {
-                PublicKey::RSA(Rsa2048PublicKey([0u8; RAW_PUBLIC_KEY_RSA_2048_LENGTH]))
+                PublicKey::RSA(Box::new(Rsa2048PublicKey([0u8; RAW_PUBLIC_KEY_RSA_2048_LENGTH])))
             }
         }
     }
@@ -192,7 +192,7 @@ impl PublicKey {
         match self {
             Self::ED25519(key) => key.as_ref(),
             Self::SECP256K1(key) => key.as_ref(),
-            Self::RSA(key) => key.as_ref(),
+            Self::RSA(key) => key.as_ref().as_ref(),
         }
     }
 
@@ -287,9 +287,9 @@ impl BorshDeserialize for PublicKey {
             KeyType::SECP256K1 => Ok(PublicKey::SECP256K1(Secp256K1PublicKey(
                 BorshDeserialize::deserialize_reader(rd)?,
             ))),
-            KeyType::RSA2048 => {
-                Ok(PublicKey::RSA(Rsa2048PublicKey(BorshDeserialize::deserialize_reader(rd)?)))
-            }
+            KeyType::RSA2048 => Ok(PublicKey::RSA(Box::new(Rsa2048PublicKey(
+                BorshDeserialize::deserialize_reader(rd)?,
+            )))),
         }
     }
 }
@@ -325,7 +325,7 @@ impl FromStr for PublicKey {
         Ok(match key_type {
             KeyType::ED25519 => Self::ED25519(ED25519PublicKey(decode_bs58(key_data)?)),
             KeyType::SECP256K1 => Self::SECP256K1(Secp256K1PublicKey(decode_bs58(key_data)?)),
-            KeyType::RSA2048 => Self::RSA(Rsa2048PublicKey(decode_bs58(key_data)?)),
+            KeyType::RSA2048 => Self::RSA(Box::new(Rsa2048PublicKey(decode_bs58(key_data)?))),
         })
     }
 }
@@ -344,7 +344,7 @@ impl From<Secp256K1PublicKey> for PublicKey {
 
 impl From<Rsa2048PublicKey> for PublicKey {
     fn from(rsa2048: Rsa2048PublicKey) -> Self {
-        Self::RSA(rsa2048)
+        Self::RSA(Box::new(rsa2048))
     }
 }
 
@@ -373,7 +373,7 @@ pub(crate) const PRIVTAE_KEY_DEFAULT_RSA_KEY_BITS: usize = 2048;
 pub enum SecretKey {
     ED25519(ED25519SecretKey),
     SECP256K1(secp256k1::SecretKey),
-    RSA(rsa::RsaPrivateKey),
+    RSA(Box<rsa::RsaPrivateKey>),
 }
 
 impl SecretKey {
@@ -392,9 +392,9 @@ impl SecretKey {
                 SecretKey::ED25519(ED25519SecretKey(keypair.to_keypair_bytes()))
             }
             KeyType::SECP256K1 => SecretKey::SECP256K1(secp256k1::SecretKey::new(&mut OsRng)),
-            KeyType::RSA2048 => SecretKey::RSA(
+            KeyType::RSA2048 => SecretKey::RSA(Box::new(
                 rsa::RsaPrivateKey::new(&mut OsRng, PRIVTAE_KEY_DEFAULT_RSA_KEY_BITS).unwrap(),
-            ),
+            )),
         }
     }
 
@@ -441,7 +441,7 @@ impl SecretKey {
                 let pk = secret_key.to_public_key();
                 let mut public_key = [0; RAW_PUBLIC_KEY_RSA_2048_LENGTH];
                 public_key.copy_from_slice(&pk.to_public_key_der().unwrap().as_bytes());
-                PublicKey::RSA(Rsa2048PublicKey(public_key))
+                PublicKey::RSA(Box::new(Rsa2048PublicKey(public_key)))
             }
         }
     }
@@ -490,7 +490,7 @@ impl FromStr for SecretKey {
                 let buffer = parse_bs58_data(2048, key_data)?;
                 let sk = rsa::RsaPrivateKey::from_pkcs8_der(&buffer)
                     .map_err(|err| Self::Err::InvalidData { error_message: err.to_string() })?;
-                Self::RSA(sk)
+                Self::RSA(Box::new(sk))
             }
         })
     }

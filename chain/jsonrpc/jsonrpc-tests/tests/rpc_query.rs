@@ -34,7 +34,7 @@ fn test_block_by_id_height() {
             CryptoHash::from_str("7tkzFg8RHBmMw1ncRJZCCZAizgq4rwCftTKYLce8RU8t").unwrap()
         );
         assert!(block.header.timestamp > 0);
-        assert_eq!(block.header.validator_proposals.len(), 0);
+        assert_eq!(block.header.validator_pledge_proposals.len(), 0);
     });
 }
 

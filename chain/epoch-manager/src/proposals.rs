@@ -186,14 +186,14 @@ mod old_validator_selection {
             let r_p = ValidatorPower::V1(ValidatorPowerV1 {
                 account_id: r.account_id().clone(),
                 public_key: r.public_key().clone(),
-                power: r.power().clone(),
+                power: r.power(),
             });
             let p = ordered_power_proposals.entry(account_id.clone()).or_insert(r_p);
             power_change.insert(account_id.clone(), p.power());
             let r_f = ValidatorPledge::V1(ValidatorPledgeV1 {
                 account_id: r.account_id().clone(),
                 public_key: r.public_key().clone(),
-                pledge: r.pledge().clone(),
+                pledge: r.pledge(),
             });
             let f = ordered_pledge_proposals.entry(account_id.clone()).or_insert(r_f);
             //*f.pledge_mut() += *validator_reward.get(&account_id).unwrap_or(&0);
@@ -230,8 +230,8 @@ mod old_validator_selection {
             let p_f = ValidatorPowerAndPledge::V1(ValidatorPowerAndPledgeV1 {
                 account_id: account_id.clone(),
                 public_key: p.public_key().clone(),
-                power: power.clone(),
-                pledge: pledge.clone(),
+                power,
+                pledge,
             });
             if pledge >= threshold {
                 final_proposals.push(p_f);

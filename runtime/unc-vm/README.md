@@ -1,4 +1,4 @@
-# The NearVM runtime crates
+# The UncVM runtime crates
 
 This crate set is a fork of Wasmer. A significant number of things
 changed, but the documentation is not up-to-date yet.

@@ -172,7 +172,7 @@ fn test_wasmer2_artifact_output_stability() {
 
 #[test]
 fn test_unc_vm_artifact_output_stability() {
-    use crate::unc_vm_runner::NearVM;
+    use crate::unc_vm_runner::UncVM;
     use unc_vm_compiler::{CpuFeature, Target};
     // If this test has failed, you want to adjust the necessary constants so that `cache::vm_hash`
     // changes (and only then the hashes here).
@@ -212,7 +212,7 @@ fn test_unc_vm_artifact_output_stability() {
         features.insert(CpuFeature::AVX);
         let triple = "x86_64-unknown-linux-gnu".parse().unwrap();
         let target = Target::new(triple, features);
-        let vm = NearVM::new_for_target(config, target);
+        let vm = UncVM::new_for_target(config, target);
         let artifact = vm.compile_uncached(&contract).unwrap();
         let serialized = artifact.serialize().unwrap();
         let this_hash = crate::utils::stable_hash(&serialized);

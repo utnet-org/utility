@@ -168,7 +168,7 @@ fn unc_vm_and_wasmtime_agree_fuzzer() {
 #[test]
 #[cfg(all(feature = "unc_vm", target_arch = "x86_64"))]
 fn unc_vm_is_reproducible_fuzzer() {
-    use crate::unc_vm_runner::NearVM;
+    use crate::unc_vm_runner::UncVM;
     use unc_primitives_core::hash::CryptoHash;
 
     bolero::check!().with_arbitrary::<ArbitraryModule>().for_each(|module: &ArbitraryModule| {
@@ -176,7 +176,7 @@ fn unc_vm_is_reproducible_fuzzer() {
         let config = test_vm_config();
         let mut first_hash = None;
         for _ in 0..3 {
-            let vm = NearVM::new(config.clone());
+            let vm = UncVM::new(config.clone());
             let exec = match vm.compile_uncached(&code) {
                 Ok(e) => e,
                 Err(_) => return,

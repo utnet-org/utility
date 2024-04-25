@@ -707,7 +707,7 @@ pub(crate) fn action_create_rsa2048_challenge(
     account_id: &AccountId,
     challenge: &CreateRsa2048ChallengeAction,
 ) -> Result<(), RuntimeError> {
-    //TODO: 从unc 基金会获取的公钥， 匹配验证签名以及附加参数(如算力, 矿工信息, dev_id, 等)
+    // TODO: Obtain the actual value of root_id from the "unc" foundation
     let root_id = "unc".parse::<AccountId>().unwrap();
     if get_rsa2048_keys(state_update, &root_id, &challenge.public_key)?.is_none() {
         result.result = Err(ActionErrorKind::RsaKeysNotFound {
@@ -718,8 +718,8 @@ pub(crate) fn action_create_rsa2048_challenge(
         return Ok(());
     }
 
-    //FIXME： 计算发起challenge 的nonce 随机数
-    // 直接使用 unc证书里面的args, 如算力
+    // FIXME: Calculate the nonce random number for initiating the challenge
+    // Use the args from the "unc" certificate, such as power
     let registered_keys = get_rsa2048_keys(state_update, &root_id, &challenge.public_key)?.unwrap();
     let args = registered_keys.clone().args;
     match serde_json::from_slice::<serde_json::Value>(&args) {
@@ -740,7 +740,7 @@ pub(crate) fn action_create_rsa2048_challenge(
                                 result.validator_power_proposals.push(ValidatorPower::new(
                                     account_id.clone(),
                                     challenge.challenge_key.clone().into(),
-                                    total_power.clone(),
+                                    total_power,
                                 ));
                                 // attach power to account
                                 tracing::info!("Account: {:?}, original power is : {}, new power is : {}, total power is : {}", account_id.clone(), account.power(), power, total_power.clone());
@@ -766,7 +766,7 @@ pub(crate) fn action_create_rsa2048_challenge(
         }
     };
     // remove from unc list and add to the miner list
-    remove_rsa2048_keys(state_update, root_id.clone(), challenge.public_key.clone());
+    remove_rsa2048_keys(state_update, root_id, challenge.public_key.clone());
     set_rsa2048_keys(
         state_update,
         account_id.clone(),
@@ -1040,7 +1040,7 @@ pub(crate) fn check_actor_permissions(
         Action::CreateAccount(_) | Action::FunctionCall(_) | Action::Transfer(_) => (),
         Action::Delegate(_) => (),
         Action::RegisterRsa2048Keys(_) => {
-            // FIXME: 这里是硬编码, 之后RuntimeConfig中添加配置, 只有创世共识账号基金会账号, 类似registrar账号
+            // FIXME: Hard-coded here, configuration should be added in RuntimeConfig later. Only the genesis consensus account and foundation account, similar to the registrar account.
             let root_id = "unc".parse::<AccountId>().unwrap();
             if account_id.clone() != root_id {
                 return Err(ActionErrorKind::ActorNoPermission {

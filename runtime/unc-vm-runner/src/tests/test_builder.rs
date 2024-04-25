@@ -204,7 +204,7 @@ impl TestBuilder {
 
                 let runtime_config = runtime_config_store.get_config(protocol_version);
 
-                // NearVM includes a different contract preparation algorithm, that is not supported on old protocol versions
+                // UncVM includes a different contract preparation algorithm, that is not supported on old protocol versions
                 if vm_kind == VMKind::NearVm
                     && runtime_config.wasm_config.limit_config.contract_prepare_version
                         != ContractPrepareVersion::V2

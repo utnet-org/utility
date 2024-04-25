@@ -25,10 +25,10 @@ pub fn prepare_contract(
     kind: VMKind,
 ) -> Result<Vec<u8>, PrepareError> {
     let prepare = config.limit_config.contract_prepare_version;
-    // NearVM => ContractPrepareVersion::V2
+    // UncVM => ContractPrepareVersion::V2
     assert!(
         (kind != VMKind::NearVm) || (prepare == crate::logic::ContractPrepareVersion::V2),
-        "NearVM only works with contract prepare version V2",
+        "UncVM only works with contract prepare version V2",
     );
     let features = crate::features::WasmFeatures::from(prepare);
     match prepare {

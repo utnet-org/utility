@@ -14,8 +14,8 @@ pub fn bob_account() -> AccountId {
 pub fn carol_account() -> AccountId {
     "carl".parse().unwrap()
 }
-pub fn eve_dot_alice_account() -> AccountId {
-    "eve".parse().unwrap()
+pub fn dan_account() -> AccountId {
+    "dan".parse().unwrap()
 }
 
 pub fn x_dot_y_dot_z_account() -> AccountId {

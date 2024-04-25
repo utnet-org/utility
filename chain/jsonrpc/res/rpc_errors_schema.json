@@ -27,12 +27,11 @@
       "subtypes": [
         "AccountAlreadyExists",
         "AccountDoesNotExist",
-        "CreateAccountOnlyByRegistrar",
         "CreateAccountNotAllowed",
         "ActorNoPermission",
         "DeleteKeyDoesNotExist",
         "AddKeyAlreadyExists",
-        "DeleteAccountStaking",
+        "DeleteAccountPledging",
         "LackBalanceForState",
         "TriesToUnpledge",
         "TriesToPledge",
@@ -46,7 +45,8 @@
         "DelegateActionExpired",
         "DelegateActionAccessKeyError",
         "DelegateActionInvalidNonce",
-        "DelegateActionNonceTooLarge"
+        "DelegateActionNonceTooLarge",
+        "RsaKeysNotFound"
       ],
       "props": {
         "index": ""
@@ -196,15 +196,6 @@
         "predecessor_id": ""
       }
     },
-    "CreateAccountOnlyByRegistrar": {
-      "name": "CreateAccountOnlyByRegistrar",
-      "subtypes": [],
-      "props": {
-        "account_id": "",
-        "predecessor_id": "",
-        "registrar_account_id": ""
-      }
-    },
     "DelegateActionExpired": {
       "name": "DelegateActionExpired",
       "subtypes": [],
@@ -244,8 +235,8 @@
         "sender_id": ""
       }
     },
-    "DeleteAccountStaking": {
-      "name": "DeleteAccountStaking",
+    "DeleteAccountPledging": {
+      "name": "DeleteAccountPledging",
       "subtypes": [],
       "props": {
         "account_id": ""
@@ -753,6 +744,14 @@
         "limit": ""
       }
     },
+    "RsaKeysNotFound": {
+      "name": "RsaKeysNotFound",
+      "subtypes": [],
+      "props": {
+        "account_id": "",
+        "public_key": ""
+      }
+    },
     "Serialization": {
       "name": "Serialization",
       "subtypes": [],
@@ -823,8 +822,8 @@
       "props": {
         "account_id": "",
         "balance": "",
-        "pledging": "",
-        "pledge": ""
+        "pledge": "",
+        "pledging": ""
       }
     },
     "TriesToUnpledge": {

@@ -100,7 +100,7 @@ runtime client. The helper functions `function_call`, `deploy_contract`, etc.
 eventually lead to the `Runtime.apply` method call.
 
 For setting usernames during playing with transactions, use default names
-`alice_account`, `bob_account`, `eve_dot_alice_account`, etc.
+`alice_account`, `bob_account`, `dan_account`, etc.
 
 ## Network
 

@@ -25,7 +25,6 @@ fn main() -> anyhow::Result<()> {
     ];
 
     let _unused_rules = [
-        // TODO: https://github.com/utnet-org/utility/issues/5849
         // TODO: activate this rule when all non-private crates are sufficiently documented
         rules::publishable_has_readme,
     ];

@@ -561,7 +561,7 @@ fn truncate_string(s: &str, limit: usize) -> String {
 mod tests {
     use std::sync::Arc;
 
-    use testlib::runtime_utils::{alice_account, bob_account, eve_dot_alice_account};
+    use testlib::runtime_utils::{alice_account, bob_account, dan_account};
     use unc_crypto::{InMemorySigner, KeyType, PublicKey, Signature, Signer};
     use unc_primitives::account::{AccessKey, FunctionCallPermission};
     use unc_primitives::action::delegate::{DelegateAction, NonDelegateAction};
@@ -1331,7 +1331,7 @@ mod tests {
                 &SignedTransaction::from_actions(
                     1,
                     alice_account(),
-                    eve_dot_alice_account(),
+                    dan_account(),
                     &*signer,
                     vec![Action::FunctionCall(Box::new(FunctionCallAction {
                         method_name: "hello".to_string(),
@@ -1348,7 +1348,7 @@ mod tests {
             .expect_err("expected an error"),
             RuntimeError::InvalidTxError(InvalidTxError::InvalidAccessKeyError(
                 InvalidAccessKeyError::ReceiverMismatch {
-                    tx_receiver: eve_dot_alice_account(),
+                    tx_receiver: dan_account(),
                     ak_receiver: bob_account().into()
                 }
             )),

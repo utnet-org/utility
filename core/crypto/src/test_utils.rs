@@ -45,8 +45,8 @@ impl PublicKey {
                 PublicKey::SECP256K1(secret_key.public_key().unwrap_as_secp256k1().clone())
             }
             KeyType::RSA2048 => {
-                let secret_key = SecretKey::RSA(rsa2048_secret_key_from_seed(seed));
-                PublicKey::RSA(secret_key.public_key().unwrap_as_rsa2048().clone())
+                let secret_key = SecretKey::RSA(Box::new(rsa2048_secret_key_from_seed(seed)));
+                PublicKey::RSA(Box::new(secret_key.public_key().unwrap_as_rsa2048().clone()))
             }
         }
     }
@@ -60,7 +60,7 @@ impl SecretKey {
                 SecretKey::ED25519(ED25519SecretKey(keypair.to_keypair_bytes()))
             }
             KeyType::SECP256K1 => SecretKey::SECP256K1(secp256k1_secret_key_from_seed(seed)),
-            KeyType::RSA2048 => SecretKey::RSA(rsa2048_secret_key_from_seed(seed)),
+            KeyType::RSA2048 => SecretKey::RSA(Box::new(rsa2048_secret_key_from_seed(seed))),
         }
     }
 }
