@@ -173,6 +173,6 @@ math_extension                          true
 ed25519_verify                          true
 alt_bn128                               true
 function_call_weight                    true
-vm_kind                                 NearVm
+vm_kind                                 UncVm
 eth_accounts                   false
 

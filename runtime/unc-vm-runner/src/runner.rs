@@ -129,7 +129,7 @@ impl VMKindExt for VMKind {
             #[cfg(all(feature = "wasmer2_vm", target_arch = "x86_64"))]
             Self::Wasmer2 => Some(Box::new(crate::wasmer2_runner::Wasmer2VM::new(config))),
             #[cfg(all(feature = "unc_vm", target_arch = "x86_64"))]
-            Self::NearVm => Some(Box::new(crate::unc_vm_runner::UncVM::new(config))),
+            Self::UncVm => Some(Box::new(crate::unc_vm_runner::UncVM::new(config))),
             #[allow(unreachable_patterns)] // reachable when some of the VMs are disabled.
             _ => None,
         }

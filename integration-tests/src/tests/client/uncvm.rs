@@ -96,5 +96,5 @@ fn test_uncvm_upgrade() {
     };
 
     assert!(logs_at_old_version.iter().any(|l| l.contains(&"vm_kind=Wasmer2")));
-    assert!(dbg!(logs_at_new_version).iter().any(|l| l.contains(&"vm_kind=NearVm")));
+    assert!(dbg!(logs_at_new_version).iter().any(|l| l.contains(&"vm_kind=UncVm")));
 }

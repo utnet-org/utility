@@ -33,7 +33,7 @@ impl<'a> PrepareContext<'a> {
 
     /// “Early” preparation.
     ///
-    /// Must happen before the finite-wasm analysis and is applicable to NearVm just as much as it is
+    /// Must happen before the finite-wasm analysis and is applicable to UncVm just as much as it is
     /// applicable to other runtimes.
     ///
     /// This will validate the module, normalize the memories within, apply limits.
