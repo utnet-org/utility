@@ -32,7 +32,7 @@ pub(crate) fn test_builder() -> TestBuilder {
     if cfg!(not(target_arch = "x86_64")) {
         skip.insert(VMKind::Wasmer0);
         skip.insert(VMKind::Wasmer2);
-        skip.insert(VMKind::UncVM);
+        skip.insert(VMKind::UncVm);
     }
     TestBuilder {
         code: ContractCode::new(Vec::new(), None),
@@ -111,7 +111,7 @@ impl TestBuilder {
     }
 
     pub(crate) fn skip_unc_vm(mut self) -> Self {
-        self.skip.insert(VMKind::UncVM);
+        self.skip.insert(VMKind::UncVm);
         self
     }
 
@@ -197,7 +197,7 @@ impl TestBuilder {
 
         for (want, &protocol_version) in wants.zip(&self.protocol_versions) {
             let mut results = vec![];
-            for vm_kind in [VMKind::UncVM, VMKind::Wasmer2, VMKind::Wasmer0, VMKind::Wasmtime] {
+            for vm_kind in [VMKind::UncVm, VMKind::Wasmer2, VMKind::Wasmer0, VMKind::Wasmtime] {
                 if self.skip.contains(&vm_kind) {
                     continue;
                 }
@@ -205,7 +205,7 @@ impl TestBuilder {
                 let runtime_config = runtime_config_store.get_config(protocol_version);
 
                 // UncVM includes a different contract preparation algorithm, that is not supported on old protocol versions
-                if vm_kind == VMKind::UncVM
+                if vm_kind == VMKind::UncVm
                     && runtime_config.wasm_config.limit_config.contract_prepare_version
                         != ContractPrepareVersion::V2
                 {

@@ -42,7 +42,7 @@ pub(crate) fn with_vm_variants(
 
     #[cfg(all(feature = "unc_vm", target_arch = "x86_64"))]
     if cfg.limit_config.contract_prepare_version == unc_parameters::vm::ContractPrepareVersion::V2 {
-        runner(VMKind::UncVM);
+        runner(VMKind::UncVm);
     }
 }
 

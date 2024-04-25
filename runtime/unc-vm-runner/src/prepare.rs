@@ -27,7 +27,7 @@ pub fn prepare_contract(
     let prepare = config.limit_config.contract_prepare_version;
     // UncVM => ContractPrepareVersion::V2
     assert!(
-        (kind != VMKind::UncVM) || (prepare == crate::logic::ContractPrepareVersion::V2),
+        (kind != VMKind::UncVm) || (prepare == crate::logic::ContractPrepareVersion::V2),
         "UncVM only works with contract prepare version V2",
     );
     let features = crate::features::WasmFeatures::from(prepare);

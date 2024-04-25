@@ -272,7 +272,7 @@ pub(crate) fn prepare_contract(
 ) -> Result<Vec<u8>, PrepareError> {
     let lightly_steamed = PrepareContext::new(original_code, features, config).run()?;
 
-    if kind == VMKind::UncVM {
+    if kind == VMKind::UncVm {
         // Built-in unc-vm code instruments code for itself.
         return Ok(lightly_steamed);
     }
@@ -402,7 +402,7 @@ mod test {
         bolero::check!().for_each(|input: &[u8]| {
             // DO NOT use ArbitraryModule. We do want modules that may be invalid here, if they pass our validation step!
             if let Ok(_) = crate::prepare::prepare_v1::validate_contract(input, features, &config) {
-                match super::prepare_contract(input, features, &config, VMKind::UncVM) {
+                match super::prepare_contract(input, features, &config, VMKind::UncVm) {
                     Err(_e) => (), // TODO: this should be a panic, but for now it’d actually trigger
                     Ok(code) => {
                         let mut validator = wasmparser::Validator::new();
