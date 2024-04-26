@@ -57,6 +57,7 @@ unc-dyn-configs.workspace = true
 unc-epoch-manager.workspace = true
 unc-jsonrpc = { workspace = true, optional = true }
 unc-jsonrpc-primitives = { workspace = true, optional = true }
+unc-mainnet-res.workspace = true
 unc-network.workspace = true
 unc-o11y.workspace = true
 unc-performance-metrics.workspace = true
@@ -133,6 +134,7 @@ nightly = [
   "unc-epoch-manager/nightly",
   "unc-jsonrpc-primitives/nightly",
   "unc-jsonrpc/nightly",
+  "unc-mainnet-res/nightly",
   "unc-network/nightly",
   "unc-o11y/nightly",
   "unc-parameters/nightly",
@@ -154,6 +156,7 @@ nightly_protocol = [
   "unc-epoch-manager/nightly_protocol",
   "unc-jsonrpc-primitives/nightly_protocol",
   "unc-jsonrpc/nightly_protocol",
+  "unc-mainnet-res/nightly_protocol",
   "unc-network/nightly_protocol",
   "unc-o11y/nightly_protocol",
   "unc-parameters/nightly_protocol",
