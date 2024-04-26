@@ -1,4 +1,4 @@
-name: Lint && check && build
+name: Lint Check && nextest && build
 on:
   push:
     branches:
@@ -14,6 +14,73 @@ env:
   CARGO_SCCACHE_COMMIT: bed5571c
 
 jobs:
+
+  cargo_nextest:
+    name: "Cargo Nextest (${{matrix.name}})"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux
+            id: linux
+            os: ubuntu-latest
+            type: stable
+            runs_integ_tests: true
+            upload_profraws: true
+          - name: Linux Nightly
+            id: linux-nightly
+            os: ubuntu-latest
+            type: nightly
+            runs_integ_tests: true
+            upload_profraws: true
+          - name: MacOS
+            id: macos
+            os: macos-latest-xlarge
+            type: stable
+            runs_integ_tests: false
+            # TODO: Currently only computing linux coverage, because the MacOS runners
+            # have files at a different path and thus comes out duplicated.
+            upload_profraws: false
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      # Install all the required tools
+      - uses: taiki-e/install-action@9b5b983efc779f85e5e5d11539f005e85ccb27ff
+        with:
+          tool: just,cargo-nextest,cargo-llvm-cov
+
+      # Run the tests:
+      - run: mkdir -p coverage/profraw/{unit,integration,binaries}
+      # - Run the unit tests, retrieving the coverage information
+      - run: just codecov-ci "nextest-unit ${{ matrix.type }}"
+      - run: mv coverage/codecov/{new,unit-${{matrix.id}}}.json
+      - run: mv coverage/profraw/{new,unit/${{matrix.id}}}.tar.zst
+      # - Run the integration tests, retrieving the coverage information
+      - run: just codecov-ci "nextest-integration ${{ matrix.type }}"
+        if: matrix.runs_integ_tests
+      - run: mv coverage/codecov/{new,integration-${{matrix.id}}}.json
+        if: matrix.runs_integ_tests
+      - run: mv coverage/profraw/{new,integration/${{matrix.id}}}.tar.zst
+        if: matrix.runs_integ_tests
+
+      # Cleanup the target directory, leaving only stuff interesting to llvm-cov, and tarball it
+      - run: just tar-bins-for-coverage-ci
+      - run: mv coverage/profraw/binaries/{new,${{matrix.id}}}.tar.zst
+
+      # Upload the coverage
+      - uses: actions/upload-artifact@v3
+        if: matrix.upload_profraws
+        with:
+          name: coverage-profraw
+          path: coverage/profraw
+          retention-days: 2
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-codecov
+          path: coverage/codecov
+
   rpc_error_schema:
     name: "RPC Schema"
     runs-on: ubuntu-latest
