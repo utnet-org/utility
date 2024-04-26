@@ -12,7 +12,6 @@ TODO: Fill out documentation for all available commands
 ### `apply_range`
 
 Basic example:
-
 ```bash
 make unc-node
 ./target/release/unc-node --home ~/.unc/ view_state apply_range \
@@ -21,7 +20,6 @@ make unc-node
 ```
 
 This command will:
-
 * build `unc-node` with link-time optimizations
 * open the blockchain state at the location provided by `--home`
 * for each block with height between `--start-index` and `--end-index`
@@ -41,7 +39,7 @@ Enable debug output to print extra details such as individual outcomes:
 ./target/release/unc-node view_state apply_range --verbose ...
 ```
 
-To make more precise time estimations, enable `--sequential` flag, which will also cause slowdown proportional to the
+To make more precise time estimations, enable `--sequential` flag, which will also cause slowdown proportional to the 
 number of rayon threads.
 
 #### Running for the whole `mainnet` history
@@ -121,11 +119,10 @@ Example:
 ### `rocksdb_stats`
 
 Tool for measuring statistics of the store for each column:
-
-* number of entries
-* column size
-* total keys size
-* total values size
+- number of entries
+- column size
+- total keys size
+- total values size
 
 Before running, install `sst_dump` tool as follows:
 
@@ -162,8 +159,7 @@ By default, the command only displays the names of all accounts that have a
 contract deployed right now. This should be fairly quick. Using flags, you can
 display more information but it will also slow down the process.
 
-To see a list of flags, run
-
+To see a list of flags, run 
 ```ignore
 cargo run -p unc-node -- view-state contract-accounts --help
 ```
@@ -190,17 +186,16 @@ cargo run -p unc-node -- view-state contract-accounts \
 ```
 
 And the output may look something like thi:
-
 ```ignore
 ACCOUNT_ID                                                         RCPTS_IN  RCPTS_OUT ACTIONS
-0-0                                                                 37         14 Transfer
-0-1                                                                797        117 Transfer
-0.app.hipodev                                                        8          9 Transfer
-0.app2.hipodev                                                       4          5 Transfer
-0                                                                   56          9 Transfer
-00                                                                  29          5 Transfer
-000                                                                190         17 Transfer
-0000.mintbase1                                                      49         68 FunctionCall,Transfer
+0-0.unc                                                                 37         14 Transfer
+0-1.unc                                                                797        117 Transfer
+0.app.hipodev.unc                                                        8          9 Transfer
+0.app2.hipodev.unc                                                       4          5 Transfer
+0.unc                                                                   56          9 Transfer
+00.unc                                                                  29          5 Transfer
+000.unc                                                                190         17 Transfer
+0000.mintbase1.unc                                                      49         68 FunctionCall,Transfer
 ...
 And 18858 errors:
 failed loading outgoing receipt DpoPSrAHECYrpntTdYXrp2W2Ad3yEPyMyCav4mXi8kyh

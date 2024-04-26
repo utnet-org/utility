@@ -1,10 +1,8 @@
-# Utility Debug UI
+# Nearcore Debug UI
 
 ## How to Use
-
-Clone 画tility, go to this directory, run `npm install` (only needed for first time), and then
-
-```sh
+Clone framework, go to this directory, run `npm install` (only needed for first time), and then
+```
 npm start
 ```
 
@@ -15,22 +13,21 @@ Go to `http://localhost:3000/<RPC address>` to look at the debug UI of a unc nod
 The RPC address can be either IP:port, or just IP (which will default to port 3030).
 
 ## How to deploy in production
-
 Use the included Dockerfile, which will serve the UI on port 80 inside the container.
 
 For example:
 
-```sh
+```
 cd tools/debug-ui
-docker build -t utility-debug-ui .
-docker run -p 8080:80 utility-debug-ui
+docker build -t framework-debug-ui .
+docker run -p 8080:80 framework-debug-ui
 ```
 
 ## Development
 
-The code is written in TypeScript with the React utility. The one thing most unintuitive about
+The code is written in TypeScript with the React framework. The one thing most unintuitive about
 React is React Hooks (the useState, useMemo, useCallback, useEffect, etc.) Understanding how
-hooks work is a **must**: <https://reactjs.org/docs/hooks-intro.html>
+hooks work is a **must**: https://reactjs.org/docs/hooks-intro.html
 
 A few less-well-known hooks that are used often in this codebase:
 
@@ -52,24 +49,20 @@ to support deep-linking in the URL (e.g. `/127.0.0.1/cluster` leads to the clust
 the UI to be served as a single application.
 
 ### Linting & Formatting
-
 The project is configured to use ESLint (error-checking) and Prettier (consistent formatting).
 
 Run `npm run lint` to check for linting & formatting errors, and `npm run fix` to fix those that
 can be automatically fixed.
 
 ## How to Use the TestLoop Log Visualizer
-
-For utility tests written in the TestLoop utility (any tests that mention "TestLoop", or
+For framework tests written in the TestLoop framework (any tests that mention "TestLoop", or
 more precisely, using TestLoop from core/async/src/test_loop.rs), the test can be visualized:
 
 1. First run the test from the Rust side and save the output, e.g.
-
-   ```sh
+   ```
    cargo test -p unc-chunks test_multi -- --show-output > ~/log.txt
    ```
-
-2. Go to the UI at `/logviz`, such as <http://localhost:3000/logviz>
+2. Go to the UI at `/logviz`, such as http://localhost:3000/logviz
 3. Drag the log.txt file into the UI.
 
 Screenshots:

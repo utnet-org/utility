@@ -74,7 +74,7 @@ members = [
     "tools/mirror",
     "tools/mock-node",
     "tools/ping",
-    "tools/re-pledged",
+    "tools/restaked",
     "tools/rpctypegen/core",
     "tools/rpctypegen/macro",
     "tools/speedy_sync",

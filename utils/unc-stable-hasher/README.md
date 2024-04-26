@@ -12,7 +12,7 @@ We need to ensure, nothing breaks during this transition period.
 
 This crate provides only one struct. See `StableHasher`.
 
-### Example
+### Example:
 
 ```rust
 fn test_stable_hasher() {

@@ -25,7 +25,7 @@ fn main() {
 
     let matches = Command::new("Key-pairs generator")
         .about(
-            "Continuously checking the node and executes pledging transaction if node is kicked out",
+            "Continuously checking the node and executes staking transaction if node is kicked out",
         )
         .arg(
             Arg::new("home")
@@ -121,12 +121,12 @@ fn main() {
             let amount = if pledge_amount == 0 { last_pledge_amount } else { pledge_amount };
             info!(
                 target: "repledged",
-                "Sending pledging transaction {} -> {}", key_file.account_id, amount
+                "Sending staking transaction {} -> {}", key_file.account_id, amount
             );
             if let Err(err) =
                 user.pledge(key_file.account_id.clone(), key_file.public_key.clone(), amount)
             {
-                error!(target: "repledged", "Failed to send pledging transaction: {}", err);
+                error!(target: "repledged", "Failed to send staking transaction: {}", err);
             }
         }
         std::thread::sleep(Duration::from_secs(wait_period));
