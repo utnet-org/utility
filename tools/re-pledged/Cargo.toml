@@ -1,5 +1,5 @@
 [package]
-name = "restaked"
+name = "re-pledged"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true

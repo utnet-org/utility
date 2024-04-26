@@ -4621,6 +4621,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "re-pledged"
+version = "0.0.0"
+dependencies = [
+ "clap",
+ "framework",
+ "integration-tests",
+ "tokio",
+ "unc-crypto",
+ "unc-jsonrpc-client",
+ "unc-o11y",
+ "unc-primitives",
+]
+
+[[package]]
 name = "redis"
 version = "0.23.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4840,20 +4854,6 @@ dependencies = [
  "wasm-bindgen-futures",
  "web-sys",
  "winreg 0.52.0",
-]
-
-[[package]]
-name = "restaked"
-version = "0.0.0"
-dependencies = [
- "clap",
- "framework",
- "integration-tests",
- "tokio",
- "unc-crypto",
- "unc-jsonrpc-client",
- "unc-o11y",
- "unc-primitives",
 ]
 
 [[package]]

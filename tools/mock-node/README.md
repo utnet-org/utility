@@ -1,4 +1,5 @@
 # mock-node
+
 This crate hosts libraries to start a test env for a single node by replacing the network module with a mock network environment.
 The mock network environment simulates the interaction that the client will usually have with other nodes by
 responding to the client's network messages and broadcasting new blocks. The mock network reads a pre-generated chain
@@ -16,7 +17,7 @@ You can find two examples in the ./benches directory.
 If you are running a mock node for mainnet or testnet on a GCP node, you want to place the new client home
 dir on a SSD disk for optimal rocksdb performance. Note that the
 default booting disk of GCP notes are HDD, so you need to mount a new SSD disk on
-your node and put the mock node's home dir there. See https://cloud.google.com/compute/docs/disks/add-persistent-disk
+your node and put the mock node's home dir there. See <https://cloud.google.com/compute/docs/disks/add-persistent-disk>
 for how to attach and mount a new disk to an existing GCP node.
 
 See `$ cargo run -p mock-node -- --help` for the list of available options and their documentation.
