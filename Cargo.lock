@@ -2232,7 +2232,6 @@ dependencies = [
  "unc-epoch-manager",
  "unc-jsonrpc",
  "unc-jsonrpc-primitives",
- "unc-mainnet-res",
  "unc-network",
  "unc-o11y",
  "unc-parameters",
@@ -7167,16 +7166,6 @@ dependencies = [
  "unc-o11y",
  "unc-primitives",
  "unc-store",
-]
-
-[[package]]
-name = "unc-mainnet-res"
-version = "0.0.0"
-dependencies = [
- "serde_json",
- "unc-account-id",
- "unc-chain-configs",
- "unc-primitives",
 ]
 
 [[package]]
