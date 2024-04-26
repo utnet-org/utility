@@ -85,7 +85,7 @@ $ rclone copy --no-check-certificate unc_cf:unc/latest ./
 $ latest=$(cat latest)
 $ rclone copy --no-check-certificate --progress --transfers=6  unc_cf:unc/${latest:?} ~/.unc/data
 
-## on ～/.unc dir touch file `validator_key.json`
+## on ～/.unc dir touch file `validator_key.json`  (optional)
 {
     "account_id": "miner-addr"
     "public_key":"ed25519:2yMvZrTtjgFMtcpE12G3tdt7KsYKdKE6jufRnz4Yyxw3",
