@@ -231,7 +231,7 @@ pub fn publishable_has_license_file(workspace: &Workspace) -> anyhow::Result<()>
         .filter(|pkg| {
             utils::is_publishable(pkg)
                 && !(utils::exists(pkg, "LICENSE")
-                    || (utils::exists(pkg, "LICENSE-APACHE") && utils::exists(pkg, "LICENSE-MIT"))
+                    || (utils::exists(pkg, "LICENSE-GPL2") && utils::exists(pkg, "LICENSE-GPL2.1"))
                     || matches!(pkg
                         .parsed
                         .license_file, Some(ref l) if utils::exists(pkg, l.as_str())))

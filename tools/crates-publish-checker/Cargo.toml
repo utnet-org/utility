@@ -1,10 +1,10 @@
 [package]
-name = "themis"
+name = "crates-publish-checker"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
 rust-version.workspace = true
-description = "https://en.wikipedia.org/wiki/Themis"
+description = "https://en.wikipedia.org/wiki/Checklist"
 repository.workspace = true
 license.workspace = true
 publish = false

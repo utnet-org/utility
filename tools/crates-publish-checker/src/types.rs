@@ -162,30 +162,38 @@ mod tests {
 
         assert_eq!(
             Some(&toml::Value::String("2021".to_owned())),
-            read_toml_with_potential_inheritance(&pkg, Some(&workspace), &["package", "edition"])
+            read_toml_with_potential_inheritance(
+                &toml::Value::from(pkg.to_owned()),
+                Some(&toml::Value::from(workspace.to_owned())),
+                &["package", "edition"]
+            )
         );
 
         assert_eq!(
             Some(&toml::Value::String("2".to_owned())),
-            read_toml_with_potential_inheritance(&pkg, Some(&workspace), &["dependencies", "syn"])
+            read_toml_with_potential_inheritance(
+                &toml::Value::from(pkg.to_owned()),
+                Some(&toml::Value::from(workspace.to_owned())),
+                &["dependencies", "syn"]
+            )
         );
 
         assert_eq!(
             Some(&toml::Value::Boolean(true)),
             read_toml_with_potential_inheritance(
-                &pkg,
-                Some(&workspace),
+                &toml::Value::from(pkg.to_owned()),
+                Some(&toml::Value::from(workspace.to_owned())),
                 &["dependencies", "quote", "optional"]
             )
         );
 
         assert_eq!(
-            Some(&toml! {
+            Some(&toml::Value::from(toml! {
                 "path" = "../serde"
-            }),
+            })),
             read_toml_with_potential_inheritance(
-                &pkg,
-                Some(&workspace),
+                &toml::Value::from(pkg.to_owned()),
+                Some(&toml::Value::from(workspace.to_owned())),
                 &["dependencies", "serde"]
             )
         );
@@ -222,30 +230,38 @@ mod tests {
 
         assert_eq!(
             Some(&toml::Value::String("2021".to_owned())),
-            read_toml_with_potential_inheritance(&pkg, Some(&workspace), &["package", "edition"])
+            read_toml_with_potential_inheritance(
+                &toml::Value::from(pkg.to_owned()),
+                Some(&toml::Value::from(workspace.to_owned())),
+                &["package", "edition"]
+            )
         );
 
         assert_eq!(
             Some(&toml::Value::String("2".to_owned())),
-            read_toml_with_potential_inheritance(&pkg, Some(&workspace), &["dependencies", "syn"])
+            read_toml_with_potential_inheritance(
+                &toml::Value::from(pkg.to_owned()),
+                Some(&toml::Value::from(workspace.to_owned())),
+                &["dependencies", "syn"]
+            )
         );
 
         assert_eq!(
             Some(&toml::Value::Boolean(true)),
             read_toml_with_potential_inheritance(
-                &pkg,
-                Some(&workspace),
+                &toml::Value::from(pkg.to_owned()),
+                Some(&toml::Value::from(workspace.to_owned())),
                 &["dependencies", "quote", "optional"]
             )
         );
 
         assert_eq!(
-            Some(&toml! {
+            Some(&toml::Value::from(toml! {
                 "path" = "../serde"
-            }),
+            })),
             read_toml_with_potential_inheritance(
-                &pkg,
-                Some(&workspace),
+                &toml::Value::from(pkg.to_owned()),
+                Some(&toml::Value::from(workspace.to_owned())),
                 &["dependencies", "serde"]
             )
         );

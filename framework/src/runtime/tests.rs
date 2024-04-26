@@ -115,7 +115,7 @@ impl NightshadeRuntime {
         }
         store_update.commit().unwrap();
 
-        (result.new_root, result.validator_proposals, result.outgoing_receipts)
+        (result.new_root, result.validator_pledge_proposals, result.outgoing_receipts)
     }
 }
 

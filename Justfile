@@ -18,7 +18,7 @@ test *FLAGS: (test-ci FLAGS) test-extra
 test-ci *FLAGS: check-cargo-fmt \
                 python-style-checks \
                 check-cargo-deny \
-                check-themis \
+                check-crates-publish-checker \
                 check-cargo-clippy \
                 check-non-default \
                 check-cargo-udeps \
@@ -89,9 +89,9 @@ check-cargo-clippy:
 check-cargo-deny:
     cargo deny --all-features --locked check bans
 
-# themis-based checks
-check-themis:
-    env CARGO_TARGET_DIR="target/themis" cargo run --locked -p themis
+# crates-publish-checker-based checks
+check-crates-publish-checker:
+    env CARGO_TARGET_DIR="target/crates-publish-checker" cargo run --locked -p crates-publish-checker
 
 # generate a codecov report for RULE
 codecov RULE:

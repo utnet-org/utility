@@ -1,4 +1,4 @@
-Observability (o11y) helpers for the UNC codebase.
+Observability (o11y) helpers for the Utility codebase.
 
 This crate contains all sorts of utilities to enable a more convenient observability implementation
 in the UNC codebase.

@@ -1463,6 +1463,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "crates-publish-checker"
+version = "0.0.0"
+dependencies = [
+ "anyhow",
+ "cargo_metadata",
+ "semver 1.0.22",
+ "serde",
+ "toml 0.8.12",
+]
+
+[[package]]
 name = "crc"
 version = "3.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6042,17 +6053,6 @@ dependencies = [
  "unc-parameters",
  "unc-primitives",
  "unc-test-contracts",
-]
-
-[[package]]
-name = "themis"
-version = "0.0.0"
-dependencies = [
- "anyhow",
- "cargo_metadata",
- "semver 1.0.22",
- "serde",
- "toml 0.8.12",
 ]
 
 [[package]]

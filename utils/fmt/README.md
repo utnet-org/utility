@@ -1,4 +1,4 @@
-# Custom formatting for the framework code base.
+# Custom formatting for the framework code base
 
 This crate is a lightweight assembly of wrapper types that we use to pretty
 print values.
