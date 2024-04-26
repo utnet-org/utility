@@ -48,7 +48,8 @@ fn test_power_validator() {
     let amount_powered: Power = 1_000_000;
     let pledge_validators = vec![("test1".parse().unwrap(), amount_pledged)];
     let power_validators = vec![("test1".parse().unwrap(), amount_powered)];
-    let mut epoch_manager = setup_default_epoch_manager(power_validators, pledge_validators, 1, 1, 2, 2, 90, 60);
+    let mut epoch_manager =
+        setup_default_epoch_manager(power_validators, pledge_validators, 1, 1, 2, 2, 90, 60);
 
     let h = hash_range(4);
     record_block(&mut epoch_manager, CryptoHash::default(), h[0], 0, vec![], vec![]);
@@ -98,16 +99,12 @@ fn test_power_validator() {
 
     let expected3 = epoch_info_with_num_seats(
         2,
-        vec![
-            ("test2".parse().unwrap(), amount_powered, amount_pledged),
-        ],
+        vec![("test2".parse().unwrap(), amount_powered, amount_pledged)],
         vec![0, 1],
         vec![vec![0, 1]],
         vec![],
         vec![],
-        change_power(vec![
-            ("test1".parse().unwrap(), amount_powered, amount_pledged),
-        ]),
+        change_power(vec![("test1".parse().unwrap(), amount_powered, amount_pledged)]),
         vec![],
         // only the validator who produced the block in this epoch gets the reward since epoch length is 1
         reward(vec![("test1".parse().unwrap(), 0), ("unc".parse().unwrap(), 0)]),
