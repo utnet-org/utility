@@ -18,7 +18,7 @@ use unc_primitives::utils::min_heap::{MinHeap, PeekMut};
 ///
 /// Panics if chunk_producers vector is not sorted in descending order by
 /// producer’s pledge.
-pub fn assign_shards<T: HasPledge<Balance> + Eq + Clone + PartialOrd>(
+pub fn assign_shards<T: HasValue<Balance> + Eq + Clone + PartialOrd>(
     chunk_producers: Vec<T>,
     num_shards: NumShards,
     min_validators_per_shard: usize,
@@ -78,7 +78,7 @@ pub fn assign_shards<T: HasPledge<Balance> + Eq + Clone + PartialOrd>(
     Ok(result)
 }
 
-fn assign_with_possible_repeats<T: HasPledge<Balance> + Eq, I: Iterator<Item = (usize, T)>>(
+fn assign_with_possible_repeats<T: HasValue<Balance> + Eq, I: Iterator<Item = (usize, T)>>(
     shard_index: &mut MinHeap<(usize, Balance, ShardId)>,
     result: &mut Vec<Vec<T>>,
     cp_iter: &mut I,
@@ -143,23 +143,23 @@ fn assign_with_possible_repeats<T: HasPledge<Balance> + Eq, I: Iterator<Item = (
 #[derive(Debug)]
 pub struct NotEnoughValidators;
 
-pub trait HasPledge<T> {
+pub trait HasValue<T> {
     fn get_value(&self) -> T;
 }
 
-impl HasPledge<Power> for ValidatorPower {
+impl HasValue<Power> for ValidatorPower {
     fn get_value(&self) -> Power {
         self.power()
     }
 }
 
-impl HasPledge<Balance> for ValidatorPledge {
+impl HasValue<Balance> for ValidatorPledge {
     fn get_value(&self) -> Balance {
         self.pledge()
     }
 }
 
-impl HasPledge<Balance> for ValidatorPowerAndPledge {
+impl HasValue<Balance> for ValidatorPowerAndPledge {
     fn get_value(&self) -> Balance {
         self.pledge()
     }
@@ -315,8 +315,8 @@ mod tests {
         }
     }
 
-    impl super::HasPledge for (usize, Balance) {
-        fn get_pledge(&self) -> Balance {
+    impl super::HasValue<Balance> for (usize, Balance) {
+        fn get_value(&self) -> Balance {
             self.1
         }
     }

@@ -2106,7 +2106,6 @@ mod test {
     use std::sync::Arc;
     use unc_async::messaging::IntoSender;
     use unc_async::time::FakeClock;
-    use unc_epoch_manager::shard_tracker::TrackedConfig;
     use unc_epoch_manager::test_utils::setup_epoch_manager_with_block_and_chunk_producers;
     use unc_network::test_utils::MockPeerManagerAdapter;
     use unc_network::types::NetworkRequests;

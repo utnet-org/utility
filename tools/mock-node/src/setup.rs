@@ -401,7 +401,6 @@ mod tests {
         let dir1 = tempfile::Builder::new().prefix("test1").tempdir().unwrap();
         let mut unc_config1 = load_test_config("", tcp::ListenerAddr::reserve_for_test(), genesis);
         unc_config1.client_config.min_num_peers = 1;
-        unc_config1.client_config.tracked_shards = vec![0]; // Track all shards.
         unc_config1.config.store.state_snapshot_enabled = true;
         let network_config = MockNetworkConfig::with_delay(Duration::from_millis(10));
 

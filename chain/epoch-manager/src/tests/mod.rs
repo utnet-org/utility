@@ -4,7 +4,7 @@ use super::*;
 use crate::reward_calculator::NUM_NS_IN_SECOND;
 use crate::test_utils::{
     block_info, change_power, default_reward_calculator, do_power, epoch_config,
-    epoch_config_with_production_config, epoch_info, epoch_info_with_num_seats, hash_range,
+    epoch_config_with_production_config, epoch_info, epoch_info_with_num_seats, hash_range, pledge,
     record_block, record_block_with_final_block_hash, record_block_with_slashes,
     record_with_block_info, reward, setup_default_epoch_manager, setup_epoch_manager,
     DEFAULT_TOTAL_SUPPLY,
@@ -44,21 +44,24 @@ impl EpochManager {
 
 #[test]
 fn test_power_validator() {
+    let amount_pledged: Balance = 1_000_000;
     let amount_powered: Power = 1_000_000;
-    let validators = vec![("test1".parse().unwrap(), amount_powered)];
-    let mut epoch_manager = setup_default_epoch_manager(validators.clone(), 1, 1, 2, 2, 90, 60);
+    let pledge_validators = vec![("test1".parse().unwrap(), amount_pledged)];
+    let power_validators = vec![("test1".parse().unwrap(), amount_powered)];
+    let mut epoch_manager = setup_default_epoch_manager(power_validators, pledge_validators, 1, 1, 2, 2, 90, 60);
 
     let h = hash_range(4);
-    record_block(&mut epoch_manager, CryptoHash::default(), h[0], 0, vec![]);
+    record_block(&mut epoch_manager, CryptoHash::default(), h[0], 0, vec![], vec![]);
 
     let expected0 = epoch_info_with_num_seats(
         1,
-        vec![("test1".parse().unwrap(), amount_powered)],
+        vec![("test1".parse().unwrap(), amount_powered, amount_pledged)],
         vec![0, 0],
         vec![vec![0, 0]],
         vec![],
         vec![],
         change_power(vec![("test1".parse().unwrap(), amount_powered)]),
+        BTreeMap::new(),
         vec![],
         reward(vec![("unc".parse().unwrap(), 0)]),
         0,
@@ -80,31 +83,30 @@ fn test_power_validator() {
         h[1],
         1,
         vec![do_power("test2".parse().unwrap(), amount_powered)],
+        vec![pledge("test2".parse().unwrap(), amount_pledged)],
     );
     let epoch1 = epoch_manager.get_epoch_id(&h[1]).unwrap();
     assert!(compare_epoch_infos(&epoch_manager.get_epoch_info(&epoch1).unwrap(), &expected0));
     assert_eq!(epoch_manager.get_epoch_id(&h[2]), Err(EpochError::MissingBlock(h[2])));
 
-    record_block(&mut epoch_manager, h[1], h[2], 2, vec![]);
+    record_block(&mut epoch_manager, h[1], h[2], 2, vec![], vec![]);
     // test2 pledging in epoch 1 and therefore should be included in epoch 3.
     let epoch2 = epoch_manager.get_epoch_id(&h[2]).unwrap();
     assert!(compare_epoch_infos(&epoch_manager.get_epoch_info(&epoch2).unwrap(), &expected0));
 
-    record_block(&mut epoch_manager, h[2], h[3], 3, vec![]);
+    record_block(&mut epoch_manager, h[2], h[3], 3, vec![], vec![]);
 
     let expected3 = epoch_info_with_num_seats(
         2,
         vec![
-            ("test1".parse().unwrap(), amount_powered),
-            ("test2".parse().unwrap(), amount_powered),
+            ("test2".parse().unwrap(), amount_powered, amount_pledged),
         ],
         vec![0, 1],
         vec![vec![0, 1]],
         vec![],
         vec![],
         change_power(vec![
-            ("test1".parse().unwrap(), amount_powered),
-            ("test2".parse().unwrap(), amount_powered),
+            ("test1".parse().unwrap(), amount_powered, amount_pledged),
         ]),
         vec![],
         // only the validator who produced the block in this epoch gets the reward since epoch length is 1
@@ -123,6 +125,10 @@ fn test_power_validator() {
         PROTOCOL_VERSION,
         epoch_manager.reward_calculator,
         validators.iter().map(|(account_id, power)| do_power(account_id.clone(), *power)).collect(),
+        validators
+            .iter()
+            .map(|(account_id, (_, balance))| pledge(account_id.clone(), *balance))
+            .collect(),
     )
     .unwrap();
     assert!(compare_epoch_infos(&epoch_manager2.get_epoch_info(&epoch3).unwrap(), &expected3));

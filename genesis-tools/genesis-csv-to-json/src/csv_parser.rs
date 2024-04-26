@@ -317,6 +317,7 @@ mod tests {
                 vesting_end: timestamp(23, 30, 0),
                 vesting_cliff: timestamp(22, 30, 20),
                 validator_stake: 100,
+                validator_power: 100,
                 validator_key: Some(PublicKey::empty(KeyType::ED25519)),
                 peer_info: Some(PeerInfo {
                     id: PeerId::new(PublicKey::empty(KeyType::ED25519)),
@@ -341,6 +342,7 @@ mod tests {
                 vesting_end: None,
                 vesting_cliff: None,
                 validator_stake: 0,
+                validator_power: 0,
                 validator_key: None,
                 peer_info: None,
                 is_treasury: true,

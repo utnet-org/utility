@@ -275,7 +275,8 @@ mod tests {
     use unc_primitives_core::types::{Balance, Power};
 
     use crate::{
-        types::{validator_power_and_pledge::ValidatorPowerAndPledge, ValidatorId}, validator_mandates::ValidatorMandatesConfig,
+        types::{validator_power_and_pledge::ValidatorPowerAndPledge, ValidatorId},
+        validator_mandates::ValidatorMandatesConfig,
     };
 
     use super::{
@@ -309,14 +310,15 @@ mod tests {
     /// The partials are (verified in [`test_validator_mandates_new`]):
     /// `vec![(1, 7), (2, 9), (3, 2), (4, 5), (5, 4), (6, 6)]`
     fn new_validator_power_and_pledges() -> Vec<ValidatorPowerAndPledge> {
-        let new_vs = |account_id: &str, power: Power, balance: Balance| -> ValidatorPowerAndPledge {
-            ValidatorPowerAndPledge::new(
-                account_id.parse().unwrap(),
-                PublicKey::empty(unc_crypto::KeyType::ED25519),
-                power,
-                balance,
-            )
-        };
+        let new_vs =
+            |account_id: &str, power: Power, balance: Balance| -> ValidatorPowerAndPledge {
+                ValidatorPowerAndPledge::new(
+                    account_id.parse().unwrap(),
+                    PublicKey::empty(unc_crypto::KeyType::ED25519),
+                    power,
+                    balance,
+                )
+            };
 
         vec![
             new_vs("account_0", 30, 30),

@@ -475,7 +475,7 @@ mod test {
                     let account = Account::new(
                         *amount,
                         *pledging,
-                        power,
+                        *power,
                         CryptoHash::default(),
                         *storage_usage,
                     );
@@ -736,6 +736,7 @@ mod test {
                     account_id: "foo0",
                     amount: 1_000_000,
                     pledging: 1_000_000,
+                    power: 1_000_000,
                     storage_usage: 182,
                 },
                 TestStateRecord::AccessKey {
@@ -746,6 +747,7 @@ mod test {
                     account_id: "foo1",
                     amount: 1_000_000,
                     pledging: 2_000_000,
+                    power: 2_000_000,
                     storage_usage: 182,
                 },
                 TestStateRecord::AccessKey {
@@ -753,13 +755,14 @@ mod test {
                     public_key: "ed25519:FXXrTXiKWpXj1R6r5fBvMLpstd8gPyrBq3qMByqKVzKF",
                 },
                 TestStateRecord::Account {
-                    account_id: "asdf.unc",
+                    account_id: "asdf",
                     amount: 1_234_000,
                     pledging: 0,
+                    power: 0,
                     storage_usage: 182,
                 },
                 TestStateRecord::AccessKey {
-                    account_id: "asdf.unc",
+                    account_id: "asdf",
                     public_key: "ed25519:5C66RSJgwK17Yb6VtTbgBCFHDRPzGUd6AAhFdXNvmJuo",
                 },
             ],
@@ -785,16 +788,18 @@ mod test {
                     account_id: "foo0",
                     amount: 100_000_000,
                     pledging: 50_000_000,
+                    power: 50_000_000,
                     storage_usage: 0,
                 },
                 TestStateRecord::Account {
-                    account_id: "extra-account.unc",
+                    account_id: "extra-account",
                     amount: 9_000_000,
                     pledging: 0,
+                    power: 0,
                     storage_usage: 0,
                 },
                 TestStateRecord::AccessKey {
-                    account_id: "extra-account.unc",
+                    account_id: "extra-account",
                     public_key: "ed25519:BhnQV3oJa8iSQDKDc8gy36TsenaMFmv7qHvcnutuXj33",
                 },
             ],
@@ -803,6 +808,7 @@ mod test {
                     account_id: "foo0",
                     amount: 149_000_000,
                     pledging: 1_000_000,
+                    power: 1_000_000,
                     storage_usage: 182,
                 },
                 TestStateRecord::AccessKey {
@@ -813,6 +819,7 @@ mod test {
                     account_id: "foo1",
                     amount: 1_000_000,
                     pledging: 2_000_000,
+                    power: 2_000_000,
                     storage_usage: 182,
                 },
                 TestStateRecord::AccessKey {
@@ -823,6 +830,7 @@ mod test {
                     account_id: "foo2",
                     amount: 10_000 * framework::config::UNC_BASE,
                     pledging: 3_000_000,
+                    power: 3_000_000,
                     storage_usage: 182,
                 },
                 TestStateRecord::AccessKey {
@@ -830,23 +838,25 @@ mod test {
                     public_key: "ed25519:Eo9W44tRMwcYcoua11yM7Xfr1DjgR4EWQFM3RU27MEX8",
                 },
                 TestStateRecord::Account {
-                    account_id: "asdf.unc",
+                    account_id: "asdf",
                     amount: 1_234_000,
                     pledging: 0,
+                    power: 0,
                     storage_usage: 182,
                 },
                 TestStateRecord::AccessKey {
-                    account_id: "asdf.unc",
+                    account_id: "asdf",
                     public_key: "ed25519:5C66RSJgwK17Yb6VtTbgBCFHDRPzGUd6AAhFdXNvmJuo",
                 },
                 TestStateRecord::Account {
-                    account_id: "extra-account.unc",
+                    account_id: "extra-account",
                     amount: 9_000_000,
                     pledging: 0,
+                    power: 0,
                     storage_usage: 182,
                 },
                 TestStateRecord::AccessKey {
-                    account_id: "extra-account.unc",
+                    account_id: "extra-account",
                     public_key: "ed25519:BhnQV3oJa8iSQDKDc8gy36TsenaMFmv7qHvcnutuXj33",
                 },
             ],
@@ -882,6 +892,7 @@ mod test {
                     account_id: "foo0",
                     amount: 1_000_000,
                     pledging: 1_000_000,
+                    power: 1_000_000,
                     storage_usage: 182,
                 },
                 TestStateRecord::AccessKey {
@@ -892,6 +903,7 @@ mod test {
                     account_id: "foo1",
                     amount: 1_000_000,
                     pledging: 2_000_000,
+                    power: 2_000_000,
                     storage_usage: 182,
                 },
                 TestStateRecord::AccessKey {
@@ -899,13 +911,14 @@ mod test {
                     public_key: "ed25519:FXXrTXiKWpXj1R6r5fBvMLpstd8gPyrBq3qMByqKVzKF",
                 },
                 TestStateRecord::Account {
-                    account_id: "asdf.unc",
+                    account_id: "asdf",
                     amount: 1_234_000,
                     pledging: 0,
+                    power: 0,
                     storage_usage: 182,
                 },
                 TestStateRecord::AccessKey {
-                    account_id: "asdf.unc",
+                    account_id: "asdf",
                     public_key: "ed25519:5C66RSJgwK17Yb6VtTbgBCFHDRPzGUd6AAhFdXNvmJuo",
                 },
             ],
@@ -914,12 +927,14 @@ mod test {
                     account_id: "foo0",
                     amount: 100_000_000,
                     pledging: 0,
+                    power: 0,
                     storage_usage: 0,
                 },
                 TestStateRecord::Account {
                     account_id: "foo2",
                     amount: 300_000_000,
                     pledging: 0,
+                    power: 0,
                     storage_usage: 0,
                 },
                 TestStateRecord::AccessKey {
@@ -931,13 +946,14 @@ mod test {
                     public_key: "ed25519:He7QeRuwizNEhBioYG3u4DZ8jWXyETiyNzFD3MkTjDMf",
                 },
                 TestStateRecord::Account {
-                    account_id: "extra-account.unc",
+                    account_id: "extra-account",
                     amount: 9_000_000,
                     pledging: 0,
+                    power: 0,
                     storage_usage: 0,
                 },
                 TestStateRecord::AccessKey {
-                    account_id: "extra-account.unc",
+                    account_id: "extra-account",
                     public_key: "ed25519:BhnQV3oJa8iSQDKDc8gy36TsenaMFmv7qHvcnutuXj33",
                 },
             ],
@@ -946,6 +962,7 @@ mod test {
                     account_id: "foo0",
                     amount: 100_000_000,
                     pledging: 0,
+                    power: 0,
                     storage_usage: 264,
                 },
                 TestStateRecord::AccessKey {
@@ -960,6 +977,7 @@ mod test {
                     account_id: "foo1",
                     amount: 3_000_000,
                     pledging: 0,
+                    power: 0,
                     storage_usage: 264,
                 },
                 TestStateRecord::AccessKey {
@@ -974,6 +992,7 @@ mod test {
                     account_id: "foo2",
                     amount: 299_000_000,
                     pledging: 1_000_000,
+                    power: 1_000_000,
                     storage_usage: 182,
                 },
                 TestStateRecord::AccessKey {
@@ -984,6 +1003,7 @@ mod test {
                     account_id: "foo3",
                     amount: 10_000 * framework::config::UNC_BASE,
                     pledging: 2_000_000,
+                    power: 2_000_000,
                     storage_usage: 182,
                 },
                 TestStateRecord::AccessKey {
@@ -991,23 +1011,25 @@ mod test {
                     public_key: "ed25519:FXXrTXiKWpXj1R6r5fBvMLpstd8gPyrBq3qMByqKVzKF",
                 },
                 TestStateRecord::Account {
-                    account_id: "asdf.unc",
+                    account_id: "asdf",
                     amount: 1_234_000,
                     pledging: 0,
+                    power: 0,
                     storage_usage: 182,
                 },
                 TestStateRecord::AccessKey {
-                    account_id: "asdf.unc",
+                    account_id: "asdf",
                     public_key: "ed25519:5C66RSJgwK17Yb6VtTbgBCFHDRPzGUd6AAhFdXNvmJuo",
                 },
                 TestStateRecord::Account {
-                    account_id: "extra-account.unc",
+                    account_id: "extra-account",
                     amount: 9_000_000,
                     pledging: 0,
+                    power: 0,
                     storage_usage: 182,
                 },
                 TestStateRecord::AccessKey {
-                    account_id: "extra-account.unc",
+                    account_id: "extra-account",
                     public_key: "ed25519:BhnQV3oJa8iSQDKDc8gy36TsenaMFmv7qHvcnutuXj33",
                 },
             ],
@@ -1029,6 +1051,7 @@ mod test {
                     account_id: "foo0",
                     amount: 1_000_000,
                     pledging: 1_000_000,
+                    power: 1_000_000,
                     storage_usage: 183,
                 },
                 TestStateRecord::AccessKey {
@@ -1041,6 +1064,7 @@ mod test {
                 account_id: "foo0",
                 amount: 100_000_000,
                 pledging: 0,
+                power: 0,
                 storage_usage: 0,
             }],
             wanted_records: &[
@@ -1048,6 +1072,7 @@ mod test {
                     account_id: "foo0",
                     amount: 99_000_000,
                     pledging: 1_000_000,
+                    power: 1_000_000,
                     storage_usage: 183,
                 },
                 TestStateRecord::AccessKey {

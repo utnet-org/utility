@@ -840,7 +840,6 @@ impl Ord for OrderedValidatorPower {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::pledge;
     use num_rational::Ratio;
     use unc_crypto::{KeyType, PublicKey};
     use unc_primitives::account::id::AccountIdRef;

@@ -6,7 +6,6 @@ use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 
 use actix::System;
-use futures::FutureExt;
 use rand::{thread_rng, Rng};
 use unc_async::messaging::CanSend;
 use unc_network::shards_manager::ShardsManagerRequestFromNetwork;

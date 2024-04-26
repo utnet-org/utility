@@ -96,8 +96,7 @@ impl ShardTracker {
 #[cfg(test)]
 mod tests {
     use super::ShardTracker;
-    use crate::test_utils::hash_range;
-    use crate::{EpochManager, EpochManagerAdapter, EpochManagerHandle, RewardCalculator};
+    use crate::{EpochManager, EpochManagerHandle, RewardCalculator};
     use num_rational::Ratio;
     use std::collections::HashSet;
     use std::sync::Arc;
@@ -108,8 +107,7 @@ mod tests {
     use unc_primitives::shard_layout::ShardLayout;
     use unc_primitives::types::validator_power::ValidatorPower;
     use unc_primitives::types::validator_stake::ValidatorPledge;
-    use unc_primitives::types::{BlockHeight, EpochId, NumShards, ProtocolVersion, ShardId};
-    use unc_primitives::version::ProtocolFeature::SimpleNightshade;
+    use unc_primitives::types::{BlockHeight, NumShards, ProtocolVersion, ShardId};
     use unc_primitives::version::PROTOCOL_VERSION;
     use unc_store::test_utils::create_test_store;
 
@@ -157,6 +155,11 @@ mod tests {
                 PublicKey::empty(KeyType::ED25519),
                 100,
             )],
+            vec![ValidatorPledge::new(
+                "test".parse().unwrap(),
+                PublicKey::empty(KeyType::ED25519),
+                100,
+            )],
         )
         .unwrap()
         .into_handle()
@@ -186,6 +189,7 @@ mod tests {
                     DEFAULT_TOTAL_SUPPLY,
                     protocol_version,
                     height * 10u64.pow(9),
+                    ..Default::default(),
                 ),
                 [0; 32],
             )
@@ -219,36 +223,11 @@ mod tests {
     }
 
     #[test]
-    fn test_track_accounts() {
-        let shard_ids: Vec<_> = (0..4).collect();
-        let epoch_manager =
-            get_epoch_manager(PROTOCOL_VERSION, shard_ids.len() as NumShards, false);
-        let shard_layout = epoch_manager.read().get_shard_layout(&EpochId::default()).unwrap();
-        let tracked_accounts = vec!["test1".parse().unwrap(), "test2".parse().unwrap()];
-        let tracker =
-            ShardTracker::new(TrackedConfig::Accounts(tracked_accounts), Arc::new(epoch_manager));
-        let mut total_tracked_shards = HashSet::new();
-        total_tracked_shards
-            .insert(account_id_to_shard_id(&"test1".parse().unwrap(), &shard_layout));
-        total_tracked_shards
-            .insert(account_id_to_shard_id(&"test2".parse().unwrap(), &shard_layout));
-
-        assert_eq!(
-            get_all_shards_care_about(&tracker, &shard_ids, &CryptoHash::default()),
-            total_tracked_shards
-        );
-        assert_eq!(
-            get_all_shards_will_care_about(&tracker, &shard_ids, &CryptoHash::default()),
-            total_tracked_shards
-        );
-    }
-
-    #[test]
     fn test_track_all_shards() {
         let shard_ids: Vec<_> = (0..4).collect();
         let epoch_manager =
             get_epoch_manager(PROTOCOL_VERSION, shard_ids.len() as NumShards, false);
-        let tracker = ShardTracker::new(TrackedConfig::AllShards, Arc::new(epoch_manager));
+        let tracker = ShardTracker::new(Arc::new(epoch_manager));
         let total_tracked_shards: HashSet<_> = shard_ids.iter().cloned().collect();
 
         assert_eq!(
@@ -259,128 +238,5 @@ mod tests {
             get_all_shards_will_care_about(&tracker, &shard_ids, &CryptoHash::default()),
             total_tracked_shards
         );
-    }
-
-    #[test]
-    fn test_track_schedule() {
-        // Creates a ShardTracker that changes every epoch tracked shards.
-        let shard_ids: Vec<_> = (0..4).collect();
-        let epoch_manager =
-            Arc::new(get_epoch_manager(PROTOCOL_VERSION, shard_ids.len() as NumShards, false));
-        let subset1 = HashSet::from([0, 1]);
-        let subset2 = HashSet::from([1, 2]);
-        let subset3 = HashSet::from([2, 3]);
-        let tracker = ShardTracker::new(
-            TrackedConfig::Schedule(vec![
-                subset1.clone().into_iter().collect(),
-                subset2.clone().into_iter().collect(),
-                subset3.clone().into_iter().collect(),
-            ]),
-            epoch_manager.clone(),
-        );
-
-        let h = hash_range(8);
-        {
-            let mut epoch_manager = epoch_manager.write();
-            for i in 0..8 {
-                record_block(
-                    &mut epoch_manager,
-                    if i > 0 { h[i - 1] } else { CryptoHash::default() },
-                    h[i],
-                    i as u64,
-                    vec![],
-                    PROTOCOL_VERSION,
-                );
-            }
-        }
-
-        assert_eq!(get_all_shards_care_about(&tracker, &shard_ids, &h[4]), subset2);
-        assert_eq!(get_all_shards_care_about(&tracker, &shard_ids, &h[5]), subset3);
-        assert_eq!(get_all_shards_care_about(&tracker, &shard_ids, &h[6]), subset1);
-        assert_eq!(get_all_shards_care_about(&tracker, &shard_ids, &h[7]), subset2);
-
-        assert_eq!(get_all_shards_will_care_about(&tracker, &shard_ids, &h[4]), subset3);
-        assert_eq!(get_all_shards_will_care_about(&tracker, &shard_ids, &h[5]), subset1);
-        assert_eq!(get_all_shards_will_care_about(&tracker, &shard_ids, &h[6]), subset2);
-        assert_eq!(get_all_shards_will_care_about(&tracker, &shard_ids, &h[7]), subset3);
-    }
-
-    #[test]
-    fn test_track_shards_shard_layout_change() {
-        let simple_nightshade_version = SimpleNightshade.protocol_version();
-        let epoch_manager = get_epoch_manager(simple_nightshade_version - 1, 1, true);
-        let tracked_accounts =
-            vec!["a.unc".parse().unwrap(), "unc".parse().unwrap(), "zoo".parse().unwrap()];
-        let tracker = ShardTracker::new(
-            TrackedConfig::Accounts(tracked_accounts.clone()),
-            Arc::new(epoch_manager.clone()),
-        );
-
-        let h = hash_range(8);
-        {
-            let mut epoch_manager = epoch_manager.write();
-            record_block(
-                &mut epoch_manager,
-                CryptoHash::default(),
-                h[0],
-                0,
-                vec![],
-                simple_nightshade_version,
-            );
-            for i in 1..8 {
-                record_block(
-                    &mut epoch_manager,
-                    h[i - 1],
-                    h[i],
-                    i as u64,
-                    vec![],
-                    simple_nightshade_version,
-                );
-            }
-            assert_eq!(
-                epoch_manager.get_epoch_info(&EpochId(h[0])).unwrap().protocol_version(),
-                simple_nightshade_version - 1
-            );
-            assert_eq!(
-                epoch_manager.get_epoch_info(&EpochId(h[1])).unwrap().protocol_version(),
-                simple_nightshade_version
-            );
-        }
-
-        // verify tracker is tracking the correct shards before and after resharding
-        for i in 1..8 {
-            let mut total_next_tracked_shards = HashSet::new();
-            let next_epoch_id = epoch_manager.get_next_epoch_id_from_prev_block(&h[i - 1]).unwrap();
-            let next_shard_layout = epoch_manager.get_shard_layout(&next_epoch_id).unwrap();
-
-            let mut total_tracked_shards = HashSet::new();
-            let epoch_id = epoch_manager.get_epoch_id_from_prev_block(&h[i - 1]).unwrap();
-            let shard_layout = epoch_manager.get_shard_layout(&epoch_id).unwrap();
-
-            for account_id in tracked_accounts.iter() {
-                let shard_id = account_id_to_shard_id(account_id, &shard_layout);
-                total_tracked_shards.insert(shard_id);
-
-                let next_shard_id = account_id_to_shard_id(account_id, &next_shard_layout);
-                total_next_tracked_shards.insert(next_shard_id);
-            }
-
-            assert_eq!(
-                get_all_shards_care_about(
-                    &tracker,
-                    &shard_layout.shard_ids().collect::<Vec<_>>(),
-                    &h[i - 1]
-                ),
-                total_tracked_shards
-            );
-            assert_eq!(
-                get_all_shards_will_care_about(
-                    &tracker,
-                    &next_shard_layout.shard_ids().collect::<Vec<_>>(),
-                    &h[i - 1]
-                ),
-                total_next_tracked_shards
-            );
-        }
     }
 }

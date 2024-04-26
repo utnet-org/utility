@@ -23,7 +23,8 @@ pub fn find_entry_point(contract: &ContractCode) -> Option<String> {
                 for export in rdr {
                     if let Ok(Export { name, kind: ExternalKind::Func, index }) = export {
                         if let Some(&Ok(ty_index)) = fns.get(index as usize) {
-                            if let Some(&Ok(Type::Func(ref func_type))) = tys.get(ty_index as usize) {
+                            if let Some(&Ok(Type::Func(ref func_type))) = tys.get(ty_index as usize)
+                            {
                                 if func_type.params().is_empty() {
                                     return Some(name.to_string());
                                 }

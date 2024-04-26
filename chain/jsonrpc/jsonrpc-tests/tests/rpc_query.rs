@@ -79,7 +79,7 @@ fn test_block_query() {
                 CryptoHash::from_str("7tkzFg8RHBmMw1ncRJZCCZAizgq4rwCftTKYLce8RU8t").unwrap()
             );
             assert!(block.header.timestamp > 0);
-            assert_eq!(block.header.validator_proposals.len(), 0);
+            assert_eq!(block.header.validator_pledge_proposals.len(), 0);
         }
     });
 }
@@ -105,7 +105,7 @@ fn test_chunk_by_hash() {
         assert_eq!(chunk.header.shard_id, 0);
         assert!(if let Signature::ED25519(_) = chunk.header.signature { true } else { false });
         assert_eq!(chunk.header.tx_root.as_ref(), &[0; 32]);
-        assert_eq!(chunk.header.validator_proposals, vec![]);
+        assert_eq!(chunk.header.validator_pledge_proposals, vec![]);
         assert_eq!(chunk.header.validator_reward, 0);
         let same_chunk = client.chunk(ChunkId::Hash(chunk.header.chunk_hash)).await.unwrap();
         assert_eq!(chunk.header.chunk_hash, same_chunk.header.chunk_hash);
@@ -576,7 +576,7 @@ fn test_get_chunk_with_object_in_params() {
         assert_eq!(chunk.header.shard_id, 0);
         assert!(if let Signature::ED25519(_) = chunk.header.signature { true } else { false });
         assert_eq!(chunk.header.tx_root.as_ref(), &[0; 32]);
-        assert_eq!(chunk.header.validator_proposals, vec![]);
+        assert_eq!(chunk.header.validator_pledge_proposals, vec![]);
         assert_eq!(chunk.header.validator_reward, 0);
         let same_chunk = client.chunk(ChunkId::Hash(chunk.header.chunk_hash)).await.unwrap();
         assert_eq!(chunk.header.chunk_hash, same_chunk.header.chunk_hash);
