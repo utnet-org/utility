@@ -6,7 +6,7 @@ use crate::runner::VMKindExt;
 use crate::ContractCode;
 use std::mem::size_of;
 use unc_parameters::RuntimeFeesConfig;
-use unc_primitives_core::types::Balance;
+use unc_primitives_core::types::{Balance, Power};
 
 use super::test_vm_config;
 use crate::runner::VMResult;
@@ -117,7 +117,7 @@ fn run_test_ext(
     method: &str,
     expected: &[u8],
     input: &[u8],
-    validators: Vec<(&str, Balance)>,
+    validators: Vec<(&str, (Power, Balance))>,
     vm_kind: VMKind,
 ) {
     let code = test_contract(vm_kind);
@@ -191,21 +191,21 @@ def_test_ext!(
     "ext_validator_pledge",
     &(100u128).to_le_bytes(),
     b"alice",
-    vec![("alice", 100), ("bob", 1)]
+    vec![("alice", (100, 100)), ("bob", (1, 1))]
 );
 def_test_ext!(
     ext_validator_pledge_bob,
     "ext_validator_pledge",
     &(1u128).to_le_bytes(),
     b"bob",
-    vec![("alice", 100), ("bob", 1)]
+    vec![("alice", (100, 100)), ("bob", (1, 1))]
 );
 def_test_ext!(
     ext_validator_pledge_carol,
     "ext_validator_pledge",
     &(0u128).to_le_bytes(),
     b"carol",
-    vec![("alice", 100), ("bob", 1)]
+    vec![("alice", (100, 100)), ("bob", (1, 1))]
 );
 
 def_test_ext!(
@@ -213,7 +213,7 @@ def_test_ext!(
     "ext_validator_total_pledge",
     &(100u128 + 1).to_le_bytes(),
     &[],
-    vec![("alice", 100), ("bob", 1)]
+    vec![("alice", (100, 100)), ("bob", (1, 1))]
 );
 
 #[test]

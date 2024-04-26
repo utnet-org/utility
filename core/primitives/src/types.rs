@@ -1522,27 +1522,28 @@ mod tests {
     use unc_crypto::{KeyType, PublicKey};
     use unc_primitives_core::types::{Balance, Power};
 
-    use super::validator_power::ValidatorPower;
+    use super::validator_power_and_pledge::ValidatorPowerAndPledge;
 
-    fn new_validator_power(power: Power) -> ValidatorPower {
-        ValidatorPower::new(
+    fn new_validator_power_and_pledge(power: Power, pledge: Balance) -> ValidatorPowerAndPledge {
+        ValidatorPowerAndPledge::new(
             "test_account".parse().unwrap(),
             PublicKey::empty(KeyType::ED25519),
             power,
+            pledge,
         )
     }
 
     #[test]
     fn test_validator_power_num_mandates() {
-        assert_eq!(new_validator_power(0).num_mandates(5), 0);
-        assert_eq!(new_validator_power(10).num_mandates(5), 2);
-        assert_eq!(new_validator_power(12).num_mandates(5), 2);
+        assert_eq!(new_validator_power_and_pledge(0, 0).num_mandates(5), 0);
+        assert_eq!(new_validator_power_and_pledge(10, 10).num_mandates(5), 2);
+        assert_eq!(new_validator_power_and_pledge(12, 12).num_mandates(5), 2);
     }
 
     #[test]
     fn test_validator_partial_mandate_weight() {
-        assert_eq!(new_validator_power(0).partial_mandate_weight(5), 0);
-        assert_eq!(new_validator_power(10).partial_mandate_weight(5), 0);
-        assert_eq!(new_validator_power(12).partial_mandate_weight(5), 2);
+        assert_eq!(new_validator_power_and_pledge(0, 0).partial_mandate_weight(5), 0);
+        assert_eq!(new_validator_power_and_pledge(10, 10).partial_mandate_weight(5), 0);
+        assert_eq!(new_validator_power_and_pledge(12, 12).partial_mandate_weight(5), 2);
     }
 }

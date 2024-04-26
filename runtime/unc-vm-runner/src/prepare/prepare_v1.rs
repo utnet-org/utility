@@ -249,8 +249,7 @@ mod test {
                 match super::prepare_contract(input, &config) {
                     Err(_e) => (), // TODO: this should be a panic, but for now it’d actually trigger
                     Ok(code) => {
-                        let mut validator = wasmparser::Validator::new();
-                        validator.wasm_features(features.into());
+                        let mut validator = wasmparser::Validator::new_with_features(features.into());
                         match validator.validate_all(&code) {
                             Ok(_) => (),
                             Err(e) => panic!(

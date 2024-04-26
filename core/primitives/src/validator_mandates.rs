@@ -272,11 +272,10 @@ mod tests {
     use rand::SeedableRng;
     use rand_chacha::ChaCha8Rng;
     use unc_crypto::PublicKey;
-    use unc_primitives_core::types::Balance;
+    use unc_primitives_core::types::{Balance, Power};
 
     use crate::{
-        types::validator_stake::ValidatorPledge, types::ValidatorId,
-        validator_mandates::ValidatorMandatesConfig,
+        types::{validator_power_and_pledge::ValidatorPowerAndPledge, ValidatorId}, validator_mandates::ValidatorMandatesConfig,
     };
 
     use super::{
@@ -309,29 +308,30 @@ mod tests {
     ///
     /// The partials are (verified in [`test_validator_mandates_new`]):
     /// `vec![(1, 7), (2, 9), (3, 2), (4, 5), (5, 4), (6, 6)]`
-    fn new_validator_pledges() -> Vec<ValidatorPledge> {
-        let new_vs = |account_id: &str, balance: Balance| -> ValidatorPledge {
-            ValidatorPledge::new(
+    fn new_validator_power_and_pledges() -> Vec<ValidatorPowerAndPledge> {
+        let new_vs = |account_id: &str, power: Power, balance: Balance| -> ValidatorPowerAndPledge {
+            ValidatorPowerAndPledge::new(
                 account_id.parse().unwrap(),
                 PublicKey::empty(unc_crypto::KeyType::ED25519),
+                power,
                 balance,
             )
         };
 
         vec![
-            new_vs("account_0", 30),
-            new_vs("account_1", 27),
-            new_vs("account_2", 9),
-            new_vs("account_3", 12),
-            new_vs("account_4", 35),
-            new_vs("account_5", 4),
-            new_vs("account_6", 6),
+            new_vs("account_0", 30, 30),
+            new_vs("account_1", 27, 27),
+            new_vs("account_2", 9, 9),
+            new_vs("account_3", 12, 12),
+            new_vs("account_4", 35, 35),
+            new_vs("account_5", 4, 4),
+            new_vs("account_6", 6, 6),
         ]
     }
 
     #[test]
     fn test_validator_mandates_new() {
-        let validators = new_validator_pledges();
+        let validators = new_validator_power_and_pledges();
         let config = ValidatorMandatesConfig::new(10, 1, 4);
         let mandates = ValidatorMandates::new(config, &validators);
 
@@ -358,7 +358,7 @@ mod tests {
         num_shards: usize,
         expected_assignment: Vec<ValidatorId>,
     ) {
-        let validators = new_validator_pledges();
+        let validators = new_validator_power_and_pledges();
         let config = ValidatorMandatesConfig::new(10, 1, num_shards);
         let mandates = ValidatorMandates::new(config, &validators);
         let mut rng = new_fixed_rng();
@@ -392,7 +392,7 @@ mod tests {
         num_shards: usize,
         expected_assignment: Vec<(ValidatorId, Balance)>,
     ) {
-        let validators = new_validator_pledges();
+        let validators = new_validator_power_and_pledges();
         let config = ValidatorMandatesConfig::new(10, 1, num_shards);
         let mandates = ValidatorMandates::new(config, &validators);
         let mut rng = new_fixed_rng();
@@ -483,7 +483,7 @@ mod tests {
         config: ValidatorMandatesConfig,
         expected_assignment: ValidatorMandatesAssignment,
     ) {
-        let validators = new_validator_pledges();
+        let validators = new_validator_power_and_pledges();
         let mandates = ValidatorMandates::new(config, &validators);
 
         let mut rng = new_fixed_rng();
