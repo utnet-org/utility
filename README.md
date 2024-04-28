@@ -80,10 +80,13 @@ access_key_id = 2ff213c3730df215a7cc56e28914092e
 secret_access_key = b28609e3869b43339c1267b59cf25aa5deff4097737d3848e1491e0729c3ff6c
 acl = public-read
 
-## download data
+## download data 
 $ rclone copy --no-check-certificate unc_cf:unc/latest ./
 $ latest=$(cat latest)
-$ rclone copy --no-check-certificate --progress --transfers=6  unc_cf:unc/${latest:?} ~/.unc/data
+$ rclone copy --no-check-certificate --progress --transfers=6  unc_cf:unc/${latest:?}.tar.gz /tmp
+
+$ un archive snapshot
+tar -zxvf /tmp/${latest:?}.tar.gz -C /tmp  && mv /tmp/${latest:?}/data ~/.unc
 
 ## on ～/.unc dir touch file `validator_key.json`  (optional)
 {

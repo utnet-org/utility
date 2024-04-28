@@ -1,6 +1,6 @@
 # Introduction
 
-Welcome to the framework development guide!
+Welcome to the utility development guide!
 
 The target audience of this guide are developers of framework itself. If you are
 a user of UNC (either a contract developer, or validator running a node),
