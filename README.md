@@ -85,7 +85,7 @@ $ rclone copy --no-check-certificate unc_cf:unc/latest ./
 $ latest=$(cat latest)
 $ rclone copy --no-check-certificate --progress --transfers=6  unc_cf:unc/${latest:?}.tar.gz /tmp
 
-$ un archive snapshot
+## un archive snapshot
 tar -zxvf /tmp/${latest:?}.tar.gz -C /tmp  && mv /tmp/${latest:?}/data ~/.unc
 
 ## on ～/.unc dir touch file `validator_key.json`  (optional)
