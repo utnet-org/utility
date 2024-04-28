@@ -11,13 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Improved self-update UX with more details ([#2](https://github.com/utnet-org/utitlity/pull/3))
+- Improved self-update UX with more details ([#4](https://github.com/utnet-org/utitlity/pull/3))
 
 ### Fixed
 
-- Display unc token amounts precisely ([#1](https://github.com/utnet-org/utitlity/pull/4))
+- Display unc token amounts precisely ([#4](https://github.com/utnet-org/utitlity/pull/4))
 
 ### Other
 
-- Removed excessive step during transaction status view to improve UX ([#280](https://github.com/utnet-org/utitlity/pull/1))
-- Updated reconstruct-transaction command ([#281](https://github.com/utnet-org/utitlity/pull/2))
+- Removed excessive step during transaction status view to improve UX ([#2](https://github.com/utnet-org/utitlity/pull/1))
+- Updated reconstruct-transaction command ([#2](https://github.com/utnet-org/utitlity/pull/2))
