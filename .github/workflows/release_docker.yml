@@ -42,6 +42,6 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64
           push: true
-          tags: kim2023/utility:${{ steps.prepare.outputs.tag_name }}
+          tags: kim2023/unc-node:${{ steps.prepare.outputs.tag_name }}
           build-args: |
             UTILITY_TAG=${{ steps.prepare.outputs.tag_name }}

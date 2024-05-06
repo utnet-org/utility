@@ -34,13 +34,25 @@ RUN make CARGO_TARGET_DIR=/tmp/target \
 # Docker image
 FROM ubuntu:22.04
 
-EXPOSE 3030 24567
+EXPOSE 3030 12345
 
 RUN apt-get update -qq && apt-get install -y \
     libssl-dev ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 COPY scripts/run_docker.sh /usr/local/bin/run.sh
-COPY --from=build /tmp/target/release/unc-node /usr/local/bin/
+COPY --from=build /tmp/target/release/unc-node /usr/local/bin/unc-node
+RUN chmod +x /usr/local/bin/unc-node
+
+# Opencontainers annotations
+LABEL org.opencontainers.image.authors="The Utility Project Team" \
+	org.opencontainers.image.url="https://www.utnet.org/" \
+	org.opencontainers.image.source="https://github.com/utnet-org/utility" \
+	org.opencontainers.image.version="0.8.0" \
+	org.opencontainers.image.revision="1" \
+	org.opencontainers.image.vendor="The Utility Project" \
+	org.opencontainers.image.licenses="GPL-2.0-or-later" \
+	org.opencontainers.image.title="Utility Node" \
+	org.opencontainers.image.description="Utility Chain Docker Node"
 
 CMD ["/usr/local/bin/run.sh"]
