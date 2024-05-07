@@ -336,7 +336,7 @@ pub fn setup_epoch_manager_with_block_and_chunk_producers(
         default_reward_calculator(),
         power_validators
             .iter()
-            .map(|(account_id, power)| power(account_id.clone(), *power))
+            .map(|(account_id, weight)| power(account_id.clone(), *weight))
             .collect(),
         pledge_validators
             .iter()
