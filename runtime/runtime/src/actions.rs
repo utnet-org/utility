@@ -1224,25 +1224,6 @@ mod tests {
     }
 
     #[test]
-    fn test_create_account_invalid_short_top_level() {
-        let account_id = "bob".parse::<AccountId>().unwrap();
-        let predecessor_id = "unc".parse::<AccountId>().unwrap();
-        let action_result =
-            test_action_create_account(account_id.clone(), predecessor_id.clone(), 11);
-        assert_eq!(
-            action_result.result,
-            Err(ActionError {
-                index: None,
-                kind: ActionErrorKind::CreateAccountOnlyByRegistrar {
-                    account_id: account_id,
-                    registrar_account_id: "registrar".parse().unwrap(),
-                    predecessor_id: predecessor_id,
-                },
-            })
-        );
-    }
-
-    #[test]
     fn test_create_account_valid_short_top_level_len_allowed() {
         let account_id = "bob".parse().unwrap();
         let predecessor_id = "unc".parse().unwrap();

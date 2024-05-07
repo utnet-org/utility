@@ -24,17 +24,17 @@ use unc_store::ShardTries;
 
 pub mod random_config;
 
+/// One unc, divisible by 10^24.
+pub const UNC_BASE: Balance = 1_000_000_000_000_000_000_000_000;
+
 /// Initial balance used in tests.
 pub const TESTING_INIT_BALANCE: Balance = 1_000_000_000 * UNC_BASE;
 
 /// Validator's pledge used in tests.
 pub const TESTING_INIT_PLEDGE: Balance = 50_000_000 * UNC_BASE;
 
-///
+/// Validator's power weight used in tests.
 pub const TESTING_INIT_POWER: Power = 5_000_000_000_000;
-
-/// One UNC, divisible by 10^24.
-pub const UNC_BASE: Balance = 1_000_000_000_000_000_000_000_000;
 
 pub struct StandaloneRuntime {
     pub apply_state: ApplyState,

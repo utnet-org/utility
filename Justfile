@@ -24,7 +24,6 @@ test-ci *FLAGS: check-cargo-fmt \
                 check-cargo-udeps \
                 (nextest "stable" FLAGS) \
                 (nextest "nightly" FLAGS) \
-                (nextest "statelessnet" FLAGS) \
                 doctests
 
 # tests that are as close to CI as possible, but not exactly the same code

@@ -4,7 +4,7 @@ use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::sync::Arc;
 
 use crate::test_utils::{
-    do_power, hash_range, record_block_with_slashes, setup_default_epoch_manager,
+    power, hash_range, record_block_with_slashes, setup_default_epoch_manager,
 };
 use crate::EpochManager;
 use unc_primitives::challenge::SlashedValidator;
@@ -92,7 +92,7 @@ fn random_proposals<RngImpl: Rng>(rng: &mut RngImpl) -> Vec<ValidatorPower> {
     if rng.gen_range(0.0..1.0) < proposal_chance {
         let account_id = AccountId::try_from(format!("test{}", rng.gen_range(1..6))).unwrap();
         let pledge_amount = rng.gen_range(100..2000);
-        proposals.push(do_power(account_id, pledge_amount));
+        proposals.push(power(account_id, pledge_amount));
     }
     proposals
 }

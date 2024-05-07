@@ -41,10 +41,6 @@ pub fn hash_range(num: usize) -> Vec<CryptoHash> {
     result
 }
 
-pub fn change_power(power_changes: Vec<(AccountId, Power)>) -> BTreeMap<AccountId, Power> {
-    power_changes.into_iter().collect()
-}
-
 pub fn epoch_info(
     epoch_height: EpochHeight,
     accounts: Vec<(AccountId, Power, Balance)>,
@@ -198,7 +194,7 @@ pub fn epoch_config(
     )
 }
 
-pub fn do_power(account_id: AccountId, power: Power) -> ValidatorPower {
+pub fn power(account_id: AccountId, power: Power) -> ValidatorPower {
     let public_key = SecretKey::from_seed(KeyType::ED25519, account_id.as_ref()).public_key();
     ValidatorPower::new(account_id, public_key, power)
 }
@@ -255,7 +251,7 @@ pub fn setup_epoch_manager(
         reward_calculator,
         power_validators
             .iter()
-            .map(|(account_id, power)| do_power(account_id.clone(), *power))
+            .map(|(account_id, power)| power(account_id.clone(), *power))
             .collect(),
         pledge_validators
             .iter()
@@ -340,7 +336,7 @@ pub fn setup_epoch_manager_with_block_and_chunk_producers(
         default_reward_calculator(),
         power_validators
             .iter()
-            .map(|(account_id, power)| do_power(account_id.clone(), *power))
+            .map(|(account_id, power)| power(account_id.clone(), *power))
             .collect(),
         pledge_validators
             .iter()
