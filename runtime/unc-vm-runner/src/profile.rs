@@ -248,7 +248,7 @@ mod test {
         let pretty_debug_str = format!("{profile_data:#?}");
         expect_test::expect![[r#"
             ------------------------------
-            Action gas: 16120
+            Action gas: 18153
             ------ Host functions --------
             contract_loading_base -> 1 [0% host]
             contract_loading_bytes -> 2 [0% host]
@@ -268,7 +268,7 @@ mod test {
             sha256_byte -> 16 [0% host]
             keccak256_base -> 17 [0% host]
             keccak256_byte -> 18 [0% host]
-            keccak512_base -> 19 [1% host]
+            keccak512_base -> 19 [0% host]
             keccak512_byte -> 20 [1% host]
             ripemd160_base -> 21 [1% host]
             ripemd160_block -> 22 [1% host]
@@ -286,9 +286,9 @@ mod test {
             storage_remove_key_byte -> 34 [1% host]
             storage_remove_ret_value_byte -> 35 [1% host]
             storage_has_key_base -> 36 [1% host]
-            storage_has_key_byte -> 37 [2% host]
-            storage_iter_create_prefix_base -> 38 [2% host]
-            storage_iter_create_prefix_byte -> 39 [2% host]
+            storage_has_key_byte -> 37 [1% host]
+            storage_iter_create_prefix_base -> 38 [1% host]
+            storage_iter_create_prefix_byte -> 39 [1% host]
             storage_iter_create_range_base -> 40 [2% host]
             storage_iter_create_from_byte -> 41 [2% host]
             storage_iter_create_to_byte -> 42 [2% host]
@@ -304,12 +304,14 @@ mod test {
             validator_total_pledge_base -> 52 [2% host]
             alt_bn128_g1_multiexp_base -> 53 [2% host]
             alt_bn128_g1_multiexp_element -> 54 [2% host]
-            alt_bn128_pairing_check_base -> 55 [3% host]
-            alt_bn128_pairing_check_element -> 56 [3% host]
-            alt_bn128_g1_sum_base -> 57 [3% host]
-            alt_bn128_g1_sum_element -> 58 [3% host]
+            alt_bn128_pairing_check_base -> 55 [2% host]
+            alt_bn128_pairing_check_element -> 56 [2% host]
+            alt_bn128_g1_sum_base -> 57 [2% host]
+            alt_bn128_g1_sum_element -> 58 [2% host]
             ed25519_verify_base -> 59 [3% host]
             ed25519_verify_byte -> 60 [3% host]
+            validator_power_base -> 61 [3% host]
+            validator_total_power_base -> 62 [3% host]
             ------ Actions --------
             create_account -> 1000
             delete_account -> 1001
@@ -327,6 +329,8 @@ mod test {
             new_data_receipt_base -> 1013
             new_data_receipt_byte -> 1014
             delegate -> 1015
+            register_rsa2048_keys -> 1016
+            create_rsa2048_challenge -> 1017
             ------------------------------
         "#]]
         .assert_eq(&pretty_debug_str)

@@ -275,7 +275,7 @@ mod test {
             sha256_base -> 15 [0% host]
             sha256_byte -> 16 [0% host]
             keccak256_base -> 17 [0% host]
-            keccak256_byte -> 18 [1% host]
+            keccak256_byte -> 18 [0% host]
             keccak512_base -> 19 [1% host]
             keccak512_byte -> 20 [1% host]
             ripemd160_base -> 21 [1% host]
@@ -292,8 +292,8 @@ mod test {
             storage_read_value_byte -> 32 [1% host]
             storage_remove_base -> 33 [1% host]
             storage_remove_key_byte -> 34 [1% host]
-            storage_remove_ret_value_byte -> 35 [2% host]
-            storage_has_key_base -> 36 [2% host]
+            storage_remove_ret_value_byte -> 35 [1% host]
+            storage_has_key_base -> 36 [1% host]
             storage_has_key_byte -> 37 [2% host]
             storage_iter_create_prefix_base -> 38 [2% host]
             storage_iter_create_prefix_byte -> 39 [2% host]
@@ -304,25 +304,27 @@ mod test {
             storage_iter_next_key_byte -> 44 [2% host]
             storage_iter_next_value_byte -> 45 [2% host]
             touching_trie_node -> 46 [2% host]
-            read_cached_trie_node -> 53 [3% host]
+            read_cached_trie_node -> 53 [2% host]
             promise_and_base -> 47 [2% host]
             promise_and_per_promise -> 48 [2% host]
             promise_return -> 49 [2% host]
             validator_pledge_base -> 50 [2% host]
             validator_total_pledge_base -> 51 [2% host]
-            alt_bn128_g1_multiexp_base -> 54 [3% host]
+            alt_bn128_g1_multiexp_base -> 54 [2% host]
             alt_bn128_g1_multiexp_element -> 55 [3% host]
             alt_bn128_pairing_check_base -> 56 [3% host]
             alt_bn128_pairing_check_element -> 57 [3% host]
             alt_bn128_g1_sum_base -> 58 [3% host]
             alt_bn128_g1_sum_element -> 59 [3% host]
+            validator_power_base -> 50 [2% host]
+            validator_total_power_base -> 51 [2% host]
             ------ Actions --------
             create_account -> 1000
             delete_account -> 1001
             deploy_contract -> 1002
             function_call -> 1003
             transfer -> 1004
-            pledge -> 1005
+            stake -> 1005
             add_key -> 1006
             delete_key -> 1007
             new_data_receipt_byte -> 1008

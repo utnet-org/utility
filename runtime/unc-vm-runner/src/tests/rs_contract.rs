@@ -188,21 +188,21 @@ def_test_ext!(ext_attached_deposit, "ext_attached_deposit", &2u128.to_le_bytes()
 
 def_test_ext!(
     ext_validator_pledge_alice,
-    "ext_validator_pledge",
+    "ext_validator_stake",
     &(100u128).to_le_bytes(),
     b"alice",
     vec![("alice", (100, 100)), ("bob", (1, 1))]
 );
 def_test_ext!(
     ext_validator_pledge_bob,
-    "ext_validator_pledge",
+    "ext_validator_stake",
     &(1u128).to_le_bytes(),
     b"bob",
     vec![("alice", (100, 100)), ("bob", (1, 1))]
 );
 def_test_ext!(
     ext_validator_pledge_carol,
-    "ext_validator_pledge",
+    "ext_validator_stake",
     &(0u128).to_le_bytes(),
     b"carol",
     vec![("alice", (100, 100)), ("bob", (1, 1))]
@@ -210,7 +210,7 @@ def_test_ext!(
 
 def_test_ext!(
     ext_validator_total_pledge,
-    "ext_validator_total_pledge",
+    "ext_validator_total_stake",
     &(100u128 + 1).to_le_bytes(),
     &[],
     vec![("alice", (100, 100)), ("bob", (1, 1))]

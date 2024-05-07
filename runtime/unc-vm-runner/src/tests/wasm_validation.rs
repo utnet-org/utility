@@ -47,7 +47,7 @@ static MULTI_VALUE: &str = r#"
 (module
   (func $entry (result i32) i32.const 0)
   (func $pick0 (param i64) (result i64 i64)
-    (get_local 0) (get_local 0))
+    (local.get 0) (local.get 0))
 )
 "#;
 

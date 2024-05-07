@@ -17,7 +17,7 @@ gives a more thorough look. Listed roughly in the order of importance:
 
 # Requirements
 
-Within each criteria we have specific requirements relevant to the UNC protocol.
+Within each criteria we have specific requirements relevant to the unc blockchain.
 
 ## Security
 

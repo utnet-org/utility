@@ -11,19 +11,19 @@
   (global (;6;) (mut f64) (f64.const -14))
   (global $y (mut i64) (i64.const -15))
 
-  (func (export "get-a") (result i32) (get_global $a))
-  (func (export "get-b") (result i64) (get_global $b))
-  (func (export "get-x") (result i32) (get_global $x))
-  (func (export "get-y") (result i64) (get_global $y))
-  (func (export "set-x") (param i32) (set_global $x (get_local 0)))
-  (func (export "set-y") (param i64) (set_global $y (get_local 0)))
+  (func (export "get-a") (result i32) (global.get $a))
+  (func (export "get-b") (result i64) (global.get $b))
+  (func (export "get-x") (result i32) (global.get $x))
+  (func (export "get-y") (result i64) (global.get $y))
+  (func (export "set-x") (param i32) (set_global $x (local.get 0)))
+  (func (export "set-y") (param i64) (set_global $y (local.get 0)))
 
-  (func (export "get-1") (result f32) (get_global 1))
-  (func (export "get-2") (result f64) (get_global 2))
-  (func (export "get-5") (result f32) (get_global 5))
-  (func (export "get-6") (result f64) (get_global 6))
-  (func (export "set-5") (param f32) (set_global 5 (get_local 0)))
-  (func (export "set-6") (param f64) (set_global 6 (get_local 0)))
+  (func (export "get-1") (result f32) (global.get 1))
+  (func (export "get-2") (result f64) (global.get 2))
+  (func (export "get-5") (result f32) (global.get 5))
+  (func (export "get-6") (result f64) (global.get 6))
+  (func (export "set-5") (param f32) (set_global 5 (local.get 0)))
+  (func (export "set-6") (param f64) (set_global 6 (local.get 0)))
 )
 
 (assert_return (invoke "get-a") (i32.const -2))
@@ -61,7 +61,7 @@
 )
 
 (assert_invalid
-  (module (global f32 (get_local 0)))
+  (module (global f32 (local.get 0)))
   "constant expression required"
 )
 
@@ -96,12 +96,12 @@
 )
 
 (assert_invalid
-  (module (global i32 (get_global 0)))
+  (module (global i32 (global.get 0)))
   "unknown global"
 )
 
 (assert_invalid
-  (module (global i32 (get_global 1)) (global i32 (i32.const 0)))
+  (module (global i32 (global.get 1)) (global i32 (i32.const 0)))
   "unknown global"
 )
 

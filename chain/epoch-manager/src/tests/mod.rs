@@ -722,12 +722,20 @@ fn test_all_validators_unpledge() {
 fn test_validator_reward_one_validator() {
     let pledge_amount = 1_000_000;
     let test1_pledge_amount = 110;
-    let validators = vec![
+    let pledge_validators = vec![
         ("test1".parse().unwrap(), test1_pledge_amount),
         ("test2".parse().unwrap(), pledge_amount),
     ];
+
+    let power_amount = 1_000_000;
+    let test1_power_amount = 110;
+    let power_validators = vec![
+        ("test1".parse().unwrap(), test1_power_amount),
+        ("test2".parse().unwrap(), power_amount),
+    ];
+
     let epoch_length = 2;
-    let total_supply = validators.iter().map(|(_, pledge)| pledge).sum();
+    let total_supply = pledge_validators.iter().map(|(_, pledge)| pledge).sum();
     let reward_calculator = RewardCalculator {
         max_inflation_rate: Ratio::new(5, 100),
         num_blocks_per_year: 50,
@@ -739,7 +747,8 @@ fn test_validator_reward_one_validator() {
         num_seconds_per_year: 50,
     };
     let mut epoch_manager = setup_epoch_manager(
-        validators,
+        power_validators,
+        pledge_validators,
         epoch_length,
         1,
         1,
@@ -763,19 +772,20 @@ fn test_validator_reward_one_validator() {
                 h[0],
                 vec![true],
                 total_supply,
+                ..Default::default()
             ),
             rng_seed,
         )
         .unwrap();
     epoch_manager
         .record_block_info(
-            block_info(h[1], 1, 1, h[0], h[0], h[1], vec![true], total_supply),
+            block_info(h[1], 1, 1, h[0], h[0], h[1], vec![true], total_supply, ..Default::default()),
             rng_seed,
         )
         .unwrap();
     epoch_manager
         .record_block_info(
-            block_info(h[2], 2, 2, h[1], h[1], h[1], vec![true], total_supply),
+            block_info(h[2], 2, 2, h[1], h[1], h[1], vec![true], total_supply, ..Default::default()),
             rng_seed,
         )
         .unwrap();

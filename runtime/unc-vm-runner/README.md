@@ -22,14 +22,14 @@ See the [FAQ][./faq.md] document for high-level design constraints discussion.
 
 ## Entry Point
 
-The entry point is the `runner::run` function. 
+The entry point is the `runner::run` function.
 
 ## Testing
 
 There are a bunch of unit-tests in this crate. You can run them with
 
 ```console
-$ cargo t -p unc-vm-runner --features wasmer0_vm,wasmer2_vm,wasmtime_vm,unc_vm
+cargo t -p unc-vm-runner --features wasmer0_vm,wasmer2_vm,wasmtime_vm,unc_vm
 ```
 
 The tests use either a short wasm snippet specified inline, or a couple of
@@ -38,7 +38,7 @@ larger test contracts from the `unc-test-contracts` crate.
 We also have a fuzzing setup:
 
 ```console
-$ cd runtime/unc-vm-runner && RUSTC_BOOTSTRAP=1 cargo fuzz run runner
+cd runtime/unc-vm-runner && RUSTC_BOOTSTRAP=1 cargo fuzz run runner
 ```
 
 ## Profiling

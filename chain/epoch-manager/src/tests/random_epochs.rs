@@ -51,12 +51,21 @@ fn do_random_test<RngImpl: Rng>(
 ) {
     let pledge_amount = 1_000;
 
-    let validators = vec![
+    let pledge_validators = vec![
         ("test1".parse().unwrap(), pledge_amount),
         ("test2".parse().unwrap(), pledge_amount),
         ("test3".parse().unwrap(), pledge_amount),
     ];
-    let mut epoch_manager = setup_default_epoch_manager(validators, epoch_length, 1, 3, 0, 90, 60);
+
+    let power_amount = 1_000;
+
+    let power_validators = vec![
+        ("test1".parse().unwrap(), power_amount),
+        ("test2".parse().unwrap(), power_amount),
+        ("test3".parse().unwrap(), power_amount),
+    ];
+
+    let mut epoch_manager = setup_default_epoch_manager(power_validators, pledge_validators, epoch_length, 1, 3, 0, 90, 60);
     let h = hash_range(num_heights as usize);
     let skip_height_probability = rng.gen_range(0.0..1.0) * rng.gen_range(0.0..1.0);
 
@@ -65,7 +74,7 @@ fn do_random_test<RngImpl: Rng>(
         .collect::<Vec<_>>();
 
     let mut slashes_per_block = Vec::new();
-    record_block_with_slashes(&mut epoch_manager, CryptoHash::default(), h[0], 0, vec![], vec![]);
+    record_block_with_slashes(&mut epoch_manager, CryptoHash::default(), h[0], 0, vec![], vec![], vec![]);
     slashes_per_block.push(vec![]);
     let mut prev_hash = h[0];
     for &height in &heights_to_pick[1..] {

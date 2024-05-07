@@ -427,9 +427,9 @@ fn test_promise_batch_action_pledge() {
             }
           },
           {
-            "Pledge": {
+            "Stake": {
               "receipt_index": 0,
-              "pledge": 110,
+              "stake": 110,
               "public_key": "ed25519:5do5nkAEVhL8iteDvXNgxi4pWK78Y7DDadX11ArFNyrf"
             }
           }

@@ -1,4 +1,4 @@
-# FAQ for using virtual machines in the blockchain.
+# FAQ for using virtual machines in the blockchain
 
 ## Preface
 
@@ -88,9 +88,9 @@ of the blockchain.
 ## Practical aspects of the execution engines
 
 ### Shall I use an interpreter, non-optimizing JIT, optimizing JIT, non-optimizing AOT, optimizing AOT compiler in my blockchain?
+
 The answer depends on the required features, and the following table will try to help.
 Every solution is subjectively measured on a bad/ok/good/great scale.
-
 
 | **Metric**        | **Interpreter**|**Non-opt JIT**|**Opt JIT**|**Non-opt AOT**|**Opt AOT**|
 | ----------------- |:--------------:| -------------:|----------:|--------------:|----------:|
@@ -163,7 +163,7 @@ estimate the gas usage.
 Up to a certain extent, the pure computations part (such as compiler algorithms) is easy, when host
 functions (external to Wasm functions provided by the blockchain) are involved it becomes harder.
 
-## Development tools.
+## Development tools
 
 ### What programming languages shall I support in my blockchain?
 
@@ -182,13 +182,13 @@ libraries are expected to be used in the contract.
 As one could see from the previous question, high level languages may require GC,
 and the contract runtime may not have such a feature available. There are few options:
 
-   * Not support such a languages
-   * Support such languages but not implement object reclamation and GC as many contracts are short
+* Not support such a languages
+* Support such languages but not implement object reclamation and GC as many contracts are short
      lived it could be a viable option
-   * Implement automated memory management as part of the language runtime and ship it with every
+* Implement automated memory management as part of the language runtime and ship it with every
      program or once per language runtime version
-   * Use runtime with existing GC, such as JVM or JS VM
-   * Move forward with the [WebAssembly GC proposal]
+* Use runtime with existing GC, such as JVM or JS VM
+* Move forward with the [WebAssembly GC proposal]
 
 [WebAssembly GC proposal]: https://github.com/WebAssembly/gc/blob/master/proposals/gc/Overview.md
 
@@ -277,15 +277,14 @@ communicated to the blockchain developers.
 While a pretty broad question, when projected on smart contract context, it means few rather simple
 questions.
 
-   * Shall cross-contract calls be represented as:
-       * sync operations
-       * async operations
-       * continuations
-   * Shall some/all host functions be asynchronous?
+* Shall cross-contract calls be represented as:
+  * sync operations
+  * async operations
+  * continuations
+* Shall some/all host functions be asynchronous?
 
 Answers to those questions depend on the blockchain architecture, however general purpose
 contract runtime likely shall support both modes of operation.
-
 
 ### How to think about the computational model for smart contracts, especially if they do I/O ?
 

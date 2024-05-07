@@ -841,7 +841,7 @@ fn gas_overflow_indirect_call() {
   (import "env" "gas" (func $gas (param i32)))
   (type $gas_ty (func (param i32)))
 
-  (table 1 anyfunc)
+  (table 1 funcref)
   (elem (i32.const 0) $gas)
 
   (func (export "main")
