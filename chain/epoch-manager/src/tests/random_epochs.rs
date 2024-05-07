@@ -4,7 +4,7 @@ use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::sync::Arc;
 
 use crate::test_utils::{
-    power, hash_range, record_block_with_slashes, setup_default_epoch_manager,
+    hash_range, power, record_block_with_slashes, setup_default_epoch_manager,
 };
 use crate::EpochManager;
 use unc_primitives::challenge::SlashedValidator;
@@ -65,7 +65,16 @@ fn do_random_test<RngImpl: Rng>(
         ("test3".parse().unwrap(), power_amount),
     ];
 
-    let mut epoch_manager = setup_default_epoch_manager(power_validators, pledge_validators, epoch_length, 1, 3, 0, 90, 60);
+    let mut epoch_manager = setup_default_epoch_manager(
+        power_validators,
+        pledge_validators,
+        epoch_length,
+        1,
+        3,
+        0,
+        90,
+        60,
+    );
     let h = hash_range(num_heights as usize);
     let skip_height_probability = rng.gen_range(0.0..1.0) * rng.gen_range(0.0..1.0);
 
@@ -74,7 +83,15 @@ fn do_random_test<RngImpl: Rng>(
         .collect::<Vec<_>>();
 
     let mut slashes_per_block = Vec::new();
-    record_block_with_slashes(&mut epoch_manager, CryptoHash::default(), h[0], 0, vec![], vec![], vec![]);
+    record_block_with_slashes(
+        &mut epoch_manager,
+        CryptoHash::default(),
+        h[0],
+        0,
+        vec![],
+        vec![],
+        vec![],
+    );
     slashes_per_block.push(vec![]);
     let mut prev_hash = h[0];
     for &height in &heights_to_pick[1..] {
