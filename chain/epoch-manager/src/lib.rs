@@ -1838,8 +1838,8 @@ impl EpochManager {
         Ok(EpochValidatorInfo {
             current_validators,
             next_validators,
-            current_fishermen: cur_epoch_info.fishermen_iter().map(Into::into).collect(),
-            next_fishermen: next_epoch_info.fishermen_iter().map(Into::into).collect(),
+            current_fishermen: vec![],
+            next_fishermen: vec![],
             current_power_proposals: all_power_proposals,
             current_pledge_proposals: all_pledge_proposals,
             prev_epoch_kickout,

@@ -838,7 +838,7 @@ impl Handler<WithSpanContext<GetValidatorInfo>> for ViewClientActor {
                     BlockId::Hash(h) => self.chain.get_block_header(&h)?,
                     BlockId::Height(h) => self.chain.get_block_header_by_height(h)?,
                 };
-                let next_block_hash =
+                let next_block_hash: CryptoHash =
                     self.chain.chain_store().get_next_block_hash(block_header.hash())?;
                 let next_block_header = self.chain.get_block_header(&next_block_hash)?;
                 if block_header.epoch_id() != next_block_header.epoch_id()

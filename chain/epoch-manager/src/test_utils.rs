@@ -251,7 +251,7 @@ pub fn setup_epoch_manager(
         reward_calculator,
         power_validators
             .iter()
-            .map(|(account_id, power)| power(account_id.clone(), *power))
+            .map(|(account_id, w)| power(account_id.clone(), *w))
             .collect(),
         pledge_validators
             .iter()

@@ -2312,9 +2312,9 @@ pub struct EpochValidatorInfo {
     /// Validators for the next epoch
     pub next_validators: Vec<NextEpochValidatorInfo>,
     /// Fishermen for the current epoch
-    pub current_fishermen: Vec<ValidatorPowerAndPledgeView>,
+    pub current_fishermen: Vec<ValidatorPledgeView>,
     /// Fishermen for the next epoch
-    pub next_fishermen: Vec<ValidatorPowerAndPledgeView>,
+    pub next_fishermen: Vec<ValidatorPledgeView>,
     /// Power proposals in the current epoch
     pub current_power_proposals: Vec<ValidatorPowerView>,
     /// Pledge proposals in the current epoch
