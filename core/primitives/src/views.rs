@@ -284,7 +284,7 @@ impl FromIterator<ChipView> for ChipsList {
         // Calculate total power by summing up the power of each chip
         let total_power: u64 = chips.iter().map(|chip| chip.power).sum();
 
-        ChipsList { total_power, chips }
+        ChipsList { total_power: total_power.into(), chips }
     }
 }
 

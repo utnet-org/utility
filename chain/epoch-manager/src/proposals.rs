@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 
-use unc_primitives::checked_feature;
 use unc_primitives::epoch_manager::block_info::BlockInfo;
 use unc_primitives::epoch_manager::block_summary::BlockSummary;
 use unc_primitives::epoch_manager::epoch_info::EpochInfo;
@@ -80,32 +79,18 @@ pub fn proposals_to_epoch_info(
     next_version: ProtocolVersion,
     last_epoch_version: ProtocolVersion,
 ) -> Result<EpochInfo, EpochError> {
-    if checked_feature!("stable", AliasValidatorSelectionAlgorithm, last_epoch_version) {
-        return crate::validator_selection::proposals_to_epoch_info(
-            epoch_config,
-            rng_seed,
-            prev_epoch_info,
-            power_proposals,
-            pledge_proposals,
-            validator_kickout,
-            validator_reward,
-            minted_amount,
-            next_version,
-            last_epoch_version,
-        );
-    } else {
-        return old_validator_selection::proposals_to_epoch_info(
-            epoch_config,
-            rng_seed,
-            prev_epoch_info,
-            power_proposals,
-            pledge_proposals,
-            validator_kickout,
-            validator_reward,
-            minted_amount,
-            next_version,
-        );
-    }
+    return crate::validator_selection::proposals_to_epoch_info(
+        epoch_config,
+        rng_seed,
+        prev_epoch_info,
+        power_proposals,
+        pledge_proposals,
+        validator_kickout,
+        validator_reward,
+        minted_amount,
+        next_version,
+        last_epoch_version,
+    );
 }
 
 mod old_validator_selection {
@@ -130,6 +115,7 @@ mod old_validator_selection {
     use crate::proposals::find_threshold;
     use crate::types::RngSeed;
 
+    #[allow(dead_code)]
     pub fn proposals_to_epoch_info(
         epoch_config: &EpochConfig,
         rng_seed: RngSeed,

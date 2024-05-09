@@ -20,6 +20,7 @@ impl WeightedIndex {
         let mut weight_sum: Power = 0;
         for w in no_alias_odds.iter_mut() {
             weight_sum += *w;
+
             *w *= n;
         }
 
@@ -58,7 +59,8 @@ impl WeightedIndex {
 
     pub fn sample(&self, seed: [u8; 32]) -> usize {
         let usize_seed = Self::copy_8_bytes(&seed[0..8]);
-        let power_seed = Self::copy_8_bytes(&seed[8..16]);
+        let mut power_seed = [0u8; 16];
+        power_seed[0..8].copy_from_slice(&seed[8..16]);
         let uniform_index = usize::from_le_bytes(usize_seed) % self.aliases.len();
         let uniform_weight = Power::from_le_bytes(power_seed) % self.weight_sum;
 

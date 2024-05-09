@@ -727,7 +727,7 @@ pub(crate) fn action_create_rsa2048_challenge(
             if let Some(power_val) = parsed_args.get("power") {
                 match power_val.as_str() {
                     Some(power_str) => {
-                        match power_str.parse::<u64>() {
+                        match power_str.parse::<u128>() {
                             Ok(power) => {
                                 // compute total power
                                 let total_power =

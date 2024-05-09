@@ -54,7 +54,7 @@ pub const TESTING_INIT_BALANCE: Balance = 1_000_000_000 * UNC_BASE;
 pub const TESTING_INIT_PLEDGE: Balance = 50_000_000 * UNC_BASE;
 
 ///
-pub const TESTING_INIT_POWER: Power = 5_000_000_000_000;
+pub const TESTING_INIT_POWER: Power = 5_000_000_000_000u128;
 
 /// One UNC, divisible by 10^24.
 pub const UNC_BASE: Balance = 1_000_000_000_000_000_000_000_000;
@@ -746,7 +746,7 @@ fn add_account_with_key(
     public_key: &PublicKey,
     amount: u128,
     pledging: u128,
-    power: u64,
+    power: u128,
     code_hash: CryptoHash,
 ) {
     records.push(StateRecord::Account {

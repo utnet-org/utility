@@ -117,7 +117,7 @@ impl EpochInfoProvider for EpochManagerHandle {
             .sum())
     }
 
-    fn minimum_power(&self, prev_block_hash: &CryptoHash) -> Result<u64, EpochError> {
+    fn minimum_power(&self, prev_block_hash: &CryptoHash) -> Result<Power, EpochError> {
         let epoch_manager = self.read();
         epoch_manager.minimum_power(prev_block_hash)
     }

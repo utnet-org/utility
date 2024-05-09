@@ -102,7 +102,6 @@ impl<'a> Memory<'a> {
     memory_get!(u16, get_u16);
     memory_get!(u8, get_u8);
     memory_set!(u128, set_u128);
-    memory_set!(u64, set_u64);
 }
 
 /// Registers to use by the guest.

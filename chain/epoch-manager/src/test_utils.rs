@@ -194,9 +194,9 @@ pub fn epoch_config(
     )
 }
 
-pub fn power(account_id: AccountId, power: Power) -> ValidatorPower {
+pub fn power(account_id: AccountId, w: Power) -> ValidatorPower {
     let public_key = SecretKey::from_seed(KeyType::ED25519, account_id.as_ref()).public_key();
-    ValidatorPower::new(account_id, public_key, power)
+    ValidatorPower::new(account_id, public_key, w)
 }
 
 pub fn pledge(account_id: AccountId, pledge: Balance) -> ValidatorPledge {
@@ -333,7 +333,7 @@ pub fn setup_epoch_manager_with_block_and_chunk_producers(
         default_reward_calculator(),
         power_validators
             .iter()
-            .map(|(account_id, weight)| power(account_id.clone(), *weight))
+            .map(|(account_id, w)| power(account_id.clone(), (*w).into()))
             .collect(),
         pledge_validators
             .iter()
