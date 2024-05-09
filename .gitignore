@@ -56,7 +56,6 @@ costs-*.txt
 names-to-stats.txt
 data_dump_*.bin!
 *_key.json
-/ops
 
 
 pytest/myenv/
