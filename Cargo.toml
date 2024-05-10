@@ -1,5 +1,5 @@
 [workspace.package]
-version = "0.7.5" # managed by cargo-workspaces, see below
+version = "0.0.0" # managed by cargo-workspaces, see below
 authors = ["Hello Inc <hello@unc.com>"]
 edition = "2021"
 rust-version = "1.77.2"
