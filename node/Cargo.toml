@@ -13,7 +13,7 @@ workspace = true
 
 [[bin]]
 path = "src/main.rs"
-name = "unc-node"
+name = "unc_node"
 
 [dependencies]
 actix.workspace = true
