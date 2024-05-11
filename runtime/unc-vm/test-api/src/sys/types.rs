@@ -41,8 +41,6 @@ pub trait ValFuncRef {
     unsafe fn from_vm_funcref(item: VMFuncRef, store: &Store) -> Self;
 
     fn into_table_reference(&self, store: &Store) -> Result<unc_vm_vm::TableElement, RuntimeError>;
-
-    unsafe fn from_table_reference(item: unc_vm_vm::TableElement, store: &Store) -> Self;
 }
 
 impl ValFuncRef for Val {
@@ -77,15 +75,5 @@ impl ValFuncRef for Val {
             Self::FuncRef(Some(f)) => unc_vm_vm::TableElement::FuncRef(f.vm_funcref()),
             _ => return Err(RuntimeError::new("val is not reference")),
         })
-    }
-
-    /// # Safety
-    ///
-    /// The returned `Val` may not outlive the containing instance.
-    unsafe fn from_table_reference(item: unc_vm_vm::TableElement, store: &Store) -> Self {
-        match item {
-            unc_vm_vm::TableElement::FuncRef(f) => Self::from_vm_funcref(f, store),
-            unc_vm_vm::TableElement::ExternRef(extern_ref) => Self::ExternRef(extern_ref.into()),
-        }
     }
 }

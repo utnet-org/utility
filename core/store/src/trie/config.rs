@@ -37,7 +37,7 @@ impl TrieConfig {
         this.view_shard_cache_config = config.view_trie_cache.clone();
 
         this.enable_receipt_prefetching = config.enable_receipt_prefetching;
-        this.load_mem_tries_for_shards = config.load_mem_tries_for_shards.clone();
+        this.load_mem_tries_for_shards.clone_from(&config.load_mem_tries_for_shards);
         this.load_mem_tries_for_all_shards = config.load_mem_tries_for_all_shards;
 
         this

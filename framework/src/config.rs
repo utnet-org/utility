@@ -1062,7 +1062,7 @@ pub fn init_configs(
                 None => Genesis::from_file(genesis_path_str, GenesisValidationMode::Full),
             }?;
 
-            genesis.config.chain_id = chain_id.clone();
+            genesis.config.chain_id.clone_from(&chain_id);
 
             genesis.to_file(dir.join(config.genesis_file));
             info!(target: "unc", "Generated for {chain_id} network node key and genesis file in {}", dir.display());

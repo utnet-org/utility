@@ -3,9 +3,6 @@ use tokio::sync::broadcast::Receiver;
 use unc_chain_configs::UpdateableClientConfig;
 use unc_dyn_configs::{UpdateableConfigLoaderError, UpdateableConfigs};
 
-#[derive(Debug)]
-pub enum ClientConfigUpdateError {}
-
 /// Manages updating the config encapsulating.
 pub struct ConfigUpdater {
     /// Receives config updates while the node is running.

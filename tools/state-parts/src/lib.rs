@@ -9,7 +9,7 @@ use unc_network::raw::{ConnectError, Connection, DirectMessage, Message};
 use unc_network::types::HandshakeFailureReason;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::network::PeerId;
-use unc_primitives::types::{AccountId, BlockHeight, ShardId};
+use unc_primitives::types::{BlockHeight, ShardId};
 use unc_primitives::version::ProtocolVersion;
 
 pub mod cli;
@@ -68,21 +68,6 @@ fn handle_message(
         _ => {}
     };
     Ok(())
-}
-
-#[derive(Debug)]
-struct PeerIdentifier {
-    account_id: Option<AccountId>,
-    peer_id: PeerId,
-}
-
-impl std::fmt::Display for PeerIdentifier {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-        match &self.account_id {
-            Some(a) => a.fmt(f),
-            None => self.peer_id.fmt(f),
-        }
-    }
 }
 
 async fn state_parts_from_node(

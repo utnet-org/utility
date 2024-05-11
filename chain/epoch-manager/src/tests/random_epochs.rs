@@ -210,7 +210,7 @@ fn verify_epochs(epoch_infos: &[Arc<EpochInfo>]) {
         let mut pledges_with_change = pledges_before_change.clone();
         for (account_id, new_pledge) in epoch_info.pledge_change() {
             if *new_pledge == 0 {
-                if pledges_before_change.get(account_id).is_none() {
+                if !pledges_before_change.contains_key(account_id) {
                     // Pledge change from 0 to 0
                     assert!(prev_epoch_info.validator_kickout().contains_key(account_id));
                     assert!(epoch_info.validator_kickout().contains_key(account_id));

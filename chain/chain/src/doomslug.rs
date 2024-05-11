@@ -1215,7 +1215,7 @@ mod tests {
             DoomslugThresholdMode::TwoThirds,
         );
 
-        assert!(tracker.approval_trackers.get(&ApprovalInner::Skip(1)).is_none());
+        assert!(!tracker.approval_trackers.contains_key(&ApprovalInner::Skip(1)));
 
         // Check the approved and endorsed pledge for the new block, and also ensure that processing one of the same approvals
         // again works fine

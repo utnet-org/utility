@@ -1,4 +1,4 @@
-use crate::errors::{ContractPrecompilatonResult, IntoVMError};
+use crate::errors::ContractPrecompilatonResult;
 use crate::logic::errors::{
     CompilationError, FunctionCallError, MethodResolveError, PrepareError, VMLogicError,
     VMRunnerError, WasmTrap,
@@ -75,6 +75,10 @@ impl MemoryLike for WasmtimeMemory {
             Ok(())
         })
     }
+}
+
+trait IntoVMError {
+    fn into_vm_error(self) -> Result<FunctionCallError, VMRunnerError>;
 }
 
 impl IntoVMError for anyhow::Error {
