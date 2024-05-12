@@ -48,7 +48,7 @@ RUN chmod +x /usr/local/bin/unc-node
 LABEL org.opencontainers.image.authors="The Utility Project Team" \
 	org.opencontainers.image.url="https://www.utnet.org/" \
 	org.opencontainers.image.source="https://github.com/utnet-org/utility" \
-	org.opencontainers.image.version="0.8.0" \
+	org.opencontainers.image.version="0.10.0" \
 	org.opencontainers.image.revision="1" \
 	org.opencontainers.image.vendor="The Utility Project" \
 	org.opencontainers.image.licenses="GPL-2.0-or-later" \

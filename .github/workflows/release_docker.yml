@@ -205,12 +205,6 @@ jobs:
             registry-url: ghcr.io
             registry-owner: ${{ needs.prepare-env.outputs.repo_owner }}
             run-on-pr: "true"
-          - name: ScaleWay
-            user-secret: SCALEWAY_USERNAME
-            token-secret: SCW_SECRET_KEY
-            registry-url: rg.fr-par.scw.cloud
-            registry-owner: utnet-org
-            run-on-pr: "false"
       fail-fast: false
     steps:
       - name: Check run conditions
