@@ -11,7 +11,7 @@ fi
 
 if [ -n "$NODE_KEY" ]; then
     cat << EOF > "$UNC_HOME/node_key.json"
-{"account_id": "", "public_key": "", "secret_key": "$NODE_KEY"}
+{"account_id": "", "public_key": "", "private_key": "$NODE_KEY"}
 EOF
 fi
 
