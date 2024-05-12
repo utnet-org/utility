@@ -20,6 +20,3 @@ sandbox/
 .dockerignore
 Dockerfile
 Dockerfile.nightly
-
-# Ignore git internal structure
-.git/
