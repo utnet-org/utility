@@ -1,47 +1,310 @@
 name: Release Docker
+# Trigger on all push events, new semantic version tags, and all PRs
 on:
   push:
     branches-ignore:
       - '**'
     tags:
-      - '*'
+      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-alpha.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-rc[0-9]+"
+  pull_request:
   workflow_dispatch:
+  inputs:
+    packageName:
+    required: false
+    type: string
+    description: "You can specify a different package name."
+
+env:
+  GITHUB_REG: ghcr.io
+  MAINTAINER: ${{ github.repository_owner }}
+  DESCRIPTION: "${{ github.repository_owner }} repository ${{ github.repository }}"
 
 jobs:
-  # build utility image and publish to dockerhub
-  docker_linux_amd64:
-    runs-on: ubuntu-latest
+  prepare-env:
+    runs-on: "ubuntu-latest"
+    outputs:
+      repo_owner: ${{ steps.setting_env.outputs.repo_owner }}
+      output_short_sha: ${{ steps.setting_env.outputs.short_sha }}
+      output_image_name: ${{ steps.setting_env.outputs.image_name }}
+      build_for_pr: ${{ steps.setting_logic.outputs.build_for_pr }}
+      build_for_merge: ${{ steps.setting_logic.outputs.build_for_merge }}
+      not_a_fork: ${{ steps.setting_logic.outputs.not_a_fork }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: "actions/checkout@v4"
+
+      - name: Add vars to ENV
+        id: setting_env
+        run: |
+          # Extract both the repository owner and repository name
+          # According to docs, github.repository is in the format of owner/repo, not just repo
+          # https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
+          REPO_OWNER=$(echo "${{ github.repository }}" | awk -F'/' '{print $1}' | tr '[:upper:]' '[:lower:]')
+          REPO_NAME=$(echo "${{ github.repository }}" | awk -F'/' '{print $2}' | tr '[:upper:]' '[:lower:]')
+
+          # Check repo name for .github use to test this workflow
+          if [[ $REPO_NAME == ".github" ]]; then
+            # Remove the leading . to avoid failing the character check
+            REPO_NAME="github"
+          fi
+
+          # Log variables for debugging
+          echo "Repository Owner: $REPO_OWNER"
+          echo "Repository Name: $REPO_NAME"
+          echo "INPUT PACKAGE NAME: ${{ inputs.packageName }}"
+
+          # Set environment variables and outputs
+          echo "REPO_OWNER=$REPO_OWNER" >> $GITHUB_ENV
+          echo "repo_owner=$REPO_OWNER" >> "$GITHUB_OUTPUT"
+          echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+          echo "short_sha=`echo ${GITHUB_SHA} | cut -c1-8`" >> "$GITHUB_OUTPUT"
+
+          if [[ "${{ inputs.packageName }}" == "${{ github.repository }}" ]]; then
+            # If a user submitted package name that has the naming containing
+            # both the repository owner and repository name, we fail
+            # e.g: inputs.packageName = "utnet-org/unc-node" is not allowed
+            echo "------------------------------------------------------------"
+            echo "ERROR: Package name not valid! => [ ${{ inputs.packageName }} ]"
+            echo "Don't use the repository owner and repository name in the package name."
+            echo "------------------------------------------------------------"
+            exit 1
+          fi
+
+          # Set the default package name to the repository name
+          PACKAGE_NAME=$REPO_NAME
+
+          # If there is a user submitted package name, use it
+          if [[ -n "${{ inputs.packageName }}" ]]; then
+            PACKAGE_NAME=$(echo "${{ inputs.packageName }}" | tr '[:upper:]' '[:lower:]')
+          fi
+
+          # validate the package name characters
+          if [[ ! $PACKAGE_NAME =~ ^[A-Za-z0-9\-]+$ ]]; then
+            echo "------------------------------------------------------------"
+            echo "ERROR: Package name not valid! => [ $PACKAGE_NAME ]"
+            echo "ONLY can use: A-Za-z0-9\-"
+            echo "------------------------------------------------------------"
+            exit 1
+          fi
+
+          # Log the package name for debugging
+          echo "PACKAGE_NAME: $PACKAGE_NAME"
+
+          # Set environment variables and outputs
+          echo "IMAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
+          echo "image_name=$PACKAGE_NAME" >> "$GITHUB_OUTPUT"
+
+      # The key logic that we want to determine is whether or not we are working
+      # on a fork and if this is a pull request or merge to main.
+      #
+      # We care about forks because of github's security policies that prevent
+      # forks from pushing images. So we only want to build images on forks
+      #
+      # The distinction between pull requests and merges to main is that on pull
+      # requests we want a single image available quickly for testing. On merges
+      # to main we want all the images built and are ok waiting longer to ensure
+      # there are not bugs.
+      - name: Add logic to ENV
+        id: setting_logic
+        run: |
+          # yamllint disable
+          echo "build_for_pr=${{ github.event_name == 'pull_request' }}" >> "$GITHUB_OUTPUT"
+          echo "build_for_merge=${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') }}" >> "$GITHUB_OUTPUT"
+          echo "not_a_fork=${{ github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name }}" >> "$GITHUB_OUTPUT"
+          # yamllint enable
+
+  # Log the key inputs to the logic as well a the outputs. We check that
+  # build_for_pr and build_for_merge are never equal when they are true as that
+  # would indicate a bug. If they are both false, this is ok, as this is the
+  # case on pushing commits to a PR.
+  logic-check:
+    needs: prepare-env
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Log logic
+        run: |
+          echo "github.event_name: ${{ github.event_name }}"
+          echo "github.ref: ${{ github.ref }}"
+          echo "head repo: ${{ github.event.pull_request.head.repo.full_name }}"
+          echo "base repo: ${{ github.event.pull_request.base.repo.full_name }}"
+          echo "build_for_pr: ${{ needs.prepare-env.outputs.build_for_pr }}"
+          echo "build_for_merge: ${{ needs.prepare-env.outputs.build_for_merge }}"
+          echo "not_a_fork: ${{ needs.prepare-env.outputs.not_a_fork }}"
+      - name: Check logic
+        if: |
+          (needs.prepare-env.outputs.build_for_pr == needs.prepare-env.outputs.build_for_merge)
+          && needs.prepare-env.outputs.build_for_pr != 'false'
+        run: |
+          echo "Failing step due to build_for_pr == build_for_merge"
+          exit 1
+
+  docker-security:
+    needs: ["prepare-env", "logic-check"]
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout
+        uses: "actions/checkout@v4"
+
+      - name: Build
+        uses: docker/build-push-action@v5
+        env:
+          OUTPUT_SHORT_SHA: ${{ needs.prepare-env.outputs.output_short_sha }}
+          OUTPUT_IMAGE_NAME: ${{ needs.prepare-env.outputs.output_image_name }}
+        with:
+          context: .
+          push: false
+          platforms: linux/amd64
+          # we're building the container before the scan, use the short sha tag
+          # for referring to it later
+          tags: ${{ env.OUTPUT_IMAGE_NAME }}:${{ env.OUTPUT_SHORT_SHA }}
+          file: ./Dockerfile
+
+      - name: Run Trivy vulnerability scanner
+        # source: https://github.com/aquasecurity/trivy-action
+        # https://github.com/marketplace/actions/aqua-security-trivy
+        uses: aquasecurity/trivy-action@master
+        env:
+          OUTPUT_SHORT_SHA: ${{ needs.prepare-env.outputs.output_short_sha }}
+          OUTPUT_IMAGE_NAME: ${{ needs.prepare-env.outputs.output_image_name }}
+        with:
+          # here we use the local tag that we've built before
+          image-ref: "${{ env.OUTPUT_IMAGE_NAME }}:${{ env.OUTPUT_SHORT_SHA }}"
+          format: "table"
+          #exit-code: '1' # uncomment to stop the CI if the scanner fails
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
+
+  docker-build:
+    name: docker-build (${{ matrix.registry.name }}; ${{ matrix.registry.registry-url }}/${{ matrix.registry.registry-owner }}/${{ needs.prepare-env.outputs.output_image_name }})
+    runs-on: "ubuntu-latest"
+    # wait until the jobs are finished.
+    needs: ["prepare-env", "logic-check", "docker-security"]
+    # We only want to run this step if one of the build flags is true. We don't
+    # run if both logic flags are false. This is the case for push events on PR
+    # commits. The logic-check job protects us from the case of both build flags
+    # being equal to true.
+    if: |
+      needs.prepare-env.outputs.build_for_pr == 'true'
+      || needs.prepare-env.outputs.build_for_merge == 'true'
+    permissions:
+      contents: write
+      packages: write
+    strategy:
+      matrix:
+        # run-on-pr is used to skip running registries that are expected to fail
+        # due to github permission issues with org wide secrets.
+        registry:
+          - name: DockerHub
+            user-secret: DOCKERHUB_USERNAME
+            token-secret: DOCKER_PAT_TOKEN
+            registry-url: docker.io
+            registry-owner: utnet-org
+            run-on-pr: "false"
+          - name: GHCR
+            user-secret: ${{ github.repository_owner }}
+            token-secret: GITHUB_TOKEN
+            registry-url: ghcr.io
+            registry-owner: ${{ needs.prepare-env.outputs.repo_owner }}
+            run-on-pr: "true"
+          - name: ScaleWay
+            user-secret: SCALEWAY_USERNAME
+            token-secret: SCW_SECRET_KEY
+            registry-url: rg.fr-par.scw.cloud
+            registry-owner: utnet-org
+            run-on-pr: "false"
+      fail-fast: false
+    steps:
+      - name: Check run conditions
+        id: run_check
+        # We only want to run when the registry is able to run on PR or if it is a merge event
+        run: echo "run=${{ matrix.registry.run-on-pr == needs.prepare-env.outputs.build_for_pr || needs.prepare-env.outputs.build_for_merge == 'true'}}" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout
+        if: ${{ steps.run_check.outputs.run == 'true'}}
+        uses: "actions/checkout@v4"
+
+      - name: Login to ${{ matrix.registry.name }}
+        if: ${{ steps.run_check.outputs.run == 'true'}}
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ matrix.registry.registry-url }}
+          username: ${{ matrix.registry.registry-url == env.GITHUB_REG && matrix.registry.user-secret || secrets[matrix.registry.user-secret] }}
+          password: ${{ secrets[matrix.registry.token-secret] }}
+
+      - name: Extract Docker Metadata
+        if: ${{ steps.run_check.outputs.run == 'true'}}
+        id: meta
+        uses: docker/metadata-action@v5
+        env:
+          OUTPUT_SHORT_SHA: ${{ needs.prepare-env.outputs.output_short_sha }}
+          OUTPUT_IMAGE_NAME: ${{ needs.prepare-env.outputs.output_image_name }}
+        with:
+          images: ${{ matrix.registry.registry-url }}/${{ matrix.registry.registry-owner }}/${{ env.OUTPUT_IMAGE_NAME }}
+          # yamllint disable
+          labels: |
+            maintainer=${{ env.MAINTAINER }}
+            commitUrl=https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+            dockerPull=docker pull ${{ matrix.registry.registry-url }}/${{ matrix.registry.registry-owner }}/${{ env.OUTPUT_IMAGE_NAME }}:${{ env.OUTPUT_SHORT_SHA }}
+            org.opencontainers.image.description=${{ env.DESCRIPTION }}
+          tags: |
+            # output minimal (short sha)
+            type=raw,value={{sha}}
+            # output v0.2.1/v*-* (or sha of no tag)
+            type=semver,pattern={{raw}}
+            # pull request event
+            type=ref,enable=true,prefix=pr-,suffix=,event=pr
+          # yamllint enable
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        if: ${{ steps.run_check.outputs.run == 'true'}}
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v2
+        if: ${{ steps.run_check.outputs.run == 'true'}}
+        uses: docker/setup-buildx-action@v3
 
-      - name: Prepare
-        id: prepare
-        run: |
-            TAG=${GITHUB_REF#refs/tags/}
-            echo "tag_name=${TAG}" >> $GITHUB_OUTPUT
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
+      # Build and Publish images on main, master, and versioned branches.
+      #
+      # The reason we split out these steps into 2 is for better handling of
+      # forks when building amd64 images and to enable faster availability of
+      # the amd64 image since building the arm64 image takes significantly
+      # longer.
+      - name: "Merge on Main Trigger: Build and Push All Docker Images"
+        if: ${{ needs.prepare-env.outputs.build_for_merge == 'true' && steps.run_check.outputs.run == 'true'}}
+        uses: docker/build-push-action@v5
+        env:
+          OUTPUT_SHORT_SHA: ${{ needs.prepare-env.outputs.output_short_sha }}
+          OUTPUT_IMAGE_NAME: ${{ needs.prepare-env.outputs.output_image_name }}
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKER_PAT_TOKEN }}
-
-      - name: Build and push images
-        uses: docker/build-push-action@v3
-        with:
-          builder: ${{ steps.buildx.outputs.name }}
           context: .
-          file: ./Dockerfile
-          platforms: linux/amd64
+          platforms: linux/arm64,linux/amd64
+          provenance: false
           push: true
-          tags: kim2023/unc-node:${{ steps.prepare.outputs.tag_name }}
-          build-args: |
-            UTILITY_TAG=${{ steps.prepare.outputs.tag_name }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: ./Dockerfile
+
+      # Build amd64 images always, and publish when it is not a fork. The Github
+      # security model prevents forks from pushing to the registry so we can
+      # only push if the branch/PR is not generated from a fork. Even though
+      # forks can't push, we still want to try and build the image to catch
+      # bugs. For testing purposes we only need an amd64 image.
+      - name: "Pull Request Trigger: Build and Push amd64 Docker Image"
+        if: ${{ needs.prepare-env.outputs.build_for_pr == 'true' && steps.run_check.outputs.run == 'true'}}
+        uses: docker/build-push-action@v5
+        env:
+          OUTPUT_SHORT_SHA: ${{ needs.prepare-env.outputs.output_short_sha }}
+          OUTPUT_IMAGE_NAME: ${{ needs.prepare-env.outputs.output_image_name }}
+        with:
+          context: .
+          platforms: linux/amd64
+          provenance: false
+          # Only push if the head and base repos match, meaning it is not a fork
+          push: ${{ needs.prepare-env.outputs.not_a_fork == 'true' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: ./Dockerfile
