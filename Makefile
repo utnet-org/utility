@@ -8,16 +8,16 @@ export CARGO_TARGET_DIR = target
 all: release
 
 
-docker-framework: DOCKER_TAG ?= framework
-docker-framework:
-	docker build -t $(DOCKER_TAG) -f Dockerfile --build-arg=make_target=unc-node-release         --progress=plain .
+docker-utility: DOCKER_TAG ?= utility
+docker-utility:
+	docker build -t $(DOCKER_TAG) -f Dockerfile --build-arg=make_target=unc-node-release --progress=plain .
 
-docker-framework-sandbox: DOCKER_TAG ?= framework-sandbox
-docker-framework-sandbox:
+docker-utility-sandbox: DOCKER_TAG ?= utility-sandbox
+docker-utility-sandbox:
 	docker build -t $(DOCKER_TAG) -f Dockerfile --build-arg=make_target=unc-node-sandbox-release --progress=plain .
 
-docker-framework-nightly: DOCKER_TAG ?= framework-nightly
-docker-framework-nightly:
+docker-utility-nightly: DOCKER_TAG ?= utility-nightly
+docker-utility-nightly:
 	docker build -t $(DOCKER_TAG) -f Dockerfile --build-arg=make_target=unc-node-nightly-release --progress=plain .
 
 
@@ -91,6 +91,6 @@ unc-node-sandbox-release:
 	cargo build -p unc-node --features sandbox --release
 
 
-.PHONY: docker-framework docker-framework-nightly release unc-node debug
+.PHONY: docker-utility docker-utility-nightly release unc-node debug
 .PHONY: perf-release perf-debug nightly-release nightly-debug assertions-release sandbox
 .PHONY: sandbox-release
