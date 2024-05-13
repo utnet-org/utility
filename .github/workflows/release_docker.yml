@@ -193,12 +193,12 @@ jobs:
         # run-on-pr is used to skip running registries that are expected to fail
         # due to github permission issues with org wide secrets.
         registry:
-          - name: DockerHub
-            user-secret: DOCKERHUB_USERNAME
-            token-secret: DOCKER_PAT_TOKEN
-            registry-url: docker.io
-            registry-owner: utnet-org
-            run-on-pr: "false"
+          # - name: DockerHub
+          #   user-secret: DOCKERHUB_USERNAME
+          #   token-secret: DOCKER_PAT_TOKEN
+          #   registry-url: docker.io
+          #   registry-owner: utnet-org
+          #   run-on-pr: "false"
           - name: GHCR
             user-secret: ${{ github.repository_owner }}
             token-secret: GITHUB_TOKEN

@@ -5,7 +5,7 @@ UNC_HOME=${UNC_HOME:-/srv/unc}
 export UNC_HOME
 
 if [ -n "$INIT" ]; then
-    unc-node init ${CHAIN_ID:+--chain-id="$CHAIN_ID"} \
+    unc-node init --download-genesis --download-config ${CHAIN_ID:+--chain-id="$CHAIN_ID"} \
                ${ACCOUNT_ID:+--account-id="$ACCOUNT_ID"}
 fi
 
