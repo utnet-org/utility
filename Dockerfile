@@ -27,7 +27,7 @@ WORKDIR /workdir
 COPY . .
 
 ENV PORTABLE=ON
-ARG make_target=release
+ARG make_target=unc-node-release
 RUN make CARGO_TARGET_DIR=/tmp/target \
     "${make_target:?make_target not set}"
 
