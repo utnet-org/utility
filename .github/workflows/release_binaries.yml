@@ -25,12 +25,12 @@ jobs:
           #   output_file: output/zips/x86_64-fedora-39-unc-node.tar.gz
           # - command: ENGINE=podman DISTRO=fedora-40 ZIP=1 ./scripts/binaries/build.sh
           #   output_file: output/zips/x86_64-fedora-40-unc-node.tar.gz
-          # - command: ENGINE=podman DISTRO=debian-11 ZIP=1 ./scripts/binaries/build.sh
-          #   output_file: output/zips/x86_64-debian-11-unc-node.tar.gz
-          # - command: ENGINE=podman DISTRO=debian-12 ZIP=1 ./scripts/binaries/build.sh
-          #   output_file: output/zips/x86_64-debian-12-unc-node.tar.gz
-          # - command: ENGINE=podman DISTRO=arch ZIP=1 ./scripts/binaries/build.sh
-          #   output_file: output/zips/x86_64-arch-unc-node.tar.gz
+          - command: ENGINE=podman DISTRO=debian-11 ZIP=1 ./scripts/binaries/build.sh
+            output_file: output/zips/x86_64-debian-11-unc-node.tar.gz
+          - command: ENGINE=podman DISTRO=debian-12 ZIP=1 ./scripts/binaries/build.sh
+            output_file: output/zips/x86_64-debian-12-unc-node.tar.gz
+          - command: ENGINE=podman DISTRO=arch ZIP=1 ./scripts/binaries/build.sh
+            output_file: output/zips/x86_64-arch-unc-node.tar.gz
     steps:
       - uses: actions/checkout@v4
         with:
@@ -62,7 +62,7 @@ jobs:
           config: cliff.toml
           args: -vv --latest --strip header
         env:
-          OUTPUT: CHANGES.md
+          OUTPUT: CHANGELOG.md
 
       - name: Prepare
         id: prepare
