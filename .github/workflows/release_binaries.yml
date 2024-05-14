@@ -35,7 +35,7 @@ jobs:
           set +e
           git add CHANGELOG.md
           git commit -m "Update changelog"
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git <branch>
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git main
 
   build_binaries:
     runs-on: ubuntu-latest
