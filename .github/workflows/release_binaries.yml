@@ -10,6 +10,8 @@ on:
 jobs:
   build_binaries:
     runs-on: ubuntu-latest
+    outputs:
+      release_body: ${{ steps.git-cliff.outputs.content }}
     strategy:
       matrix:
         include:
@@ -31,6 +33,8 @@ jobs:
           #   output_file: output/zips/x86_64-arch-unc-node.tar.gz
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -51,6 +55,16 @@ jobs:
           max_attempts: 3
           command: ${{ matrix.command }}
 
+      - name: Generate a changelog
+        uses: orhun/git-cliff-action@v3
+        id: git-cliff
+        with:
+          config: cliff.toml
+          args: -vv --latest --strip header
+        env:
+          OUTPUT: CHANGES.md
+          GITHUB_REPO: ${{ github.repository }}
+
       - name: Prepare
         id: prepare
         run: |
@@ -64,4 +78,5 @@ jobs:
           file: ${{ matrix.output_file }}
           release_name: ${{ steps.prepare.outputs.tag_name }}
           tag: ${{ steps.prepare.outputs.tag_name }}
+          body: ${{ steps.git-cliff.outputs.content }}
           overwrite: true

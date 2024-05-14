@@ -102,7 +102,7 @@ static EXPECTED_UNSUPPORTED: &[(&str, &str)] = &[
 #[test]
 fn ensure_fails_verification() {
     let config = test_vm_config();
-    with_vm_variants(&config, |kind| {
+    with_vm_variants(&config, |kind: unc_parameters::vm::VMKind| {
         for (feature_name, wat) in EXPECTED_UNSUPPORTED {
             let wasm = wat::parse_str(wat).expect("parsing test wat should succeed");
             if let Ok(_) = prepare_contract(&wasm, &config, kind) {
