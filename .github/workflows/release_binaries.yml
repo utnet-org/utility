@@ -63,6 +63,8 @@ jobs:
             output_file: output/zips/x86_64-arch-unc-node.tar.gz
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
