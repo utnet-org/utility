@@ -240,7 +240,6 @@ fn test_unc_vm_artifact_output_stability() {
     // Once it has been confirmed that these steps have been done, the expected hashes in this test
     // can be adjusted.
 }
-
 /// [`CompiledContractCache`] which simulates failures in the underlying
 /// database.
 #[derive(Default)]
