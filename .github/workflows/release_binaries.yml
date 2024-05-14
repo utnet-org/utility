@@ -10,8 +10,6 @@ on:
 jobs:
   build_binaries:
     runs-on: ubuntu-latest
-    outputs:
-      release_body: ${{ steps.git-cliff.outputs.content }}
     strategy:
       matrix:
         include:
@@ -49,20 +47,30 @@ jobs:
       - name: install podman
         run: sudo apt-get update && sudo apt install podman -y
 
+      - name: Generate a changelog
+        uses: orhun/git-cliff-action@v3
+        id: git-cliff
+        with:
+          config: ./cliff.toml
+          args: -vv --latest --strip header
+        env:
+          OUTPUT: CHANGELOG.md
+
+      - name: write file
+        run: cat ${{ steps.git-cliff.outputs.changelog }} > ./CHANGELOG.md
+
+      - name: commit changes
+        uses: EndBug/add-and-commit@v9.1.4
+        with:
+          default_author: github_actions
+          message: 'chore: Update Changelog'
+          add: ./CHANGELOG.md
+
       - uses: nick-fields/retry@v3
         with:
           timeout_minutes: 60
           max_attempts: 3
           command: ${{ matrix.command }}
-
-      - name: Generate a changelog
-        uses: orhun/git-cliff-action@v3
-        id: git-cliff
-        with:
-          config: cliff.toml
-          args: -vv --latest --strip header
-        env:
-          OUTPUT: CHANGELOG.md
 
       - name: Prepare
         id: prepare
@@ -77,5 +85,5 @@ jobs:
           file: ${{ matrix.output_file }}
           release_name: ${{ steps.prepare.outputs.tag_name }}
           tag: ${{ steps.prepare.outputs.tag_name }}
-          body: ${{ steps.git-cliff.outputs.content }}
+          body: ${{ steps.git-cliff.outputs.changelog }}
           overwrite: true
