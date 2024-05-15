@@ -28,14 +28,13 @@
 
 ## About Utility
 
-Utility's purpose is to enable community-driven innovation to benefit people around the world.
+Utility's mission is to stimulate community-led innovation for the benefit of people worldwide.
 
-To achieve this purpose, *Utility* provides a developer platform where developers and entrepreneurs can create apps that put users back in control of their data and assets, which is the foundation of ["Open Web" movement][open-web-url].
+To realize this mission, *Utility* provides a platform where developers and entrepreneurs can build applications that put users back in control of their data and assets. This is a core tenet of the ["Open Web" movement][open-web-url].
 
-One of the components of *Utility* is the Utility Protocol, an infrastructure for server-less applications and smart contracts powered by a blockchain.
-Utility Protocol is built to deliver usability and scalability of modern PaaS like Firebase at fraction of the prices that blockchains like Ethereum charge.
+A key component of *utnet* is utility, a blockchain-powered infrastructure for serverless applications and smart contracts. Utility aims to offer the ease-of-use and scalability of modern PaaS like Firebase, but at a fraction of the cost of blockchains like Ethereum.
 
-Overall, *Utility* provides a wide range of tools for developers to easily build applications:
+In summary, *Utility* offers a suite of tools for developers to effortlessly build applications:
 
 - [JS Client library][js-api] to connect to Utility Protocol from your applications.
 - [Rust][rust-sdk] and [JavaScript/TypeScript][js-sdk] SDKs to write smart contracts and stateful server-less functions.
