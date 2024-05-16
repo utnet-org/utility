@@ -1,6 +1,6 @@
 [workspace.package]
 version = "0.0.0" # managed by cargo-workspaces, see below
-authors = ["Hello Inc <hello@unc.com>"]
+authors = ["Hello Inc <hello@utnet.org>"]
 edition = "2021"
 rust-version = "1.78.0"
 repository = "https://github.com/utnet-org/utility"

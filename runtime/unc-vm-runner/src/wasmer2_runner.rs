@@ -393,7 +393,7 @@ impl Wasmer2VM {
     ) -> Result<Result<(), FunctionCallError>, VMRunnerError> {
         let _span = tracing::debug_span!(target: "vm", "run_method").entered();
 
-        // FastGasCounter in Nearcore and Wasmer must match in layout.
+        // FastGasCounter in UncNode and Wasmer must match in layout.
         assert_eq!(size_of::<FastGasCounter>(), size_of::<wasmer_types::FastGasCounter>());
         assert_eq!(
             offset_of!(FastGasCounter, burnt_gas),

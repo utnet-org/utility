@@ -408,7 +408,7 @@ impl UncVM {
     ) -> Result<Result<(), FunctionCallError>, VMRunnerError> {
         let _span = tracing::debug_span!(target: "vm", "run_method").entered();
 
-        // FastGasCounter in Nearcore must be reinterpret_cast-able to the one in UncVm.
+        // FastGasCounter in UncNode must be reinterpret_cast-able to the one in UncVm.
         assert_eq!(
             size_of::<FastGasCounter>(),
             size_of::<unc_vm_types::FastGasCounter>() + size_of::<u64>()

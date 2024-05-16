@@ -22,7 +22,7 @@ Rust is _very_ well documented. It's possible to learn the whole language and
 most of the idioms by just reading the official docs. Starting points are
 
 * [The Rust Book](https://doc.rust-lang.org/book/) (any resemblance to "Guide to
-  Nearcore Development" is purely coincidental)
+  UncNode Development" is purely coincidental)
 * [Standard Library API](https://doc.rust-lang.org/stable/std/)
 
 Alternatives are:

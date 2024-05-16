@@ -40,7 +40,7 @@ struct ValidatorInfoHelper {
 
 /// A helper that prints information about current chain and reports to telemetry.
 pub struct InfoHelper {
-    /// Nearcore agent (executable) version
+    /// UncNode agent (executable) version
     unc_version: Version,
     /// System reference.
     sys: System,

@@ -4,9 +4,9 @@ proc-macro = true
 [package]
 name = "unc-vm-compiler-test-derive"
 version.workspace = true
-authors = ["Wasmer Engineering Team <engineering@wasmer.io>", "Hello Inc <hello@unc.com>"]
+authors = ["Wasmer Engineering Team <engineering@wasmer.io>", "Hello Inc <hello@utnet.org>"]
 edition = "2021"
-license = "MIT"
+license = "GPL-2.0-or-later"
 description = "A macro to generate easily tests across compilers and engines"
 keywords = ["unsafe", "body", "fn", "safety", "hygiene"]
 categories = ["rust-patterns"]

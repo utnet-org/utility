@@ -171,7 +171,7 @@ pub fn has_unified_rust_edition(workspace: &Workspace) -> anyhow::Result<()> {
     Ok(())
 }
 
-const EXPECTED_AUTHOR: &str = "Hello Inc <hello@unc.com>";
+const EXPECTED_AUTHOR: &str = "Hello Inc <hello@utnet.org>";
 
 /// Ensure all crates have the appropriate author, non-exclusively of course.
 pub fn author_is_hello(workspace: &Workspace) -> anyhow::Result<()> {

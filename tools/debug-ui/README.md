@@ -1,4 +1,4 @@
-# Nearcore Debug UI
+# UncNode Debug UI
 
 ## How to Use
 

@@ -18,11 +18,10 @@ It is very unlikely that a user will need to deal with `wasmer-vm`
 directly. The `wasmer` crate provides types that embed types from
 `wasmer-vm` with a higher-level API.
 
-
 [`wasmer-engine`]: https://crates.io/crates/wasmer-engine
 
 ### Acknowledgments
 
 This project borrowed some of the code for the VM structure and trapping from the [wasmtime-runtime](https://crates.io/crates/wasmtime-runtime).
 
-Please check [Wasmer ATTRIBUTIONS](https://github.com/wasmerio/wasmer/blob/master/ATTRIBUTIONS.md) to further see licenses and other attributions of the project. 
+Please check [Wasmer ATTRIBUTIONS](https://github.com/wasmerio/wasmer/blob/master/ATTRIBUTIONS.md) to further see licenses and other attributions of the project.

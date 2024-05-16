@@ -8,7 +8,7 @@ Such tests are written in python and not in Rust (in which the framework itself,
 and most of the sanity and fuzz tests, are written) due to the availability of
 libraries to easily connect to, remove nodes and orchestrate cloud instances.
 
-Nearcore itself has several features guarded by a
+UncNode itself has several features guarded by a
 [feature flag](https://doc.rust-lang.org/1.29.0/book/first-edition/conditional-compilation.html)
 that allows the python tests to invoke behaviors otherwise impossible to be
 exercised by an honest actor.

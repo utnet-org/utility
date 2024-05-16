@@ -5,6 +5,7 @@ This crate is a fork of `wasmer-engine`. A significant number of things changed,
 This crate is the general abstraction for creating Engines in Wasmer.
 
 Wasmer Engines are mainly responsible for two things:
+
 * Transform the compilation code (from any Wasmer Compiler) to
   **create** an `Artifact`,
 * **Load** an`Artifact` so it can be used by the user (normally,

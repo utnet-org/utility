@@ -28,5 +28,4 @@ The fact that singlepass is not prone to JIT bombs and offers a very
 predictable compilation speed makes it ideal for **blockchains** and other
 systems where fast and consistent compilation times are very critical.
 
-
 [example]: https://github.com/wasmerio/wasmer/blob/master/examples/compiler_singlepass.rs
