@@ -40,7 +40,6 @@ fn build_contract(dir: &str, args: &[&str], output: &str) -> Result<()> {
 /// `env_remove` invocations will remove these flags from the nested `cargo build`
 /// process, to avoid unexpected behaviors due to the workspace configurations.
 // TODO(eth-implicit) Change it to have a reproducible hash of the WASM file.
-// see https://github.com/utnet-org/utility/pull/10269#discussion_r1430139987.
 fn cargo_build_cmd(target_dir: &Path) -> Command {
     let mut res = Command::new("cargo");
 

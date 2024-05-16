@@ -52,9 +52,7 @@ Now start the estimator under QEMU with the counter plugin enabled (note, that R
       CARGO_PROFILE_RELEASE_CODEGEN_UNITS=1
       export CARGO_PROFILE_RELEASE_LTO CARGO_PROFILE_RELEASE_CODEGEN_UNITS
   
-  See [#4678](https://github.com/utnet-org/utility/issues/4678) for more details.
-  
-* You also may observe slight differences in different launches, because number of instructions operating with disk cache is not fully determined, as well as weight of RocksDB operations. 
+* You also may observe slight differences in different launches, because number of instructions operating with disk cache is not fully determined, as well as weight of RocksDB operations.
   To improve estimation, you can launch it several times and take the worst result.
 
 ## IO cost calibration
@@ -69,27 +67,31 @@ We do that by computing following operation:
 
 and checking how much data to be read/written depending on number of create accounts.
 Then we could figure out:
-   * 1 account creation cost in instructions
-   * 1 account creation cost in bytes read and written
+
+* 1 account creation cost in instructions
+* 1 account creation cost in bytes read and written
 For example, experiments performed in mid Oct 2020 shown the following numbers:
 10M accounts:
-    * 6_817_684_914_212 instructions executed
-    * 168_398_590_013 bytes read
-    * 48_486_537_178 bytes written
+  * 6_817_684_914_212 instructions executed
+  * 168_398_590_013 bytes read
+  * 48_486_537_178 bytes written
 
 Thus 1 account approximately costs:
-    * 681_768 instructions executed
-    * 16840 bytes read
-    * 4849 bytes written
+
+* 681_768 instructions executed
+* 16840 bytes read
+* 4849 bytes written
 
 Let's presume that execution, read and write each takes following shares in account cost creation.
-   * Execution: *3/6*
-   * Read: *2/6*
-   * Write: *1/6*
+
+* Execution: *3/6*
+* Read: *2/6*
+* Write: *1/6*
 
 Then we could conclude that:
-   * 1 byte read costs 681768 * 2 / 3 / 16840 = 27 instructions
-   * 1 byte written costs 681768 * 1 / 3 / 4849 = 47 instructions
+
+* 1 byte read costs 681768 * 2 / 3 / 16840 = 27 instructions
+* 1 byte written costs 681768 * 1 / 3 / 4849 = 47 instructions
 
 Thus, when measuring costs we set the operation cost to be:
 
@@ -125,7 +127,7 @@ To execute commands in already running container first find its id with:
     > docker ps
 
     CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                  NAMES
-    e9dcb52cc91b        ubuntu-emu         "/usr/bin/env bash"   	2 hours ago         Up 2 hours          0.0.0.0:5000->22/tcp   reverent_carson
+    e9dcb52cc91b        ubuntu-emu         "/usr/bin/env bash"    2 hours ago         Up 2 hours          0.0.0.0:5000->22/tcp   reverent_carson
 
 and the use container ID for `docker exec` command, like:
 

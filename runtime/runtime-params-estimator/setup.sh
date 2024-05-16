@@ -7,7 +7,7 @@ ensure_repo () {
     cd $1;
     git pull
   else
-    git clone --depth=1 https://github.com/unc/$1;
+    git clone --depth=1 https://github.com/utnet-org/$1;
   fi
 }
 

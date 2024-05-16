@@ -44,7 +44,6 @@ mod tests {
     #[test]
     #[ignore]
     // TODO(eth-implicit) Do not ignore when Wallet Contract build becomes reproducible,
-    // see https://github.com/utnet-org/utility/pull/10269#discussion_r1430139987.
     fn check_wallet_contract() {
         assert!(!wallet_contract().code().is_empty());
         let expected_hash =
@@ -55,7 +54,6 @@ mod tests {
     #[test]
     #[ignore]
     // TODO(eth-implicit) Do not ignore when Wallet Contract build becomes reproducible,
-    // see https://github.com/utnet-org/utility/pull/10269#discussion_r1430139987.
     fn check_wallet_contract_magic_bytes() {
         assert!(!wallet_contract_magic_bytes().code().is_empty());
         let expected_hash =

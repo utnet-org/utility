@@ -1,7 +1,5 @@
 A temporary (placeholder) implementation of the `Wallet Contract`.
 
-See https://github.com/Utility/UEPs/issues/518.
-
 Must not use in production!
 
 Currently, the contract can only be used in nightly build.

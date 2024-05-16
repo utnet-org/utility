@@ -3,7 +3,8 @@
 Use this tool to measure the running time of elementary runtime operations that have associated fees.
 
 1. Run the estimator
-    ```bash
+
+    ```sh
     cargo run --release --package runtime-params-estimator --features required --bin runtime-params-estimator -- --accounts-num 20000 --additional-accounts-num 200000 --iters 1 --warmup-iters 1 --metric time
     ```
 
@@ -40,7 +41,8 @@ statistics. But the plan is that it will also give gas estimations based on
 replaying traces.
 
 Example:
-```
+
+```sh
 cargo run -p runtime-params-estimator -- replay my_trace.log cache-stats
   GET   193 Block  193 BlockHeader  101 BlockHeight  100 BlockInfo  2 BlockMisc
         11 CachedContractCode  98 ChunkExtra  95 Chunks  4 EpochInfo  
@@ -63,13 +65,10 @@ The test input files `./res/*.io_trace` have been generated based on real mainne
 
 ```bash
 cargo build --release -p unc-node --features=io_trace
-for shard in 0 1 2 3
-do
-  target/release/unc-node \
-    --record-io-trace=75220100-75220101.s${shard}.io_trace view-state \
-    apply-range --start-index 75220100 --end-index 75220101 \
-    --sequential --shard-id ${shard}
-done
+target/release/unc-node \
+  --record-io-trace=75220100-75220101.s0.io_trace view-state \
+  apply-range --start-index 75220100 --end-index 75220101 \
+  --sequential --shard-id 0
 ```
 
 When running these command, make sure to run with `sequential` and to disable
