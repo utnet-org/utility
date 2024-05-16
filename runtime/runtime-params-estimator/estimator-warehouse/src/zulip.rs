@@ -5,7 +5,7 @@ use reqwest::blocking::Client;
 
 use crate::check::{Notice, RelativeChange, Status, UncertainChange};
 
-const ZULIP_SERVER: &str = "unc.zulipchat.com";
+const ZULIP_SERVER: &str = "utnet.zulipchat.com";
 
 pub(crate) struct ZulipEndpoint {
     client: Client,

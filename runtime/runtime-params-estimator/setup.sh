@@ -11,5 +11,5 @@ ensure_repo () {
   fi
 }
 
-ensure_repo unc-sdk-rs;
+ensure_repo utility-sdk-rs;
 ensure_repo core-contracts;

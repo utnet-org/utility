@@ -120,7 +120,7 @@ fn precompilation_cost(
 
     // Now validate that estimations obtained earlier provides correct upper estimation
     // for several other contracts.
-    // Contracts binaries are taken from unc-sdk-rs examples, ae20fc458858144e4a35faf58be778d13c2b0511.
+    // Contracts binaries are taken from utility-sdk-rs examples, ae20fc458858144e4a35faf58be778d13c2b0511.
     let validate_contracts = vec![
         // File 139637.
         read_resource("res/status_message.wasm"),
