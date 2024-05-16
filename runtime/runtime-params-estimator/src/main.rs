@@ -339,8 +339,8 @@ fn main_docker(
 
         let mut buf = String::new();
         buf.push_str("set -ex;\n");
-        buf.push_str("cd /host/framework;\n");
-        buf.push_str("cargo build --manifest-path /host/framework/Cargo.toml");
+        buf.push_str("cd /host/utility;\n");
+        buf.push_str("cargo build --manifest-path /host/utility/Cargo.toml");
         buf.push_str(" --package runtime-params-estimator --bin runtime-params-estimator");
 
         // Feature "required" is always necessary for accurate measurements.
@@ -362,7 +362,7 @@ fn main_docker(
             qemu_cmd_builder = qemu_cmd_builder.plugin_log(true).print_on_every_close(true);
         }
         let mut qemu_cmd = qemu_cmd_builder
-            .build(&format!("/host/framework/target/{profile}/runtime-params-estimator"))?;
+            .build(&format!("/host/utility/target/{profile}/runtime-params-estimator"))?;
 
         qemu_cmd.args(&["--home", "/.unc"]);
         buf.push_str(&format!("{:?}", qemu_cmd));
@@ -399,15 +399,15 @@ fn main_docker(
         buf
     };
 
-    let framework =
-        format!("type=bind,source={},target=/host/framework", project_root.to_str().unwrap());
+    let utility =
+        format!("type=bind,source={},target=/host/utility", project_root.to_str().unwrap());
     let unchome = format!("type=bind,source={},target=/.unc", state_dump_path.to_str().unwrap());
 
     let mut cmd = Command::new("docker");
     cmd.args(&["run", "--rm", "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined"])
-        .args(&["--mount", &framework])
+        .args(&["--mount", &utility])
         .args(&["--mount", &unchome])
-        .args(&["--mount", "source=rust-emu-target-dir,target=/host/framework/target"])
+        .args(&["--mount", "source=rust-emu-target-dir,target=/host/utility/target"])
         .args(&["--mount", "source=rust-emu-cargo-dir,target=/usr/local/cargo"])
         .args(&["--env", "RUST_BACKTRACE=full"]);
     // Spawning an interactive shell and pseudo TTY is necessary for debug shell

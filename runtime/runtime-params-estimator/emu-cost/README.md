@@ -3,17 +3,17 @@
 ## Theory of operations
 
  Operation execution cost (aka gas cost) is computed basing on the number of userland x86 instructions required to perform the
-particular operation in current UNC runtime implementation. To compute this cost, we use instrumented QEMU binary
+particular operation in current utility runtime implementation. To compute this cost, we use instrumented QEMU binary
 translating engine to execute required operations in the userland Linux simulator.
-Thus, to measure the execution cost we have to compile UNC runtime benchmark for Linux, execute the benchmark under
+Thus, to measure the execution cost we have to compile utility runtime benchmark for Linux, execute the benchmark under
 instrumented QEMU running in Docker, and count how many x86 instructions are executed between start and end of execution.
 
  Instrumentation of QEMU is implemented in the following manner. We install instrumentation callback which conditionally increments
 the instruction counter on every instruction during translation by QEMU's JIT, TCG. We activate counting when specific Linux syscall
 (currently, 0 aka sys_read) is executed with the certain arguments (file descriptor argument == 0xcafebabe or 0xcafebabf).
 On start event we clear instruction counter, on stop event we stop counting and return counted instructions into the buffer provided
-to read syscall. As result, UNC benchmark will know the exact instruction counter passed between two moments and this value
-is the pure function of Docker image used, Rust compiler version and the UNC implementation and is fully reproducible.
+to read syscall. As result, utility benchmark will know the exact instruction counter passed between two moments and this value
+is the pure function of Docker image used, Rust compiler version and the utility implementation and is fully reproducible.
 
 ## Usage
 
@@ -30,9 +30,7 @@ It will be mounted under `/host` in the Docker container.
 Start container and build estimator with:
 
     host> ./run.sh
-    docker> cd /host/framework
-    docker> cd /host/framework/runtime/runtime-params-estimator
-    docker> pushd ./test-contract && ./build.sh && popd
+    docker> cd /host/runtime/runtime-params-estimator
     docker> cargo build --release --package runtime-params-estimator --features required
 
 Now start the estimator under QEMU with the counter plugin enabled (note, that Rust compiler produces SSE4, so specify recent CPU):
@@ -70,7 +68,7 @@ Then we could figure out:
 
 * 1 account creation cost in instructions
 * 1 account creation cost in bytes read and written
-For example, experiments performed in mid Oct 2020 shown the following numbers:
+For example, experiments performed in mid May 2024 shown the following numbers:
 10M accounts:
   * 6_817_684_914_212 instructions executed
   * 168_398_590_013 bytes read
@@ -103,7 +101,7 @@ We ship prebuilt QEMU and TCG instruction counter plugin, so in many cases one d
 However, in case you still want to build it - use the following steps.
 
 Important: we build QEMU and the TCG plugin inside the container, so execute following commands inside Docker.
-Set environment variable HOST_DIR (on the host) to location where both QEMU and framework source code is checked
+Set environment variable HOST_DIR (on the host) to location where both QEMU and utility source code is checked
 out, it will be mounted as `/host` inside the Docker container.
 Start container with:
 
@@ -117,7 +115,7 @@ To build QEMU use:
 
 Then build and test the QEMU's JIT plugin:
 
-    cd /host/framework/runtime/runtime-params-estimator/emu-cost/counter_plugin
+    cd /host/runtime/runtime-params-estimator/emu-cost/counter_plugin
     cp /host/qemu-linux/bin/qemu-x86_64 ./
     make QEMU_DIR=/host/qemu
     make test
@@ -131,4 +129,4 @@ To execute commands in already running container first find its id with:
 
 and the use container ID for `docker exec` command, like:
 
-    docker exec -it e9dcb52cc91b /host/qemu-linux/bin/qemu-x86_64 -d plugin -plugin file=/host/qemu-linux/plugins/libcounter.so /host/framework/runtime/runtime-params-estimator/emu-cost/counter_plugin/test_binary
+    docker exec -it e9dcb52cc91b /host/qemu-linux/bin/qemu-x86_64 -d plugin -plugin file=/host/qemu-linux/plugins/libcounter.so /host/utility/runtime/runtime-params-estimator/emu-cost/counter_plugin/test_binary

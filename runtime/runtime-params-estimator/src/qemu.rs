@@ -82,11 +82,11 @@ impl QemuCommandBuilder {
     /// Create the final command line
     pub fn build(&self, inner_cmd: &str) -> anyhow::Result<Command> {
         let mut cmd = Command::new(
-            "/host/framework/runtime/runtime-params-estimator/emu-cost/counter_plugin/qemu-x86_64",
+            "/host/utility/runtime/runtime-params-estimator/emu-cost/counter_plugin/qemu-x86_64",
         );
 
         let plugin_path =
-            "/host/framework/runtime/runtime-params-estimator/emu-cost/counter_plugin/libcounter.so";
+            "/host/utility/runtime/runtime-params-estimator/emu-cost/counter_plugin/libcounter.so";
 
         let mut buf = format!("file={}", plugin_path);
         if self.started {
