@@ -1,8 +1,8 @@
 import re
 import sys
 
-re1 = re.compile('Using (\d+) accounts')
-re2 = re.compile('executed (\d+) instructions; (\d+) bytes read; (\d+) bytes written')
+re1 = re.compile(r'Using (\d+) accounts')
+re2 = re.compile(r'executed (\d+) instructions; (\d+) bytes read; (\d+) bytes written')
 
 accounts = 0
 interesting = [ 1000000 ]
@@ -16,5 +16,5 @@ for line in sys.stdin:
         insn = m.group(1)
         read = m.group(2)
         written = m.group(3)
-        print insn, "r"+str(accounts), read
-        print insn, "w"+str(accounts), written
+        print(insn, "r"+str(accounts), read)
+        print(insn, "w"+str(accounts), written)

@@ -2,7 +2,7 @@
 
 ./setup.sh
 
-vmkind="wasmer"
+vmkind="wasmer2"
 features="required"
 
 if [[ ! -z "$1" ]]; then
@@ -19,7 +19,7 @@ set -ex
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 cd "${script_dir}"/../../
-cargo run --release --package unc-node --bin unc-node -- --home /tmp/data init --test-seed=alice --account-id=alice --fast
+cargo run --release --package unc-node --bin unc-node -- --home /tmp/data init --test-seed=alice --account-id=test --fast
 cd "${script_dir}"/../../genesis-tools/genesis-populate
 cargo run --release --package genesis-populate --bin genesis-populate -- --additional-accounts-num=10000000 --home /tmp/data
 cd "${script_dir}"
