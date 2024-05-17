@@ -2,7 +2,7 @@
 
 # Versions
 
-Client Version: x.x.x
+Node Version: x.x.x
 
 # Breaking changes
 <!-- Does this upgrade include any breadking changes ? Yes / No, describe -->

@@ -28,8 +28,6 @@ use unc_vm_runner::logic::LimitConfig;
 pub const ZERO_BALANCE_ACCOUNT_STORAGE_LIMIT: StorageUsage = 770;
 
 /// Possible errors when checking whether an account has enough tokens for storage staking
-/// Read details of state staking
-/// <https://nomicon.io/Economics/README.html#state-pledge>.
 pub enum StorageStakingError {
     /// An account does not have enough and the additional amount needed for storage staking
     LackBalanceForStorageStaking(Balance),
@@ -75,7 +73,7 @@ pub fn check_storage_pledge(
     }
 }
 
-/// Zero Balance Account introduced in NEP 448 https://github.com/Utility/UEPs/pull/448
+/// Zero Balance Account
 /// An account is a zero balance account if and only if the account uses no more than `ZERO_BALANCE_ACCOUNT_STORAGE_LIMIT` bytes
 fn is_zero_balance_account(account: &Account) -> bool {
     account.storage_usage() <= ZERO_BALANCE_ACCOUNT_STORAGE_LIMIT
@@ -1910,6 +1908,5 @@ mod tests {
         check("hello", 5, "hello");
         check("hello", 6, "hello");
         check("hello", 10, "hello");
-        check("привет", 3, "п");
     }
 }

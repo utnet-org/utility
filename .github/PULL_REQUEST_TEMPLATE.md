@@ -30,4 +30,4 @@ Please add the labels corresponding to the type of changes your PR introduces:
 - [ ] The code was formatted with `cargo fmt`.
 - [ ] The code compiles with no new warnings with `cargo build --release` and `cargo build --release --features nightly`.
 - [ ] The code has no new warnings when using `cargo clippy`.
-- [ ] If this change affects documented features or needs new documentation, I have created a PR with a [documentation update](https://github.com/availproject/availproject.github.io).
+- [ ] If this change affects documented features or needs new documentation, I have created a PR with a [documentation update](https://github.com/utnet-org/utility.github.io).
