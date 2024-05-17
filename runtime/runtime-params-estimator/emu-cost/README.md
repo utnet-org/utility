@@ -124,9 +124,9 @@ To execute commands in already running container first find its id with:
 
     > docker ps
 
-    CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                  NAMES
-    e9dcb52cc91b        ubuntu-emu         "/usr/bin/env bash"    2 hours ago         Up 2 hours          0.0.0.0:5000->22/tcp   reverent_carson
+    CONTAINER ID   IMAGE                  COMMAND                  CREATED        STATUS        PORTS     NAMES
+    10a606e128e9   rust-emu:rust-1.78.0   "/usr/bin/env bash -…"   2 hours ago    Up 2 hours              crazy_greider
 
 and the use container ID for `docker exec` command, like:
 
-    docker exec -it e9dcb52cc91b /host/qemu-linux/bin/qemu-x86_64 -d plugin -plugin file=/host/qemu-linux/plugins/libcounter.so /host/utility/runtime/runtime-params-estimator/emu-cost/counter_plugin/test_binary
+    docker exec -it 10a606e128e9 /host/qemu-linux/bin/qemu-x86_64 -d plugin -plugin file=/host/qemu-linux/plugins/libcounter.so /host/utility/runtime/runtime-params-estimator/emu-cost/counter_plugin/test_binary

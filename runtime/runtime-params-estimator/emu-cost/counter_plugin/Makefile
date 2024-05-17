@@ -6,7 +6,7 @@
 
 CFLAGS += -fPIC
 CFLAGS += -I$(QEMU_DIR)/include/qemu -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
-# COUNTER_PLUGIN = /host/framework/runtime/runtime-params-estimator/emu-cost/counter_plugin/libcounter.so
+# COUNTER_PLUGIN = /host/utility/runtime/runtime-params-estimator/emu-cost/counter_plugin/libcounter.so
 #QEMU=/host/qemu-linux/bin/qemu-x86_64
 QEMU=./qemu-x86_64
 COUNTER_PLUGIN=./libcounter.so
