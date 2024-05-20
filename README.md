@@ -25,7 +25,7 @@
 [telegram-url]: https://t.me/cryptounc
 
 ## Table of Contents
-- [Table of Contents](#table-of-contents)
+
 - [About Utility](#about-utility)
 - [Installation](#installation)
 - [Directory Structure](#directory-structure)
