@@ -1,8 +1,8 @@
 use std::sync::Arc;
 
 use crate::node::{Node, ThreadNode};
-use framework::config::{GenesisExt, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
-use framework::load_test_config;
+use unc-infra.:config::{GenesisExt, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
+use unc-infra.:load_test_config;
 use testlib::runtime_utils::{alice_account, bob_account};
 use unc_chain_configs::Genesis;
 use unc_crypto::{InMemorySigner, KeyType};

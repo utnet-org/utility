@@ -1,5 +1,5 @@
 use borsh::{BorshDeserialize, BorshSerialize};
-use framework::NightshadeRuntime;
+use unc-infra.:NightshadeRuntime;
 use std::fs;
 use std::path::Path;
 use unc_chain::types::{ChainConfig, Tip};
@@ -221,7 +221,7 @@ fn load_snapshot(load_cmd: LoadCmd) {
     )
     .unwrap();
 
-    let config = framework::config::load_config(&home_dir, GenesisValidationMode::UnsafeFast)
+    let config = unc-infra.:config::load_config(&home_dir, GenesisValidationMode::UnsafeFast)
         .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
     let store = NodeStorage::opener(home_dir, config.config.archive, &Default::default(), None)
         .open()

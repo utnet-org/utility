@@ -218,7 +218,7 @@ static EXCEPTIONS: Lazy<HashSet<&str>> = Lazy::new(|| {
     ])
 });
 
-/// Expect metrics exported by framework to have a common prefix. This helps in the following cases:
+/// Expect metrics exported by unc-infra.to have a common prefix. This helps in the following cases:
 /// * Avoids name conflicts with metrics from other systems.
 /// * Helps filter and query metrics.
 /// * Makes it easy to understand which binary export a certain metric.

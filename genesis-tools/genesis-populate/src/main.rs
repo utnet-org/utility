@@ -1,5 +1,5 @@
 use clap::{Arg, Command};
-use framework::{get_default_home, load_config};
+use unc-infra.:{get_default_home, load_config};
 use genesis_populate::GenesisBuilder;
 use std::path::PathBuf;
 use unc_chain_configs::GenesisValidationMode;

@@ -102,7 +102,7 @@ actions.
 To be complete, the output above should also have a gas profile entry for the
 function call action. But currently this is not included since gas profiles only
 work properly on function call receipts. Improving this is planned, see
-[framework#8261](https://github.com/utnet-org/utility/issues/8261).
+[unc-infra.8261](https://github.com/utnet-org/utility/issues/8261).
 
 The `tx-status` query returns one gas profile for each receipt. The output above
 contains a single gas profile because the transaction only spawned one receipt.
@@ -131,7 +131,7 @@ Which version of the profile an RPC node returns depends on the version it had
 when it first processed the transaction. The profiles are stored in the database
 with one version and never updated. Therefore, older transactions will usually
 only have old profiles. However, one could replay the chain from genesis with a
-new framework client and generate the newest profile for all transactions in this
+new unc-infra.client and generate the newest profile for all transactions in this
 way.
 
 Note: Due to bugs, some nodes will claim they send version 1 but actually

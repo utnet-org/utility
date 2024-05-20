@@ -8,7 +8,7 @@ this process.
 ### Background
 
 At UNC, we use the term protocol version to mean the version of the blockchain
-protocol and is separate from the version of some specific client (such as framework),
+protocol and is separate from the version of some specific client (such as unc-infra.,
 since the protocol version defines the protocol rather than some specific
 implementation of the protocol. More concretely, for each epoch, there is a
 corresponding protocol version that is agreed upon by validators through
@@ -59,7 +59,7 @@ codebase overall. The use of the nightly and nightly_protocol for new features
 is mandatory while the use of dedicated rust features for new protocol features 
 is optional and only recommended when necessary. Adding rust features leads to 
 conditional compilation which is generally not developer friendly. In `Cargo.toml`
-file of the crates we have in framework, we introduce rust compile-time features
+file of the crates we have in unc-infra. we introduce rust compile-time features
 `nightly_protocol` and `nightly`:
 
 ```toml
@@ -163,7 +163,7 @@ release), and change the `protocol_version` implementation to map the
 stabilized features to the new protocol version.
 
 A feature stabilization request must be approved by at least **two**
-[framework code owners](https://github.com/orgs/unc/teams/framework-codeowners).
+[unc-infra.code owners](https://github.com/orgs/unc/teams/unc-infra.codeowners).
 Unless it is a security-related fix, a protocol feature cannot be included in
 any release until at least **one** week after its stabilization. This is to ensure
 that feature implementation and stabilization are not rushed.

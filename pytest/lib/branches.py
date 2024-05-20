@@ -45,7 +45,7 @@ def __get_latest_deploy(chain_id: str) -> typing.Tuple[str, str]:
         res.raise_for_status()
         return res.text
 
-    basehref = f'{_BASEHREF}/framework-deploy/{chain_id}'
+    basehref = f'{_BASEHREF}/unc-infra.deploy/{chain_id}'
     release = download(f'{basehref}/latest_release')
     deploy = download(f'{basehref}/latest_deploy')
 
@@ -144,7 +144,7 @@ def patch_binary(binary: pathlib.Path) -> None:
     nix_expr = '''
     with (import <nixpkgs> {});
     symlinkJoin {
-      name = "framework-dependencies";
+      name = "unc-infra.dependencies";
       paths = [patchelf stdenv.cc.bintools gcc.cc.lib];
     }
     '''
@@ -204,7 +204,7 @@ def __download_binary(release: str, deploy: str) -> Executables:
     """Download binary for given release and deploy."""
     logger.info(f'Getting unc-node for {release}@{_UNAME} (deploy={deploy})')
     unc-node = _OUT_DIR / f'unc-node-{release}-{deploy}'
-    basehref = f'{_BASEHREF}/framework/{_UNAME}/{release}/{deploy}'
+    basehref = f'{_BASEHREF}/unc-infra.{_UNAME}/{release}/{deploy}'
     __download_file_if_missing(unc-node, f'{basehref}/unc-node')
     return Executables(_OUT_DIR, unc-node)
 

@@ -30,7 +30,7 @@ def coverage(test_binary):
         '-v', f'{src_dir}:{src_dir}', '-v',
         f'{coverage_output}:{coverage_output}',
         'utility/unc-coverage-runtime', 'bash', '-c',
-        f'/usr/local/bin/kcov --include-pattern=framework --exclude-pattern=.so --verify {coverage_output} {test_binary}'
+        f'/usr/local/bin/kcov --include-pattern=unc-infra.--exclude-pattern=.so --verify {coverage_output} {test_binary}'
     ],
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE,

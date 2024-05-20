@@ -870,7 +870,7 @@ async fn max_num_peers_limit() {
     // I just don't understand how NLL works.
     //
     // The proper solution would be to:
-    // 1. Make framework presubmit run tests with "[panic=abort]" (which is not supported with
+    // 1. Make unc-infra.presubmit run tests with "[panic=abort]" (which is not supported with
     //    "cargo test"), so that the test actually stop if some thread panic.
     // 2. Set some timeout on the test execution (with an enourmous heardoom), so that we actually get some logs
     //    if the presubmit times out (also not supported by "cargo test").

@@ -24,4 +24,4 @@ unc-chain-configs.workspace = true
 unc-epoch-manager.workspace = true
 unc-primitives.workspace = true
 unc-store.workspace = true
-framework.workspace = true
+unc-infra.workspace = true

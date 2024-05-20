@@ -8,7 +8,7 @@ use unc_parameters::RuntimeFeesConfig;
 
 /// Returned by VM::run method.
 ///
-/// `VMRunnerError` means framework is buggy or the data base has been corrupted.
+/// `VMRunnerError` means unc-infra.is buggy or the data base has been corrupted.
 /// We are unable to produce a deterministic result. The correct action usually
 /// is to crash or maybe ban a peer and/or send a challenge.
 ///

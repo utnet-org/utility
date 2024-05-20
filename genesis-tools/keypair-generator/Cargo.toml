@@ -14,5 +14,5 @@ workspace = true
 [dependencies]
 clap.workspace = true
 
-framework.workspace = true
+unc-infra.workspace = true
 unc-crypto.workspace = true

@@ -1,4 +1,4 @@
-use framework::test_utils::TestEnvNightshadeSetupExt;
+use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
 use std::collections::HashSet;
 use unc_chain::{ChainGenesis, Provenance};
 use unc_chain_configs::{Genesis, GenesisConfig, GenesisRecords};

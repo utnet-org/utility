@@ -69,7 +69,7 @@ pub trait ValidatorSigner: Sync + Send {
         data: &[u8],
     ) -> (unc_crypto::vrf::Value, unc_crypto::vrf::Proof);
 
-    /// Used by test infrastructure, only implement if make sense for testing otherwise raise `unimplemented`.
+    /// Used by test unc-infra.tructure, only implement if make sense for testing otherwise raise `unimplemented`.
     fn write_to_file(&self, path: &Path) -> std::io::Result<()>;
 }
 

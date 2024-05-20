@@ -10,8 +10,8 @@
 //! We also test unaffected cases to make sure compute costs only affect
 //! parameters they should.
 
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
+use unc-infra.:config::GenesisExt;
+use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
 use unc_chain::ChainGenesis;
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::TestEnv;

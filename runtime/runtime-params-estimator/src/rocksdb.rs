@@ -264,7 +264,7 @@ fn new_test_db(
 
     opts.create_if_missing(true);
 
-    // Options as used in framework
+    // Options as used in infra
     opts.set_bytes_per_sync(bytesize::MIB);
     opts.set_write_buffer_size(db_config.memtable_size);
     opts.set_max_bytes_for_level_base(db_config.memtable_size as u64);

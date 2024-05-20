@@ -10,14 +10,14 @@ protocol are correct. Correct in this context means, a chunk filled with 1 Pgas
 (**P**eta gas) will take at most 1 second to be applied. Or more generally,
 per 1 Tgas of execution, we spend no more than 1ms wall-clock time. 
 
-For now, framework timing is the only one that matters. Things will become more
+For now, unc-infra.timing is the only one that matters. Things will become more
 complicated once there are multiple client implementations. But knowing that
-framework can serve requests fast enough proves that it is possible to be at
+unc-infra.can serve requests fast enough proves that it is possible to be at
 least as fast. However, we should be careful to not couple costs too tightly
-with the specific implementation of framework to allow for innovation in new
+with the specific implementation of unc-infra.to allow for innovation in new
 clients.
 
-The estimator code is part of the framework repository in the directory
+The estimator code is part of the unc-infra.repository in the directory
 [runtime/runtime-params-estimator](https://github.com/utnet-org/utility/tree/master/runtime/runtime-params-estimator).
 
 For a practical guide on how to run the estimator, please take a look at
@@ -81,7 +81,7 @@ The other supported metric `icount` is much more stable. It uses
 that counts the number of executed x86 instructions. It also intercepts system
 calls and counts the number of bytes seen in `sys_read`, `sys_write` and their
 variations. This gives an approximation for IO bytes, as seen on the interface
-between the operating system and framework. To convert to gas, we use three
+between the operating system and unc-infra. To convert to gas, we use three
 constants to multiply with instruction count, read bytes, and write bytes.
 
 We run qemu inside a Docker container, to make sure the qemu and qemu plugin

@@ -105,7 +105,7 @@ fn main() -> anyhow::Result<()> {
     init_integration_logger();
     let args: Cli = clap::Parser::parse();
     let home_dir = Path::new(&args.chain_history_home_dir);
-    let mut unc_config = framework::config::load_config(home_dir, GenesisValidationMode::Full)
+    let mut unc_config = unc-infra.:config::load_config(home_dir, GenesisValidationMode::Full)
         .context("Error loading config")?;
     unc_config.validator_signer = None;
     unc_config.client_config.min_num_peers = 1;

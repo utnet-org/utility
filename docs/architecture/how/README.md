@@ -3,20 +3,20 @@
 This chapter describes how unc-node works with a focus on implementation details
 and practical scenarios. To get a better understanding of how the protocol
 works, please refer to [nomicon](https://nomicon.io). For a high-level code map
-of framework, please refer to this [document](../).
+of unc-infra. please refer to this [document](../).
 
 ## High level overview
 
 On the high level, unc-node is a daemon that periodically receives messages from
 the network and sends messages to peers based on different triggers. Uncd is
 implemented using an [actor
-framework](https://en.wikipedia.org/wiki/Actor_model) called
+unc-infra.(https://en.wikipedia.org/wiki/Actor_model) called
 [actix](https://docs.rs/actix).
 
 **Note:** Using actix was decided in the early days of the implementation of
-framework and by no means represents our confidence in actix. On the contrary, we
+unc-infra.and by no means represents our confidence in actix. On the contrary, we
 have noticed a number of issues with actix and are considering implementing an
-actor framework in house.
+actor unc-infra.in house.
 
 There are several important actors in unc-node:
 

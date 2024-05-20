@@ -46,7 +46,7 @@ unc-primitives-core.workspace = true
 unc-primitives.workspace = true
 unc-store.workspace = true
 unc-test-contracts.workspace = true
-framework.workspace = true
+unc-infra.workspace = true
 node-runtime.workspace = true
 
 [dev-dependencies]
@@ -67,7 +67,7 @@ nightly = [
   "unc-primitives-core/nightly",
   "unc-primitives/nightly",
   "unc-store/nightly",
-  "framework/nightly",
+  "unc-infra/nightly",
   "node-runtime/nightly",
 ]
 nightly_protocol = [
@@ -80,6 +80,6 @@ nightly_protocol = [
   "unc-primitives-core/nightly_protocol",
   "unc-primitives/nightly_protocol",
   "unc-store/nightly_protocol",
-  "framework/nightly_protocol",
+  "unc-infra/nightly_protocol",
   "node-runtime/nightly_protocol",
 ]

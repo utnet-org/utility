@@ -34,7 +34,7 @@ thiserror.workspace = true
 tokio.workspace = true
 tracing.workspace = true
 
-framework.workspace = true
+unc-infra.workspace = true
 unc-chain-configs.workspace = true
 unc-chain.workspace = true
 unc-chain-primitives.workspace = true
@@ -65,7 +65,7 @@ nightly = [
   "unc-primitives-core/nightly",
   "unc-primitives/nightly",
   "unc-store/nightly",
-  "framework/nightly",
+  "unc-infra/nightly",
 ]
 nightly_protocol = [
   "unc-chain-configs/nightly_protocol",
@@ -80,5 +80,5 @@ nightly_protocol = [
   "unc-primitives-core/nightly_protocol",
   "unc-primitives/nightly_protocol",
   "unc-store/nightly_protocol",
-  "framework/nightly_protocol",
+  "unc-infra/nightly_protocol",
 ]

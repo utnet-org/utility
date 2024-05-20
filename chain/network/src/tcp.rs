@@ -49,7 +49,7 @@ pub struct Stream {
 /// We are assuming here that the unit test is executed on a single machine on the loopback
 /// network interface, so that both inbound and outbound IP is always 127.0.0.1.
 /// To create a reliable StreamId for a distributed, we would have to transmit it over the connection itself,
-/// which is doable, but not yet needed in our testing framework.
+/// which is doable, but not yet needed in our testing unc-infra.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) struct StreamId {
     inbound: std::net::SocketAddr,

@@ -1,4 +1,4 @@
-use framework::NightshadeRuntime;
+use unc-infra.:NightshadeRuntime;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use std::fs::File;
 use std::io::Write;
@@ -467,9 +467,9 @@ mod test {
     use std::io::{Read, Seek, SeekFrom};
     use std::path::Path;
 
-    use framework::config::GenesisExt;
-    use framework::config::TESTING_INIT_PLEDGE;
-    use framework::NightshadeRuntime;
+    use unc-infra.:config::GenesisExt;
+    use unc-infra.:config::TESTING_INIT_PLEDGE;
+    use unc-infra.:NightshadeRuntime;
     use unc_chain::{ChainGenesis, Provenance};
     use unc_chain_configs::Genesis;
     use unc_client::test_utils::TestEnv;

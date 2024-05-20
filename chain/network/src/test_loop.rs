@@ -1,6 +1,6 @@
 use unc_primitives::types::AccountId;
 
-/// A multi-instance test using the TestLoop framework can support routing
+/// A multi-instance test using the TestLoop unc-infra.can support routing
 /// lookup for network messages, as long as the Data type contains AccountId.
 /// This trait is just a helper for looking up the index.
 pub trait SupportsRoutingLookup {

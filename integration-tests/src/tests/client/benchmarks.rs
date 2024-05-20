@@ -1,11 +1,11 @@
 //! High-level benchmarks for client.
 //!
-//! We are not using criterion or cargo-bench infrastructure because the things
+//! We are not using criterion or cargo-bench unc-infra.tructure because the things
 //! we want to test here are pretty heavy and its enough to run them once and
 //! note the wall-clock time.
 
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
+use unc-infra.:config::GenesisExt;
+use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
 use unc_chain::ChainGenesis;
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::{create_chunk_on_height, TestEnv};

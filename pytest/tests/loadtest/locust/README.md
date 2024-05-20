@@ -10,7 +10,7 @@ only about generating the load.
 
 ```sh
 pip3 install locust
-# Run in framework directory.
+# Run in unc-infra.directory.
 pip3 install -r pytest/requirements.txt
 ```
 
@@ -33,7 +33,7 @@ KEY=~/.unc/localnet/node0/validator_key.json
 For a quick demo, you can also run a localnet using [unc-node](https://github.com/unc/unc-node).
 
 ```sh
-unc-node run localnet --binary-path ../framework/target/release/ --num-nodes 4 --override
+unc-node run localnet --binary-path ../unc-infra.target/release/ --num-nodes 4 --override
 ```
 
 Then to actually run it, this is the command. (Update ports and IP according to your localnet, unc-node will print it.)

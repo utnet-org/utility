@@ -10,7 +10,7 @@ all share a unified variable version in the [workspace manifest](../../Cargo.tom
 This keeps versions consistent across the workspace and informs their versions
 at the moment of publishing.
 
-We also have CI infrastructure set up to automate the publishing process to
+We also have CI unc-infra.tructure set up to automate the publishing process to
 crates.io. So, on every merge to master, if there's a version change, it is
 automatically applied to all the crates in the workspace and it attempts to
 publish the new versions of all non-private crates. All crates that should be

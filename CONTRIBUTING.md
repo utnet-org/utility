@@ -68,7 +68,7 @@ following steps when creating a PR:
    be squashed into a single commit.
 3. The changes should be thoroughly tested.  Please refer to [this
    document](https://github.com/utnet-org/utility/blob/master/docs/practices/testing/README.md)
-   for our testing guidelines and an overview of the testing infrastructure.
+   for our testing guidelines and an overview of the testing unc-infra.tructure.
 4. When ready, send a pull request against the `master` branch of the `utility`
    repository.
 5. Feel free to submit draft PRs to get early feedback and to make sure you are

@@ -3,7 +3,7 @@ use anyhow;
 use anyhow::Context;
 use borsh::BorshDeserialize;
 use clap;
-use framework::UncConfig;
+use unc-infra.:UncConfig;
 use rand::seq::SliceRandom;
 use std::io::Result;
 use std::path::Path;
@@ -59,7 +59,7 @@ impl ColdStoreCommand {
     pub fn run(self, home_dir: &Path) -> anyhow::Result<()> {
         let mode =
             if self.readwrite { unc_store::Mode::ReadWrite } else { unc_store::Mode::ReadOnly };
-        let mut unc_config = framework::config::load_config(
+        let mut unc_config = unc-infra.:config::load_config(
             &home_dir,
             unc_chain_configs::GenesisValidationMode::Full,
         )

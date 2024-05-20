@@ -340,7 +340,7 @@ mod tests {
     }
 
     /// This test is change checker for a reason - we don't expect transaction format to change.
-    /// If it does - you MUST update all of the dependencies: like framework and other clients.
+    /// If it does - you MUST update all of the dependencies: like unc-infra.and other clients.
     #[test]
     fn test_serialize_transaction() {
         let public_key: PublicKey = "22skMptHjFWNyuEWY22ftn2AbLPSYpmYwGJRGwpNHbTV".parse().unwrap();

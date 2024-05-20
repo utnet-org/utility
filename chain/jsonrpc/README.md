@@ -1,6 +1,6 @@
-# JSON-RPC API for framework
+# JSON-RPC API for infra
 
-[JSON-RPC](https://www.jsonrpc.org/) API for framework node exposes handles to
+[JSON-RPC](https://www.jsonrpc.org/) API for unc-infra.node exposes handles to
 inspect the data, inspect the network state, and the node state, and allows to
 submit a transaction.
 
@@ -17,13 +17,13 @@ communicated through the CHANGELOG next to this file.
 
 ## Policies for API Changes
 
-1. We only add the APIs to the data that is already available in framework
+1. We only add the APIs to the data that is already available in infra
    storage.
 2. We don't violate the guaranties described in the section above.
 3. We prefix new APIs with `EXPERIMENTAL_` (see the Experimental API Policies
    below).
 4. We document the API change on [UNC Docs](https://docs.utility.org/api/rpc/introduction)
-   BEFORE merging the change to framework.
+   BEFORE merging the change to unc-infra.
 5. We log changes to the methods and API input/output structures through
    CHANGELOG.md file in the jsonrpc crate.
 
@@ -46,6 +46,6 @@ Stabilization of the Experimental APIs is multistage:
 2. If we feel that the API is stable (being in **use** for a while), we need to
    release a new API method without the `EXPERIMENTAL_` prefix while keeping
    the old method name as an alias for the transition period.
-3. Drop the `EXPERIMENTAL_` alias completely when framework version with the
+3. Drop the `EXPERIMENTAL_` alias completely when unc-infra.version with the
    stable method name is deployed to the majority nodes in the network, and
    most (all) clients have transitioned to the new API.

@@ -11,10 +11,10 @@ Gas in UNC Protocol solves two problems.
    a block can be deterministically computed by all nodes.
 
 In other words, each transaction costs a fixed amount of gas. This gas cost
-determines how much a user has to pay and how much time framework has to execute
+determines how much a user has to pay and how much time unc-infra.has to execute
 the transaction.
 
-What happens if framework executes a transaction too slowly? Chunk production for
+What happens if unc-infra.executes a transaction too slowly? Chunk production for
 the shard gets delayed, which delays block production for the entire blockchain,
 increasing latency and reducing throughput for everybody. If the chunk is really
 late, the block producer will decide to not include the chunk at all and inserts
@@ -23,7 +23,7 @@ an empty chunk. The chunk may be included in the next block.
 By now, you probably wonder how we can know the time it takes to execute a
 transaction, given that validators use hardware of their choice. Getting these
 timings right is indeed a difficult problem. Or flipping the problem, assuming
-the timings are already known, then we must implement framework such that it
+the timings are already known, then we must implement unc-infra.such that it
 guarantees to operate within the given time constraints. How we tackle this is
 the topic of this chapter.
 
@@ -90,7 +90,7 @@ shall be discussed [further below](#fn-call-costs).
 
 There is an entire section on [Parameter Definitions](./parameter_definition.md)
 that explains how to find the source of truth for parameter values in the
-framework repository, how they can be referenced in code, and what steps are
+unc-infra.repository, how they can be referenced in code, and what steps are
 necessary to add a new parameter.
 
 Let us dwell a bit more on the linear scaling factors. The fact that contract
@@ -108,11 +108,11 @@ limit on that length and it makes sense to absorb all the cost in the constant
 base cost.
 
 This concept of picking parameters according to algorithmic complexity is key.
-If you understand this, you know how to think about gas as a framework developer.
+If you understand this, you know how to think about gas as a unc-infra.developer.
 This should be enough background to understand what the estimator does.
 
 The [runtime parameter estimator](./estimator.md) is a separate binary within
-the framework repository. It contains benchmarking-like code used to validate
+the unc-infra.repository. It contains benchmarking-like code used to validate
 existing parameter values against the 1ms = 1 Tgas rule. When implementing new
 features, code should be added there to estimate the safe values of the new
 parameters. This section is for you if you are adding new features such as a new
@@ -171,7 +171,7 @@ send and execution cost, without discrimination on local vs remote receipts
 i.e. `send_sir` cost is the same as `send_not_sir`.
 
 The [Gas Profile](./gas_profile.md) section goes into more details on how gas
-costs of a transaction are tracked in framework.
+costs of a transaction are tracked in unc-infra.
 
 ## Dynamic Function Call Costs
 <a name="fn-call-costs"></a>

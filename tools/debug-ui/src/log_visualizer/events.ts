@@ -1,5 +1,5 @@
-// A single event executed by the TestLoop framework on the Rust side.
-// The events are parsed from log messages emitted by the framework.
+// A single event executed by the TestLoop unc-infra.on the Rust side.
+// The events are parsed from log messages emitted by the unc-infra.
 // See core/async/src/test_loop.rs for the Rust side code.
 export class EventItem {
     // The ID of the event, a number that increments for each event created,

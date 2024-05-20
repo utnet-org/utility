@@ -82,7 +82,7 @@ impl TestEnv {
     /// unstuck the block.
     ///
     /// Implementation is rather crude and just hijacks our logging
-    /// infrastructure. Hopefully this is good enough, but, if it isn't, we can
+    /// unc-infra.tructure. Hopefully this is good enough, but, if it isn't, we can
     /// add something more robust.
     pub fn pause_block_processing(&mut self, capture: &mut TracingCapture, block: &CryptoHash) {
         let paused_blocks = Arc::clone(&self.paused_blocks);

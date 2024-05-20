@@ -378,7 +378,7 @@ impl InitCmd {
             check_release_build(chain)
         }
 
-        framework::init_configs(
+        unc-infra.:init_configs(
             home_dir,
             self.chain_id,
             self.account_id.and_then(|account_id| account_id.parse().ok()),
@@ -455,7 +455,7 @@ impl RunCmd {
         o11y_opts: &unc_o11y::Options,
     ) {
         // Load configs from home.
-        let mut unc_config = framework::config::load_config(home_dir, genesis_validation)
+        let mut unc_config = unc-infra.:config::load_config(home_dir, genesis_validation)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
         check_release_build(&unc_config.client_config.chain_id);
@@ -545,20 +545,20 @@ impl RunCmd {
             .await
             .global();
 
-            let updateable_configs = framework::dyn_config::read_updateable_configs(home_dir)
+            let updateable_configs = unc-infra.:dyn_config::read_updateable_configs(home_dir)
                 .unwrap_or_else(|e| panic!("Error reading dynamic configs: {:#}", e));
             let mut updateable_config_loader =
                 UpdateableConfigLoader::new(updateable_configs.clone(), tx_config_update);
             let config_updater = ConfigUpdater::new(rx_config_update);
 
-            let framework::UncNode {
+            let unc-infra.:UncNode {
                 rpc_servers,
                 cold_store_loop_handle,
                 state_sync_dump_handle,
                 flat_state_migration_handle,
                 resharding_handle,
                 ..
-            } = framework::start_with_config_and_synchronization(
+            } = unc-infra.:start_with_config_and_synchronization(
                 home_dir,
                 unc_config,
                 Some(tx_crash),
@@ -570,7 +570,7 @@ impl RunCmd {
                 let sig = wait_for_interrupt_signal(home_dir, &mut rx_crash).await;
                 if sig == "SIGHUP" {
                     let maybe_updateable_configs =
-                        framework::dyn_config::read_updateable_configs(home_dir);
+                        unc-infra.:dyn_config::read_updateable_configs(home_dir);
                     updateable_config_loader.reload(maybe_updateable_configs);
                 } else {
                     break sig;
@@ -662,7 +662,7 @@ impl LocalnetCmd {
     pub(super) fn run(self, home_dir: &Path) {
         let tracked_shards = Self::parse_tracked_shards(&self.tracked_shards, self.shards);
 
-        framework::config::init_testnet_configs(
+        unc-infra.:config::init_testnet_configs(
             home_dir,
             self.shards,
             self.validators,
@@ -703,13 +703,13 @@ pub(super) struct RecompressStorageSubCommand {
 impl RecompressStorageSubCommand {
     pub(super) fn run(self, home_dir: &Path) {
         warn!(target: "unc-node", "Recompressing storage; note that this operation may take up to a day to finish.");
-        let opts = framework::RecompressOpts {
+        let opts = unc-infra.:RecompressOpts {
             dest_dir: self.output_dir,
             keep_partial_chunks: self.keep_partial_chunks,
             keep_invalid_chunks: self.keep_invalid_chunks,
             keep_trie_changes: self.keep_trie_changes,
         };
-        if let Err(err) = framework::recompress_storage(home_dir, opts) {
+        if let Err(err) = unc-infra.:recompress_storage(home_dir, opts) {
             error!("{}", err);
             std::process::exit(1);
         }
@@ -839,7 +839,7 @@ pub(super) struct ValidateConfigCommand {}
 
 impl ValidateConfigCommand {
     pub(super) fn run(&self, home_dir: &Path) -> anyhow::Result<()> {
-        framework::config::load_config(home_dir, GenesisValidationMode::Full)?;
+        unc-infra.:config::load_config(home_dir, GenesisValidationMode::Full)?;
         Ok(())
     }
 }

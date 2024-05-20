@@ -1,6 +1,6 @@
 use crate::node::RuntimeNode;
 use crate::tests::standard_cases::*;
-use framework::config::{GenesisExt, TESTING_INIT_BALANCE};
+use unc-infra.:config::{GenesisExt, TESTING_INIT_BALANCE};
 use testlib::runtime_utils::{add_test_contract, alice_account, bob_account};
 use unc_chain_configs::Genesis;
 use unc_crypto::SecretKey;

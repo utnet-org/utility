@@ -4,7 +4,7 @@
 # Allow files and directories
 !/chain
 !/core
-!/framework
+!/infra
 !/runtime
 !/node
 !/utils

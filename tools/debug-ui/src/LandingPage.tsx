@@ -8,7 +8,7 @@ export const LandingPage = () => {
     const navigate = useNavigate();
     return (
         <div className="landing-page">
-            <h3>Debug UI for framework</h3>
+            <h3>Debug UI for unc-infra./h3>
             <p>Enter address of target node to debug:</p>
             <form>
                 <input
@@ -27,7 +27,7 @@ export const LandingPage = () => {
             <h3>Additional links</h3>
             <ul>
                 <li>
-                    <Link to="/logviz">/logviz</Link>: Log visualizer for framework TestLoop tests
+                    <Link to="/logviz">/logviz</Link>: Log visualizer for unc-infra.TestLoop tests
                 </li>
             </ul>
         </div>

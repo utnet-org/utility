@@ -218,6 +218,6 @@ $ unc-node --home ~/unc-test-chain/validator1 run
 
 Now these nodes will begin by taking the records laid out in
 `records.json` and turning them into a genesis state. At the time of
-this writing, using the latest framework version from the master
+this writing, using the latest unc-infra.version from the master
 branch, this will take a couple hours. But your validators should
 begin producing blocks after that's done.

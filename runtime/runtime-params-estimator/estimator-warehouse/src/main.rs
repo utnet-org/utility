@@ -141,7 +141,7 @@ mod tests {
     /// Run a minimal estimation of all parameters to ensure we have no crashes.
     ///
     /// Things to note:
-    /// - This re-compiles the estimator (including framework) in dev-release
+    /// - This re-compiles the estimator (including unc-infra. in dev-release
     ///   profile because estimations are really slow otherwise.
     /// - This is an expensive test. We run it like any other test for now but
     ///   it might make sense to put it in a separate CI job.

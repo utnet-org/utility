@@ -1,5 +1,5 @@
 //! Stream wrapper, which allows for custom interactions with the network protocol.
-//! We might want to turn it into a fuzz testing framework for the network protocol.
+//! We might want to turn it into a fuzz testing unc-infra.for the network protocol.
 use bytes::BytesMut;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 

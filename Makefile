@@ -45,17 +45,17 @@ debug: unc-node-debug
 perf-release: UNC_RELEASE_BUILD=release
 perf-release:
 	CARGO_PROFILE_RELEASE_DEBUG=true cargo build -p unc-node --release --features performance_stats
-	cargo build -p store-validator --release --features performance_stats
+	cargo build -p store-validator --release --features unc-infra.performance_stats
 
 
 perf-debug:
 	cargo build -p unc-node --features performance_stats
-	cargo build -p store-validator --features performance_stats
+	cargo build -p store-validator --features unc-infra.performance_stats
 
 
 nightly-release: unc-node-nightly-release
-	cargo build -p store-validator --release --features nightly,performance_stats
-	cargo build -p genesis-populate --release --features nightly,performance_stats
+	cargo build -p store-validator --release --features unc-infra/nightly,unc-infra.performance_stats
+	cargo build -p genesis-populate --release --features unc-infra/nightly,unc-infra.performance_stats
 
 unc-node-nightly-release:
 	cargo build -p unc-node --release --features nightly,performance_stats
@@ -63,8 +63,8 @@ unc-node-nightly-release:
 
 nightly-debug:
 	cargo build -p unc-node --features nightly,performance_stats
-	cargo build -p store-validator --features nightly,performance_stats
-	cargo build -p genesis-populate --features nightly,performance_stats
+	cargo build -p store-validator --features unc-infra/nightly,unc-infra.performance_stats
+	cargo build -p genesis-populate --features unc-infra/nightly,unc-infra.performance_stats
 
 
 assertions-release: UNC_RELEASE_BUILD=release

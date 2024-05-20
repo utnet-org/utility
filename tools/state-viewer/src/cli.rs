@@ -3,7 +3,7 @@ use crate::contract_accounts::ContractAccountFilter;
 use crate::rocksdb_stats::get_rocksdb_stats;
 use crate::trie_iteration_benchmark::TrieIterationBenchmarkCmd;
 
-use framework::{load_config, UncConfig};
+use unc-infra.:{load_config, UncConfig};
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use unc_chain_configs::{GenesisChangeConfig, GenesisValidationMode};

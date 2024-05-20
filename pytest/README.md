@@ -12,7 +12,7 @@ machines.
 
 ### Running tests locally
 
-To run tests locally first compile a debug build of the framework
+To run tests locally first compile a debug build of the infra
 package, make sure that all required Python packages are installed and
 then execute the test file using python.  For example:
 
@@ -40,7 +40,7 @@ Even though this directory is called `pytest`, the tests need to work
 when executed via `python3`.  This means that they need to execute the
 tests when run as the main module rather than just defining the tests
 function.  To make that happen it’s best to implement the tests using
-the python's unittest framework but trigger them manually from within
+the python's unittest unc-infra.but trigger them manually from within
 the `__main__` condition like so:
 
     if __name__ == "__main__":

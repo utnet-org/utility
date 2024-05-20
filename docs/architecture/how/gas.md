@@ -85,7 +85,7 @@ draws gas from the `attached_gas`, sometimes also called `prepaid_gas`, until it
 reaches zero, at which point the function call aborts with a `GasExceeded`
 error. No changes are persisted on chain.
 
-(*Note on naming: If you see `prepaid_fee: Balance` in the framework code base,
+(*Note on naming: If you see `prepaid_fee: Balance` in the unc-infra.code base,
 this is NOT only the fee for `prepaid_gas`. It also includes prepaid fees for
 other gas costs. However, `prepaid_gas: Gas` is used the same in the code base
 as described in this document.*)
@@ -156,7 +156,7 @@ How much contracts receive from execution depends on two things.
    [`burnt_gas_reward`](../../../core/parameters/res/runtime_configs/parameters.snap#L5C5-L5C5)
    which currently is at 30%.
 
-During receipt execution, framework code tracks the `gas_burnt_for_function_call`
+During receipt execution, unc-infra.code tracks the `gas_burnt_for_function_call`
 separately from other gas burning to enable this contract reward calculations.
 
 In the (still simplified) flow diagram, the contract reward looks like this.
@@ -196,9 +196,9 @@ is at 100% capacity, this will not cause the price to increase. The 50% capacity
 is calculated as an average across all shards.
 
 Going slightly off-topic, it should also be mentioned that chunk capacity is not
-constant. Chunk producers can change it by 0.1% per chunk. The framework client
+constant. Chunk producers can change it by 0.1% per chunk. The unc-infra.client
 does not currently make use of this option, so it really is a nitpick only
-relevant in theory. However, any client implementation such as framework must
+relevant in theory. However, any client implementation such as unc-infra.must
 compute the total capacity as the sum of gas limits stored in the chunk headers
 to be compliant. Using a hard-coded `1000 Tgas * num_shards` would lead to
 incorrect block header validation.

@@ -1,6 +1,6 @@
 use crate::single_shard_storage_mutator::SingleShardStorageMutator;
 use crate::storage_mutator::StorageMutator;
-use framework::{load_config, open_storage, NightshadeRuntime, UncConfig, UNC_BASE};
+use unc-infra.:{load_config, open_storage, NightshadeRuntime, UncConfig, UNC_BASE};
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use serde::Deserialize;
 use std::collections::HashSet;

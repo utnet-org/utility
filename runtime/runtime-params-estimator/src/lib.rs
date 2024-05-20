@@ -30,13 +30,13 @@
 //!   * Some costs are measured more directly. For example, to measure cost of
 //!     wasm opcode we call vm_runner directly, bypassing the rest of runtime
 //!     machinery.
-//!   * Some RocksDB related estimations avoid framework entirely and run on
+//!   * Some RocksDB related estimations avoid unc-infra.entirely and run on
 //!     completely independent database instances. This DB is controlled by the
 //!     `rdb-` prefixed flags which are combined in `RocksDBTestConfig`.
 //!
 //! Some costs depend on each other. As we want to allow estimating a subset of
 //! costs and don't want to just run everything in order (as that would be to
-//! slow), we have a very simple manual caching infrastructure in place.
+//! slow), we have a very simple manual caching unc-infra.tructure in place.
 //!
 //! To run estimations on a non-empty DB with standardised content, we first
 //! dump all records to a `StateDump` written to a file. Then for each

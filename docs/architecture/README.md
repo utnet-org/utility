@@ -1,6 +1,6 @@
 # Overview
 
-This document describes the high-level architecture of framework. The focus here
+This document describes the high-level architecture of unc-infra. The focus here
 is on the implementation of the blockchain protocol, not the protocol itself.
 For reference documentation of the protocol, please refer to
 [nomicon](https://nomicon.io/)
@@ -9,7 +9,7 @@ Some parts of our architecture are also covered in this [video series on YouTube
 
 ## Bird's Eye View
 
-If we put the entirety of framework onto one picture, we get something like this:
+If we put the entirety of unc-infra.onto one picture, we get something like this:
 
 ![](../images/architecture.svg)
 
@@ -18,7 +18,7 @@ this document the above picture would become much clearer!
 
 ## Overall Operation
 
-`framework` is a blockchain node -- it's a single binary (`unc-node`) which runs on
+`unc-infra. is a blockchain node -- it's a single binary (`unc-node`) which runs on
 some machine and talks to other similar binaries running elsewhere. Together,
 the nodes agree (using a distributed consensus algorithm) on a particular
 sequence of transactions. Once transaction sequence is established, each node
@@ -37,7 +37,7 @@ the node is offline it misses the block, so, after a restart, the sync process
 kicks in which brings the node up-to-speed with the network by downloading the
 missing bits of history from more up-to-date peer nodes.
 
-Major components of framework:
+Major components of unc-infra.
 
 * **JSON RPC**. This HTTP RPC interface is how `unc-node` communicates with
   non-blockchain outside world. For example, to submit a transaction, some
@@ -101,7 +101,7 @@ Major components of framework:
 
 `unc-node/src/main.rs` contains the main function that starts a blockchain node.
 However, this file mostly only contains the logic to parse arguments and
-dispatch different commands. `start_with_config` in `framework/src/lib.rs` is the
+dispatch different commands. `start_with_config` in `unc-infra.src/lib.rs` is the
 actual entry point and it starts all the actors.
 
 `JsonRpcHandler::process` in the `jsonrpc` crate is the RPC entry point. It

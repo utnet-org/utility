@@ -12,7 +12,7 @@ Projects:
 
 - [Emscripten](https://github.com/kripken/emscripten): for emtests test sources to ensure compatibility - [LICENSE](#emscripten)
 - [Nebulet](https://github.com/nebulet/nebulet): as the base for creating a great Rust WebAssembly runtime - [LICENSE](#nebulet)
-- [WAVM](https://github.com/wavm/wavm): for their great integration and testing framework - [LICENSE](#wavm)
+- [WAVM](https://github.com/wavm/wavm): for their great integration and testing unc-infra.- [LICENSE](#wavm)
 - [wasmtime](https://github.com/CraneStation/wasmtime): for their API and internal documentation, as well as some internal implementations - [LICENSE](#wasmtime)
 - [WebAssembly spec](https://github.com/WebAssembly/spec/tree/master/test): for the spectests implementation
 

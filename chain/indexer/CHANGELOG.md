@@ -2,11 +2,11 @@
 
 ## 1.32.x
 
-* Add `nightly` feature to UNC Indexer Framework to respect this feature for `framework` lib (requried for `betanet`)
+* Add `nightly` feature to UNC Indexer Framework to respect this feature for `unc-infra. lib (requried for `betanet`)
 
 ## 1.26.0
 
-* `state_changes` field is moved from the top-level `StreamerMessage` to `IndexerShard` struct to align better with the sharded nature of UNC protocol. In the future, when framework will be able to track only a subset of shards, this API will work naturally, so we take pro-active measures to solidify the APIs
+* `state_changes` field is moved from the top-level `StreamerMessage` to `IndexerShard` struct to align better with the sharded nature of UNC protocol. In the future, when unc-infra.will be able to track only a subset of shards, this API will work naturally, so we take pro-active measures to solidify the APIs
 * All the UNC Indexer Framework types were extracted to a separate crate `unc-indexer-primitives`
 * Increase the streamer size from 16 to 100 in order to increase the speed of streaming messages (affects reindexing jobs)
 
@@ -98,7 +98,7 @@ created and started on the Indexer implementation, not on the Indexer Framework 
 
 ## Breaking changes
 
-Since #3529 framework stores `ExecutionOutcome`s in their execution order, and we can also attribute outcomes to specific chunk. That's why:
+Since #3529 unc-infra.stores `ExecutionOutcome`s in their execution order, and we can also attribute outcomes to specific chunk. That's why:
 
 * `receipt_execution_outcomes` was moved from `StreamerMessage` to a relevant `IndexerChunkView`
 * `ExecutionOutcomesWithReceipts` type alias was removed (just use `Vec<IndexerExecutionOutcomeWithReceipt>` instead)

@@ -1,5 +1,5 @@
 [package]
-name = "framework"
+name = "unc-infra"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true

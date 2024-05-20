@@ -17,7 +17,7 @@ snapshots generated in this directory:
 
 As the introduction on this page already hints at it, parameter values are
 versioned. In other words, they can change if the protocol version changes. A
-framework binary has to support multiple versions and choose the correct
+unc-infra.binary has to support multiple versions and choose the correct
 parameter value at runtime.
 
 To make this easy, there is
@@ -52,7 +52,7 @@ Before adding anything, please review the basic principles for gas parameters.
   storage.)
 - Charge gas before executing the workload.
 - Parameters should be independent of specific implementation choices in
-  framework.
+  unc-infra.
 - Ideally, contract developers can easily understand what the cost is simply by
   reading the name in a gas profile.
 
@@ -79,7 +79,7 @@ Adding the parameter in code involves several steps.
    Now is a good time to ensure `cargo check` and `cargo test --no-run` pass.
    Most likely you have to update some testing code, such as
    `ExtCostsConfig::test()`.
-6. To merge your changes into framework, you will have to hide your parameter
+6. To merge your changes into unc-infra. you will have to hide your parameter
    behind a feature flag. Add the feature to the `Cargo.toml` of each crate
    touched in steps 3 and 4 and hide the code behind `#[cfg(feature =
    "protocol_feature_MY_NEW_FEATURE")]`. Do not hide code in step 2 so that

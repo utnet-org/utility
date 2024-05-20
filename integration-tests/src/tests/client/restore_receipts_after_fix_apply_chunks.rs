@@ -1,7 +1,7 @@
 use crate::tests::client::process_blocks::set_block_protocol_version;
-use framework::config::GenesisExt;
-use framework::migrations::load_migration_data;
-use framework::test_utils::TestEnvNightshadeSetupExt;
+use unc-infra.:config::GenesisExt;
+use unc-infra.:migrations::load_migration_data;
+use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
 use std::collections::HashSet;
 use unc_chain::{ChainGenesis, Provenance};
 use unc_chain_configs::Genesis;

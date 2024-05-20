@@ -107,7 +107,6 @@ impl MessageDiscriminant {
     /// Allows creating discriminants currently unknown in this crate, which can
     /// be useful to prototype new standards. For example, when the client
     /// project still relies on an older version of this crate while nightly
-    /// framework already supports a new NEP.
     pub fn new_on_chain(nep: u32) -> Result<Self, CreateDiscriminantError> {
         // unchecked arithmetic: these are constants
         if nep > MAX_ON_CHAIN_DISCRIMINANT - MIN_ON_CHAIN_DISCRIMINANT {
@@ -125,7 +124,6 @@ impl MessageDiscriminant {
     /// Allows creating discriminants currently unknown in this crate, which can
     /// be useful to prototype new standards. For example, when the client
     /// project still relies on an older version of this crate while nightly
-    /// framework already supports a new NEP.
     pub fn new_off_chain(nep: u32) -> Result<Self, CreateDiscriminantError> {
         // unchecked arithmetic: these are constants
         if nep > MAX_OFF_CHAIN_DISCRIMINANT - MIN_OFF_CHAIN_DISCRIMINANT {

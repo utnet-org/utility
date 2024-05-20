@@ -1,4 +1,4 @@
-A collection of smart-contract used in framework tests.
+A collection of smart-contract used in unc-infra.tests.
 
 Rust contracts are built via `build.rs`, the Assembly Script contract
 is build manually and committed to the git repository.

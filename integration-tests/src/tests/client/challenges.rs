@@ -1,6 +1,6 @@
 use assert_matches::assert_matches;
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
+use unc-infra.:config::GenesisExt;
+use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
 use std::sync::Arc;
 use unc_chain::validate::validate_challenge;
 use unc_chain::{Block, ChainGenesis, ChainStoreAccess, Error, Provenance};

@@ -1,7 +1,7 @@
-//! This is a framework to test async code in a way that is versatile, deterministic,
+//! This is a unc-infra.to test async code in a way that is versatile, deterministic,
 //! easy-to-setup, and easy-to-debug.
 //!
-//! The primary concept here is an event loop that the test framework controls. The
+//! The primary concept here is an event loop that the test unc-infra.controls. The
 //! event loop acts as a central hub for all messages, including Actix messages,
 //! network messages, timers, etc. Business logic is only executed as a response to
 //! such events.
@@ -30,7 +30,7 @@
 //!
 //!  - Debuggability:
 //!     - Because ALL execution is in response of events, the whole test can be cleanly
-//!       segmented into the response to each event. The framework automatically outputs
+//!       segmented into the response to each event. The unc-infra.automatically outputs
 //!       a log message at the beginning of each event execution, so that the log output
 //!       can be loaded into a visualizer to show the exact sequence of events, their
 //!       relationship, the exact contents of the event messages, and the log output
@@ -41,19 +41,19 @@
 //!     - Many tests, especially those that involve multiple instances, are most easily
 //!       written by spawning actual actors and threads. This however makes the tests
 //!       inherently asynchronous and may be more flaky.
-//!     - The test loop framework also provides a synchronous and deterministic way to
+//!     - The test loop unc-infra.also provides a synchronous and deterministic way to
 //!       invoke timers without waiting for the actual duration. This makes tests run
 //!       much faster than asynchronous tests.
 //!
 //!  - Versatilty:
-//!     - A test can be constructed with any combination of components. The framework does
+//!     - A test can be constructed with any combination of components. The unc-infra.does
 //!       not dictate what components should exist, or how many instances there should be.
 //!       This allows for both small and focused tests, and large multi-instance tests.
 //!     - Timed tests can be written to check the theoretical performance of certain tasks,
 //!       such as distributing chunks to other nodes within X milliseconds provided that
 //!       network messages have a 10ms delay.
-//!     - The framework does not require major migrations to existing code, e.g. it is
-//!       compatible with the Actix framework (and possibly futures in the future).
+//!     - The unc-infra.does not require major migrations to existing code, e.g. it is
+//!       compatible with the Actix unc-infra.(and possibly futures in the future).
 //!
 //! A note on the order of execution of the events: all events that are due at the same
 //! timestamp are executed in FIFO order. For example, if the events are emitted in the
@@ -80,7 +80,7 @@ use std::{
 };
 use unc_o11y::{testonly::init_test_logger, tracing::log::info};
 
-/// Main struct for the Test Loop framework.
+/// Main struct for the Test Loop unc-infra.
 /// The `Data` type should contain all the business logic state that is relevant
 /// to the test. The `Event` type should contain all the possible events that
 /// are sent to the event loop.

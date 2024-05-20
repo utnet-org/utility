@@ -1,7 +1,7 @@
 # unc Telemetry
 
 A small utility (TelemetryActor), that tries to send the telemetry (metrics) information as JSON over HTTP-post to selected list of servers.
-Telemetry is sent from all the framework binaries (that enabled it in the config.json) - like validators, RPC nodes etc.
+Telemetry is sent from all the unc-infra.binaries (that enabled it in the config.json) - like validators, RPC nodes etc.
 
 The data that is sent over is of type TelemetryInfo, and is signed with the server's key.
 

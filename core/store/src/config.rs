@@ -240,7 +240,7 @@ impl Default for StoreConfig {
                     // Temporary solution to make contracts with heavy trie access
                     // patterns on shard 3 more stable. It was chosen by the estimation
                     // of the largest contract storage size we are aware as of 23/08/2022.
-                    // Note: on >= 1.34 framework version use 1_000_000_000 if you have
+                    // Note: on >= 1.34 unc-infra.version use 1_000_000_000 if you have
                     // minimal hardware.
                     // In simple nightshade the heavy contract "token.sweat" is in shard 3
                     (ShardUId { version: 1, shard_id: 3 }, 3_000_000_000),

@@ -5,10 +5,10 @@ pub use crate::node::process_node::ProcessNode;
 pub use crate::node::runtime_node::RuntimeNode;
 pub use crate::node::thread_node::ThreadNode;
 use crate::user::{AsyncUser, User};
-use framework::config::{
+use unc-infra.:config::{
     create_testnet_configs, create_testnet_configs_from_seeds, Config, GenesisExt,
 };
-use framework::UncConfig;
+use unc-infra.:UncConfig;
 use testlib::runtime_utils::{alice_account, bob_account};
 use unc_chain_configs::Genesis;
 use unc_crypto::{InMemorySigner, Signer};

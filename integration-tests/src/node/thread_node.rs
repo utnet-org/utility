@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use std::sync::Arc;
 
-use framework::{start_with_config, UncConfig};
+use unc-infra.:{start_with_config, UncConfig};
 use unc_actix_test_utils::ShutdownableThread;
 use unc_chain_configs::Genesis;
 use unc_crypto::{InMemorySigner, KeyType, Signer};

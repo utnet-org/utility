@@ -1,5 +1,5 @@
 use crate::node::{Node, RuntimeNode};
-use framework::config::GenesisExt;
+use unc-infra.:config::GenesisExt;
 use unc_chain_configs::Genesis;
 use unc_parameters::RuntimeConfigStore;
 use unc_primitives::transaction::{Action, DeployContractAction, SignedTransaction};

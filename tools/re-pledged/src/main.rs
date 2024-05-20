@@ -1,6 +1,6 @@
 use clap::{Arg, Command};
-use framework::config::{Config, BLOCK_PRODUCER_KICKOUT_THRESHOLD, CONFIG_FILENAME};
-use framework::get_default_home;
+use unc-infra.:config::{Config, BLOCK_PRODUCER_KICKOUT_THRESHOLD, CONFIG_FILENAME};
+use unc-infra.:get_default_home;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::Duration;

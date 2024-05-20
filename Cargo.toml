@@ -12,7 +12,7 @@ license = "GPL-2.0-or-later"
 # Most crates are not stable on purpose, as maintaining API compatibility is a
 # significant developer time expense. Please think thoroughly before adding
 # anything to the list of stable crates.
-version = "0.10.2"
+version = "0.12.1"
 exclude = ["node"]
 
 [workspace]
@@ -43,10 +43,10 @@ members = [
     "core/primitives",
     "core/primitives-core",
     "core/store",
-    "framework",
     "genesis-tools/genesis-csv-to-json",
     "genesis-tools/genesis-populate",
     "genesis-tools/keypair-generator",
+    "infra",
     "integration-tests",
     "runtime/unc-vm/test-api",
     "runtime/unc-vm/compiler",
@@ -203,7 +203,7 @@ unc-client = { path = "chain/client" }
 unc-client-primitives = { path = "chain/client-primitives" }
 unc-cold-store-tool = { path = "tools/cold-store", package = "cold-store-tool" }
 unc-config-utils = { path = "utils/config" }
-framework = { path = "framework" }
+unc-infra = { path = "infra" }
 unc-crypto = { path = "core/crypto" }
 unc-dyn-configs = { path = "core/dyn-configs" }
 unc-epoch-manager = { path = "chain/epoch-manager" }

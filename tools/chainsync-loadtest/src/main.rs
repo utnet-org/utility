@@ -3,8 +3,8 @@ mod fetch_chain;
 mod network;
 
 use anyhow::{anyhow, Context};
-use framework::config;
-use framework::config::UncConfig;
+use unc-infra.:config;
+use unc-infra.:config::UncConfig;
 use network::Network;
 use openssl_probe;
 use std::sync::Arc;

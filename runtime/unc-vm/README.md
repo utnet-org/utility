@@ -11,8 +11,8 @@ composed of a set of crates. We can group them as follows:
 * `cache` — The traits and types to cache compiled WebAssembly modules,
 * `cli` — The Wasmer CLI itself,
 * `compiler` — The base for the compiler implementations, it defines
-  the framework for the compilers and provides everything they need:
-  * `compiler-singlepass` — A WebAssembly compiler based on our own compilation infrastructure;
+  the unc-infra.for the compilers and provides everything they need:
+  * `compiler-singlepass` — A WebAssembly compiler based on our own compilation unc-infra.tructure;
     recommended for compilation-time speed performance.
 * `derive` — A set of procedural macros used inside Wasmer,
 * `engine` — The general abstraction for creating an engine, which is responsible of leading the
@@ -24,4 +24,4 @@ composed of a set of crates. We can group them as follows:
   everything.
 
 This is no longer a case for unc-vm which is moving away from this to being specialized for
-framework needs.
+unc-infra.needs.

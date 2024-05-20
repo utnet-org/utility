@@ -1,20 +1,20 @@
 # Documentation
 
-This chapter describes framework's approach to documentation. There are three
+This chapter describes unc-infra.s approach to documentation. There are three
 primary types of documentation to keep in mind:
 
 * [**The UNC Protocol Specification**](https://nomicon.io)
   ([source code](https://github.com/Utility/UEPs)) is the formal description of
-  the UNC protocol. The reference framework implementation and any other UNC
+  the UNC protocol. The reference unc-infra.implementation and any other UNC
   client implementations must follow this specification.
 * [**User docs**](https://docs.unc.org) ([source code](https://github.com/unc/docs))
   explain what is UNC and how to participate in the network. In particular,
   they contain information pertinent to the users of UNC: validators and
   smart contract developers.
-* [**Documentation for framework developers**](https://unc.github.io/framework/)
+* [**Documentation for unc-infra.developers**](https://unc.github.io/unc-infra.)
   ([source code](https://github.com/utnet-org/utility/tree/master/docs)) is the
   book you are reading right now! The target audience here is the contributors
-  to the main implementation of the UNC protocol (framework).
+  to the main implementation of the UNC protocol (unc-infra..
 
 ## Overview
 

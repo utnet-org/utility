@@ -12,5 +12,5 @@ publish = true
 workspace = true
 
 [dependencies]
-# Absolutely must not depend on any crates from framework workspace,
+# Absolutely must not depend on any crates from unc-infra.workspace,
 # and should have as few dependencies as possible otherwise.

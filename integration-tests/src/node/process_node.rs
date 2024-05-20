@@ -8,7 +8,7 @@ use std::{env, thread};
 use rand::Rng;
 use tracing::error;
 
-use framework::config::UncConfig;
+use unc-infra.:config::UncConfig;
 use unc_chain_configs::Genesis;
 use unc_crypto::{InMemorySigner, KeyType, Signer};
 use unc_primitives::types::AccountId;

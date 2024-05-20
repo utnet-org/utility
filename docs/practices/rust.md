@@ -57,7 +57,7 @@ This is a thing in its category, do check it out:
   in Rust (async/await).
 * [Rust API Guidelines](https://rust-lang.github.io/api-guidelines/about.html)
   codify rules for idiomatic Rust APIs. Note that guidelines apply to _semver
-  surface_ of libraries, and most of the code in framework is not on the semver
+  surface_ of libraries, and most of the code in unc-infra.is not on the semver
   boundary. Still, a lot of insight there!
 * [Rustonomicon](https://doc.rust-lang.org/nomicon/) explains `unsafe`. (any
   resemblance to <https://nomicon.io> is purely coincidental)

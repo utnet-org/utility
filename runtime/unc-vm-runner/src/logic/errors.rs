@@ -251,7 +251,7 @@ impl From<PrepareError> for FunctionCallError {
 ///
 /// `VMLogicError` have two very different types of errors. Some are just
 /// a result from the guest code doing incorrect things, other are bugs in
-/// framework.
+/// unc-infra.
 /// The first type can be converted to a `FunctionCallError`, the other becomes
 /// a `VMRunnerError` instead and must be treated differently.
 impl TryFrom<VMLogicError> for FunctionCallError {

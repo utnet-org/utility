@@ -13,7 +13,7 @@ code without any prior knowledge.
 
 # 2. Code structure
 
-`unc-network` runs on top of the `actor` framework called 
+`unc-network` runs on top of the `actor` unc-infra.called 
 [`Actix`](https://actix.rs/docs/). Code structure is split between 4 actors
 `PeerManagerActor`, `PeerActor`, `RoutingTableActor`, `EdgeValidatorActor`
 
@@ -441,7 +441,7 @@ This section describes different protocols of sending messages currently used in
 ## 10.1 Messages between Actors.
 
 `unc` is build on `Actix`'s `actor`
-[framework](https://actix.rs/docs/actix/actor). Usually each actor
+[unc-infra.(https://actix.rs/docs/actix/actor). Usually each actor
 runs on its own dedicated thread. Some, like `PeerActor` have one thread per
 each instance. Only messages implementing `actix::Message`, can be sent
 using between threads. Each actor has its own queue; Processing of messages

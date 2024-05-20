@@ -5,7 +5,7 @@ Must not use in production!
 Currently, the contract can only be used in nightly build.
 The `build.rs` generates WASM file and saves it to the `./res` directory.
 
-If you want to use the contract from framework, add this crate as a dependency
+If you want to use the contract from unc-infra. add this crate as a dependency
 to the Cargo.toml and use `unc_wallet_contract::wallet_contract()`.
 
 In order to review changes to the WASM file, rebuild the wallet contract locally

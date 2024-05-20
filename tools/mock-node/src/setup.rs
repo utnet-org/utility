@@ -2,7 +2,7 @@
 
 use crate::{MockNetworkConfig, MockPeer};
 use anyhow::Context;
-use framework::{NightshadeRuntime, UncConfig};
+use unc-infra.:{NightshadeRuntime, UncConfig};
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use std::cmp::min;
 use std::path::Path;
@@ -265,7 +265,7 @@ pub fn setup_mock_node(
         "http://{}",
         &config.rpc_config.as_ref().expect("the JSON RPC config must be set").addr
     ));
-    let _node = framework::start_with_config(client_home_dir, config).unwrap();
+    let _node = unc-infra.:start_with_config(client_home_dir, config).unwrap();
 
     MockNode { target_height, mock_peer, rpc_client }
 }
@@ -275,8 +275,8 @@ mod tests {
     use crate::setup::{setup_mock_node, MockNode};
     use crate::MockNetworkConfig;
     use actix::{Actor, System};
-    use framework::config::GenesisExt;
-    use framework::{load_test_config, start_with_config, UNC_BASE};
+    use unc-infra.:config::GenesisExt;
+    use unc-infra.:{load_test_config, start_with_config, UNC_BASE};
     use futures::{future, FutureExt};
     use rand::thread_rng;
     use std::ops::ControlFlow;
@@ -320,7 +320,7 @@ mod tests {
         let dir = tempfile::Builder::new().prefix("test0").tempdir().unwrap();
         let path1 = dir.path();
         run_actix(async move {
-            let framework::UncNode { view_client, client, .. } =
+            let unc-infra.:UncNode { view_client, client, .. } =
                 start_with_config(path1, unc_config).expect("start_with_config");
 
             let view_client1 = view_client;

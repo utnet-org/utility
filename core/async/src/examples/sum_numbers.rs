@@ -9,7 +9,7 @@ pub enum SumRequest {
     GetSum,
 }
 
-// Mimics a typical backing component of some actor in framework. Handles request
+// Mimics a typical backing component of some actor in unc-infra. Handles request
 // messages, and sends some other messages to another actor. The other actor is
 // abstracted with an Sender here. We'll show how to test this in
 // sum_numbers_test.rs.

@@ -1,4 +1,4 @@
-use framework::{config::GenesisExt, NightshadeRuntime};
+use unc-infra.:{config::GenesisExt, NightshadeRuntime};
 use std::io;
 use std::path::Path;
 use std::time::Duration;

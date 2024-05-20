@@ -57,7 +57,7 @@ impl DatabaseCommand {
             SubCommand::CompactDatabase(cmd) => cmd.run(home),
             SubCommand::CorruptStateSnapshot(cmd) => cmd.run(home),
             SubCommand::MakeSnapshot(cmd) => {
-                let unc_config = framework::config::load_config(
+                let unc_config = unc-infra.:config::load_config(
                     &home,
                     unc_chain_configs::GenesisValidationMode::UnsafeFast,
                 )
@@ -67,7 +67,7 @@ impl DatabaseCommand {
             SubCommand::RunMigrations(cmd) => cmd.run(home),
             SubCommand::StatePerf(cmd) => cmd.run(home),
             SubCommand::LoadMemTrie(cmd) => {
-                let unc_config = framework::config::load_config(
+                let unc_config = unc-infra.:config::load_config(
                     &home,
                     unc_chain_configs::GenesisValidationMode::UnsafeFast,
                 )

@@ -2,9 +2,9 @@ use crate::test_helpers::heavy_test;
 use crate::unc_utils::{add_blocks, setup_configs_with_epoch_length};
 use actix::Actor;
 use actix_rt::System;
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
-use framework::{start_with_config, UncConfig};
+use unc-infra.:config::GenesisExt;
+use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
+use unc-infra.:{start_with_config, UncConfig};
 use futures::{future, FutureExt};
 use std::collections::HashSet;
 use std::path::Path;
@@ -135,7 +135,7 @@ fn test_continuous_epoch_sync_info_population() {
 /// Sync second node to first node (at least headers).
 /// Check that it has all EpochSyncInfo records and all of them are correct.
 ///
-/// The header sync part is based on `integration-tests::framework::sync_nodes::sync_nodes`.
+/// The header sync part is based on `integration-tests::unc-infra.:sync_nodes::sync_nodes`.
 #[test]
 fn test_continuous_epoch_sync_info_population_on_header_sync() {
     heavy_test(|| {
@@ -158,7 +158,7 @@ fn test_continuous_epoch_sync_info_population_on_header_sync() {
 
         run_actix(async move {
             // Start first node
-            let framework::UncNode { client: client1, .. } =
+            let unc-infra.:UncNode { client: client1, .. } =
                 start_with_config(dir1_path, unc1).expect("start_with_config");
 
             // Generate 4 epochs + 10 blocks
@@ -173,13 +173,13 @@ fn test_continuous_epoch_sync_info_population_on_header_sync() {
             }
 
             // Start second node
-            let framework::UncNode { view_client: view_client2, .. } =
+            let unc-infra.:UncNode { view_client: view_client2, .. } =
                 start_with_config(dir2_path, unc2).expect("start_with_config");
 
             // Wait for second node's headers to sync.
             // Timeout here means that header sync is not working.
             // Header sync is better debugged through other tests.
-            // For example, run `integration-tests::framework::sync_nodes::sync_nodes` test,
+            // For example, run `integration-tests::unc-infra.:sync_nodes::sync_nodes` test,
             // on which this test's setup is based.
             WaitOrTimeoutActor::new(
                 Box::new(move |_ctx| {

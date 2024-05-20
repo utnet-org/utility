@@ -17,7 +17,7 @@ clap.workspace = true
 indicatif.workspace = true
 tempfile.workspace = true
 
-framework.workspace = true
+unc-infra.workspace = true
 unc-chain-configs.workspace = true
 unc-crypto.workspace = true
 unc-epoch-manager.workspace = true
@@ -35,7 +35,7 @@ nightly_protocol = [
   "unc-primitives/nightly_protocol",
   "unc-store/nightly_protocol",
   "unc-vm-runner/nightly_protocol",
-  "framework/nightly_protocol",
+  "unc-infra/nightly_protocol",
 ]
 nightly = [
   "nightly_protocol",
@@ -45,5 +45,5 @@ nightly = [
   "unc-primitives/nightly",
   "unc-store/nightly",
   "unc-vm-runner/nightly",
-  "framework/nightly",
+  "unc-infra/nightly",
 ]

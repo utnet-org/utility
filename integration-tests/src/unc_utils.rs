@@ -1,7 +1,7 @@
 use crate::genesis_helpers::genesis_block;
 use actix::Addr;
-use framework::config::{GenesisExt, TESTING_INIT_PLEDGE, TESTING_INIT_POWER};
-use framework::{load_test_config, UncConfig};
+use unc-infra.:config::{GenesisExt, TESTING_INIT_PLEDGE, TESTING_INIT_POWER};
+use unc-infra.:{load_test_config, UncConfig};
 use unc_chain::Block;
 use unc_chain_configs::Genesis;
 use unc_client::{BlockResponse, ClientActor};

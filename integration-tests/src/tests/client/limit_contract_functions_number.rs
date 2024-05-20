@@ -1,7 +1,7 @@
 use crate::tests::client::process_blocks::deploy_test_contract;
 use assert_matches::assert_matches;
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
+use unc-infra.:config::GenesisExt;
+use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
 use unc_chain::ChainGenesis;
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::TestEnv;

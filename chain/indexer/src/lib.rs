@@ -3,7 +3,7 @@
 use anyhow::Context;
 use tokio::sync::mpsc;
 
-pub use framework::{get_default_home, init_configs, UncConfig};
+pub use unc-infra.:{get_default_home, init_configs, UncConfig};
 use unc_chain_configs::GenesisValidationMode;
 pub use unc_primitives;
 use unc_primitives::types::Gas;
@@ -18,7 +18,7 @@ mod streamer;
 
 pub const INDEXER: &str = "indexer";
 
-/// Config wrapper to simplify signature and usage of `framework::init_configs`
+/// Config wrapper to simplify signature and usage of `unc-infra.:init_configs`
 /// function by making args more explicit via struct
 #[derive(Debug, Clone)]
 pub struct InitConfigArgs {
@@ -83,16 +83,16 @@ pub struct IndexerConfig {
     pub validate_genesis: bool,
 }
 
-/// This is the core component, which handles `framework` and internal `streamer`.
+/// This is the core component, which handles `unc-infra. and internal `streamer`.
 pub struct Indexer {
     indexer_config: IndexerConfig,
-    unc_config: framework::UncConfig,
+    unc_config: unc-infra.:UncConfig,
     view_client: actix::Addr<unc_client::ViewClientActor>,
     client: actix::Addr<unc_client::ClientActor>,
 }
 
 impl Indexer {
-    /// Initialize Indexer by configuring `framework`
+    /// Initialize Indexer by configuring `unc-infra.
     pub fn new(indexer_config: IndexerConfig) -> Result<Self, anyhow::Error> {
         tracing::info!(
             target: INDEXER,
@@ -106,10 +106,10 @@ impl Indexer {
             GenesisValidationMode::UnsafeFast
         };
         let unc_config =
-            framework::config::load_config(&indexer_config.home_dir, genesis_validation_mode)
+            unc-infra.:config::load_config(&indexer_config.home_dir, genesis_validation_mode)
                 .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
-        let framework::UncNode { client, view_client, .. } =
-            framework::start_with_config(&indexer_config.home_dir, unc_config.clone())
+        let unc-infra.:UncNode { client, view_client, .. } =
+            unc-infra.:start_with_config(&indexer_config.home_dir, unc_config.clone())
                 .with_context(|| "start_with_config")?;
         Ok(Self { view_client, client, unc_config, indexer_config })
     }
@@ -129,7 +129,7 @@ impl Indexer {
     }
 
     /// Expose unc-node config
-    pub fn unc_config(&self) -> &framework::UncConfig {
+    pub fn unc_config(&self) -> &unc-infra.:UncConfig {
         &self.unc_config
     }
 

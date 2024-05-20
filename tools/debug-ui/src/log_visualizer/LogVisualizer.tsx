@@ -16,8 +16,8 @@ const LAYOUT_SIZES: SizesConfig = {
     newTimestampMargin: 8,
 };
 
-// Visualizes the log output of a Rust test written in the TestLoop framework.
-// See core/async/src/test_loop.rs about the framework itself.
+// Visualizes the log output of a Rust test written in the TestLoop unc-infra.
+// See core/async/src/test_loop.rs about the unc-infra.itself.
 export const LogVisualizer = () => {
     const [logLines, setLogLines] = useState<string[]>([]);
     const [selectedEventId, setSelectedEventId] = useState<number | null>(null);

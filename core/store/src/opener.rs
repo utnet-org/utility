@@ -181,7 +181,7 @@ pub struct StoreOpener<'a> {
 struct DBOpener<'a> {
     /// Path to the database.
     ///
-    /// This is resolved from framework home directory and store configuration
+    /// This is resolved from unc-infra.home directory and store configuration
     /// passed to [`crate::NodeStorage::opener`].
     path: std::path::PathBuf,
 

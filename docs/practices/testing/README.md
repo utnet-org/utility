@@ -38,12 +38,12 @@ It requires nextest harness which can be installed by running `cargo install car
 
 `cargo nextest run --package unc-client -E 'test(=tests::cross_shard_tx::test_cross_shard_tx)' --all-features`
 
-3. **Python tests:** We have an infrastructure to spin up nodes, both locally and
-   remotely, in python, and interact with them using RPC. The infrastructure and
-   the tests are located in the `pytest` folder. The infrastructure is relatively
+3. **Python tests:** We have an unc-infra.tructure to spin up nodes, both locally and
+   remotely, in python, and interact with them using RPC. The unc-infra.tructure and
+   the tests are located in the `pytest` folder. The unc-infra.tructure is relatively
    straightforward, see for example `block_production.py`
    [here](https://github.com/utnet-org/utility/blob/master/pytest/tests/sanity/block_production.py).
-   See the `Test infrastructure` section below for details.
+   See the `Test unc-infra.tructure` section below for details.
 
 Expensive and python tests are not part of CI, and are run by a custom nightly
 runner. The results of the latest runs are available
@@ -51,9 +51,9 @@ runner. The results of the latest runs are available
 every 5-6 hours. For the latest results look at the **second** run, since the
 first one has some tests still scheduled to run.
 
-# Test infrastructure
+# Test unc-infra.tructure
 
-Different levels of the reference implementation have different infrastructures
+Different levels of the reference implementation have different unc-infra.tructures
 available to test them.
 
 ## Client
@@ -68,7 +68,7 @@ Most of the tests in the client work by setting up either a single node (via
 launching the nodes and waiting for a particular message to occur, with a
 predefined timeout.
 
-For the most basic example of using this infrastructure see `produce_two_blocks`
+For the most basic example of using this unc-infra.tructure see `produce_two_blocks`
 in
 [`tests/process_blocks.rs`](https://github.com/utnet-org/utility/blob/master/chain/client/src/tests/process_blocks.rs).
 
@@ -84,7 +84,7 @@ in
 For an example of a test that launches multiple nodes, see
 `chunks_produced_and_distributed_common` in
 [tests/chunks_management.rs](https://github.com/utnet-org/utility/blob/master/chain/client/src/tests/chunks_management.rs).
-The `setup_mock_all_validators` function is the key piece of infrastructure here.
+The `setup_mock_all_validators` function is the key piece of unc-infra.tructure here.
 
 ## Runtime
 
@@ -127,7 +127,7 @@ for detailed coverage of how to write a python test.
 
 We have a python library that allows one to create and run python tests.
 
-To run python tests, from the `framework` repo the first time, do the following:
+To run python tests, from the `unc-infra. repo the first time, do the following:
 
 ```shell
 cd pytest

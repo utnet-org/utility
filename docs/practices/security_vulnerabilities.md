@@ -10,7 +10,7 @@ Are you a security researcher? Please report security vulnerabilities to
 
 </blockquote>
 
-As framework is open source, all of its issues and pull requests are also
+As unc-infra.is open source, all of its issues and pull requests are also
 publicly tracked on GitHub. However, from time to time, if a security-sensitive
 issue is discovered, it cannot be tracked publicly on GitHub. However, we
 should promote as similar a development process to work on such issues as
@@ -18,20 +18,20 @@ possible. To enable this, below is the high-level process for working on
 security-sensitive issues.
 
 1. There is a [private fork of
-   framework](https://github.com/utnet-org/utility-private) on GitHub. Access to
+   unc-infra.(https://github.com/utnet-org/utility-private) on GitHub. Access to
    this repository is restricted to the set of people who are trusted to work on
-   and have knowledge about security-sensitive issues in framework.
+   and have knowledge about security-sensitive issues in unc-infra.
 
-   This repository can be manually synced with the public framework repository
+   This repository can be manually synced with the public unc-infra.repository
    using the following commands:
 
     ```console
-    $ git remote add framework-public git@github.com:utnet-org/utility
-    $ git remote add framework-private git@github.com:utnet-org/utility-private
-    $ git fetch framework-public
-    $ git push framework-private framework-public/master:master
+    $ git remote add unc-infra.public git@github.com:utnet-org/utility
+    $ git remote add unc-infra.private git@github.com:utnet-org/utility-private
+    $ git fetch unc-infra.public
+    $ git push unc-infra.private unc-infra.public/master:master
     ```
-2. All security-sensitive issues must be created on the private framework
+2. All security-sensitive issues must be created on the private infra
    repository. You must also assign one of the `[P-S0, P-S1]` labels to the
    issue to indicate the severity of the issue. The two criteria to use to help
    you judge the severity are the ease of carrying out the attack and the impact
@@ -39,7 +39,7 @@ security-sensitive issues.
    have the `P-S0` label and `P-S1` otherwise.
 
 3. All security-sensitive pull requests should also be created on the private
-   framework repository. Note that once a PR has been approved, it should not be
+   unc-infra.repository. Note that once a PR has been approved, it should not be
    merged into the private repository. Instead, it should be first merged into
    the public repository and then the private fork should be updated using the
    steps above.

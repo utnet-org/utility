@@ -1965,7 +1965,7 @@ impl Chain {
         let epoch_protocol_version =
             self.epoch_manager.get_epoch_protocol_version(header.epoch_id())?;
         if epoch_protocol_version > PROTOCOL_VERSION {
-            panic!("The client protocol version is older than the protocol version of the network. Please update framework. Client protocol version:{}, network protocol version {}", PROTOCOL_VERSION, epoch_protocol_version);
+            panic!("The client protocol version is older than the protocol version of the network. Please update unc-infra. Client protocol version:{}, network protocol version {}", PROTOCOL_VERSION, epoch_protocol_version);
         }
 
         // First real I/O expense.

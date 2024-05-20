@@ -34,7 +34,7 @@ fn merge(a: &mut Value, b: &Value) {
 impl Drop for Schema {
     /// `rpc_error` wants to collect **all** invocations of the macro across the
     /// project and merge them into a single file. These kinds of macros are not
-    /// supported at all by Rust macro infrastructure, so we use gross hacks
+    /// supported at all by Rust macro unc-infra.tructure, so we use gross hacks
     /// here.
     ///
     /// Every macro invocation merges its results into the

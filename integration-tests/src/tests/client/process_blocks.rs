@@ -5,9 +5,9 @@ use std::sync::{Arc, RwLock};
 
 use actix::System;
 use assert_matches::assert_matches;
-use framework::config::{GenesisExt, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
-use framework::test_utils::TestEnvNightshadeSetupExt;
-use framework::UNC_BASE;
+use unc-infra.:config::{GenesisExt, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
+use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
+use unc-infra.:UNC_BASE;
 use futures::{future, FutureExt};
 use rand::prelude::StdRng;
 use rand::{Rng, SeedableRng};

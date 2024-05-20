@@ -1,6 +1,6 @@
 use chrono::Utc;
-use framework::config::UncConfig;
-use framework::NightshadeRuntime;
+use unc-infra.:config::UncConfig;
+use unc-infra.:NightshadeRuntime;
 use redis::Commands;
 use serde::ser::{SerializeSeq, Serializer};
 use std::collections::HashMap;
@@ -295,11 +295,11 @@ mod test {
     use std::path::Path;
     use std::sync::Arc;
 
-    use framework::config::GenesisExt;
-    use framework::config::TESTING_INIT_PLEDGE;
-    use framework::config::{Config, UncConfig};
-    use framework::test_utils::TestEnvNightshadeSetupExt;
-    use framework::NightshadeRuntime;
+    use unc-infra.:config::GenesisExt;
+    use unc-infra.:config::TESTING_INIT_PLEDGE;
+    use unc-infra.:config::{Config, UncConfig};
+    use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
+    use unc-infra.:NightshadeRuntime;
     use unc_chain::{ChainGenesis, ChainStoreAccess, Provenance};
     use unc_chain_configs::genesis_validate::validate_genesis;
     use unc_chain_configs::{Genesis, GenesisChangeConfig};

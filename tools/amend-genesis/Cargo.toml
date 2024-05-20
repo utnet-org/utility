@@ -30,5 +30,5 @@ unc-primitives.workspace = true
 unc-primitives-core.workspace = true
 unc-store.workspace = true
 unc-test-contracts.workspace = true
-framework.workspace = true
+unc-infra.workspace = true
 node-runtime.workspace = true

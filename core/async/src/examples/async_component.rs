@@ -7,7 +7,7 @@ use crate::{
 // responds with InnerResponse, and an OuterComponent which handles an
 // OuterRequest, spawns a future to send a request to the InnerComponent, and
 // then responds back with an OuterResponse (but not as an Actix response; just
-// another message). This mimics how we use Actix in framework.
+// another message). This mimics how we use Actix in unc-infra.
 
 #[derive(Debug)]
 pub(crate) struct InnerRequest(pub String);

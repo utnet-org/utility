@@ -1,5 +1,5 @@
 use crate::run_test::{BlockConfig, NetworkConfig, RuntimeConfig, Scenario, TransactionConfig};
-use framework::config::{TESTING_INIT_BALANCE, UNC_BASE};
+use unc-infra.:config::{TESTING_INIT_BALANCE, UNC_BASE};
 use unc_crypto::{InMemorySigner, KeyType, PublicKey};
 use unc_primitives::{
     account::{AccessKey, AccessKeyPermission, FunctionCallPermission},

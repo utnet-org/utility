@@ -21,7 +21,7 @@ unc-primitives.workspace = true
 unc-store.workspace = true
 unc-o11y.workspace = true
 unc-chain.workspace = true
-framework.workspace = true
+unc-infra.workspace = true
 
 [dev-dependencies]
 testlib.workspace = true

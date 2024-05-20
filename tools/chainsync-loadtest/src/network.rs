@@ -1,5 +1,5 @@
 use crate::concurrency::{Once, RateLimiter, WeakMap};
-use framework::config::UncConfig;
+use unc-infra.:config::UncConfig;
 use log::info;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
@@ -62,7 +62,7 @@ pub struct Network {
     // client_config.min_num_peers
     min_peers: usize,
     // Currently it is equivalent to genesis_config.num_block_producer_seats,
-    // (see https://cs.github.com/utnet-org/utility/blob/dae9553670de13c279d3ebd55f17da13d94fa691/framework/src/runtime/mod.rs#L1114).
+    // (see https://cs.github.com/utnet-org/utility/blob/dae9553670de13c279d3ebd55f17da13d94fa691/unc-infra.src/runtime/mod.rs#L1114).
     // AFAICT eventually it will change dynamically (I guess it will be provided in the Block).
     parts_per_chunk: u64,
 

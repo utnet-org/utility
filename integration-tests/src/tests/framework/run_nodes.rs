@@ -1,4 +1,4 @@
-use crate::tests::framework::node_cluster::NodeCluster;
+use crate::tests::unc-infra.:node_cluster::NodeCluster;
 use actix::System;
 use rand::{thread_rng, Rng};
 use std::ops::ControlFlow;
@@ -45,7 +45,7 @@ fn run_heavy_nodes(
     // test binary exits, breaking stuff. This sleep here is a best-effort to
     // let those destructors finish. This should make the tests less flaky.
     // Hopefully, we'll be able to fix this properly by replacing actix actor
-    // framework with something that handles cancellation gracefully.
+    // unc-infra.with something that handles cancellation gracefully.
     std::thread::sleep(std::time::Duration::from_millis(250));
 }
 

@@ -2,7 +2,7 @@ use actix::Addr;
 use anyhow::Context;
 use async_trait::async_trait;
 use borsh::{BorshDeserialize, BorshSerialize};
-use framework::config::UncConfig;
+use unc-infra.:config::UncConfig;
 use rocksdb::DB;
 use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
@@ -860,7 +860,7 @@ impl<T: ChainAccess> TxMirror<T> {
         secret: Option<[u8; crate::secret::SECRET_LEN]>,
     ) -> anyhow::Result<Self> {
         let target_config =
-            framework::config::load_config(target_home.as_ref(), GenesisValidationMode::UnsafeFast)
+            unc-infra.:config::load_config(target_home.as_ref(), GenesisValidationMode::UnsafeFast)
                 .with_context(|| {
                     format!("Error loading target config from {:?}", target_home.as_ref())
                 })?;

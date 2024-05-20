@@ -8,8 +8,6 @@
 <br />
 <br />
 
-## Reference implementation of Utility
-
 ![Buildkite](https://img.shields.io/buildkite/0eae07525f8e44a19b48fa937813e2c21ee04aa351361cd851)
 ![Stable Status][stable-release]
 ![Prerelease Status][prerelease]
@@ -26,31 +24,24 @@
 [telegram-badge]: https://cdn.jsdelivr.net/gh/Patrolavia/telegram-badge@8fe3382b3fd3a1c533ba270e608035a27e430c2e/chat.svg
 [telegram-url]: https://t.me/cryptounc
 
+## Table of Contents
+
+- [Table of Contents](#table-of-contents)
+- [About Utility](#about-utility)
+- [Installation](#installation)
+- [Directory Structure](#directory-structure)
+- [Contributing](#contributing)
+- [Security](#security)
+
 ## About Utility
 
 Utility's mission is to stimulate community-led innovation for the benefit of people worldwide.
 
 To realize this mission, *Utility* provides a platform where developers and entrepreneurs can build applications that put users back in control of their data and assets. This is a core tenet of the ["Open Web" movement][open-web-url].
 
-A key component of *utnet* is utility, a blockchain-powered infrastructure for serverless applications and smart contracts. Utility aims to offer the ease-of-use and scalability of modern PaaS like Firebase, but at a fraction of the cost of blockchains like Ethereum.
+A key component of *utnet* is utility, a blockchain-powered unc-infra.tructure for serverless applications and smart contracts. Utility aims to offer the ease-of-use and scalability of modern PaaS like Firebase, but at a fraction of the cost of blockchains like Ethereum.
 
-In summary, *Utility* offers a suite of tools for developers to effortlessly build applications:
-
-- [JS Client library][js-api] to connect to Utility Protocol from your applications.
-- [Rust][rust-sdk] and [JavaScript/TypeScript][js-sdk] SDKs to write smart contracts and stateful server-less functions.
-- [Numerous examples][examples-url] with links to hack on them right inside your browser.
-- [Lots of documentation][docs-url], with [Tutorials][tutorials-url] and [API docs][api-docs-url].
-
-[open-web-url]: https://techcrunch.com/2016/04/10/1301496/
-[js-api]: https://github.com/utnet-org/utility/unc-api-js
-[rust-sdk]: https://github.com/utnet-org/utility/unc-sdk-rs
-[js-sdk]: https://github.com/utnet-org/utility/unc-sdk-js
-[examples-url]: https://utnet-org/utility.dev
-[docs-url]: https://docs.utnet-org/utility.org
-[tutorials-url]: https://docs.utnet-org/utility.org/tutorials/welcome
-[api-docs-url]: https://docs.utnet-org/utility.org/api/rpc/introduction
-
-## Join the Network
+## Installation
 
 The easiest way to join the network, is by using the `make release` command  or download release binaries, which you can install as follows:
 
@@ -98,9 +89,36 @@ tar -zxvf /tmp/${latest:?}.tar.gz -C /tmp  && mv /tmp/${latest:?}/data ~/.unc
 $ unc-node --home ~/.unc  run
 ```
 
-To learn how to become validator, checkout [documentation](https://docs.utnet-org/utility.org/docs/develop/node/validator/staking-and-delegation).
+To learn how to become validator, checkout [documentation](https://docs.xyz666.org).
+
+## Directory Structure
+
+<pre>
+├── <a href="./chain/">chain</a>: Consensus chain interaction utilities.
+│ ├── <a href="./chain/chain/">bindings</a>: block chain validate and rocksdb column.
+│ ├── <a href="./chain/client/">src</a>: peer node bootstrap.
+│ └── <a href="./chain/network/">network</a>: libp2p network discover.
+├── <a href="./docs/">docs</a>: Documentation resources, including images and diagrams.
+├── <a href="./core/">core</a>: Components for utility primitives.
+│ ├── <a href="./core/crypto/">crypto</a>: Crypto libs rsa2048, secp256k1.
+│ ├── <a href="./core/primitives/">primitives</a>: Chain relatives base data structure.
+│ └── <a href="./core/store/">store</a>: rocksdb store data structure.
+├── <a href="./infra/">infra</a>: The Utility instance, including application logic and attestation mechanisms.
+│ ├── <a href="./infra/src/">infra</a>: Node initialize for Utility.
+│ └── <a href="./infra/tests/">test</a>: Command-line tools and utilities.
+├── <a href="./runtime/">runtime</a>: Core libraries for various protocol functionalities.
+│ ├── <a href="./runtime/runtime/">runtime</a>: Chain state apply, contracts executor.
+│ └── <a href="./runtime/unc-vm-runner/">runner</a>: Rust bindings for smart contracts.
+├── <a href="./node/">node</a>: Node service for chain messages and transactions.
+│ └── <a href="./node/src/">node</a>: Application logic for the node service.
+├── <a href="./scripts/">scripts</a>: Utility scripts for development and operational tasks.
+└── <a href="./integration-test/">test</a>: Testing suite for end-to-end, smoke, and utility testing.
+</pre>
 
 ## Contributing
 
-The workflow and details of setup to contribute are described in [CONTRIBUTING.md](CONTRIBUTING.md), and security policy is described in [SECURITY.md](SECURITY.md).
-To propose new protocol changes or standards use [Specification & Standards repository](https://github.com/utility/UEPs).
+For detailed instructions on how to contribute, including our coding standards, testing practices, and how to submit pull requests, please see [the contribution guidelines](CONTRIBUTING.md)
+
+## Security
+
+Please refer to [SECURITY.md](./SECURITY.md).

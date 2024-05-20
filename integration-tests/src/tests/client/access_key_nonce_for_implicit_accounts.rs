@@ -1,8 +1,8 @@
 use crate::tests::client::process_blocks::produce_blocks_from_height;
 use assert_matches::assert_matches;
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
-use framework::UNC_BASE;
+use unc-infra.:config::GenesisExt;
+use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
+use unc-infra.:UNC_BASE;
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
 use std::collections::HashSet;

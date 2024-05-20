@@ -1,9 +1,9 @@
 use assert_matches::assert_matches;
 
-use framework::config::GenesisExt;
-use framework::state_sync::spawn_state_sync_dump;
-use framework::test_utils::TestEnvNightshadeSetupExt;
-use framework::UNC_BASE;
+use unc-infra.:config::GenesisExt;
+use unc-infra.:state_sync::spawn_state_sync_dump;
+use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
+use unc-infra.:UNC_BASE;
 use std::ops::ControlFlow;
 use std::sync::Arc;
 use std::time::Duration;

@@ -130,7 +130,7 @@ fn do_fork(
     }
 }
 
-// This test infrastructure do the following:
+// This test unc-infra.tructure do the following:
 // Build Chain 1 from the full data, then GC it.
 // Build Chain 2 from the data removing everything that should be removed after GC.
 // Make sure that Chain 1 == Chain 2.

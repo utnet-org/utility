@@ -1,7 +1,7 @@
 use std::{collections::HashSet, sync::Arc};
 
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
+use unc-infra.:config::GenesisExt;
+use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
 use tracing::log::debug;
 use unc_async::messaging::CanSend;
 use unc_chain::{ChainGenesis, Provenance};

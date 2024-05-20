@@ -2,7 +2,7 @@ use std::cell::RefCell;
 use std::collections::{HashMap, HashSet};
 use std::sync::{Arc, RwLock};
 
-use framework::config::MIN_GAS_PRICE;
+use unc-infra.:config::MIN_GAS_PRICE;
 use node_runtime::state_viewer::TrieViewer;
 use node_runtime::{ApplyState, Runtime};
 use unc_crypto::{PublicKey, Signer};

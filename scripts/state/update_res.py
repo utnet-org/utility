@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Checks or updates contents of framework/res/genesis_config.json file.
+"""Checks or updates contents of unc-infra.res/genesis_config.json file.
 
-* `update_res.py` updates framework/res/genesis_config.json to current
+* `update_res.py` updates unc-infra.res/genesis_config.json to current
   `unc init` version without any records.
 
-* `update_res.py check` checks whether framework/res/genesis_config.json
+* `update_res.py check` checks whether unc-infra.res/genesis_config.json
   file matches what `unc init` generates.
 """
 

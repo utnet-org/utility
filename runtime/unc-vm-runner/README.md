@@ -1,7 +1,7 @@
 # unc-vm-runner
 
 An engine that runs smart contracts compiled to Wasm.
-This is the main crate of the "contract runtime" part of framework.
+This is the main crate of the "contract runtime" part of unc-infra.
 
 "Running smart contracts" is:
 

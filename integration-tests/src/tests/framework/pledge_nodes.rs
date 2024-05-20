@@ -9,8 +9,8 @@ use unc_primitives::num_rational::Ratio;
 
 use crate::genesis_helpers::genesis_hash;
 use crate::test_helpers::heavy_test;
-use framework::config::{GenesisExt, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
-use framework::{load_test_config, start_with_config, UncConfig, UNC_BASE};
+use unc-infra.:config::{GenesisExt, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
+use unc-infra.:{load_test_config, start_with_config, UncConfig, UNC_BASE};
 use unc_actix_test_utils::run_actix;
 use unc_chain_configs::Genesis;
 use unc_client::{ClientActor, GetBlock, ProcessTxRequest, Query, Status, ViewClientActor};
@@ -85,7 +85,7 @@ fn init_test_staking(
         .enumerate()
         .map(|(i, config)| {
             let genesis_hash = genesis_hash(&config.genesis);
-            let framework::UncNode { client, view_client, .. } =
+            let unc-infra.:UncNode { client, view_client, .. } =
                 start_with_config(paths[i], config.clone()).expect("start_with_config");
             let account_id = format!("unc.{}", i).parse::<AccountId>().unwrap();
             let signer = Arc::new(InMemorySigner::from_seed(

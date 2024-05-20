@@ -1,7 +1,7 @@
 use actix_web::{web, App, HttpServer};
 use anyhow::anyhow;
 use borsh::BorshDeserialize;
-use framework::state_sync::extract_part_id_from_part_file_name;
+use unc-infra.:state_sync::extract_part_id_from_part_file_name;
 use std::collections::HashSet;
 use std::path::PathBuf;
 use std::sync::Arc;

@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
-use framework::test_utils::TestEnvNightshadeSetupExt;
+use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
 use rand::seq::IteratorRandom;
 use rand::{thread_rng, Rng};
 use unc_chain::{ChainGenesis, Provenance};
@@ -59,7 +59,7 @@ fn test_in_memory_trie_node_consistency() {
         // included a few blocks later it won't be rejected.
         transaction_validity_period: 1000,
         // Make two validators. In this test we don't care about validators but
-        // the TestEnv framework works best if all clients are validators. So
+        // the TestEnv unc-infra.works best if all clients are validators. So
         // since we are using two clients, make two validators.
         validators: vec![
             AccountInfo {

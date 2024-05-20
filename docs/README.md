@@ -2,14 +2,14 @@
 
 Welcome to the utility development guide!
 
-The target audience of this guide are developers of framework itself. If you are
+The target audience of this guide are developers of unc-infra.itself. If you are
 a user of UNC (either a contract developer, or validator running a node),
 please refer to the user docs at <https://docs.unc.org>.
 
 This guide is built with [mdBook](https://rust-lang.github.io/mdBook/)
-from sources in the [framework repository](https://github.com/utnet-org/utility/).
+from sources in the [unc-infra.repository](https://github.com/utnet-org/utility/).
 You can edit it by pressing the "edit" icon in the top right corner, we welcome
-all contributions. The guide is hosted at <https://unc.github.io/framework/>.
+all contributions. The guide is hosted at <https://unc.github.io/unc-infra.>.
 
 The guide is organized as a collection of loosely coupled chapters -- you don't
 need to read them in order, feel free to peruse the TOC, and focus on

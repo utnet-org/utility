@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use std::rc::Rc;
 
 use clap::Parser;
-use framework::config::load_config;
+use unc-infra.:config::load_config;
 use unc_chain::{Block, ChainStore};
 use unc_chain_configs::GenesisValidationMode;
 use unc_epoch_manager::EpochManager;
@@ -12,7 +12,7 @@ use unc_primitives::hash::CryptoHash;
 use unc_primitives::shard_layout::{account_id_to_shard_id, ShardUId};
 use unc_primitives::types::{AccountId, BlockHeight};
 
-use framework::open_storage;
+use unc-infra.:open_storage;
 
 use crate::block_iterators::{
     make_block_iterator_from_command_args, CommandArgs, LastNBlocksIterator,

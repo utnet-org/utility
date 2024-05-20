@@ -1,7 +1,7 @@
 use assert_matches::assert_matches;
 
-use framework::config::GenesisExt;
-use framework::test_utils::TestEnvNightshadeSetupExt;
+use unc-infra.:config::GenesisExt;
+use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
 use node_runtime::ZERO_BALANCE_ACCOUNT_STORAGE_LIMIT;
 use unc_chain::ChainGenesis;
 use unc_chain_configs::Genesis;

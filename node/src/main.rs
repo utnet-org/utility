@@ -2,7 +2,7 @@ mod cli;
 
 use self::cli::UncdCmd;
 use anyhow::Context;
-use framework::get_default_home;
+use unc-infra.:get_default_home;
 use once_cell::sync::Lazy;
 use std::env;
 use std::path::PathBuf;

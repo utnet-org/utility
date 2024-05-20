@@ -261,7 +261,7 @@ fn main() -> Result<()> {
     // (sending telemetry and downloading genesis)
     openssl_probe::init_ssl_cert_env_vars();
     let env_filter = unc_o11y::tracing_subscriber::EnvFilter::new(
-        "framework=info,indexer_example=info,tokio_reactor=info,unc=info,\
+        "unc-infra.info,indexer_example=info,tokio_reactor=info,unc=info,\
          stats=info,telemetry=info,indexer=info,unc-performance-metrics=info",
     );
     let _subscriber = unc_o11y::default_subscriber(env_filter, &Default::default()).global();

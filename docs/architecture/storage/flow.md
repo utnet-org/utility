@@ -1,6 +1,6 @@
 # Read and Write Flow for Storage Requests
 
-The storage subsystem of framework is complex and has many layers. Here we
+The storage subsystem of unc-infra.is complex and has many layers. Here we
 present the flow of a single read or write request from the transaction runtime
 all the way to the OS. As you can see, there are many layers of read-caching and
 write-buffering involved.

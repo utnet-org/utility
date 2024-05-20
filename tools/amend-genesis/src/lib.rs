@@ -134,7 +134,7 @@ impl AccountRecords {
                     })?;
                 }
                 if self.amount_needed {
-                    account.set_amount(10_000 * framework::config::UNC_BASE);
+                    account.set_amount(10_000 * unc-infra.:config::UNC_BASE);
                 }
                 *total_supply += account.amount() + account.pledging();
                 seq.serialize_element(&StateRecord::Account { account_id, account })?;
@@ -614,36 +614,36 @@ mod test {
                 genesis_time: StaticClock::utc(),
                 chain_id: "rusttestnet".to_string(),
                 genesis_height: 0,
-                num_block_producer_seats: framework::config::NUM_BLOCK_PRODUCER_SEATS,
+                num_block_producer_seats: unc-infra.:config::NUM_BLOCK_PRODUCER_SEATS,
                 num_block_producer_seats_per_shard: utils::get_num_seats_per_shard(
                     num_shards,
-                    framework::config::NUM_BLOCK_PRODUCER_SEATS,
+                    unc-infra.:config::NUM_BLOCK_PRODUCER_SEATS,
                 ),
                 avg_hidden_validator_seats_per_shard: (0..num_shards).map(|_| 0).collect(),
                 protocol_upgrade_pledge_threshold:
-                    framework::config::PROTOCOL_UPGRADE_STAKE_THRESHOLD,
+                    unc-infra.:config::PROTOCOL_UPGRADE_STAKE_THRESHOLD,
                 epoch_length: 1000,
-                gas_limit: framework::config::INITIAL_GAS_LIMIT,
-                gas_price_adjustment_rate: framework::config::GAS_PRICE_ADJUSTMENT_RATE,
+                gas_limit: unc-infra.:config::INITIAL_GAS_LIMIT,
+                gas_price_adjustment_rate: unc-infra.:config::GAS_PRICE_ADJUSTMENT_RATE,
                 block_producer_kickout_threshold:
-                    framework::config::BLOCK_PRODUCER_KICKOUT_THRESHOLD,
+                    unc-infra.:config::BLOCK_PRODUCER_KICKOUT_THRESHOLD,
                 chunk_producer_kickout_threshold:
-                    framework::config::CHUNK_PRODUCER_KICKOUT_THRESHOLD,
+                    unc-infra.:config::CHUNK_PRODUCER_KICKOUT_THRESHOLD,
                 online_max_threshold: Rational32::new(99, 100),
                 online_min_threshold: Rational32::new(
-                    framework::config::BLOCK_PRODUCER_KICKOUT_THRESHOLD as i32,
+                    unc-infra.:config::BLOCK_PRODUCER_KICKOUT_THRESHOLD as i32,
                     100,
                 ),
                 validators: initial_validators,
-                transaction_validity_period: framework::config::TRANSACTION_VALIDITY_PERIOD,
-                protocol_reward_rate: framework::config::PROTOCOL_REWARD_RATE,
-                max_inflation_rate: framework::config::MAX_INFLATION_RATE,
+                transaction_validity_period: unc-infra.:config::TRANSACTION_VALIDITY_PERIOD,
+                protocol_reward_rate: unc-infra.:config::PROTOCOL_REWARD_RATE,
+                max_inflation_rate: unc-infra.:config::MAX_INFLATION_RATE,
                 total_supply: get_initial_supply(&records_in),
-                num_blocks_per_year: framework::config::NUM_BLOCKS_PER_YEAR,
+                num_blocks_per_year: unc-infra.:config::NUM_BLOCKS_PER_YEAR,
                 protocol_treasury_account: "treasury.unc".parse().unwrap(),
-                fishermen_threshold: framework::config::FISHERMEN_THRESHOLD,
+                fishermen_threshold: unc-infra.:config::FISHERMEN_THRESHOLD,
                 shard_layout: shards,
-                min_gas_price: framework::config::MIN_GAS_PRICE,
+                min_gas_price: unc-infra.:config::MIN_GAS_PRICE,
                 ..Default::default()
             };
 
@@ -828,7 +828,7 @@ mod test {
                 },
                 TestStateRecord::Account {
                     account_id: "foo2",
-                    amount: 10_000 * framework::config::UNC_BASE,
+                    amount: 10_000 * unc-infra.:config::UNC_BASE,
                     pledging: 3_000_000,
                     power: 3_000_000,
                     storage_usage: 182,
@@ -1001,7 +1001,7 @@ mod test {
                 },
                 TestStateRecord::Account {
                     account_id: "foo3",
-                    amount: 10_000 * framework::config::UNC_BASE,
+                    amount: 10_000 * unc-infra.:config::UNC_BASE,
                     pledging: 2_000_000,
                     power: 2_000_000,
                     storage_usage: 182,
