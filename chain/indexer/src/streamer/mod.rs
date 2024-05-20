@@ -190,7 +190,6 @@ async fn build_streamer_message(
         // However the Receipts are not included in any Chunk. Indexer Framework needs to include them,
         // so it was decided to artificially include the Receipts into the Chunk of the Block where
         // ExecutionOutcomes appear.
-        // ref: https://github.com/utnet-org/utility/pull/4248
         if PROBLEMATIC_BLOCKS.contains(&block.header.hash)
             && &protocol_config_view.chain_id == unc_primitives::chains::MAINNET
         {
@@ -220,7 +219,6 @@ async fn build_streamer_message(
 
     // Ideally we expect `shards_outcomes` to be empty by this time, but if something went wrong with
     // chunks and we end up with non-empty `shards_outcomes` we want to be sure we put them into IndexerShard
-    // That might happen before the fix https://github.com/utnet-org/utility/pull/4228
     for (shard_id, outcomes) in shards_outcomes {
         indexer_shards[shard_id as usize].receipt_execution_outcomes.extend(
             outcomes.into_iter().map(|outcome| IndexerExecutionOutcomeWithReceipt {

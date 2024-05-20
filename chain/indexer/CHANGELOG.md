@@ -1,13 +1,9 @@
 # Changelog
 
-## 1.32.x
+## 0.10.0
 
-* Add `nightly` feature to UNC Indexer Framework to respect this feature for `unc-infra. lib (requried for `betanet`)
-
-## 1.26.0
-
-* `state_changes` field is moved from the top-level `StreamerMessage` to `IndexerShard` struct to align better with the sharded nature of UNC protocol. In the future, when unc-infra.will be able to track only a subset of shards, this API will work naturally, so we take pro-active measures to solidify the APIs
-* All the UNC Indexer Framework types were extracted to a separate crate `unc-indexer-primitives`
+* `state_changes` field is moved from the top-level `StreamerMessage` to `IndexerShard` struct to align better with the sharded nature of Utility protocol. In the future, when unc-infra.will be able to track only a subset of shards, this API will work naturally, so we take pro-active measures to solidify the APIs
+* All the Utility Indexer Framework types were extracted to a separate crate `unc-indexer-primitives`
 * Increase the streamer size from 16 to 100 in order to increase the speed of streaming messages (affects reindexing jobs)
 
 ## Breaking changes
@@ -16,17 +12,9 @@ The field `state_changes` is moved from the root of `StreamerMessage`
 to the `IndexerShard.state_changes` and now contains only changes related
 to the specific shard.
 
-## 0.10.1
-
-* (mainnet only) Add additional handler to inject restored receipts to the block #47317863. See [PR 4248](https://github.com/utnet-org/utility/pull/4248) for reference
-
-## 0.10.0
-
 * Add additional logs on Indexer Framework start
 * Avoid double genesis validation by removing the explicit validation on Indexer instantiation
 * Replaced the method how genesis is being read to optimize memory usage
-
-## Breaking changes
 
 Since the change of reading genesis method to optimize memory usage. You'd be able to iterate over genesis records with `unc_config.genesis.for_each_record(|record| {...})`. Nothing is changed for you your indexer does nothing about genesis records.
 
@@ -36,7 +24,7 @@ Since the change of reading genesis method to optimize memory usage. You'd be ab
 
 ## 0.9.1
 
-* Introduce a hot-fix. Execution outcome for local receipt might appear not in the same block as the receipt. Local receipts are not saved in database and unable to be fetched. To include a receipt in `IndexerExecutionOutcomeWithReceipt` and prevent UNC Indexer Framework from panic we fetch previous blocks to find corresponding local receipt to include.
+* Introduce a hot-fix. Execution outcome for local receipt might appear not in the same block as the receipt. Local receipts are not saved in database and unable to be fetched. To include a receipt in `IndexerExecutionOutcomeWithReceipt` and prevent Utility Indexer Framework from panic we fetch previous blocks to find corresponding local receipt to include.
 
 ## 0.9.0 (do not use this version, it contains a bug)
 
@@ -49,8 +37,9 @@ Since the change of reading genesis method to optimize memory usage. You'd be ab
 ## Breaking changes
 
 * `IndexerChunkView` doesn't contain field `receipt_execution_outcomes` anymore, this field has been moved to `IndexerShard`
-* `StreamerMessage` structure was aligned more with UNC Protocol specification and now looks like:
-  ```
+* `StreamerMessage` structure was aligned more with Utility Protocol specification and now looks like:
+
+  ```rust
   StreamerMessage {
     block: BlockView,
     shards: Vec<IndexerShard>,
