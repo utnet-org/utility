@@ -8,7 +8,7 @@
 <br />
 <br />
 
-![Buildkite](https://img.shields.io/buildkite/0eae07525f8e44a19b48fa937813e2c21ee04aa351361cd851)
+![Build](https://img.shields.io/github/actions/workflow/status/utnet-org/utility/default.yml?&label=Build&logo=github-actions&logoColor=white&style=flat")
 ![Stable Status][stable-release]
 ![Prerelease Status][prerelease]
 [![codecov][codecov-badge]][codecov-url]
@@ -25,6 +25,7 @@
 [telegram-url]: https://t.me/cryptounc
 
 ## Table of Contents
+- [Table of Contents](#table-of-contents)
 - [About Utility](#about-utility)
 - [Installation](#installation)
 - [Directory Structure](#directory-structure)

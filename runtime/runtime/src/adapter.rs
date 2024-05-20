@@ -57,6 +57,7 @@ pub trait ViewRuntimeAdapter {
         state_root: MerkleHash,
         account_id: &AccountId,
     ) -> Result<Vec<(PublicKey, AccessKey)>, crate::state_viewer::errors::ViewAccessKeyError>;
+
     fn view_chip_list(
         &self,
         shard_uid: &ShardUId,

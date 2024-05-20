@@ -1083,7 +1083,6 @@ pub(crate) fn check_account_existence(
                     // public key. We've decided to make it an invalid transaction to have any other
                     // actions on the implicit hex accounts.
                     // The easiest way is to reject the `CreateAccount` action.
-                    // See https://github.com/utility/UEPs/pull/71
                     return Err(ActionErrorKind::OnlyImplicitAccountCreationAllowed {
                         account_id: account_id.clone(),
                     }
@@ -1160,7 +1159,7 @@ mod tests {
     fn test_action_create_account(
         account_id: AccountId,
         predecessor_id: AccountId,
-        length: u8,
+        _length: u8,
     ) -> ActionResult {
         let mut account = None;
         let mut actor_id = predecessor_id.clone();

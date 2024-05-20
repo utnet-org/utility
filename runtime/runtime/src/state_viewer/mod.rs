@@ -112,7 +112,6 @@ impl TrieViewer {
         access_keys
     }
 
-    #[allow(deprecated)]
     pub fn view_chip_list(
         &self,
         state_update: &TrieUpdate,
@@ -368,12 +367,4 @@ impl TrieViewer {
             Ok(result)
         }
     }
-}
-
-// Helper function to deserialize ChipView from binary format
-#[allow(dead_code)]
-fn deserialize_chip_view(encoded: &[u8]) -> Result<ChipView, Box<dyn std::error::Error>> {
-    // Directly deserialize the JSON data into ChipView
-    let chip_view = serde_json::from_slice::<ChipView>(encoded)?;
-    Ok(chip_view)
 }

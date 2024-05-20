@@ -260,6 +260,7 @@ fn main() -> Result<()> {
     // We use it to automatically search the for root certificates to perform HTTPS calls
     // (sending telemetry and downloading genesis)
     openssl_probe::init_ssl_cert_env_vars();
+
     let env_filter = unc_o11y::tracing_subscriber::EnvFilter::new(
         "unc-infra.info,indexer_example=info,tokio_reactor=info,unc=info,\
          stats=info,telemetry=info,indexer=info,unc-performance-metrics=info",
