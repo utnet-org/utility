@@ -3,7 +3,7 @@
 pub mod state_dump;
 
 use crate::state_dump::StateDump;
-use unc-infra.:{NightshadeRuntime, UncConfig};
+use unc_infra::{NightshadeRuntime, UncConfig};
 use indicatif::{ProgressBar, ProgressStyle};
 use std::collections::BTreeMap;
 use std::hash::{Hash, Hasher};

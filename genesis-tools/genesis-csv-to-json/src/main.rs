@@ -1,5 +1,5 @@
 use clap::{Arg, Command};
-use unc-infra.:get_default_home;
+use unc_infra::get_default_home;
 use std::collections::HashSet;
 use std::path::PathBuf;
 use unc_primitives::types::ShardId;

@@ -480,8 +480,8 @@ pub(crate) fn apply_receipt(
 
 #[cfg(test)]
 mod test {
-    use unc-infra.:config::GenesisExt;
-    use unc-infra.:NightshadeRuntime;
+    use unc_infra::config::GenesisExt;
+    use unc_infra::NightshadeRuntime;
     use rand::rngs::StdRng;
     use rand::SeedableRng;
     use std::path::Path;

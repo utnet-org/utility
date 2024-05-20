@@ -1,6 +1,6 @@
 use std::{cell::RefCell, collections::HashMap, rc::Rc, time::Instant};
 
-use unc-infra.:UncConfig;
+use unc_infra::UncConfig;
 use unc_chain::{ChainStore, ChainStoreAccess};
 use unc_epoch_manager::EpochManager;
 use unc_primitives::shard_layout::ShardLayout;

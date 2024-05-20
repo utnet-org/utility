@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use unc-infra.:config::GenesisExt;
+use unc_infra::config::GenesisExt;
 use node_runtime::{state_viewer::TrieViewer, Runtime};
 use testlib::runtime_utils::{add_test_contract, alice_account, bob_account};
 use unc_chain_configs::Genesis;

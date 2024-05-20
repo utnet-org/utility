@@ -1,4 +1,4 @@
-use crate::tests::unc-infra.:node_cluster::NodeCluster;
+use crate::tests::unc_infra::node_cluster::NodeCluster;
 use actix::System;
 use rand::{thread_rng, Rng};
 use std::ops::ControlFlow;

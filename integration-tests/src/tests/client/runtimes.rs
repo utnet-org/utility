@@ -1,8 +1,8 @@
 //! Client is responsible for tracking the chain, chunks, and producing them when needed.
 //! This client works completely synchronously and must be operated by some async actor outside.
 
-use unc-infra.:config::GenesisExt;
-use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
+use unc_infra::config::GenesisExt;
+use unc_infra::test_utils::TestEnvNightshadeSetupExt;
 use std::collections::HashMap;
 use std::sync::Arc;
 use unc_chain::ChainGenesis;

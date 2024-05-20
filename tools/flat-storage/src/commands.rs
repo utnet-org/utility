@@ -1,7 +1,7 @@
 /// Tools for modifying flat storage - should be used only for experimentation & debugging.
 use borsh::BorshDeserialize;
 use clap::Parser;
-use unc-infra.:{load_config, NightshadeRuntime, UncConfig};
+use unc_infra::{load_config, NightshadeRuntime, UncConfig};
 use std::sync::atomic::AtomicBool;
 use std::{path::PathBuf, sync::Arc, time::Duration};
 use tqdm::tqdm;

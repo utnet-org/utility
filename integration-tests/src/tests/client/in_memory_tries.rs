@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
-use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
+use unc_infra::test_utils::TestEnvNightshadeSetupExt;
 use rand::seq::IteratorRandom;
 use rand::{thread_rng, Rng};
 use unc_chain::{ChainGenesis, Provenance};

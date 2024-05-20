@@ -1,8 +1,8 @@
 #![cfg_attr(not(feature = "nightly"), allow(unused_imports))]
 
 use crate::tests::client::process_blocks::deploy_test_contract;
-use unc-infra.:config::GenesisExt;
-use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
+use unc_infra::config::GenesisExt;
+use unc_infra::test_utils::TestEnvNightshadeSetupExt;
 use unc_chain::ChainGenesis;
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::TestEnv;

@@ -25,7 +25,7 @@ pub(crate) struct ChangeDbKindCommand {
 
 impl ChangeDbKindCommand {
     pub(crate) fn run(&self, home_dir: &Path) -> anyhow::Result<()> {
-        let unc_config = unc-infra.:config::load_config(
+        let unc_config = unc_infra::config::load_config(
             &home_dir,
             unc_chain_configs::GenesisValidationMode::UnsafeFast,
         )?;

@@ -1,6 +1,6 @@
 use anyhow::Context;
 use clap;
-use unc-infra.:NightshadeRuntime;
+use unc_infra::NightshadeRuntime;
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 use unc_chain::{ChainStore, ChainStoreAccess, ChainUpdate, DoomslugThresholdMode};
@@ -31,15 +31,15 @@ enum SubCommand {
 impl EpochSyncCommand {
     pub fn run(self, home_dir: &Path) -> anyhow::Result<()> {
         let mut unc_config = Self::create_snapshot(home_dir)?;
-        let storage = unc-infra.:open_storage(&home_dir, &mut unc_config)?;
+        let storage = unc_infra::open_storage(&home_dir, &mut unc_config)?;
 
         match self.subcmd {
             SubCommand::ValidateEpochSyncInfo(cmd) => cmd.run(&home_dir, &storage, &unc_config),
         }
     }
 
-    fn create_snapshot(home_dir: &Path) -> anyhow::Result<unc-infra.:config::UncConfig> {
-        let mut unc_config = unc-infra.:config::load_config(
+    fn create_snapshot(home_dir: &Path) -> anyhow::Result<unc_infra::config::UncConfig> {
+        let mut unc_config = unc_infra::config::load_config(
             &home_dir,
             unc_chain_configs::GenesisValidationMode::UnsafeFast,
         )
@@ -54,7 +54,7 @@ impl EpochSyncCommand {
             .join("epoch-sync-snapshot");
         let snapshot_path = home_dir.join(store_path_addition.clone());
 
-        let storage = unc-infra.:open_storage(&home_dir, &mut unc_config)?;
+        let storage = unc_infra::open_storage(&home_dir, &mut unc_config)?;
 
         if snapshot_path.exists() && snapshot_path.is_dir() {
             tracing::info!(?snapshot_path, "Found a DB snapshot");
@@ -88,7 +88,7 @@ impl ValidateEpochSyncInfoCmd {
         &self,
         home_dir: &Path,
         storage: &NodeStorage,
-        config: &unc-infra.:config::UncConfig,
+        config: &unc_infra::config::UncConfig,
     ) -> anyhow::Result<()> {
         let store = storage.get_hot_store();
 

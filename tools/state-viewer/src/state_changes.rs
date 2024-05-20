@@ -1,5 +1,5 @@
 use borsh::BorshDeserialize;
-use unc-infra.:{NightshadeRuntime, UncConfig};
+use unc_infra::{NightshadeRuntime, UncConfig};
 use std::path::{Path, PathBuf};
 use unc_chain::types::RuntimeAdapter;
 use unc_chain::{ChainStore, ChainStoreAccess};

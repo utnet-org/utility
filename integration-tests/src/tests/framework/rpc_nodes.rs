@@ -1,5 +1,5 @@
 use crate::genesis_helpers::genesis_block;
-use crate::tests::unc-infra.:node_cluster::NodeCluster;
+use crate::tests::unc_infra::node_cluster::NodeCluster;
 use actix::clock::sleep;
 use actix::{Actor, System};
 use assert_matches::assert_matches;

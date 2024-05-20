@@ -5,7 +5,7 @@ use actix::{Actor, System};
 use futures::{future, FutureExt, TryFutureExt};
 
 use crate::genesis_helpers::genesis_block;
-use crate::tests::unc-infra.:node_cluster::NodeCluster;
+use crate::tests::unc_infra::node_cluster::NodeCluster;
 use unc_actix_test_utils::spawn_interruptible;
 use unc_client::GetBlock;
 use unc_crypto::{InMemorySigner, KeyType};

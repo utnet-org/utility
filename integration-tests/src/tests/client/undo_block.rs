@@ -1,5 +1,5 @@
-use unc-infra.:config::GenesisExt;
-use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
+use unc_infra::config::GenesisExt;
+use unc_infra::test_utils::TestEnvNightshadeSetupExt;
 use std::sync::Arc;
 use unc_chain::{ChainGenesis, ChainStore, ChainStoreAccess, Provenance};
 use unc_chain_configs::Genesis;

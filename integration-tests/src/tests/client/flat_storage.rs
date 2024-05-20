@@ -1,7 +1,7 @@
 /// Tests which check correctness of background flat storage creation.
 use assert_matches::assert_matches;
-use unc-infra.:config::GenesisExt;
-use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
+use unc_infra::config::GenesisExt;
+use unc_infra::test_utils::TestEnvNightshadeSetupExt;
 use std::str::FromStr;
 use std::thread;
 use std::time::Duration;

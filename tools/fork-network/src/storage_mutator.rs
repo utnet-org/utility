@@ -1,5 +1,5 @@
 use crate::single_shard_storage_mutator::SingleShardStorageMutator;
-use unc-infra.:NightshadeRuntime;
+use unc_infra::NightshadeRuntime;
 use std::sync::Arc;
 use unc_crypto::PublicKey;
 use unc_epoch_manager::EpochManagerAdapter;

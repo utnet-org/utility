@@ -162,7 +162,7 @@ fn run_estimation(cli_args: CliArgs) -> anyhow::Result<Option<CostTable>> {
         // Also, continuous estimation should be able to pick up such changes.
         let contract_code = unc_test_contracts::estimator_contract();
 
-        unc-infra.:init_configs(
+        unc_infra::init_configs(
             &state_dump_path,
             None,
             Some("test.unc".parse().unwrap()),
@@ -180,7 +180,7 @@ fn run_estimation(cli_args: CliArgs) -> anyhow::Result<Option<CostTable>> {
         )
         .expect("failed to init config");
 
-        let unc_config = unc-infra.:load_config(&state_dump_path, GenesisValidationMode::Full)
+        let unc_config = unc_infra::load_config(&state_dump_path, GenesisValidationMode::Full)
             .context("Error loading config")?;
         let store = unc_store::NodeStorage::opener(
             &state_dump_path,

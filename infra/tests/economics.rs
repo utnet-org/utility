@@ -5,7 +5,7 @@ use num_rational::Ratio;
 use unc_client::ProcessTxResponse;
 use unc_epoch_manager::EpochManager;
 
-use unc-infra.:{config::GenesisExt, NightshadeRuntime};
+use unc_infra::{config::GenesisExt, NightshadeRuntime};
 use testlib::fees_utils::FeeHelper;
 use unc_chain::ChainGenesis;
 use unc_chain_configs::Genesis;

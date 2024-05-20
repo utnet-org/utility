@@ -1,5 +1,5 @@
 use crate::node::{Node, RuntimeNode};
-use unc-infra.:config::GenesisExt;
+use unc_infra::config::GenesisExt;
 use std::collections::HashSet;
 use std::mem::size_of;
 use testlib::runtime_utils::{add_test_contract, alice_account, bob_account};

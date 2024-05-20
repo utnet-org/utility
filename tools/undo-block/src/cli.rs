@@ -1,4 +1,4 @@
-use unc-infra.:load_config;
+use unc_infra::load_config;
 use std::path::Path;
 use unc_chain::ChainStore;
 use unc_chain_configs::GenesisValidationMode;

@@ -1,7 +1,7 @@
 use borsh::BorshDeserialize;
-use unc-infra.:config::GenesisExt;
-use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
-use unc-infra.:{cold_storage::spawn_cold_store_loop, UncConfig};
+use unc_infra::config::GenesisExt;
+use unc_infra::test_utils::TestEnvNightshadeSetupExt;
+use unc_infra::{cold_storage::spawn_cold_store_loop, UncConfig};
 use std::collections::HashSet;
 use std::str::FromStr;
 use strum::IntoEnumIterator;
@@ -558,7 +558,7 @@ fn test_cold_loop_on_gc_boundary() {
         InMemorySigner::from_random(AccountId::from_str("test").unwrap(), KeyType::ED25519);
 
     let mut unc_config = UncConfig::new(
-        unc-infra.:config::Config::default(),
+        unc_infra::config::Config::default(),
         genesis.clone(),
         unc_crypto::KeyFile {
             account_id: signer.account_id,

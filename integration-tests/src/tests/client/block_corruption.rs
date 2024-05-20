@@ -1,7 +1,7 @@
 use anyhow::Context;
 use borsh::BorshDeserialize;
-use unc-infra.:config::GenesisExt;
-use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
+use unc_infra::config::GenesisExt;
+use unc_infra::test_utils::TestEnvNightshadeSetupExt;
 use unc_chain::{Block, ChainGenesis, Error, Provenance};
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::TestEnv;

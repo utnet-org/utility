@@ -1,5 +1,5 @@
 use crate::utils::{flat_head, flat_head_state_root, open_rocksdb};
-use unc-infra.:UncConfig;
+use unc_infra::UncConfig;
 use std::path::Path;
 use std::sync::Arc;
 use std::time::Duration;

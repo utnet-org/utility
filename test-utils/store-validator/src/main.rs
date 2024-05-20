@@ -1,5 +1,5 @@
 use clap::{Arg, Command};
-use unc-infra.:{get_default_home, load_config};
+use unc_infra::{get_default_home, load_config};
 use std::path::PathBuf;
 use std::process;
 use unc_chain::store_validator::StoreValidator;
@@ -38,7 +38,7 @@ fn main() {
     .get_hot_store();
     let epoch_manager = EpochManager::new_arc_handle(store.clone(), &unc_config.genesis.config);
     let shard_tracker = ShardTracker::new(epoch_manager.clone());
-    let runtime = unc-infra.:NightshadeRuntime::from_config(
+    let runtime = unc_infra::NightshadeRuntime::from_config(
         home_dir,
         store.clone(),
         &unc_config,

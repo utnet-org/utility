@@ -9,7 +9,7 @@ use unc_o11y::testonly::init_integration_logger;
 use unc_o11y::WithSpanContextExt;
 use unc_primitives::hash::CryptoHash;
 
-use crate::tests::unc-infra.:node_cluster::NodeCluster;
+use crate::tests::unc_infra::node_cluster::NodeCluster;
 
 #[test]
 #[cfg_attr(not(feature = "expensive_tests"), ignore)]

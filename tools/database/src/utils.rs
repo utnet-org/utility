@@ -12,8 +12,8 @@ pub(crate) fn open_rocksdb(
     home: &Path,
     mode: unc_store::Mode,
 ) -> anyhow::Result<unc_store::db::RocksDB> {
-    let config = unc-infra.:config::Config::from_file_skip_validation(
-        &home.join(unc-infra.:config::CONFIG_FILENAME),
+    let config = unc_infra::config::Config::from_file_skip_validation(
+        &home.join(unc_infra::config::CONFIG_FILENAME),
     )?;
     let store_config = &config.store;
     let db_path = store_config.path.as_ref().cloned().unwrap_or_else(|| home.join("data"));
@@ -23,8 +23,8 @@ pub(crate) fn open_rocksdb(
 }
 
 pub(crate) fn open_state_snapshot(home: &Path, mode: unc_store::Mode) -> anyhow::Result<Store> {
-    let config = unc-infra.:config::Config::from_file_skip_validation(
-        &home.join(unc-infra.:config::CONFIG_FILENAME),
+    let config = unc_infra::config::Config::from_file_skip_validation(
+        &home.join(unc_infra::config::CONFIG_FILENAME),
     )?;
     let store_config = &config.store;
     let db_path = store_config.path.as_ref().cloned().unwrap_or_else(|| home.join("data"));

@@ -1,6 +1,6 @@
 use assert_matches::assert_matches;
-use unc-infra.:config::GenesisExt;
-use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
+use unc_infra::config::GenesisExt;
+use unc_infra::test_utils::TestEnvNightshadeSetupExt;
 use unc_chain::{ChainGenesis, Provenance};
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::TestEnv;

@@ -29,10 +29,10 @@ pub(crate) struct ChainAccess {
 impl ChainAccess {
     pub(crate) fn new<P: AsRef<Path>>(home: P) -> anyhow::Result<Self> {
         let config =
-            unc-infra.:config::load_config(home.as_ref(), GenesisValidationMode::UnsafeFast)
+            unc_infra::config::load_config(home.as_ref(), GenesisValidationMode::UnsafeFast)
                 .with_context(|| format!("Error loading config from {:?}", home.as_ref()))?;
 
-        let node = unc-infra.:start_with_config(home.as_ref(), config)
+        let node = unc_infra::start_with_config(home.as_ref(), config)
             .context("failed to start UNC node")?;
         Ok(Self { view_client: node.view_client })
     }

@@ -1,6 +1,6 @@
-use unc-infra.:config::GenesisExt;
-use unc-infra.:test_utils::TestEnvNightshadeSetupExt;
-use unc-infra.:UNC_BASE;
+use unc_infra::config::GenesisExt;
+use unc_infra::test_utils::TestEnvNightshadeSetupExt;
+use unc_infra::UNC_BASE;
 use std::path::PathBuf;
 use unc_chain::{ChainGenesis, ChainStoreAccess, Provenance};
 use unc_chain_configs::Genesis;

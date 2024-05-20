@@ -1,7 +1,7 @@
 use crate::{ChainError, SourceBlock, SourceChunk};
 use anyhow::Context;
 use async_trait::async_trait;
-use unc-infra.:NightshadeRuntime;
+use unc_infra::NightshadeRuntime;
 use std::path::Path;
 use std::sync::Arc;
 use unc_chain::types::RuntimeAdapter;
@@ -36,9 +36,9 @@ pub(crate) struct ChainAccess {
 impl ChainAccess {
     pub(crate) fn new<P: AsRef<Path>>(home: P) -> anyhow::Result<Self> {
         let mut config =
-            unc-infra.:config::load_config(home.as_ref(), GenesisValidationMode::UnsafeFast)
+            unc_infra::config::load_config(home.as_ref(), GenesisValidationMode::UnsafeFast)
                 .with_context(|| format!("Error loading config from {:?}", home.as_ref()))?;
-        let node_storage = unc-infra.:open_storage(home.as_ref(), &mut config)
+        let node_storage = unc_infra::open_storage(home.as_ref(), &mut config)
             .context("failed opening storage")?;
         let store = node_storage.get_hot_store();
         let chain = ChainStore::new(

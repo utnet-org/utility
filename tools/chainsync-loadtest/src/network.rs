@@ -1,5 +1,5 @@
 use crate::concurrency::{Once, RateLimiter, WeakMap};
-use unc-infra.:config::UncConfig;
+use unc_infra::config::UncConfig;
 use log::info;
 use rand::seq::SliceRandom;
 use rand::thread_rng;

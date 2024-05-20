@@ -2,8 +2,8 @@ use crate::genesis_helpers::genesis_block;
 use crate::test_helpers::heavy_test;
 use crate::unc_utils::{add_blocks, setup_configs};
 use actix::{Actor, System};
-use unc-infra.:config::{GenesisExt, TESTING_INIT_PLEDGE};
-use unc-infra.:{load_test_config, start_with_config};
+use unc_infra::config::{GenesisExt, TESTING_INIT_PLEDGE};
+use unc_infra::{load_test_config, start_with_config};
 use futures::{future, FutureExt};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, RwLock};
@@ -30,7 +30,7 @@ fn sync_nodes() {
 
         run_actix(async move {
             let dir1 = tempfile::Builder::new().prefix("sync_nodes_1").tempdir().unwrap();
-            let unc-infra.:UncNode { client: client1, .. } =
+            let unc_infra::UncNode { client: client1, .. } =
                 start_with_config(dir1.path(), unc1).expect("start_with_config");
 
             let signer = create_test_signer("other");
@@ -38,7 +38,7 @@ fn sync_nodes() {
                 add_blocks(vec![genesis_block], client1, 13, genesis.config.epoch_length, &signer);
 
             let dir2 = tempfile::Builder::new().prefix("sync_nodes_2").tempdir().unwrap();
-            let unc-infra.:UncNode { view_client: view_client2, .. } =
+            let unc_infra::UncNode { view_client: view_client2, .. } =
                 start_with_config(dir2.path(), unc2).expect("start_with_config");
 
             WaitOrTimeoutActor::new(
@@ -73,11 +73,11 @@ fn sync_after_sync_nodes() {
 
         run_actix(async move {
             let dir1 = tempfile::Builder::new().prefix("sync_nodes_1").tempdir().unwrap();
-            let unc-infra.:UncNode { client: client1, .. } =
+            let unc_infra::UncNode { client: client1, .. } =
                 start_with_config(dir1.path(), unc1).expect("start_with_config");
 
             let dir2 = tempfile::Builder::new().prefix("sync_nodes_2").tempdir().unwrap();
-            let unc-infra.:UncNode { view_client: view_client2, .. } =
+            let unc_infra::UncNode { view_client: view_client2, .. } =
                 start_with_config(dir2.path(), unc2).expect("start_with_config");
 
             let signer = create_test_signer("other");
@@ -151,7 +151,7 @@ fn sync_state_pledge_change() {
         let dir1 = tempfile::Builder::new().prefix("sync_state_pledge_change_1").tempdir().unwrap();
         let dir2 = tempfile::Builder::new().prefix("sync_state_pledge_change_2").tempdir().unwrap();
         run_actix(async {
-            let unc-infra.:UncNode { client: client1, view_client: view_client1, .. } =
+            let unc_infra::UncNode { client: client1, view_client: view_client1, .. } =
                 start_with_config(dir1.path(), unc1.clone()).expect("start_with_config");
 
             let genesis_hash = *genesis_block(&genesis).hash();
@@ -198,7 +198,7 @@ fn sync_state_pledge_change() {
                         if !started_copy.load(Ordering::SeqCst) && latest_height > 2 * epoch_length
                         {
                             started_copy.store(true, Ordering::SeqCst);
-                            let unc-infra.:UncNode { view_client: view_client2, arbiters, .. } =
+                            let unc_infra::UncNode { view_client: view_client2, arbiters, .. } =
                                 start_with_config(&dir2_path_copy, unc2_copy)
                                     .expect("start_with_config");
                             *arbiters_holder2.write().unwrap() = arbiters;

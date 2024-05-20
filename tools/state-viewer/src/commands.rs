@@ -7,7 +7,7 @@ use crate::state_dump::state_dump_redis;
 use crate::tx_dump::dump_tx_from_block;
 use crate::{apply_chunk, epoch_info};
 use bytesize::ByteSize;
-use unc-infra.:{NightshadeRuntime, UncConfig};
+use unc_infra::{NightshadeRuntime, UncConfig};
 use itertools::GroupBy;
 use itertools::Itertools;
 use node_runtime::adapter::ViewRuntimeAdapter;
@@ -1306,9 +1306,9 @@ impl std::fmt::Debug for StateStatsAccount {
 
 #[cfg(test)]
 mod tests {
-    use unc-infra.:config::Config;
-    use unc-infra.:config::GenesisExt;
-    use unc-infra.:{NightshadeRuntime, UncConfig};
+    use unc_infra::config::Config;
+    use unc_infra::config::GenesisExt;
+    use unc_infra::{NightshadeRuntime, UncConfig};
     use std::sync::Arc;
     use unc_chain::types::RuntimeAdapter;
     use unc_chain::ChainGenesis;

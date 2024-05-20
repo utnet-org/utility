@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 use clap::{Arg, Command};
 
-use unc-infra.:get_default_home;
+use unc_infra::get_default_home;
 use unc_crypto::{InMemorySigner, KeyType, SecretKey, Signer};
 
 fn generate_key_to_file(account_id: &str, key: SecretKey, path: &PathBuf) -> std::io::Result<()> {
@@ -106,7 +106,7 @@ fn main() {
                 let account_id =
                     account_id.expect("Account id must be specified if --generate-config is used");
                 let mut path = home_dir.to_path_buf();
-                path.push(unc-infra.:config::VALIDATOR_KEY_FILE);
+                path.push(unc_infra::config::VALIDATOR_KEY_FILE);
                 if let Err(e) = generate_key_to_file(account_id, key, &path) {
                     eprintln!("Error writing key to {}: {}", path.display(), e);
                     return;
@@ -119,7 +119,7 @@ fn main() {
             println!("PK: {}", key);
             if generate_config {
                 let mut path = home_dir.to_path_buf();
-                path.push(unc-infra.:config::NODE_KEY_FILE);
+                path.push(unc_infra::config::NODE_KEY_FILE);
                 if let Err(e) = generate_key_to_file("node", key, &path) {
                     eprintln!("Error writing key to {}: {}", path.display(), e);
                     return;
