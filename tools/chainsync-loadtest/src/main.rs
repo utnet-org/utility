@@ -3,8 +3,6 @@ mod fetch_chain;
 mod network;
 
 use anyhow::{anyhow, Context};
-use unc_infra::config;
-use unc_infra::config::UncConfig;
 use network::Network;
 use openssl_probe;
 use std::sync::Arc;
@@ -13,6 +11,8 @@ use unc_async::messaging::LateBoundSender;
 use unc_async::messaging::Sender;
 use unc_async::time;
 use unc_chain_configs::Genesis;
+use unc_infra::config;
+use unc_infra::config::UncConfig;
 use unc_network::concurrency::ctx;
 use unc_network::concurrency::scope;
 use unc_network::PeerManagerActor;

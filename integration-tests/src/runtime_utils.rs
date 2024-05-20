@@ -1,9 +1,9 @@
 use std::collections::HashSet;
 
-use unc_infra::config::GenesisExt;
 use node_runtime::{state_viewer::TrieViewer, Runtime};
 use testlib::runtime_utils::{add_test_contract, alice_account, bob_account};
 use unc_chain_configs::Genesis;
+use unc_infra::config::GenesisExt;
 use unc_parameters::RuntimeConfig;
 use unc_primitives::shard_layout::ShardUId;
 use unc_primitives::state_record::{state_record_to_account_id, StateRecord};

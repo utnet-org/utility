@@ -1,5 +1,4 @@
 use borsh::{BorshDeserialize, BorshSerialize};
-use unc_infra::NightshadeRuntime;
 use std::fs;
 use std::path::Path;
 use unc_chain::types::{ChainConfig, Tip};
@@ -8,6 +7,7 @@ use unc_chain_configs::{GenesisValidationMode, MutableConfigValue, ReshardingCon
 use unc_epoch_manager::shard_tracker::ShardTracker;
 use unc_epoch_manager::types::EpochInfoAggregator;
 use unc_epoch_manager::EpochManager;
+use unc_infra::NightshadeRuntime;
 use unc_primitives::block::Block;
 use unc_primitives::block_header::BlockHeader;
 use unc_primitives::epoch_manager::block_info::BlockInfo;

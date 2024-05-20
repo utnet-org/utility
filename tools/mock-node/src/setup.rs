@@ -2,7 +2,6 @@
 
 use crate::{MockNetworkConfig, MockPeer};
 use anyhow::Context;
-use unc_infra::{NightshadeRuntime, UncConfig};
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use std::cmp::min;
 use std::path::Path;
@@ -14,6 +13,7 @@ use unc_chain::{Chain, ChainGenesis, ChainStore, ChainStoreAccess, DoomslugThres
 use unc_crypto::{KeyType, SecretKey};
 use unc_epoch_manager::shard_tracker::ShardTracker;
 use unc_epoch_manager::{EpochManager, EpochManagerAdapter, EpochManagerHandle};
+use unc_infra::{NightshadeRuntime, UncConfig};
 use unc_jsonrpc_client::JsonRpcClient;
 use unc_network::tcp;
 use unc_network::types::PeerInfo;
@@ -275,8 +275,6 @@ mod tests {
     use crate::setup::{setup_mock_node, MockNode};
     use crate::MockNetworkConfig;
     use actix::{Actor, System};
-    use unc_infra::config::GenesisExt;
-    use unc_infra::{load_test_config, start_with_config, UNC_BASE};
     use futures::{future, FutureExt};
     use rand::thread_rng;
     use std::ops::ControlFlow;
@@ -288,6 +286,8 @@ mod tests {
     use unc_client::{GetBlock, ProcessTxRequest};
     use unc_crypto::{InMemorySigner, KeyType};
     use unc_epoch_manager::{EpochManager, EpochManagerAdapter};
+    use unc_infra::config::GenesisExt;
+    use unc_infra::{load_test_config, start_with_config, UNC_BASE};
     use unc_network::tcp;
     use unc_network::test_utils::{wait_or_timeout, WaitOrTimeoutActor};
     use unc_o11y::testonly::init_integration_logger;

@@ -4,13 +4,13 @@
 //! we want to test here are pretty heavy and its enough to run them once and
 //! note the wall-clock time.
 
-use unc_infra::config::GenesisExt;
-use unc_infra::test_utils::TestEnvNightshadeSetupExt;
 use unc_chain::ChainGenesis;
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::{create_chunk_on_height, TestEnv};
 use unc_client::ProcessTxResponse;
 use unc_crypto::{InMemorySigner, KeyType};
+use unc_infra::config::GenesisExt;
+use unc_infra::test_utils::TestEnvNightshadeSetupExt;
 use unc_primitives::transaction::{Action, DeployContractAction, SignedTransaction};
 
 /// How long does it take to produce a large chunk?

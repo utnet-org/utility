@@ -1,5 +1,4 @@
 use crate::concurrency::{Once, RateLimiter, WeakMap};
-use unc_infra::config::UncConfig;
 use log::info;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
@@ -8,6 +7,7 @@ use std::sync::{Arc, Mutex};
 use tokio::sync::oneshot;
 use unc_async::messaging::CanSend;
 use unc_async::time;
+use unc_infra::config::UncConfig;
 use unc_network::concurrency::ctx;
 use unc_network::concurrency::scope;
 use unc_network::types::{

@@ -1,3 +1,7 @@
+use std::collections::HashSet;
+use std::fs::File;
+use std::path::Path;
+use unc_chain_configs::{Genesis, GenesisConfig};
 use unc_infra::config::{
     Config, BLOCK_PRODUCER_KICKOUT_THRESHOLD, CHUNK_PRODUCER_KICKOUT_THRESHOLD, CONFIG_FILENAME,
     EXPECTED_EPOCH_LENGTH, FISHERMEN_THRESHOLD, GAS_PRICE_ADJUSTMENT_RATE, GENESIS_CONFIG_FILENAME,
@@ -6,10 +10,6 @@ use unc_infra::config::{
     TRANSACTION_VALIDITY_PERIOD,
 };
 use unc_infra::UNC_BASE;
-use std::collections::HashSet;
-use std::fs::File;
-use std::path::Path;
-use unc_chain_configs::{Genesis, GenesisConfig};
 use unc_primitives::types::{Balance, NumShards, ShardId};
 use unc_primitives::utils::get_num_seats_per_shard;
 use unc_primitives::version::PROTOCOL_VERSION;

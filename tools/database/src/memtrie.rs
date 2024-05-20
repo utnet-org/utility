@@ -1,9 +1,9 @@
 use crate::utils::{flat_head, flat_head_state_root, open_rocksdb};
-use unc_infra::UncConfig;
 use std::path::Path;
 use std::sync::Arc;
 use std::time::Duration;
 use unc_epoch_manager::EpochManager;
+use unc_infra::UncConfig;
 use unc_primitives::block::Tip;
 use unc_primitives::block_header::BlockHeader;
 use unc_primitives::types::ShardId;

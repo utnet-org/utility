@@ -1,10 +1,10 @@
 use clap::{Arg, Command};
-use unc_infra::{get_default_home, load_config};
 use std::path::PathBuf;
 use std::process;
 use unc_chain::store_validator::StoreValidator;
 use unc_chain_configs::GenesisValidationMode;
 use unc_epoch_manager::{shard_tracker::ShardTracker, EpochManager};
+use unc_infra::{get_default_home, load_config};
 use unc_o11y::testonly::init_integration_logger;
 use yansi::Color::{Green, Red, White, Yellow};
 

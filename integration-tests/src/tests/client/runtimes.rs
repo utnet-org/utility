@@ -1,14 +1,14 @@
 //! Client is responsible for tracking the chain, chunks, and producing them when needed.
 //! This client works completely synchronously and must be operated by some async actor outside.
 
-use unc_infra::config::GenesisExt;
-use unc_infra::test_utils::TestEnvNightshadeSetupExt;
 use std::collections::HashMap;
 use std::sync::Arc;
 use unc_chain::ChainGenesis;
 use unc_chain_configs::Genesis;
 use unc_client::test_utils::TestEnv;
 use unc_crypto::KeyType;
+use unc_infra::config::GenesisExt;
+use unc_infra::test_utils::TestEnvNightshadeSetupExt;
 use unc_network::test_utils::MockPeerManagerAdapter;
 use unc_primitives::block::{Approval, ApprovalInner};
 use unc_primitives::block_header::ApprovalType;

@@ -3,10 +3,10 @@ use crate::contract_accounts::ContractAccountFilter;
 use crate::rocksdb_stats::get_rocksdb_stats;
 use crate::trie_iteration_benchmark::TrieIterationBenchmarkCmd;
 
-use unc_infra::{load_config, UncConfig};
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use unc_chain_configs::{GenesisChangeConfig, GenesisValidationMode};
+use unc_infra::{load_config, UncConfig};
 use unc_primitives::account::id::AccountId;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::sharding::ChunkHash;

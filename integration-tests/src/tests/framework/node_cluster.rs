@@ -1,11 +1,11 @@
 use crate::test_helpers::heavy_test;
 use actix::Addr;
 use actix_rt::ArbiterHandle;
-use unc_infra::{config::GenesisExt, load_test_config, start_with_config};
 use futures::future;
 use unc_actix_test_utils::{run_actix, spawn_interruptible};
 use unc_chain_configs::Genesis;
 use unc_client::{ClientActor, ViewClientActor};
+use unc_infra::{config::GenesisExt, load_test_config, start_with_config};
 use unc_network::tcp;
 use unc_network::test_utils::convert_boot_nodes;
 use unc_o11y::testonly::init_integration_logger;

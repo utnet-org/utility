@@ -2,11 +2,11 @@
 extern crate bencher;
 
 use bencher::Bencher;
-use unc_infra::{get_default_home, load_config, NightshadeRuntime};
 use std::time::{Duration, Instant};
 use unc_chain::{types::RuntimeAdapter, ChainStore, ChainStoreAccess};
 use unc_chain_configs::GenesisValidationMode;
 use unc_epoch_manager::EpochManager;
+use unc_infra::{get_default_home, load_config, NightshadeRuntime};
 use unc_o11y::testonly::init_integration_logger;
 use unc_primitives::types::StateRoot;
 use unc_store::Mode;

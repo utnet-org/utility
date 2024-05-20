@@ -1,6 +1,4 @@
 use chrono::Utc;
-use unc_infra::config::UncConfig;
-use unc_infra::NightshadeRuntime;
 use redis::Commands;
 use serde::ser::{SerializeSeq, Serializer};
 use std::collections::HashMap;
@@ -15,6 +13,8 @@ use unc_chain_configs::{Genesis, GenesisChangeConfig, GenesisConfig};
 use unc_crypto::PublicKey;
 use unc_epoch_manager::EpochManagerAdapter;
 use unc_epoch_manager::EpochManagerHandle;
+use unc_infra::config::UncConfig;
+use unc_infra::NightshadeRuntime;
 use unc_primitives::account::id::AccountId;
 use unc_primitives::block::BlockHeader;
 use unc_primitives::state_record::state_record_to_account_id;
@@ -295,11 +295,6 @@ mod test {
     use std::path::Path;
     use std::sync::Arc;
 
-    use unc_infra::config::GenesisExt;
-    use unc_infra::config::TESTING_INIT_PLEDGE;
-    use unc_infra::config::{Config, UncConfig};
-    use unc_infra::test_utils::TestEnvNightshadeSetupExt;
-    use unc_infra::NightshadeRuntime;
     use unc_chain::{ChainGenesis, ChainStoreAccess, Provenance};
     use unc_chain_configs::genesis_validate::validate_genesis;
     use unc_chain_configs::{Genesis, GenesisChangeConfig};
@@ -307,6 +302,11 @@ mod test {
     use unc_client::ProcessTxResponse;
     use unc_crypto::{InMemorySigner, KeyFile, KeyType, PublicKey, SecretKey};
     use unc_epoch_manager::EpochManager;
+    use unc_infra::config::GenesisExt;
+    use unc_infra::config::TESTING_INIT_PLEDGE;
+    use unc_infra::config::{Config, UncConfig};
+    use unc_infra::test_utils::TestEnvNightshadeSetupExt;
+    use unc_infra::NightshadeRuntime;
     use unc_primitives::account::id::AccountId;
     use unc_primitives::state_record::StateRecord;
     use unc_primitives::transaction::{Action, DeployContractAction, SignedTransaction};

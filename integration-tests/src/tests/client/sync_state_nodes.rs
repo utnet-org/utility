@@ -1,7 +1,5 @@
 use crate::test_helpers::heavy_test;
 use actix::{Actor, System};
-use unc_infra::test_utils::TestEnvNightshadeSetupExt;
-use unc_infra::{config::GenesisExt, load_test_config, start_with_config};
 use futures::{future, FutureExt};
 use std::ops::ControlFlow;
 use std::sync::{Arc, RwLock};
@@ -16,6 +14,8 @@ use unc_client::test_utils::TestEnv;
 use unc_client::{GetBlock, ProcessTxResponse};
 use unc_client_primitives::types::GetValidatorInfo;
 use unc_crypto::{InMemorySigner, KeyType};
+use unc_infra::test_utils::TestEnvNightshadeSetupExt;
+use unc_infra::{config::GenesisExt, load_test_config, start_with_config};
 use unc_network::tcp;
 use unc_network::test_utils::{convert_boot_nodes, wait_or_timeout, WaitOrTimeoutActor};
 use unc_o11y::testonly::{init_integration_logger, init_test_logger};

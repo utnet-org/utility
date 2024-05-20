@@ -480,8 +480,6 @@ pub(crate) fn apply_receipt(
 
 #[cfg(test)]
 mod test {
-    use unc_infra::config::GenesisExt;
-    use unc_infra::NightshadeRuntime;
     use rand::rngs::StdRng;
     use rand::SeedableRng;
     use std::path::Path;
@@ -491,6 +489,8 @@ mod test {
     use unc_client::ProcessTxResponse;
     use unc_crypto::{InMemorySigner, KeyType};
     use unc_epoch_manager::{EpochManager, EpochManagerAdapter};
+    use unc_infra::config::GenesisExt;
+    use unc_infra::NightshadeRuntime;
     use unc_primitives::hash::CryptoHash;
     use unc_primitives::shard_layout;
     use unc_primitives::transaction::SignedTransaction;

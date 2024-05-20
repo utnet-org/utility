@@ -2,7 +2,6 @@ use actix::Addr;
 use anyhow::Context;
 use async_trait::async_trait;
 use borsh::{BorshDeserialize, BorshSerialize};
-use unc_infra::config::UncConfig;
 use rocksdb::DB;
 use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
@@ -21,6 +20,7 @@ use unc_client_primitives::types::{
 };
 use unc_crypto::{PublicKey, SecretKey};
 use unc_indexer::{Indexer, StreamerMessage};
+use unc_infra::config::UncConfig;
 use unc_o11y::WithSpanContextExt;
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::receipt::{Receipt, ReceiptEnum};

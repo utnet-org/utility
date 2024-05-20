@@ -3,8 +3,8 @@ use std::path::PathBuf;
 
 use clap::{Arg, Command};
 
-use unc_infra::get_default_home;
 use unc_crypto::{InMemorySigner, KeyType, SecretKey, Signer};
+use unc_infra::get_default_home;
 
 fn generate_key_to_file(account_id: &str, key: SecretKey, path: &PathBuf) -> std::io::Result<()> {
     let signer = InMemorySigner::from_secret_key(account_id.parse().unwrap(), key);

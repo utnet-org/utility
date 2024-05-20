@@ -1,8 +1,8 @@
-use unc_infra::load_config;
 use std::path::Path;
 use unc_chain::ChainStore;
 use unc_chain_configs::GenesisValidationMode;
 use unc_epoch_manager::EpochManager;
+use unc_infra::load_config;
 use unc_store::{Mode, NodeStorage};
 
 #[derive(clap::Parser)]

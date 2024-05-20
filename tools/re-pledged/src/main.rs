@@ -1,10 +1,10 @@
 use clap::{Arg, Command};
-use unc_infra::config::{Config, BLOCK_PRODUCER_KICKOUT_THRESHOLD, CONFIG_FILENAME};
-use unc_infra::get_default_home;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::Duration;
 use unc_crypto::{InMemorySigner, KeyFile};
+use unc_infra::config::{Config, BLOCK_PRODUCER_KICKOUT_THRESHOLD, CONFIG_FILENAME};
+use unc_infra::get_default_home;
 use unc_o11y::tracing::{error, info};
 use unc_primitives::views::CurrentEpochValidatorInfo;
 // TODO(1905): Move out RPC interface for transacting into separate production crate.

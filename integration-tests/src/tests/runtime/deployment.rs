@@ -1,6 +1,6 @@
 use crate::node::{Node, RuntimeNode};
-use unc_infra::config::GenesisExt;
 use unc_chain_configs::Genesis;
+use unc_infra::config::GenesisExt;
 use unc_parameters::RuntimeConfigStore;
 use unc_primitives::transaction::{Action, DeployContractAction, SignedTransaction};
 use unc_primitives::types::AccountId;

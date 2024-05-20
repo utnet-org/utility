@@ -2,10 +2,10 @@ use std::cell::RefCell;
 use std::collections::{HashMap, HashSet};
 use std::sync::{Arc, RwLock};
 
-use unc_infra::config::MIN_GAS_PRICE;
 use node_runtime::state_viewer::TrieViewer;
 use node_runtime::{ApplyState, Runtime};
 use unc_crypto::{PublicKey, Signer};
+use unc_infra::config::MIN_GAS_PRICE;
 use unc_jsonrpc_primitives::errors::ServerError;
 use unc_parameters::RuntimeConfig;
 use unc_primitives::errors::{RuntimeError, TxExecutionError};

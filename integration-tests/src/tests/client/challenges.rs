@@ -1,6 +1,4 @@
 use assert_matches::assert_matches;
-use unc_infra::config::GenesisExt;
-use unc_infra::test_utils::TestEnvNightshadeSetupExt;
 use std::sync::Arc;
 use unc_chain::validate::validate_challenge;
 use unc_chain::{Block, ChainGenesis, ChainStoreAccess, Error, Provenance};
@@ -9,6 +7,8 @@ use unc_chunks::ShardsManager;
 use unc_client::test_utils::{create_chunk, create_chunk_with_transactions, TestEnv};
 use unc_client::{Client, ProcessTxResponse};
 use unc_crypto::{InMemorySigner, KeyType};
+use unc_infra::config::GenesisExt;
+use unc_infra::test_utils::TestEnvNightshadeSetupExt;
 use unc_network::types::NetworkRequests;
 use unc_primitives::challenge::{
     BlockDoubleSign, Challenge, ChallengeBody, ChunkProofs, MaybeEncodedShardChunk, PartialState,

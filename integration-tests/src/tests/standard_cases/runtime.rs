@@ -1,9 +1,9 @@
 use crate::node::RuntimeNode;
 use crate::tests::standard_cases::*;
-use unc_infra::config::{GenesisExt, TESTING_INIT_BALANCE};
 use testlib::runtime_utils::{add_test_contract, alice_account, bob_account};
 use unc_chain_configs::Genesis;
 use unc_crypto::SecretKey;
+use unc_infra::config::{GenesisExt, TESTING_INIT_BALANCE};
 use unc_primitives::checked_feature;
 use unc_primitives::state_record::StateRecord;
 use unc_primitives::version::PROTOCOL_VERSION;

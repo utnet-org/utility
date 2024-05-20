@@ -3,10 +3,10 @@ use std::path::PathBuf;
 use std::rc::Rc;
 
 use clap::Parser;
-use unc_infra::config::load_config;
 use unc_chain::{Block, ChainStore};
 use unc_chain_configs::GenesisValidationMode;
 use unc_epoch_manager::EpochManager;
+use unc_infra::config::load_config;
 
 use unc_primitives::hash::CryptoHash;
 use unc_primitives::shard_layout::{account_id_to_shard_id, ShardUId};

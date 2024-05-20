@@ -5,9 +5,6 @@ use std::sync::{Arc, RwLock};
 
 use actix::System;
 use assert_matches::assert_matches;
-use unc_infra::config::{GenesisExt, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
-use unc_infra::test_utils::TestEnvNightshadeSetupExt;
-use unc_infra::UNC_BASE;
 use futures::{future, FutureExt};
 use rand::prelude::StdRng;
 use rand::{Rng, SeedableRng};
@@ -32,6 +29,9 @@ use unc_client::{
     BlockApproval, BlockResponse, Client, GetBlockWithMerkleTree, ProcessTxResponse, SetNetworkInfo,
 };
 use unc_crypto::{InMemorySigner, KeyType, PublicKey, Signature, Signer};
+use unc_infra::config::{GenesisExt, TESTING_INIT_BALANCE, TESTING_INIT_PLEDGE};
+use unc_infra::test_utils::TestEnvNightshadeSetupExt;
+use unc_infra::UNC_BASE;
 use unc_network::test_utils::{wait_or_panic, MockPeerManagerAdapter};
 use unc_network::types::{
     BlockInfo, ConnectedPeerInfo, HighestHeightPeerInfo, NetworkInfo, PeerChainInfo,
