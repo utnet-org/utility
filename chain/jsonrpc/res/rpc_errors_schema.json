@@ -847,6 +847,13 @@
       "subtypes": [],
       "props": {}
     },
+    "UnsuitableChallengingKey": {
+      "name": "UnsuitableChallengingKey",
+      "subtypes": [],
+      "props": {
+        "public_key": ""
+      }
+    },
     "UnsuitablePledgingKey": {
       "name": "UnsuitablePledgingKey",
       "subtypes": [],
@@ -860,13 +867,6 @@
       "props": {
         "protocol_feature": "",
         "version": ""
-      }
-    },
-    "UnsuitableChallengingKey": {
-      "name": "UnsuitableChallengingKey",
-      "subtypes": [],
-      "props": {
-       "public_key": ""
       }
     },
     "ValueLengthExceeded": {
