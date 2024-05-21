@@ -396,6 +396,11 @@ impl Display for ActionsValidationError {
                     protocol_feature,
                     version,
             ),
+            ActionsValidationError::UnsuitableChallengingKey { public_key } => write!(
+                f,
+                "The challenging key must be RSA2048 keys. {} is provided instead.",
+                public_key,
+            ),
         }
     }
 }
