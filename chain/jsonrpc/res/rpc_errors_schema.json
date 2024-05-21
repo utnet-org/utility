@@ -68,7 +68,8 @@
         "UnsuitablePledgingKey",
         "FunctionCallZeroAttachedGas",
         "DelegateActionMustBeOnlyOne",
-        "UnsupportedProtocolFeature"
+        "UnsupportedProtocolFeature",
+        "UnsuitableChallengingKey"
       ],
       "props": {}
     },
@@ -859,6 +860,13 @@
       "props": {
         "protocol_feature": "",
         "version": ""
+      }
+    },
+    "UnsuitableChallengingKey": {
+      "name": "UnsuitableChallengingKey",
+      "subtypes": [],
+      "props": {
+       "public_key": ""
       }
     },
     "ValueLengthExceeded": {
