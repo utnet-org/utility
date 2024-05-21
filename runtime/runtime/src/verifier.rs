@@ -525,7 +525,7 @@ fn validate_create_rsa2048_challenge_action(
     action: &CreateRsa2048ChallengeAction,
 ) -> Result<(), ActionsValidationError> {
     if !is_valid_challenge_key(&action.public_key) {
-        return Err(ActionsValidationError::UnsuitablePledgingKey {
+        return Err(ActionsValidationError::UnsuitableChallengingKey {
             public_key: Box::new(action.public_key.clone()),
         });
     }

@@ -259,6 +259,9 @@ pub enum ActionsValidationError {
     /// `ProtocolFeature` here because we don't want to leak the internals of
     /// that type into observable borsh serialization.
     UnsupportedProtocolFeature { protocol_feature: String, version: ProtocolVersion },
+
+    /// The actions only support rsa2048 keys
+    UnsuitableChallengingKey { public_key: Box<PublicKey> },
 }
 
 /// Describes the error for validating a receipt.

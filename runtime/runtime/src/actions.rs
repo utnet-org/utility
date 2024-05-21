@@ -346,13 +346,15 @@ pub(crate) fn action_pledge(
                 .into());
                 return Ok(());
             }
+
+            // FIXME: when pledge is zero, it should be removed from the validator_pledge_proposals
+            result.validator_pledge_proposals.push(ValidatorPledge::new(
+                account_id.clone(),
+                pledge.public_key.clone(),
+                pledge.pledge,
+            ));
         }
 
-        result.validator_pledge_proposals.push(ValidatorPledge::new(
-            account_id.clone(),
-            pledge.public_key.clone(),
-            pledge.pledge,
-        ));
         if pledge.pledge > account.pledging() {
             // We've checked above `account.amount >= increment`
             account.set_amount(account.amount() - increment);

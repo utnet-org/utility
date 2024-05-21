@@ -274,7 +274,7 @@ impl Runtime {
                         logs: vec![],
                         receipt_ids: vec![receipt.receipt_id],
                         gas_burnt: verification_result.gas_burnt,
-                        // TODO(#8806): Support compute costs for actions. For now they match burnt gas.
+                        // TODO: Support compute costs for actions. For now they match burnt gas.
                         compute_usage: Some(verification_result.gas_burnt),
                         tokens_burnt: verification_result.burnt_amount,
                         executor_id: transaction.signer_id.clone(),
@@ -312,7 +312,7 @@ impl Runtime {
         let mut result = ActionResult::default();
         result.gas_used = exec_fees;
         result.gas_burnt = exec_fees;
-        // TODO(#8806): Support compute costs for actions. For now they match burnt gas.
+        // TODO: Support compute costs for actions. For now they match burnt gas.
         result.compute_usage = exec_fees;
         let account_id = &receipt.receiver_id;
         let is_the_only_action = actions.len() == 1;
@@ -1282,10 +1282,7 @@ impl Runtime {
             get(&state_update, &TrieKey::DelayedReceiptIndices)?.unwrap_or_default();
         let initial_delayed_receipt_indices = delayed_receipts_indices.clone();
 
-        if !apply_state.is_new_chunk
-            && apply_state.current_protocol_version
-                >= ProtocolFeature::FixApplyChunks.protocol_version()
-        {
+        if !apply_state.is_new_chunk {
             let (trie, trie_changes, state_changes) = state_update.finalize()?;
             let proof = trie.recorded_storage();
             return Ok(ApplyResult {
@@ -1400,7 +1397,7 @@ impl Runtime {
             Ok(())
         };
 
-        // TODO(#8859): Introduce a dedicated `compute_limit` for the chunk.
+        // TODO: Introduce a dedicated `compute_limit` for the chunk.
         // For now compute limit always matches the gas limit.
         let compute_limit = apply_state.gas_limit.unwrap_or(Gas::max_value());
 
@@ -1471,7 +1468,7 @@ impl Runtime {
         }
         metrics.delayed_receipts_done(total_gas_burnt, total_compute_usage);
 
-        // And then we process the new incoming receipts. These are receipts from other shards.
+        // And then we process the new incoming receipts.
         if let Some(prefetcher) = &mut prefetcher {
             prefetcher.clear();
             // Prefetcher is allowed to fail
@@ -1617,7 +1614,7 @@ mod tests {
     }
 
     fn to_tera(unc: Power) -> Power {
-        unc * 10u64.pow(12)
+        unc * 10u128.pow(12)
     }
 
     fn create_receipt_with_actions(

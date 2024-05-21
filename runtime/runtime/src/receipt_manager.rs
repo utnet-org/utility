@@ -404,7 +404,7 @@ mod tests {
         let mut receipt_manager = super::ReceiptManager::default();
         for &(static_gas, gas_weight, _) in function_calls {
             let index = receipt_manager
-                .create_receipt(vec![], vec![], "rick.test".parse().unwrap())
+                .create_receipt(vec![], vec![], "wick.test".parse().unwrap())
                 .unwrap();
             gas_limit = gas_limit.saturating_sub(static_gas);
             receipt_manager
