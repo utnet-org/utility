@@ -10,6 +10,10 @@ on:
       - "v[0-9]+.[0-9]+.[0-9]+-rc[0-9]+"
   workflow_dispatch:
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   changelog:
     name: Generate changelog
@@ -22,15 +26,25 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Calculate the next release
+        run: .github/workflows/calculate-alpha-release.bash
+
       - name: Generate a changelog
         uses: orhun/git-cliff-action@v3
         id: git-cliff
         with:
           config: ./cliff.toml
-          args: -vv --latest --strip header
+          args: -vv --unreleased --tag ${{ env.NEXT_TAG }} --strip header
         env:
           OUTPUT: CHANGELOG.md
           GITHUB_REPO: ${{ github.repository }}
+
+      # - name: Publish on GitHub
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     tag: ${{ env.NEXT_TAG }}
+      #     prerelease: true
+      #     bodyFile: CHANGELOG.md
 
   build_binaries:
     runs-on: ubuntu-latest
