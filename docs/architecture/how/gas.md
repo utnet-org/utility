@@ -120,8 +120,7 @@ gas burnt.) However, given a call can never burn more than was attached anyway,
 this second limit is obsolete with the current configuration where the two limits
 are equal.
 
-Since protocol version 53, with the stabilization of
-[NEP-264](https://github.com/Utility/UEPs/blob/master/neps/nep-0264.md), contract
+Since protocol version 53, with the stabilization, contract
 developers do not have to specify the absolute amount of gas to attach to calls.
 `promise_batch_action_function_call_weight` allows to specify a ratio of unspent
 gas that is computed after the current call has finished. This allows attaching

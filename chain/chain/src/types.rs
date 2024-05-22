@@ -29,8 +29,8 @@ use unc_primitives::types::{
     StateChangesForResharding, StateRoot, StateRootNode,
 };
 use unc_primitives::version::{
-    ProtocolVersion, MIN_GAS_PRICE_NEP_92, MIN_GAS_PRICE_NEP_92_FIX, MIN_PROTOCOL_VERSION_NEP_92,
-    MIN_PROTOCOL_VERSION_NEP_92_FIX,
+    ProtocolVersion, MIN_GAS_PRICE_UIP_92, MIN_GAS_PRICE_UIP_92_FIX, MIN_PROTOCOL_VERSION_UIP_92,
+    MIN_PROTOCOL_VERSION_UIP_92_FIX,
 };
 use unc_primitives::views::{QueryRequest, QueryResponse};
 use unc_store::{PartialStorage, ShardTries, Store, Trie, WrappedTrieChanges};
@@ -146,19 +146,19 @@ impl BlockEconomicsConfig {
     /// version higher than those changes are not overwritten and will instead
     /// respect the value defined in genesis.
     pub fn min_gas_price(&self, protocol_version: ProtocolVersion) -> Balance {
-        if self.genesis_protocol_version < MIN_PROTOCOL_VERSION_NEP_92 {
-            if protocol_version >= MIN_PROTOCOL_VERSION_NEP_92_FIX {
-                MIN_GAS_PRICE_NEP_92_FIX
-            } else if protocol_version >= MIN_PROTOCOL_VERSION_NEP_92 {
-                MIN_GAS_PRICE_NEP_92
+        if self.genesis_protocol_version < MIN_PROTOCOL_VERSION_UIP_92 {
+            if protocol_version >= MIN_PROTOCOL_VERSION_UIP_92_FIX {
+                MIN_GAS_PRICE_UIP_92_FIX
+            } else if protocol_version >= MIN_PROTOCOL_VERSION_UIP_92 {
+                MIN_GAS_PRICE_UIP_92
             } else {
                 self.genesis_min_gas_price
             }
-        } else if self.genesis_protocol_version < MIN_PROTOCOL_VERSION_NEP_92_FIX {
-            if protocol_version >= MIN_PROTOCOL_VERSION_NEP_92_FIX {
-                MIN_GAS_PRICE_NEP_92_FIX
+        } else if self.genesis_protocol_version < MIN_PROTOCOL_VERSION_UIP_92_FIX {
+            if protocol_version >= MIN_PROTOCOL_VERSION_UIP_92_FIX {
+                MIN_GAS_PRICE_UIP_92_FIX
             } else {
-                MIN_GAS_PRICE_NEP_92
+                MIN_GAS_PRICE_UIP_92
             }
         } else {
             self.genesis_min_gas_price

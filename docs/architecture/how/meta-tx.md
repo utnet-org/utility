@@ -1,6 +1,6 @@
 # Meta Transactions
 
-[NEP-366](https://github.com/Utility/UEPs/pull/366) introduced the concept of meta
+introduced the concept of meta
 transactions to unc Protocol. This feature allows users to execute transactions
 on UNC without owning any gas or tokens. In order to enable this, users
 construct and sign transactions off-chain. A third party (the relayer) is used
@@ -14,10 +14,9 @@ more flexible.
 ## Overview
 
 ![Flow chart of meta
-transactions](https://raw.githubusercontent.com/Utility/UEPs/003e589e6aba24fc70dd91c9cf7ef0007ca50735/neps/assets/nep-0366/NEP-DelegateAction.png)
-_Credits for the diagram go to the NEP authors Alexander Fadeev and Egor
+transactions](https://raw.githubusercontent.com/Utility/UEPs/003e589e6aba24fc70dd91c9cf7ef0007ca50735/neps/assets/nep-0366/UIP-DelegateAction.png)
+_Credits for the diagram go to the UIP authors Alexander Fadeev and Egor
 Uleyskiy._
-
 
 The graphic shows an example use case for meta transactions. Alice owns an
 amount of the fungible token $FT. She wants to transfer some to John. To do
@@ -119,7 +118,7 @@ Nested delegate actions have no known use case and it would be complicated to
 implement. Consequently, it was omitted.
 
 For delegate actions beside each other, there was a bit of back and forth during
-the NEP-366 design phase. The potential use case here is essentially the same as
+the UIP-366 design phase. The potential use case here is essentially the same as
 having multiple receivers in a delegate action. Naturally, it runs into all the
 same complications (false sense of atomicity) and ends with the same conclusion:
 Omitted from the MVP and left open for future improvement.

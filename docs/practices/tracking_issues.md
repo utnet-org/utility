@@ -31,7 +31,7 @@ issue for your work.
   edited to reflect the current status.
 - The issues should contain links to all the relevant design documents
   which should also be kept up-to-date.
-- The issues should link to any relevant NEP if applicable.
+- The issues should link to any relevant UIP if applicable.
 - The issues should contain a list of to-do tasks that should be kept
   up-to-date as new work items are discovered and other items are done. This
   helps others gauge progress and helps lower the barrier of entry for others to

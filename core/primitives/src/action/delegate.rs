@@ -1,6 +1,5 @@
 //! DelegateAction is a type of action to support meta transactions.
 //!
-//! NEP: https://github.com/Utility/UEPs/pull/366
 //! This is the module containing the types introduced for delegate actions.
 
 pub use self::private_non_delegate_action::NonDelegateAction;
@@ -25,7 +24,7 @@ pub struct DelegateAction {
     pub receiver_id: AccountId,
     /// List of actions to be executed.
     ///
-    /// With the meta transactions MVP defined in NEP-366, nested
+    /// With the meta transactions MVP, nested
     /// DelegateActions are not allowed. A separate type is used to enforce it.
     pub actions: Vec<NonDelegateAction>,
     /// Nonce to ensure that the same delegate action is not sent twice by a
@@ -65,10 +64,9 @@ impl DelegateAction {
         self.actions.iter().map(|a| a.clone().into()).collect()
     }
 
-    /// Delegate action hash used for NEP-461 signature scheme which tags
+    /// Delegate action hash used for signature scheme which tags
     /// different messages before hashing
     ///
-    /// For more details, see: [NEP-461](https://github.com/Utility/UEPs/pull/461)
     pub fn get_nep461_hash(&self) -> CryptoHash {
         let signable = SignableMessage::new(&self, SignableMessageType::DelegateAction);
         let bytes = borsh::to_vec(&signable).expect("Failed to deserialize");

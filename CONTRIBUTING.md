@@ -54,10 +54,6 @@ the team should help you get started.  We do not always keep the issue tracker
 up-to-date, so if you do not find an interesting task to work on, please ask for
 help on our zulip channel.
 
-If you have an idea for an enhancement to the protocol itself, please make a
-proposal by following the [UNC Enhancement
-Proposal](https://github.com/Utility/UEPs/blob/master/neps/nep-0001.md) process.
-
 ## Pull Requests
 
 All the contributions to `utility` happen via Pull Requests.  Please follow the

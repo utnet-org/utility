@@ -5,8 +5,6 @@ An epoch is a unit of time when the set of validators of the network remain cons
 
 You can read more about the epoch here: <https://docs.utility.org/concepts/basics/epoch>
 
-You can read more about Epoch finalization and Epoch changes here: <https://github.com/utility/UEPs/blob/master/specs/BlockchainLayer/EpochManager/EpochManager.md>
-
 ## EpochManager
 
 Main class that has two main functions:

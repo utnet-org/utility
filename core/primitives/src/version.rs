@@ -19,13 +19,13 @@ pub use unc_primitives_core::version::ProtocolFeature;
 pub use unc_primitives_core::version::PEER_MIN_ALLOWED_PROTOCOL_VERSION;
 pub use unc_primitives_core::version::PROTOCOL_VERSION;
 
-/// Minimum gas price proposed in NEP 92 and the associated protocol version
-pub const MIN_GAS_PRICE_NEP_92: Balance = 1_000_000_000;
-pub const MIN_PROTOCOL_VERSION_NEP_92: ProtocolVersion = 31;
+/// Minimum gas price proposed in UIP 92 and the associated protocol version
+pub const MIN_GAS_PRICE_UIP_92: Balance = 1_000_000_000;
+pub const MIN_PROTOCOL_VERSION_UIP_92: ProtocolVersion = 31;
 
-/// Minimum gas price proposed in NEP 92 (fixed) and the associated protocol version
-pub const MIN_GAS_PRICE_NEP_92_FIX: Balance = 100_000_000;
-pub const MIN_PROTOCOL_VERSION_NEP_92_FIX: ProtocolVersion = 32;
+/// Minimum gas price proposed in UIP 92 (fixed) and the associated protocol version
+pub const MIN_GAS_PRICE_UIP_92_FIX: Balance = 100_000_000;
+pub const MIN_PROTOCOL_VERSION_UIP_92_FIX: ProtocolVersion = 32;
 
 pub const CORRECT_RANDOM_VALUE_PROTOCOL_VERSION: ProtocolVersion = 33;
 

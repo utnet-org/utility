@@ -92,7 +92,7 @@ Adding the parameter in code involves several steps.
 
 For a first draft, the exact gas value used in the parameter is not crucial.
 Make sure the right set of parameters exists and try to set a number that roughly
-makes sense. This should be enough to enable discussions on the NEP around the
+makes sense. This should be enough to enable discussions on the UIP around the
 feasibility and usefulness of the proposed feature. If you are not sure, a good
 rule of thumb is 0.1 Tgas for each disk operation and at least 1 Tgas for each
 ms of CPU time. Then round it up generously.

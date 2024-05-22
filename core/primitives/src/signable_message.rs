@@ -7,11 +7,10 @@ use unc_primitives_core::types::AccountId;
 // transactions are defined in it. Introducing this is no protocol change. This
 // is just a forward-looking implementation detail of meta transactions.
 //
-// We plan to establish a standard with NEP-461 that makes this an official
-// specification in the wider ecosystem. Note that NEP-461 should not change the
+// We plan to establish a standard that makes this an official
+// specification in the wider ecosystem. Note that should not change the
 // protocol in any way, unless we have to change meta transaction implementation
 // details to adhere to the future standard.
-// [NEP-461](https://github.com/Utility/UEPs/pull/461)
 //
 // TODO: consider making these public once there is an approved standard.
 const MIN_ON_CHAIN_DISCRIMINANT: u32 = 1 << 30;
@@ -19,8 +18,7 @@ const MAX_ON_CHAIN_DISCRIMINANT: u32 = (1 << 31) - 1;
 const MIN_OFF_CHAIN_DISCRIMINANT: u32 = 1 << 31;
 const MAX_OFF_CHAIN_DISCRIMINANT: u32 = u32::MAX;
 
-// UEPs currently included in the scheme
-const NEP_366_META_TRANSACTIONS: u32 = 366;
+const UIP_META_TRANSACTIONS: u32 = 366;
 
 /// Used to distinguish message types that are sign by account keys, to avoid an
 /// abuse of signed messages as something else.
@@ -29,8 +27,8 @@ const NEP_366_META_TRANSACTIONS: u32 = 366;
 /// signed under this signature scheme.
 ///
 /// The scheme is a draft introduced to avoid security issues with the
-/// implementation of meta transactions (NEP-366) but will eventually be
-/// standardized with NEP-461 that solves the problem more generally.
+/// implementation of meta transactions but will eventually be
+/// standardized that solves the problem more generally.
 #[derive(
     Debug,
     Clone,
@@ -73,9 +71,9 @@ pub enum SignableMessageType {
 pub enum ReadDiscriminantError {
     #[error("does not fit any known categories")]
     UnknownMessageType,
-    #[error("NEP {0} does not have a known on-chain use")]
+    #[error("UIP {0} does not have a known on-chain use")]
     UnknownOnChainNep(u32),
-    #[error("NEP {0} does not have a known off-chain use")]
+    #[error("UIP {0} does not have a known off-chain use")]
     UnknownOffChainNep(u32),
     #[error("discriminant is in the range for transactions")]
     TransactionFound,
@@ -102,7 +100,7 @@ impl<'a, T: BorshSerialize> SignableMessage<'a, T> {
 }
 
 impl MessageDiscriminant {
-    /// Create a discriminant for an on-chain actionable message that was introduced in the specified NEP.
+    /// Create a discriminant for an on-chain actionable message that was introduced in the specified UIP.
     ///
     /// Allows creating discriminants currently unknown in this crate, which can
     /// be useful to prototype new standards. For example, when the client
@@ -119,7 +117,7 @@ impl MessageDiscriminant {
         }
     }
 
-    /// Create a discriminant for an off-chain message that was introduced in the specified NEP.
+    /// Create a discriminant for an off-chain message that was introduced in the specified UIP.
     ///
     /// Allows creating discriminants currently unknown in this crate, which can
     /// be useful to prototype new standards. For example, when the client
@@ -153,7 +151,7 @@ impl MessageDiscriminant {
     }
 
     /// If this discriminant marks a message intended for on-chain use, return
-    /// the NEP in which the message type was introduced.
+    /// the UIP in which the message type was introduced.
     pub fn on_chain_nep(&self) -> Option<u32> {
         if self.discriminant < MIN_ON_CHAIN_DISCRIMINANT
             || self.discriminant > MAX_ON_CHAIN_DISCRIMINANT
@@ -167,7 +165,7 @@ impl MessageDiscriminant {
     }
 
     /// If this discriminant marks a message intended for off-chain use, return
-    /// the NEP in which the message type was introduced.
+    /// the UIP in which the message type was introduced.
     ///
     /// clippy: MAX_OFF_CHAIN_DISCRIMINANT currently is u32::MAX which makes the
     /// comparison pointless, however I think it helps code readability to have
@@ -194,7 +192,7 @@ impl TryFrom<MessageDiscriminant> for SignableMessageType {
             Err(Self::Error::TransactionFound)
         } else if let Some(nep) = discriminant.on_chain_nep() {
             match nep {
-                NEP_366_META_TRANSACTIONS => Ok(Self::DelegateAction),
+                UIP_META_TRANSACTIONS => Ok(Self::DelegateAction),
                 _ => Err(Self::Error::UnknownOnChainNep(nep)),
             }
         } else if let Some(nep) = discriminant.off_chain_nep() {
@@ -207,10 +205,10 @@ impl TryFrom<MessageDiscriminant> for SignableMessageType {
 
 impl From<SignableMessageType> for MessageDiscriminant {
     fn from(ty: SignableMessageType) -> Self {
-        // unwrapping here is ok, we know the constant NEP numbers used are in range
+        // unwrapping here is ok, we know the constant UIP numbers used are in range
         match ty {
             SignableMessageType::DelegateAction => {
-                MessageDiscriminant::new_on_chain(NEP_366_META_TRANSACTIONS).unwrap()
+                MessageDiscriminant::new_on_chain(UIP_META_TRANSACTIONS).unwrap()
             }
         }
     }
@@ -230,7 +228,7 @@ mod tests {
         InMemorySigner::from_seed(account_id.to_owned(), KeyType::ED25519, account_id.as_str())
     }
 
-    // happy path for NEP-366 signature
+    // happy path for signature
     #[test]
     fn nep_366_ok() {
         let sender_id: AccountId = "alice.unc".parse().unwrap();
@@ -244,7 +242,7 @@ mod tests {
         assert!(signed.verify());
     }
 
-    // Try to use a wrong nep number in NEP-366 signature verification.
+    // Try to use a wrong nep number in UIP signature verification.
     #[test]
     fn nep_366_wrong_nep() {
         let sender_id: AccountId = "alice.unc".parse().unwrap();
@@ -262,7 +260,7 @@ mod tests {
         assert!(!signed.verify());
     }
 
-    // Try to use a wrong message type in NEP-366 signature verification.
+    // Try to use a wrong message type in UIP-366 signature verification.
     #[test]
     fn nep_366_wrong_msg_type() {
         let sender_id: AccountId = "alice.unc".parse().unwrap();

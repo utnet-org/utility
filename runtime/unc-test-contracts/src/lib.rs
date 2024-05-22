@@ -66,14 +66,14 @@ pub fn fuzzing_contract() -> &'static [u8] {
     CONTRACT.get_or_init(|| read_contract("contract_for_fuzzing_rs.wasm")).as_slice()
 }
 
-/// NEP-141 implementation (fungible token contract).
+/// UIP-141 implementation (fungible token contract).
 ///
 /// The code is available here:
 /// https://github.com/utnet-org/utility-sdk-rs/tree/master/examples/fungible-token
 ///
 /// We keep a static WASM of this for our integration tests. We don't have to
 /// update it with every SDK release, any contract implementing the interface
-/// defined by NEP-141 is sufficient. But for future reference, the WASM was
+/// defined by UIP-141 is sufficient. But for future reference, the WASM was
 /// compiled with SDK version 4.1.1.
 pub fn ft_contract() -> &'static [u8] {
     static CONTRACT: OnceCell<Vec<u8>> = OnceCell::new();

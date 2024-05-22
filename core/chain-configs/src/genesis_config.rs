@@ -771,7 +771,6 @@ pub struct ProtocolConfigView {
     /// Max pledge percentage of the validators we will kick out.
     pub max_kickout_pledge_perc: u8,
     /// The lowest ratio s/s_total any block producer can have.
-    /// See <https://github.com/Utility/UEPs/pull/167> for details
     pub minimum_pledge_ratio: Rational32,
     /// The minimum number of validators each shard must have
     pub minimum_validators_per_shard: NumSeats,
