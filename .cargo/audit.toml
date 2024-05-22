@@ -7,7 +7,6 @@ ignore = [
     # However, we should probably replace cloud-storage with tame-gcs as soon as possible to remove this ignore.
     "RUSTSEC-2021-0141",
 
-
     # mach is unmaintained, but seems to be required by wasmtime at its latest version, which we currently cannot do without.
     # We should replace it with mach2 in our personal code, but will need to keep it there until wasmtime switches to it.
     # Anyway, it cannot be a security liability in production, considering it is bindings to the OS X kernel.

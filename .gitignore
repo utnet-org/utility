@@ -34,7 +34,6 @@ venv
 
 # Integration tests
 create-unc-app/
-unc-api-js/
 test-keys/
 tmp/
 
@@ -57,5 +56,6 @@ names-to-stats.txt
 data_dump_*.bin!
 *_key.json
 
+/ops
 
 pytest/myenv/
