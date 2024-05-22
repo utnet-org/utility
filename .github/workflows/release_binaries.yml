@@ -39,12 +39,12 @@ jobs:
           OUTPUT: CHANGELOG.md
           GITHUB_REPO: ${{ github.repository }}
 
-      # - name: Publish on GitHub
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     tag: ${{ env.NEXT_TAG }}
-      #     prerelease: true
-      #     bodyFile: CHANGELOG.md
+      - name: Publish on GitHub
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ env.NEXT_TAG }}
+          prerelease: true
+          bodyFile: CHANGELOG.md
 
   build_binaries:
     runs-on: ubuntu-latest
