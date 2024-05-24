@@ -25,7 +25,6 @@ once_cell.workspace = true
 primitive-types.workspace = true
 rand = "0.7" # TODO: this is probably wrong?
 rsa.workspace = true
-rsa-export.workspace = true
 secp256k1.workspace = true
 serde.workspace = true
 serde_json.workspace = true
