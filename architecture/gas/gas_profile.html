@@ -1,0 +1,330 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Gas Profile - Guide to Utility Development</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="../../architecture/index.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><a href="../../architecture/how/index.html"><strong aria-hidden="true">2.</strong> How unc-node works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/how/sync.html"><strong aria-hidden="true">2.1.</strong> How Sync Works</a></li><li class="chapter-item expanded "><a href="../../architecture/how/gc.html"><strong aria-hidden="true">2.2.</strong> Garbage Collection</a></li><li class="chapter-item expanded "><a href="../../architecture/how/epoch.html"><strong aria-hidden="true">2.3.</strong> How Epoch Works</a></li><li class="chapter-item expanded "><a href="../../architecture/how/tx_routing.html"><strong aria-hidden="true">2.4.</strong> Transaction Routing</a></li><li class="chapter-item expanded "><a href="../../architecture/how/tx_receipts.html"><strong aria-hidden="true">2.5.</strong> Transactions And Receipts</a></li><li class="chapter-item expanded "><a href="../../architecture/how/gas.html"><strong aria-hidden="true">2.6.</strong> Gas</a></li><li class="chapter-item expanded "><a href="../../architecture/how/meta-tx.html"><strong aria-hidden="true">2.7.</strong> Meta transactions</a></li><li class="chapter-item expanded "><a href="../../architecture/how/serialization.html"><strong aria-hidden="true">2.8.</strong> Serialization: Borsh, Json, ProtoBuf</a></li><li class="chapter-item expanded "><a href="../../architecture/how/proofs.html"><strong aria-hidden="true">2.9.</strong> Proofs</a></li></ol></li><li class="chapter-item expanded "><a href="../../architecture/next/index.html"><strong aria-hidden="true">3.</strong> How unc-node will work</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/next/catchup_and_state_sync.html"><strong aria-hidden="true">3.1.</strong> Catchup and state sync improvements</a></li><li class="chapter-item expanded "><a href="../../architecture/next/malicious_chunk_producer_and_phase2.html"><strong aria-hidden="true">3.2.</strong> Malicious producers and phase 2</a></li></ol></li><li class="chapter-item expanded "><a href="../../architecture/storage.html"><strong aria-hidden="true">4.</strong> Storage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/storage/flow.html"><strong aria-hidden="true">4.1.</strong> Storage Request Flow</a></li><li class="chapter-item expanded "><a href="../../architecture/storage/trie.html"><strong aria-hidden="true">4.2.</strong> Trie</a></li><li class="chapter-item expanded "><a href="../../architecture/storage/database.html"><strong aria-hidden="true">4.3.</strong> Database Format</a></li><li class="chapter-item expanded "><a href="../../architecture/storage/flat_storage.html"><strong aria-hidden="true">4.4.</strong> Flat Storage</a></li></ol></li><li class="chapter-item expanded "><a href="../../architecture/network.html"><strong aria-hidden="true">5.</strong> Network</a></li><li class="chapter-item expanded "><a href="../../architecture/gas/index.html"><strong aria-hidden="true">6.</strong> Gas Cost Parameters</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/gas/parameter_definition.html"><strong aria-hidden="true">6.1.</strong> Parameter Definitions</a></li><li class="chapter-item expanded "><a href="../../architecture/gas/gas_profile.html" class="active"><strong aria-hidden="true">6.2.</strong> Gas Profile</a></li><li class="chapter-item expanded "><a href="../../architecture/gas/estimator.html"><strong aria-hidden="true">6.3.</strong> Runtime Parameter Estimator</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Practices</li><li class="chapter-item expanded "><a href="../../practices/index.html"><strong aria-hidden="true">7.</strong> Overview</a></li><li class="chapter-item expanded "><a href="../../practices/rust.html"><strong aria-hidden="true">8.</strong> Rust 🦀</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/index.html"><strong aria-hidden="true">9.</strong> Workflows</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../practices/workflows/run_a_node.html"><strong aria-hidden="true">9.1.</strong> Run a Node</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/deploy_a_contract.html"><strong aria-hidden="true">9.2.</strong> Deploy a Contract</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/gas_estimations.html"><strong aria-hidden="true">9.3.</strong> Run Gas Estimations</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/localnet_on_many_machines.html"><strong aria-hidden="true">9.4.</strong> Localnet on many machines</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/io_trace.html"><strong aria-hidden="true">9.5.</strong> IO tracing</a></li></ol></li><li class="chapter-item expanded "><a href="../../practices/style.html"><strong aria-hidden="true">10.</strong> Code Style</a></li><li class="chapter-item expanded "><a href="../../practices/docs.html"><strong aria-hidden="true">11.</strong> Documentation</a></li><li class="chapter-item expanded "><a href="../../practices/tracking_issues.html"><strong aria-hidden="true">12.</strong> Tracking Issues</a></li><li class="chapter-item expanded "><a href="../../practices/security_vulnerabilities.html"><strong aria-hidden="true">13.</strong> Security Vulnerabilities</a></li><li class="chapter-item expanded "><a href="../../practices/fast_builds.html"><strong aria-hidden="true">14.</strong> Fast Builds</a></li><li class="chapter-item expanded "><a href="../../practices/testing/index.html"><strong aria-hidden="true">15.</strong> Testing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../practices/testing/python_tests.html"><strong aria-hidden="true">15.1.</strong> Python Tests</a></li><li class="chapter-item expanded "><a href="../../practices/testing/test_utils.html"><strong aria-hidden="true">15.2.</strong> Testing Utils</a></li></ol></li><li class="chapter-item expanded "><a href="../../practices/protocol_upgrade.html"><strong aria-hidden="true">16.</strong> Protocol Upgrade</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced configuration</li><li class="chapter-item expanded "><a href="../../advanced_configuration/networking.html"><strong aria-hidden="true">17.</strong> Networking</a></li><li class="chapter-item expanded affix "><li class="part-title">Custom test networks</li><li class="chapter-item expanded "><a href="../../test_networks/mainnet_spoon.html"><strong aria-hidden="true">18.</strong> Starting a network from mainnet state</a></li><li class="chapter-item expanded affix "><li class="part-title">Misc</li><li class="chapter-item expanded "><a href="../../misc/index.html"><strong aria-hidden="true">19.</strong> Overview</a></li><li class="chapter-item expanded "><a href="../../misc/state_sync_dump.html"><strong aria-hidden="true">20.</strong> State Sync Dump</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Guide to Utility Development</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/utnet-org/utility/tree/master/docs" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/utnet-org/utility/edit/master/docs/./architecture/gas/gas_profile.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="gas-profile"><a class="header" href="#gas-profile">Gas Profile</a></h1>
+<p>What if you want to understand the exact gas spending of a smart contract call?
+It would be very complicated to predict exactly how much gas executing a piece
+of WASM code will require, including all host function calls and actions. An
+easier approach is to just run the code on testnet and see how much gas it
+burns. Gas profiles allow one to dig deeper and understand the breakdown of the
+gas costs per parameter.</p>
+<p><strong>Gas profiles are not very reliable</strong>, in that they are often incomplete and the
+details of how they are computed can change without a protocol version bump.</p>
+<h2 id="example-transaction-gas-profile"><a class="header" href="#example-transaction-gas-profile">Example Transaction Gas Profile</a></h2>
+<p>You can query the gas profile of a transaction with
+<a href="https://docs.unc.org/tools/unc-cli">UNC CLI</a>.</p>
+<pre><code class="language-bash">unc_ENV=mainnet unc tx-status 8vYxsqYp5Kkfe8j9LsTqZRsEupNkAs1WvgcGcUE4MUUw  \
+  --accountId app.unccrowd.unc  \
+  --nodeUrl https://archival-rpc.mainnet.unc.org  # Allows to retrieve older transactions.
+</code></pre>
+<pre><code>Transaction app.unccrowd.unc:8vYxsqYp5Kkfe8j9LsTqZRsEupNkAs1WvgcGcUE4MUUw
+{
+  receipts_outcome: [
+    {
+      block_hash: '2UVQKpxH6PhEqiKr6zMggqux4hwMrqqjpsbKrJG3vFXW',
+      id: '14bwmJF21PXY9YWGYN1jpjF3BRuyCKzgVWfhXhZBKH4u',
+      outcome: {
+        executor_id: 'app.unccrowd.unc',
+        gas_burnt: 5302170867180,
+        logs: [],
+        metadata: {
+          gas_profile: [
+            {
+              cost: 'BASE',
+              cost_category: 'WASM_HOST_COST',
+              gas_used: '15091782327'
+            },
+            {
+              cost: 'CONTRACT_LOADING_BASE',
+              cost_category: 'WASM_HOST_COST',
+              gas_used: '35445963'
+            },
+            {
+              cost: 'CONTRACT_LOADING_BYTES',
+              cost_category: 'WASM_HOST_COST',
+              gas_used: '117474381750'
+            },
+            {
+              cost: 'READ_CACHED_TRIE_NODE',
+              cost_category: 'WASM_HOST_COST',
+              gas_used: '615600000000'
+            },
+            # ...
+            # skipping entries for presentation brevity
+            # ...
+            {
+              cost: 'WRITE_REGISTER_BASE',
+              cost_category: 'WASM_HOST_COST',
+              gas_used: '48713882262'
+            },
+            {
+              cost: 'WRITE_REGISTER_BYTE',
+              cost_category: 'WASM_HOST_COST',
+              gas_used: '4797573768'
+            }
+          ],
+          version: 2
+        },
+        receipt_ids: [ '46Qsorkr6hy36ZzWmjPkjbgG28ko1iwz1NT25gvia51G' ],
+        status: { SuccessValue: 'ZmFsc2U=' },
+        tokens_burnt: '530217086718000000000'
+      },
+      proof: [ ... ]
+    },
+    { ... }
+  ],
+  status: { SuccessValue: 'ZmFsc2U=' },
+  transaction: { ... },
+  transaction_outcome: {
+    block_hash: '7MgTTVi3aMG9LiGV8ezrNvoorUwQ7TwkJ4Wkbk3Fq5Uq',
+    id: '8vYxsqYp5Kkfe8j9LsTqZRsEupNkAs1WvgcGcUE4MUUw',
+    outcome: {
+      executor_id: 'evgeniya.unc',
+      gas_burnt: 2428068571644,
+      ...
+      tokens_burnt: '242806857164400000000'
+    },
+  }
+}
+</code></pre>
+<p>The gas profile is in <code>receipts_outcome.outcome.metadata.gas_profile</code>. It shows
+gas costs per parameter and with associated categories such as <code>WASM_HOST_COST</code>
+or <code>ACTION_COST</code>. In the example, all costs are of the former category, which is
+gas expended on smart contract execution. The latter is for gas spent on
+actions.</p>
+<p>To be complete, the output above should also have a gas profile entry for the
+function call action. But currently this is not included since gas profiles only
+work properly on function call receipts. Improving this is planned, see
+<a href="https://github.com/utnet-org/utility/issues/8261">unc-infra.8261</a>.</p>
+<p>The <code>tx-status</code> query returns one gas profile for each receipt. The output above
+contains a single gas profile because the transaction only spawned one receipt.
+If there was a chain of cross contract calls, there would be multiple profiles.</p>
+<p>Besides receipts, also note the <code>transaction_outcome</code> in the output. It contains
+the gas cost for converting the transaction into a receipt. To calculate the
+full gas cost, add up the transaction cost with all receipt costs.</p>
+<p>The transaction outcome currently does not have a gas profile, it only shows the
+total gas spent converting the transaction. Arguably, it is not necessary to
+provide the gas profile since the costs only depend on the list of actions. With
+sufficient understanding of the protocol, one could reverse-engineer the exact
+breakdown simply by looking at the action list. But adding the profile would
+still make sense to make it easier to understand.</p>
+<h2 id="gas-profile-versions"><a class="header" href="#gas-profile-versions">Gas Profile Versions</a></h2>
+<p>Depending on the version in <code>receipts_outcome.outcome.metadata.version</code>, you
+should expect a different format of the gas profile. Version 1 has no profile
+data at all. Version 2 has a detailed profile but some parameters are conflated,
+so you cannot extract the exact gas spending in some cases. Version 3 will have
+the cost exactly per parameter.</p>
+<p>Which version of the profile an RPC node returns depends on the version it had
+when it first processed the transaction. The profiles are stored in the database
+with one version and never updated. Therefore, older transactions will usually
+only have old profiles. However, one could replay the chain from genesis with a
+new unc-infra.client and generate the newest profile for all transactions in this
+way.</p>
+<p>Note: Due to bugs, some nodes will claim they send version 1 but actually
+send version 2. (Did I mention that profiles are unreliable?)</p>
+<h2 id="how-gas-profiles-are-created"><a class="header" href="#how-gas-profiles-are-created">How Gas Profiles are Created</a></h2>
+<p>The transaction runtime charges gas in various places around the code.
+<code>ActionResult</code> keeps a summary of all costs for an action. The <code>gas_burnt</code> and
+<code>gas_used</code> fields track the total gas burned and reserved for spawned receipts.
+These two fields are crucial for the protocol to function correctly, as they are
+used to determine when execution runs out of gas.</p>
+<p>Additionally, <code>ActionResult</code> also has a <code>profile</code> field which keeps a detailed
+breakdown of the gas spending per parameter. Profiles are not stored on chain
+but RPC nodes and archival nodes keep them in their databases. This is mostly a
+debug tool and has no direct impact on the correct functioning of the protocol.</p>
+<h2 id="charging-gas"><a class="header" href="#charging-gas">Charging Gas</a></h2>
+<p>Generally speaking, gas is charged right before the computation that it pays for
+is executed. It has to be before to avoid cheap resource exhaustion attacks.
+Imagine the user has only 1 gas unit left, but if we start executing an expensive
+step, we would waste a significant duration of computation on all validators
+without anyone paying for it.</p>
+<p>When charging gas for an action, the <code>ActionResult</code> can be updated directly. But
+when charging WASM costs, it would be too slow to do a context switch each time,
+Therefore, a fast gas counter exists that can be updated from within the VM.
+(See
+<a href="https://github.com/utnet-org/utility/blob/06711f8460f946b8d2042aa1df6abe03c5184767/runtime/unc-vm-logic/src/gas_counter.rs">gas_counter.rs</a>)
+At the end of a function call execution, the gas counter is read by the host and
+merged into the <code>ActionResult</code>.</p>
+<!-- 
+TODO: We can expand a bit more on how profiles are created and how it interacts 
+with gas charging after merging https://github.com/utnet-org/utility/issues/8033
+-->
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../architecture/gas/parameter_definition.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../../architecture/gas/estimator.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../architecture/gas/parameter_definition.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../../architecture/gas/estimator.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

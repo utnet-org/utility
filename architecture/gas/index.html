@@ -1,0 +1,357 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Gas Cost Parameters - Guide to Utility Development</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="../../architecture/index.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><a href="../../architecture/how/index.html"><strong aria-hidden="true">2.</strong> How unc-node works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/how/sync.html"><strong aria-hidden="true">2.1.</strong> How Sync Works</a></li><li class="chapter-item expanded "><a href="../../architecture/how/gc.html"><strong aria-hidden="true">2.2.</strong> Garbage Collection</a></li><li class="chapter-item expanded "><a href="../../architecture/how/epoch.html"><strong aria-hidden="true">2.3.</strong> How Epoch Works</a></li><li class="chapter-item expanded "><a href="../../architecture/how/tx_routing.html"><strong aria-hidden="true">2.4.</strong> Transaction Routing</a></li><li class="chapter-item expanded "><a href="../../architecture/how/tx_receipts.html"><strong aria-hidden="true">2.5.</strong> Transactions And Receipts</a></li><li class="chapter-item expanded "><a href="../../architecture/how/gas.html"><strong aria-hidden="true">2.6.</strong> Gas</a></li><li class="chapter-item expanded "><a href="../../architecture/how/meta-tx.html"><strong aria-hidden="true">2.7.</strong> Meta transactions</a></li><li class="chapter-item expanded "><a href="../../architecture/how/serialization.html"><strong aria-hidden="true">2.8.</strong> Serialization: Borsh, Json, ProtoBuf</a></li><li class="chapter-item expanded "><a href="../../architecture/how/proofs.html"><strong aria-hidden="true">2.9.</strong> Proofs</a></li></ol></li><li class="chapter-item expanded "><a href="../../architecture/next/index.html"><strong aria-hidden="true">3.</strong> How unc-node will work</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/next/catchup_and_state_sync.html"><strong aria-hidden="true">3.1.</strong> Catchup and state sync improvements</a></li><li class="chapter-item expanded "><a href="../../architecture/next/malicious_chunk_producer_and_phase2.html"><strong aria-hidden="true">3.2.</strong> Malicious producers and phase 2</a></li></ol></li><li class="chapter-item expanded "><a href="../../architecture/storage.html"><strong aria-hidden="true">4.</strong> Storage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/storage/flow.html"><strong aria-hidden="true">4.1.</strong> Storage Request Flow</a></li><li class="chapter-item expanded "><a href="../../architecture/storage/trie.html"><strong aria-hidden="true">4.2.</strong> Trie</a></li><li class="chapter-item expanded "><a href="../../architecture/storage/database.html"><strong aria-hidden="true">4.3.</strong> Database Format</a></li><li class="chapter-item expanded "><a href="../../architecture/storage/flat_storage.html"><strong aria-hidden="true">4.4.</strong> Flat Storage</a></li></ol></li><li class="chapter-item expanded "><a href="../../architecture/network.html"><strong aria-hidden="true">5.</strong> Network</a></li><li class="chapter-item expanded "><a href="../../architecture/gas/index.html" class="active"><strong aria-hidden="true">6.</strong> Gas Cost Parameters</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/gas/parameter_definition.html"><strong aria-hidden="true">6.1.</strong> Parameter Definitions</a></li><li class="chapter-item expanded "><a href="../../architecture/gas/gas_profile.html"><strong aria-hidden="true">6.2.</strong> Gas Profile</a></li><li class="chapter-item expanded "><a href="../../architecture/gas/estimator.html"><strong aria-hidden="true">6.3.</strong> Runtime Parameter Estimator</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Practices</li><li class="chapter-item expanded "><a href="../../practices/index.html"><strong aria-hidden="true">7.</strong> Overview</a></li><li class="chapter-item expanded "><a href="../../practices/rust.html"><strong aria-hidden="true">8.</strong> Rust 🦀</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/index.html"><strong aria-hidden="true">9.</strong> Workflows</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../practices/workflows/run_a_node.html"><strong aria-hidden="true">9.1.</strong> Run a Node</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/deploy_a_contract.html"><strong aria-hidden="true">9.2.</strong> Deploy a Contract</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/gas_estimations.html"><strong aria-hidden="true">9.3.</strong> Run Gas Estimations</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/localnet_on_many_machines.html"><strong aria-hidden="true">9.4.</strong> Localnet on many machines</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/io_trace.html"><strong aria-hidden="true">9.5.</strong> IO tracing</a></li></ol></li><li class="chapter-item expanded "><a href="../../practices/style.html"><strong aria-hidden="true">10.</strong> Code Style</a></li><li class="chapter-item expanded "><a href="../../practices/docs.html"><strong aria-hidden="true">11.</strong> Documentation</a></li><li class="chapter-item expanded "><a href="../../practices/tracking_issues.html"><strong aria-hidden="true">12.</strong> Tracking Issues</a></li><li class="chapter-item expanded "><a href="../../practices/security_vulnerabilities.html"><strong aria-hidden="true">13.</strong> Security Vulnerabilities</a></li><li class="chapter-item expanded "><a href="../../practices/fast_builds.html"><strong aria-hidden="true">14.</strong> Fast Builds</a></li><li class="chapter-item expanded "><a href="../../practices/testing/index.html"><strong aria-hidden="true">15.</strong> Testing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../practices/testing/python_tests.html"><strong aria-hidden="true">15.1.</strong> Python Tests</a></li><li class="chapter-item expanded "><a href="../../practices/testing/test_utils.html"><strong aria-hidden="true">15.2.</strong> Testing Utils</a></li></ol></li><li class="chapter-item expanded "><a href="../../practices/protocol_upgrade.html"><strong aria-hidden="true">16.</strong> Protocol Upgrade</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced configuration</li><li class="chapter-item expanded "><a href="../../advanced_configuration/networking.html"><strong aria-hidden="true">17.</strong> Networking</a></li><li class="chapter-item expanded affix "><li class="part-title">Custom test networks</li><li class="chapter-item expanded "><a href="../../test_networks/mainnet_spoon.html"><strong aria-hidden="true">18.</strong> Starting a network from mainnet state</a></li><li class="chapter-item expanded affix "><li class="part-title">Misc</li><li class="chapter-item expanded "><a href="../../misc/index.html"><strong aria-hidden="true">19.</strong> Overview</a></li><li class="chapter-item expanded "><a href="../../misc/state_sync_dump.html"><strong aria-hidden="true">20.</strong> State Sync Dump</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Guide to Utility Development</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/utnet-org/utility/tree/master/docs" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/utnet-org/utility/edit/master/docs/./architecture/gas/README.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="gas-cost-parameters"><a class="header" href="#gas-cost-parameters">Gas Cost Parameters</a></h1>
+<p>Gas in UNC Protocol solves two problems.</p>
+<ol>
+<li>To avoid spam, validator nodes only perform work if a user's tokens are
+burned. Tokens are automatically converted to gas using the current gas
+price.</li>
+<li>To synchronize shards, they must all produce chunks following a strict
+schedule of 1 second execution time. Gas is used to measure how heavy the
+workload of a transaction is, so that the number of transactions that fit in
+a block can be deterministically computed by all nodes.</li>
+</ol>
+<p>In other words, each transaction costs a fixed amount of gas. This gas cost
+determines how much a user has to pay and how much time unc-infra.has to execute
+the transaction.</p>
+<p>What happens if unc-infra.executes a transaction too slowly? Chunk production for
+the shard gets delayed, which delays block production for the entire blockchain,
+increasing latency and reducing throughput for everybody. If the chunk is really
+late, the block producer will decide to not include the chunk at all and inserts
+an empty chunk. The chunk may be included in the next block.</p>
+<p>By now, you probably wonder how we can know the time it takes to execute a
+transaction, given that validators use hardware of their choice. Getting these
+timings right is indeed a difficult problem. Or flipping the problem, assuming
+the timings are already known, then we must implement unc-infra.such that it
+guarantees to operate within the given time constraints. How we tackle this is
+the topic of this chapter.</p>
+<p>If you want to learn more about Gas from a user perspective, 
+<a href="https://docs.unc.org/concepts/basics/transactions/gas">Gas basic concepts</a>,
+<a href="https://docs.unc.org/concepts/basics/transactions/gas-advanced">Gas advanced concepts</a>,
+and <a href="https://nomicon.io/RuntimeSpec/Fees/">the runtime fee specification</a> are
+good places to dig deeper.</p>
+<h2 id="hardware-and-timing-assumptions"><a class="header" href="#hardware-and-timing-assumptions">Hardware and Timing Assumptions</a></h2>
+<p>For timing to make sense at all, we must first define hardware constraints. The
+official hardware requirements for a validator are published on
+<a href="https://unc-nodes.io/validator/hardware">unc-nodes.io/validator/hardware</a>. They
+may change over time but the main principle is that a moderately configured,
+cloud-hosted virtual machine suffices.</p>
+<p>For our gas computation, we assume the minimum required hardware. Then we define
+10<sup>15</sup> gas to be executed in at most 1s. We commonly use 1 Tgas (=
+10<sup>12</sup> gas) in conversation, which corresponds to 1ms execution time.</p>
+<p>Obviously, this definition means that a validator running more powerful hardware
+will execute the transactions faster. That is perfectly okay, as far as the
+protocol is concerned we just need to make sure the chunk is available in time.
+If it is ready in even less time, no problem.</p>
+<p>Less obviously, this means that even a minimally configured validator is often
+idle. Why is that? Well, the hardware must be prepared to execute chunks that
+are always full. But that is rarely the case, as the gas price increases
+exponentially when chunks are full, which would cause traffic to go back
+eventually.</p>
+<p>Furthermore, the hardware has to be ready for transactions of all types,
+including transactions chosen by a malicious actor selecting only the most
+complex transactions. Those transactions can also be unbalanced in what
+bottlenecks they hit. For example, a chunk can be filled with transactions that
+fully utilize the CPU's floating point units. Or they could be using all the
+available disk IO bandwidth.</p>
+<p>Because the minimum required hardware needs to meet the timing requirements for
+any of those scenarios, the typical, more balanced case is usually computed
+faster than the gas rule states.</p>
+<h2 id="transaction-gas-cost-model"><a class="header" href="#transaction-gas-cost-model">Transaction Gas Cost Model</a></h2>
+<p>A transaction is essentially just a list of actions to be executed on the same
+account. For example it could be <code>CreateAccount</code> combined with
+<code>FunctionCall(&quot;hello_world&quot;)</code>.</p>
+<p>The <a href="https://nomicon.io/RuntimeSpec/Actions">reference for available actions</a>
+shows the conclusive list of possible actions. The protocol defines fixed fees
+for each of them. More details on <a href="#action-costs">actions fees</a> follow below.</p>
+<p>Fixed fees are an important design decision. It means that a given action will
+always cost the exact same amount of gas, no matter on what hardware it
+executes. But the content of the action can impact the cost, for example a
+<code>DeployContract</code> action's cost scales with the size of the contract code.</p>
+<p>So, to be more precise, the protocol defines fixed gas cost <em>parameters</em> for
+each action, together with a formula to compute the gas cost for the action. All
+actions today either use a single fixed gas cost or they use a base cost and a
+linear scaling parameter. With one important exception, <code>FunctionCall</code>, which
+shall be discussed <a href="#fn-call-costs">further below</a>.</p>
+<p>There is an entire section on <a href="./parameter_definition.html">Parameter Definitions</a>
+that explains how to find the source of truth for parameter values in the
+unc-infra.repository, how they can be referenced in code, and what steps are
+necessary to add a new parameter.</p>
+<p>Let us dwell a bit more on the linear scaling factors. The fact that contract
+deployment cost, which includes code compilation, scales linearly limits the
+compiler to use only algorithms of linear complexity. Either that, or the
+parameters must be set to match the 1ms = 1Tgas rule at the largest possible
+contract size. Today, we limit ourselves to linear-time algorithms in the
+compiler.</p>
+<p>Likewise, an action that has no scaling parameters must only use constant time
+to execute. Taking the <code>CreateAcccount</code> action as an example, with a cost of 0.1
+Tgas, it has to execute within 0.1ms. Technically, the execution time depends
+ever so slightly on the account name length. But there is a fairly low upper
+limit on that length and it makes sense to absorb all the cost in the constant
+base cost.</p>
+<p>This concept of picking parameters according to algorithmic complexity is key.
+If you understand this, you know how to think about gas as a unc-infra.developer.
+This should be enough background to understand what the estimator does.</p>
+<p>The <a href="./estimator.html">runtime parameter estimator</a> is a separate binary within
+the unc-infra.repository. It contains benchmarking-like code used to validate
+existing parameter values against the 1ms = 1 Tgas rule. When implementing new
+features, code should be added there to estimate the safe values of the new
+parameters. This section is for you if you are adding new features such as a new
+pre-compiled method or other host functions.</p>
+<p>Next up are more details on the specific costs that occur when executing UNC
+transactions, which help to understand existing parameters and how they are
+organized.</p>
+<h2 id="action-costs"><a class="header" href="#action-costs">Action Costs</a></h2>
+<p>Actions are executed in two steps. First, an action is verified and inserted to
+an action receipt, which is sent to the receiver of the action. The <code>send</code> fee
+is paid for this. It is charged either in <code>fn process_transaction(..)</code> if the
+action is part of a fresh transaction, or inside
+<a href="https://github.com/utnet-org/utility/blob/14b8ae2c7465444c9b672a23b044c00be98f6e34/runtime/unc-vm-logic/src/logic.rs">logic.rs</a>
+through <code>fn pay_action_base(..)</code> if the action is generated by a function call.
+The send fee is meant to cover the cost to validate an action and transmit it
+over the network.</p>
+<p>The second step is action execution. It is charged in <code>fn apply_action(..)</code>.
+The execution cost has to cover everything required to apply the action to the
+blockchain's state.</p>
+<p>These two steps are done on the same shard for local receipts. Local receipts
+are defined as those where the sender account is also the receiver, abbreviated
+as <code>sir</code> which stands for &quot;sender is receiver&quot;.</p>
+<p>For remote receipts, which is any receipt where the sender and receiver accounts
+are different, we charge a different fee since sending between shards is extra
+work. Notably, we charge that extra work even if the accounts are on the same
+shard. In terms of gas costs, each account is conceptually its own shard. This
+makes dynamic resharding possible without user-observable impact.</p>
+<p>When the send step is performed, the minimum required gas to start execution of
+that action is known. Thus, if the receipt has not enough gas, it can be aborted
+instead of forwarding it. Here we have to introduce the concept of used gas.</p>
+<p><code>gas_used</code> is different from <code>gas_burnt</code>. The former includes the gas that needs
+to be reserved for the execution step whereas the latter only includes the gas
+that has been burnt in the current chunk. The difference between the two is
+sometimes also called prepaid gas, as this amount of gas is paid for during the
+send step and it is available in the execution step for free.</p>
+<p>If execution fails, the prepaid cost that has not been burned will be refunded.
+But this is not the reason why it must burn on the receiver shard instead of the
+sender shard. The reason is that we want to properly compute the gas limits on
+the chunk that does the execution work.</p>
+<p>In conclusion, each action parameter is split into three costs, <code>send_sir</code>,
+<code>send_not_sir</code>, and <code>execution</code>. Local receipts charge the first and last
+parameters, remote receipts charge the second and third. They should be
+estimated, defined, and charged separately. But the reality is that today almost
+all actions are estimated as a whole and the parameters are split 50/50 between
+send and execution cost, without discrimination on local vs remote receipts
+i.e. <code>send_sir</code> cost is the same as <code>send_not_sir</code>.</p>
+<p>The <a href="./gas_profile.html">Gas Profile</a> section goes into more details on how gas
+costs of a transaction are tracked in unc-infra.</p>
+<h2 id="dynamic-function-call-costs"><a class="header" href="#dynamic-function-call-costs">Dynamic Function Call Costs</a></h2>
+<p><a name="fn-call-costs"></a></p>
+<p>Costs that occur while executing a function call on a deployed WASM app (a.k.a.
+smart contract) are charged only at the receiver. Thus, they have only one value
+to define them, in contrast to action costs.</p>
+<p>The most fundamental dynamic gas cost is <code>wasm_regular_op_cost</code>. It is
+multiplied with the exact number of WASM operations executed. You can read about
+<a href="https://nomicon.io/RuntimeSpec/Preparation#gas-instrumentation">Gas Instrumentation</a>
+if you are curious how we count WASM ops.</p>
+<p>Currently, all operations are charged the same, although it could be more
+efficient to charge less for opcodes like <code>i32.add</code> compared to <code>f64.sqrt</code>.</p>
+<p>The remaining dynamic costs are for work done during host function calls. Each
+host function charges a base cost. Either the general <code>wasm_base</code> cost, or a
+specific cost such as <code>wasm_utf8_decoding_base</code>, or sometimes both. New host
+function calls should define a separate base cost and not charge <code>wasm_base</code>.</p>
+<p>Additional host-side costs can be scaled per input byte, such as
+<code>wasm_sha256_byte</code>, or costs related to moving data between host and guest, or
+any other cost that is specific to the host function. Each host function must
+clearly define what its costs are and how they depend on the input.</p>
+<h2 id="non-gas-parameters"><a class="header" href="#non-gas-parameters">Non-gas parameters</a></h2>
+<p>Not all runtime parameters are directly related to gas costs. Here is a brief
+overview.</p>
+<ul>
+<li><strong>Gas economics config:</strong> Defines the conversion rate when purchasing gas with
+UNC tokens and how gas rewards are split.</li>
+<li><strong>Storage usage config:</strong> Costs in tokens, not gas, for storing data on chain.</li>
+<li><strong>Account creation config:</strong> Rules for account creation.</li>
+<li><strong>Smart contract limits:</strong> Rules for WASM execution.</li>
+</ul>
+<p>None of the above define any gas costs directly. But there can be interplay
+between those parameters and gas costs. For example, the limits on smart
+contracts changes the assumptions for how slow a contract compilation could be,
+hence it affects the deploy action costs.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../architecture/network.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../../architecture/gas/parameter_definition.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../architecture/network.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../../architecture/gas/parameter_definition.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

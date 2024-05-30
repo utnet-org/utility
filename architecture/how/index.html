@@ -1,0 +1,378 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>How unc-node works - Guide to Utility Development</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="../../architecture/index.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><a href="../../architecture/how/index.html" class="active"><strong aria-hidden="true">2.</strong> How unc-node works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/how/sync.html"><strong aria-hidden="true">2.1.</strong> How Sync Works</a></li><li class="chapter-item expanded "><a href="../../architecture/how/gc.html"><strong aria-hidden="true">2.2.</strong> Garbage Collection</a></li><li class="chapter-item expanded "><a href="../../architecture/how/epoch.html"><strong aria-hidden="true">2.3.</strong> How Epoch Works</a></li><li class="chapter-item expanded "><a href="../../architecture/how/tx_routing.html"><strong aria-hidden="true">2.4.</strong> Transaction Routing</a></li><li class="chapter-item expanded "><a href="../../architecture/how/tx_receipts.html"><strong aria-hidden="true">2.5.</strong> Transactions And Receipts</a></li><li class="chapter-item expanded "><a href="../../architecture/how/gas.html"><strong aria-hidden="true">2.6.</strong> Gas</a></li><li class="chapter-item expanded "><a href="../../architecture/how/meta-tx.html"><strong aria-hidden="true">2.7.</strong> Meta transactions</a></li><li class="chapter-item expanded "><a href="../../architecture/how/serialization.html"><strong aria-hidden="true">2.8.</strong> Serialization: Borsh, Json, ProtoBuf</a></li><li class="chapter-item expanded "><a href="../../architecture/how/proofs.html"><strong aria-hidden="true">2.9.</strong> Proofs</a></li></ol></li><li class="chapter-item expanded "><a href="../../architecture/next/index.html"><strong aria-hidden="true">3.</strong> How unc-node will work</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/next/catchup_and_state_sync.html"><strong aria-hidden="true">3.1.</strong> Catchup and state sync improvements</a></li><li class="chapter-item expanded "><a href="../../architecture/next/malicious_chunk_producer_and_phase2.html"><strong aria-hidden="true">3.2.</strong> Malicious producers and phase 2</a></li></ol></li><li class="chapter-item expanded "><a href="../../architecture/storage.html"><strong aria-hidden="true">4.</strong> Storage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/storage/flow.html"><strong aria-hidden="true">4.1.</strong> Storage Request Flow</a></li><li class="chapter-item expanded "><a href="../../architecture/storage/trie.html"><strong aria-hidden="true">4.2.</strong> Trie</a></li><li class="chapter-item expanded "><a href="../../architecture/storage/database.html"><strong aria-hidden="true">4.3.</strong> Database Format</a></li><li class="chapter-item expanded "><a href="../../architecture/storage/flat_storage.html"><strong aria-hidden="true">4.4.</strong> Flat Storage</a></li></ol></li><li class="chapter-item expanded "><a href="../../architecture/network.html"><strong aria-hidden="true">5.</strong> Network</a></li><li class="chapter-item expanded "><a href="../../architecture/gas/index.html"><strong aria-hidden="true">6.</strong> Gas Cost Parameters</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/gas/parameter_definition.html"><strong aria-hidden="true">6.1.</strong> Parameter Definitions</a></li><li class="chapter-item expanded "><a href="../../architecture/gas/gas_profile.html"><strong aria-hidden="true">6.2.</strong> Gas Profile</a></li><li class="chapter-item expanded "><a href="../../architecture/gas/estimator.html"><strong aria-hidden="true">6.3.</strong> Runtime Parameter Estimator</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Practices</li><li class="chapter-item expanded "><a href="../../practices/index.html"><strong aria-hidden="true">7.</strong> Overview</a></li><li class="chapter-item expanded "><a href="../../practices/rust.html"><strong aria-hidden="true">8.</strong> Rust 🦀</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/index.html"><strong aria-hidden="true">9.</strong> Workflows</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../practices/workflows/run_a_node.html"><strong aria-hidden="true">9.1.</strong> Run a Node</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/deploy_a_contract.html"><strong aria-hidden="true">9.2.</strong> Deploy a Contract</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/gas_estimations.html"><strong aria-hidden="true">9.3.</strong> Run Gas Estimations</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/localnet_on_many_machines.html"><strong aria-hidden="true">9.4.</strong> Localnet on many machines</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/io_trace.html"><strong aria-hidden="true">9.5.</strong> IO tracing</a></li></ol></li><li class="chapter-item expanded "><a href="../../practices/style.html"><strong aria-hidden="true">10.</strong> Code Style</a></li><li class="chapter-item expanded "><a href="../../practices/docs.html"><strong aria-hidden="true">11.</strong> Documentation</a></li><li class="chapter-item expanded "><a href="../../practices/tracking_issues.html"><strong aria-hidden="true">12.</strong> Tracking Issues</a></li><li class="chapter-item expanded "><a href="../../practices/security_vulnerabilities.html"><strong aria-hidden="true">13.</strong> Security Vulnerabilities</a></li><li class="chapter-item expanded "><a href="../../practices/fast_builds.html"><strong aria-hidden="true">14.</strong> Fast Builds</a></li><li class="chapter-item expanded "><a href="../../practices/testing/index.html"><strong aria-hidden="true">15.</strong> Testing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../practices/testing/python_tests.html"><strong aria-hidden="true">15.1.</strong> Python Tests</a></li><li class="chapter-item expanded "><a href="../../practices/testing/test_utils.html"><strong aria-hidden="true">15.2.</strong> Testing Utils</a></li></ol></li><li class="chapter-item expanded "><a href="../../practices/protocol_upgrade.html"><strong aria-hidden="true">16.</strong> Protocol Upgrade</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced configuration</li><li class="chapter-item expanded "><a href="../../advanced_configuration/networking.html"><strong aria-hidden="true">17.</strong> Networking</a></li><li class="chapter-item expanded affix "><li class="part-title">Custom test networks</li><li class="chapter-item expanded "><a href="../../test_networks/mainnet_spoon.html"><strong aria-hidden="true">18.</strong> Starting a network from mainnet state</a></li><li class="chapter-item expanded affix "><li class="part-title">Misc</li><li class="chapter-item expanded "><a href="../../misc/index.html"><strong aria-hidden="true">19.</strong> Overview</a></li><li class="chapter-item expanded "><a href="../../misc/state_sync_dump.html"><strong aria-hidden="true">20.</strong> State Sync Dump</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Guide to Utility Development</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/utnet-org/utility/tree/master/docs" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/utnet-org/utility/edit/master/docs/./architecture/how/README.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="how-unc-node-works"><a class="header" href="#how-unc-node-works">How unc-node works</a></h1>
+<p>This chapter describes how unc-node works with a focus on implementation details
+and practical scenarios. To get a better understanding of how the protocol
+works, please refer to <a href="https://nomicon.io">nomicon</a>. For a high-level code map
+of unc-infra. please refer to this <a href="../">document</a>.</p>
+<h2 id="high-level-overview"><a class="header" href="#high-level-overview">High level overview</a></h2>
+<p>On the high level, unc-node is a daemon that periodically receives messages from
+the network and sends messages to peers based on different triggers. Uncd is
+implemented using an [actor
+unc-infra.(https://en.wikipedia.org/wiki/Actor_model) called
+<a href="https://docs.rs/actix">actix</a>.</p>
+<p><strong>Note:</strong> Using actix was decided in the early days of the implementation of
+unc-infra.and by no means represents our confidence in actix. On the contrary, we
+have noticed a number of issues with actix and are considering implementing an
+actor unc-infra.in house.</p>
+<p>There are several important actors in unc-node:</p>
+<ul>
+<li>
+<p><code>PeerActor</code> - Each peer is represented by one peer actor and runs in a separate
+thread. It is responsible for sending messages to and receiving messages from
+a given peer. After <code>PeerActor</code> receives a message, it will route it to
+<code>ClientActor</code>, <code>ViewClientActor</code>, or <code>PeerManagerActor</code> depending on the type
+of the message.</p>
+</li>
+<li>
+<p><code>PeerManagerActor</code> - Peer Manager is responsible for receiving messages to send
+to the network from either <code>ClientActor</code> or <code>ViewClientActor</code> and routing them to
+the right <code>PeerActor</code> to send the bytes over the wire. It is also responsible for
+handling some types of network messages received and routed through <code>PeerActor</code>.
+For the purpose of this document, we only need to know that <code>PeerManagerActor</code>
+handles <code>RoutedMessage</code>s. Peer manager would decide whether the <code>RoutedMessage</code>s
+should be routed to <code>ClientActor</code> or <code>ViewClientActor</code>.</p>
+</li>
+<li>
+<p><code>ClientActor</code> - Client actor is the “core” of unc-node. It contains all the main
+logic including consensus, block and chunk processing, state transition, garbage
+collection, etc. Client actor is single threaded.</p>
+</li>
+<li>
+<p><code>ViewClientActor</code> - View client actor can be thought of as a read-only interface
+to <strong>client</strong>. It only accesses data stored in a node’s storage and does not mutate
+any state. It is used for two purposes:</p>
+<ul>
+<li>Answering RPC requests by fetching the relevant piece of data from storage.</li>
+<li>Handling some network requests that do not require any changes to the
+storage, such as header sync, state sync, and block sync requests.</li>
+</ul>
+<p><code>ViewClientActor</code> runs in four threads by default but this number is configurable.</p>
+</li>
+</ul>
+<h2 id="data-flow-within-unc-node"><a class="header" href="#data-flow-within-unc-node">Data flow within <code>unc-node</code></a></h2>
+<p>Flow for incoming messages:</p>
+<p><img src="https://user-images.githubusercontent.com/1711539/195619986-25798cde-8a91-4721-86bd-93fa924b483a.png" alt="" /></p>
+<p>Flow for outgoing messages:</p>
+<p><img src="https://user-images.githubusercontent.com/1711539/195626792-7697129b-7f9c-4953-b939-0b9bcacaf72c.png" alt="" /></p>
+<h2 id="how-unc-node-operates-when-it-is-fully-synced"><a class="header" href="#how-unc-node-operates-when-it-is-fully-synced">How unc-node operates when it is fully synced</a></h2>
+<p>When a node is fully synced, the main logic of the node operates in the
+following way (the node is assumed to track all shards, as most nodes on mainnet
+do today):</p>
+<ol>
+<li>A block is produced by some block producer and sent to the node through
+broadcasting.</li>
+<li>The node receives a block and tries to process it. If the node is synced it
+presumably has the previous block and the state before the current block to
+apply. It then checks whether it has all the chunks available. If the node is
+not a validator node, it won’t have any chunk parts and therefore won’t have
+the chunks available. If the node is a validator node, it may already have
+chunk parts through chunk parts forwarding from other nodes and therefore may
+have already reconstructed some chunks. Regardless, if the node doesn’t have all
+chunks for all shards, it will request them from peers by parts.</li>
+<li>The chunk requests are sent and the node waits for enough chunk parts to be
+received to reconstruct the chunks. For each chunk, 1/3 of all the parts<!-- TODO: Is 100 the number of all the parts or one third of all the parts? -->
+(100) is sufficient to reconstruct a chunk. If new blocks arrive while waiting
+for chunk parts, they will be put into a <code>OrphanPool</code>, waiting to be processed.
+If a chunk part request is not responded to within <code>chunk_request_retry_period</code>,
+which is set to 400ms by default, then a request for the same chunk part
+would be sent again.</li>
+<li>After all chunks are reconstructed, the node processes the current block by
+applying transactions and receipts from the chunks. Afterwards, it will
+update the head according to the fork choice rule, which only looks at block
+height. In other words, if the newly processed block is of higher height than
+the current head of the node, the head is updated.</li>
+<li>The node checks whether any blocks in the <code>OrphanPool</code> are ready to be
+processed in a BFS order and processes all of them until none can be
+processed anymore. Note that a block is put into the <code>OrphanPool</code> if and
+only if its previous block is not accepted.</li>
+<li>Upon acceptance of a block, the node would check whether it needs to run
+garbage collection. If it needs to, it would garbage collect two blocks worth
+of data at a time. The logic of garbage collection is complicated and could
+be found <a href="./gc.html">here</a>.</li>
+<li>If the node is a validator node, it would start a timer after the current
+block is accepted. After <code>min_block_production_delay</code> which is currently
+configured to be 1.3s on mainnet, it would send an approval to the block
+producer of the next block (current block height + 1).</li>
+</ol>
+<p>The main logic is illustrated below:</p>
+<p><img src="https://user-images.githubusercontent.com/1711539/195635652-f0c7ebae-a2e5-423f-8e62-b853b815fcec.png" alt="" /></p>
+<h2 id="how-unc-node-works-when-it-is-synchronizing"><a class="header" href="#how-unc-node-works-when-it-is-synchronizing">How unc-node works when it is synchronizing</a></h2>
+<p><code>PeerManagerActor</code> periodically sends a <code>NetworkInfo</code> message to <code>ClientActor</code>
+to update it on the latest peer information, which includes the height of each
+peer. Once <code>ClientActor</code> realizes that it is more than <code>sync_height_threshold</code>
+(which by default is set to 1) behind the highest height among peers, it starts
+to sync. The synchronization process is done in three steps:</p>
+<ol>
+<li>
+<p>Header sync. The node first identifies the headers it needs to sync through a
+<a href="https://github.com/utnet-org/utility/blob/279044f09a7e6e5e3f26db4898af3655dae6eda6/chain/client/src/sync.rs#L332"><code>get_locator</code></a>
+calculation. This is essentially an exponential backoff computation that
+tries to identify commonly known headers between the node and its peers. Then
+it would request headers from different peers, at most
+<code>MAX_BLOCK_HEADER_HASHES</code> (which is 512) headers at a time.</p>
+</li>
+<li>
+<p>After the headers are synced, the node would determine whether it needs to
+run state sync. The exact condition can be found
+<a href="https://github.com/utnet-org/utility/blob/279044f09a7e6e5e3f26db4898af3655dae6eda6/chain/client/src/sync.rs#L458">here</a>
+but basically a node would do state sync if it is more than 2 epochs behind
+the head of the network. State sync is a very complex process and warrants
+its own section. We will give a high level overview here.</p>
+<ol>
+<li>First, the node computes <code>sync_hash</code> which is the hash of the block that
+identifies the state that the node wants to sync. This is guaranteed to be
+the first block of the most recent epoch. In fact, there is a
+<a href="https://github.com/utnet-org/utility/blob/279044f09a7e6e5e3f26db4898af3655dae6eda6/chain/chain/src/chain.rs#L4292">check</a>
+on the receiver side that this is indeed the case. The node would also
+request the block whose hash is <code>sync_hash</code></li>
+<li>The node <a href="https://github.com/utnet-org/utility/blob/279044f09a7e6e5e3f26db4898af3655dae6eda6/chain/chain/src/chain.rs#L1809">deletes basically all data (blocks, chunks, state) from its
+storage</a>.
+This is not an optimal solution, but it makes the implementation for
+combining state easier when there is no stale data in storage.</li>
+<li>For the state of each shard that the node needs to download, it first
+requests a
+<a href="https://github.com/utnet-org/utility/blob/279044f09a7e6e5e3f26db4898af3655dae6eda6/core/primitives/src/syncing.rs#L40">header</a>
+that contains some metadata the node needs to know about. Then the node
+computes the number of state parts it needs to download and requests those
+parts from different peers who track the shard.</li>
+<li>After all parts are downloaded, the node <a href="https://github.com/utnet-org/utility/blob/279044f09a7e6e5e3f26db4898af3655dae6eda6/chain/client/src/client_actor.rs#L1877">combines those state
+parts</a>
+and then
+<a href="https://github.com/utnet-org/utility/blob/279044f09a7e6e5e3f26db4898af3655dae6eda6/chain/chain/src/chain.rs#L3065">finalizes</a>
+the state sync by applying the last chunk included in or before the sync
+block so that the node has the state after applying sync block to be able
+to apply the next block.</li>
+<li>The node <a href="https://github.com/utnet-org/utility/blob/279044f09a7e6e5e3f26db4898af3655dae6eda6/chain/chain/src/chain.rs#L1874">resets
+heads</a>
+properly after state sync.</li>
+</ol>
+</li>
+<li>
+<p>Block Sync. The node first gets the block with highest height that is on the
+canonical chain and request from there <code>MAX_BLOCK_REQUESTS</code> (which is set to 5)
+blocks from different peers in a round robin order. The block sync routine
+runs again if head has changed (progress is made) or if a timeout (which is
+set to 2s) has happened.</p>
+</li>
+</ol>
+<p><strong>Note:</strong> when a block is received and its height is no more than 500 + the
+node’s current head height, then the node would request its previous block
+automatically. This is called orphan sync and helps to speed up the syncing
+process. If, on the other hand, the height is more than 500 + the node’s current
+head height, the block is simply dropped.</p>
+<!-- TODO: Either this note is incorrect or the block processing diagram is. -->
+<h2 id="how-clientactor-works"><a class="header" href="#how-clientactor-works">How <code>ClientActor</code> works</a></h2>
+<p>ClientActor has some periodically running routines that are worth noting:</p>
+<ul>
+<li><a href="https://github.com/utnet-org/utility/blob/fa78002a1b4119e5efe277c3073b3f333f451ffc/chain/client/src/client_actor.rs#L1198">Doomslug
+timer</a> - 
+This routine runs every <code>doosmslug_step_period</code> (set to 100ms by default) and
+updates consensus information. If the node is a validator node, it also sends
+approvals when necessary.</li>
+<li><a href="https://github.com/utnet-org/utility/blob/fa78002a1b4119e5efe277c3073b3f333f451ffc/chain/client/src/client_actor.rs#L991">Block
+production</a> - 
+This routine runs every <code>block_production_tracking_delay</code> (which is set to
+100ms by default) and checks if the node should produce a block.</li>
+<li><a href="https://github.com/utnet-org/utility/blob/fa78002a1b4119e5efe277c3073b3f333f451ffc/chain/client/src/client_actor.rs#L1790">Log
+summary</a> - 
+Prints a log line that summarizes block rate, average gas used, the height of
+the node, etc. every 10 seconds.</li>
+<li><a href="https://github.com/utnet-org/utility/blob/fa78002a1b4119e5efe277c3073b3f333f451ffc/chain/chunks/src/lib.rs#L910">Resend chunk
+requests</a> - 
+This routine runs every <code>chunk_request_retry_period</code> (which is set to 400ms).
+It resends the chunk part requests for those that are not yet responded to.</li>
+<li><a href="https://github.com/utnet-org/utility/blob/fa78002a1b4119e5efe277c3073b3f333f451ffc/chain/client/src/client_actor.rs#L1629">Sync</a> - 
+This routine runs every <code>sync_step_period</code> (which is set to 10ms by default)
+and checks whether the node needs to sync from its peers and, if needed, also
+starts the syncing process.</li>
+<li><a href="https://github.com/utnet-org/utility/blob/fa78002a1b4119e5efe277c3073b3f333f451ffc/chain/client/src/client_actor.rs#L1581">Catch
+up</a> - 
+This routine runs every <code>catchup_step_period</code> (which is set to 100ms by
+default) and runs the catch up process. This only applies if a node validates
+shard A in epoch X and is going to validate a different shard B in epoch X+1.
+In this case, the node would start downloading the state for shard B at the
+beginning of epoch X. After the state downloading is complete, it would apply
+all blocks in the current epoch (epoch X) for shard B to ensure that the node
+has the state needed to validate shard B when epoch X+1 starts.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../architecture/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../../architecture/how/sync.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../architecture/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../../architecture/how/sync.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

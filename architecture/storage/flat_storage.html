@@ -1,0 +1,350 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Flat Storage - Guide to Utility Development</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="../../architecture/index.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><a href="../../architecture/how/index.html"><strong aria-hidden="true">2.</strong> How unc-node works</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/how/sync.html"><strong aria-hidden="true">2.1.</strong> How Sync Works</a></li><li class="chapter-item expanded "><a href="../../architecture/how/gc.html"><strong aria-hidden="true">2.2.</strong> Garbage Collection</a></li><li class="chapter-item expanded "><a href="../../architecture/how/epoch.html"><strong aria-hidden="true">2.3.</strong> How Epoch Works</a></li><li class="chapter-item expanded "><a href="../../architecture/how/tx_routing.html"><strong aria-hidden="true">2.4.</strong> Transaction Routing</a></li><li class="chapter-item expanded "><a href="../../architecture/how/tx_receipts.html"><strong aria-hidden="true">2.5.</strong> Transactions And Receipts</a></li><li class="chapter-item expanded "><a href="../../architecture/how/gas.html"><strong aria-hidden="true">2.6.</strong> Gas</a></li><li class="chapter-item expanded "><a href="../../architecture/how/meta-tx.html"><strong aria-hidden="true">2.7.</strong> Meta transactions</a></li><li class="chapter-item expanded "><a href="../../architecture/how/serialization.html"><strong aria-hidden="true">2.8.</strong> Serialization: Borsh, Json, ProtoBuf</a></li><li class="chapter-item expanded "><a href="../../architecture/how/proofs.html"><strong aria-hidden="true">2.9.</strong> Proofs</a></li></ol></li><li class="chapter-item expanded "><a href="../../architecture/next/index.html"><strong aria-hidden="true">3.</strong> How unc-node will work</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/next/catchup_and_state_sync.html"><strong aria-hidden="true">3.1.</strong> Catchup and state sync improvements</a></li><li class="chapter-item expanded "><a href="../../architecture/next/malicious_chunk_producer_and_phase2.html"><strong aria-hidden="true">3.2.</strong> Malicious producers and phase 2</a></li></ol></li><li class="chapter-item expanded "><a href="../../architecture/storage.html"><strong aria-hidden="true">4.</strong> Storage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/storage/flow.html"><strong aria-hidden="true">4.1.</strong> Storage Request Flow</a></li><li class="chapter-item expanded "><a href="../../architecture/storage/trie.html"><strong aria-hidden="true">4.2.</strong> Trie</a></li><li class="chapter-item expanded "><a href="../../architecture/storage/database.html"><strong aria-hidden="true">4.3.</strong> Database Format</a></li><li class="chapter-item expanded "><a href="../../architecture/storage/flat_storage.html" class="active"><strong aria-hidden="true">4.4.</strong> Flat Storage</a></li></ol></li><li class="chapter-item expanded "><a href="../../architecture/network.html"><strong aria-hidden="true">5.</strong> Network</a></li><li class="chapter-item expanded "><a href="../../architecture/gas/index.html"><strong aria-hidden="true">6.</strong> Gas Cost Parameters</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../architecture/gas/parameter_definition.html"><strong aria-hidden="true">6.1.</strong> Parameter Definitions</a></li><li class="chapter-item expanded "><a href="../../architecture/gas/gas_profile.html"><strong aria-hidden="true">6.2.</strong> Gas Profile</a></li><li class="chapter-item expanded "><a href="../../architecture/gas/estimator.html"><strong aria-hidden="true">6.3.</strong> Runtime Parameter Estimator</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Practices</li><li class="chapter-item expanded "><a href="../../practices/index.html"><strong aria-hidden="true">7.</strong> Overview</a></li><li class="chapter-item expanded "><a href="../../practices/rust.html"><strong aria-hidden="true">8.</strong> Rust 🦀</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/index.html"><strong aria-hidden="true">9.</strong> Workflows</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../practices/workflows/run_a_node.html"><strong aria-hidden="true">9.1.</strong> Run a Node</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/deploy_a_contract.html"><strong aria-hidden="true">9.2.</strong> Deploy a Contract</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/gas_estimations.html"><strong aria-hidden="true">9.3.</strong> Run Gas Estimations</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/localnet_on_many_machines.html"><strong aria-hidden="true">9.4.</strong> Localnet on many machines</a></li><li class="chapter-item expanded "><a href="../../practices/workflows/io_trace.html"><strong aria-hidden="true">9.5.</strong> IO tracing</a></li></ol></li><li class="chapter-item expanded "><a href="../../practices/style.html"><strong aria-hidden="true">10.</strong> Code Style</a></li><li class="chapter-item expanded "><a href="../../practices/docs.html"><strong aria-hidden="true">11.</strong> Documentation</a></li><li class="chapter-item expanded "><a href="../../practices/tracking_issues.html"><strong aria-hidden="true">12.</strong> Tracking Issues</a></li><li class="chapter-item expanded "><a href="../../practices/security_vulnerabilities.html"><strong aria-hidden="true">13.</strong> Security Vulnerabilities</a></li><li class="chapter-item expanded "><a href="../../practices/fast_builds.html"><strong aria-hidden="true">14.</strong> Fast Builds</a></li><li class="chapter-item expanded "><a href="../../practices/testing/index.html"><strong aria-hidden="true">15.</strong> Testing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../practices/testing/python_tests.html"><strong aria-hidden="true">15.1.</strong> Python Tests</a></li><li class="chapter-item expanded "><a href="../../practices/testing/test_utils.html"><strong aria-hidden="true">15.2.</strong> Testing Utils</a></li></ol></li><li class="chapter-item expanded "><a href="../../practices/protocol_upgrade.html"><strong aria-hidden="true">16.</strong> Protocol Upgrade</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced configuration</li><li class="chapter-item expanded "><a href="../../advanced_configuration/networking.html"><strong aria-hidden="true">17.</strong> Networking</a></li><li class="chapter-item expanded affix "><li class="part-title">Custom test networks</li><li class="chapter-item expanded "><a href="../../test_networks/mainnet_spoon.html"><strong aria-hidden="true">18.</strong> Starting a network from mainnet state</a></li><li class="chapter-item expanded affix "><li class="part-title">Misc</li><li class="chapter-item expanded "><a href="../../misc/index.html"><strong aria-hidden="true">19.</strong> Overview</a></li><li class="chapter-item expanded "><a href="../../misc/state_sync_dump.html"><strong aria-hidden="true">20.</strong> State Sync Dump</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Guide to Utility Development</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/utnet-org/utility/tree/master/docs" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/utnet-org/utility/edit/master/docs/./architecture/storage/flat_storage.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="high-level-overview"><a class="header" href="#high-level-overview">High level overview</a></h1>
+<p>When mainnet launched, the unc-node client stored all the chain's state in a single
+RocksDB column <code>DBCol::State</code>. This column embeds the entire <a href="./trie.html">UNC state
+trie</a> directly in the key-value database, using roughly
+<code>hash(borsh_encode(trie_node))</code> as the key to store a <code>trie_node</code>. This gives a
+content-addressed storage system that can easily self-verify.</p>
+<p>Flat storage is a bit like a database index for the values stored in the trie.
+It stores a copy of the data in a more accessible way to speed up the lookup
+time. </p>
+<p>Drastically oversimplified, flat storage uses a hashmap instead of a trie. This
+reduces the lookup time from <code>O(d)</code> to <code>O(1)</code> where <code>d</code> is the tree depth of the
+value.</p>
+<p>But the devil is in the detail. Below is a high-level summary of implementation
+challenges, which are the reasons why the above description is an
+oversimplification.</p>
+<h2 id="time-dimension-of-the-state"><a class="header" href="#time-dimension-of-the-state">Time dimension of the state</a></h2>
+<p>The blockchain state is modified with every chunk. Uncd must be able to travel
+back in time and resolve key lookups for older versions, as well as travel to
+alternative universes to resolve requests for chunks that belong to a different
+fork.</p>
+<p>Using the full trie embedding in RocksDB, this is almost trivial. We only need
+to know the state root for a chunk and we can start traversing from the root to
+any key. As long as we do not delete (garbage collect) unused trie nodes, the
+data remains available. The overhead is minimal, too, since all the trie nodes
+that have not been changed are shared between tries.</p>
+<p>Enter flat storage territory: A simple hashmap only stores a snapshot. When we
+write a new value to the same key, the old value is overwritten and no longer
+accessible. A solution to access different versions on each shard is required.</p>
+<p>The minimal solution only tracks the final head and all forks building on top. A
+full implementation would also allow replaying older chunks and doing view
+calls. But even this minimal solution pulls in all complicated details regarding
+consensus and multiplies them with all the problems listed below.</p>
+<h2 id="fear-of-data-corruption"><a class="header" href="#fear-of-data-corruption">Fear of data corruption</a></h2>
+<p>State and FlatState keep a copy of the same data and need to be in sync at all
+times. This is a source for errors which any implementation needs to test
+properly. Ideally, there are also tools to quickly compare the two and verify
+which is correct.</p>
+<p>Note: The trie storage is verifiable by construction of the hashes. The flat
+state is not directly verifiable. But it is possible to reconstruct the full
+trie just from the leaf values and use that for verification.</p>
+<h2 id="gas-accounting-requires-a-protocol-change"><a class="header" href="#gas-accounting-requires-a-protocol-change">Gas accounting requires a protocol change</a></h2>
+<p>The trie path we take in a trie lookup affects the gas costs, and hence the
+balance subtracted from the user. In other words, the lookup algorithm leaks
+into the protocol. Hence, we cannot switch between different ways of looking up
+state without a protocol change.</p>
+<p>This makes things a whole lot more complicated. We have to do the data migration
+and prepare flat storage, while still using trie storage. Keeping flat storage
+up to date at this point is pure overhead. And then, at the epoch switch where
+the new protocol version begins, we have to start using the new storage in all
+clients simultaneously. Anyone that has not finished migration, yet, will fail
+to produce a chunk due to invalid gas results.</p>
+<p>In an ideal future, we want to make gas costs independent of the position in the
+trie and then this would no longer be a problem.</p>
+<h2 id="performance-reality-check"><a class="header" href="#performance-reality-check">Performance reality check</a></h2>
+<p>Going from <code>O(d)</code> to <code>O(1)</code> sounds great. But let's look at actual numbers.</p>
+<p>A flat state lookup requires exactly 2 database requests. One for finding the
+<code>ValueRef</code> and one for dereferencing the value. (Dereferencing only happens if
+the value is present and if enough gas was paid to cover reading the potentially
+large value, otherwise we short-circuit.)</p>
+<p>A trie lookup requires exactly <code>d</code> trie node lookups where <code>d</code> is the depth in
+the trie, plus one more for dereferencing the final value.</p>
+<p>Clearly, <code>d + 1</code> is worse than <code>1 + 1</code>, right? Well, as it turns out, we can
+cache the trie nodes with surprisingly high effectiveness. In mainnet
+workloads (which were often optimized to work well with the trie shape) we
+observe a 99% cache hit rate in many cases. </p>
+<p>Combine that with the fact that a typical value for <code>d</code> is somewhere between 10
+and 20. Then we may conclude that, in expectation, a trie lookup (<code>d * 0.01 + 1</code>
+requests) requires less DB requests than a flat state lookup (<code>1 + 1</code> requests). </p>
+<p>In practice, however, flat state still has an edge over accessing trie storage
+directly. And that is due to two reasons.</p>
+<ol>
+<li>DB keys are in better order, leading to more cache hits in RocksDB's block cache.</li>
+<li>The flat state column is much smaller than the state column.</li>
+</ol>
+<p>We observed a speedup of 100x and beyond for reading a single value from
+<code>DBCol::FlatState</code> compared to reading it from <code>DBCol::State</code>. So that is
+clearly a win. But one that is due to the data layout inside RocksDB, not due to
+algorithmic improvements.</p>
+<h2 id="updating-the-merkle-tree"><a class="header" href="#updating-the-merkle-tree">Updating the Merkle tree</a></h2>
+<p>When we update a value in the blockchain state, all ancestor nodes change their
+value due to the recursive nature of Merkle trees.</p>
+<p>Updating flat state is easy enough but then we would not know the new state
+root. Annoyingly, it is rather important to have the state root in due time, as
+it is included in the chunk header.</p>
+<p>To update the state root, we need to read all nodes between the root and all
+changed values. At which point, we are doing all the same reads we were trying
+to avoid in the first place.</p>
+<p>This makes flat state for writes algorithmically useless, as we still have to do
+<code>O(d)</code> requests, no matter what. But there are potential benefits from data
+locality, as flat state stores values sorted by a trie key instead of a
+perfectly random hash.</p>
+<p>For that, we would need a fast index not only for the state value but also for
+all intermediate trie nodes. At this point, we would be back to a full embedding
+of the trie in a key-value store / hashmap. Just changing the keys we use for
+the database.</p>
+<p>Note that we can enjoy the benefits of read-only flat storage to improve read
+heavy contracts. But a read-modify-write pattern using this hybrid solution is
+strictly worse than the original implementation without flat storage.</p>
+<h1 id="implementation-status-and-future-ideas"><a class="header" href="#implementation-status-and-future-ideas">Implementation status and future ideas</a></h1>
+<p>As of March 2023, we have implemented a read-only flat storage that only works
+for the frontier of non-final blocks and the final block itself. Archival calls
+and view calls still use the trie directly.</p>
+<h2 id="things-we-have-solved"><a class="header" href="#things-we-have-solved">Things we have solved</a></h2>
+<p>We are fairly confident we have solved the time-travel issues, the data
+migration / protocol upgrade problems, and got a decent handle on avoiding
+accidental data corruption.</p>
+<p>This improves the worst case (no cache hits) for reads dramatically. And it
+paves the way for further improvements, as we have now a good understanding of
+all these seemingly-simple but actually-really-hard problems.</p>
+<h2 id="flat-state-for-writes"><a class="header" href="#flat-state-for-writes">Flat state for writes</a></h2>
+<p>How to use flat storage for writes is not fully designed, yet, but we have some
+rough ideas how to do it. But we don't know the performance we should expect.
+Algorithmically, it can only get worse but the speedup on RocksDB we found with
+the read-only flat storage is promising. But one has to wonder if there are not
+also simpler ways to achieve better data locality in RocksDB.</p>
+<h2 id="inlining-values"><a class="header" href="#inlining-values">Inlining values</a></h2>
+<p>We hope to get a jump in performance by avoiding dereferencing <code>ValueRef</code> after
+the flat state lookup. At least for small values  we could store the value
+itself also in flat state. (to be defined what small means)</p>
+<p>This seems very promising because the value dereferencing still happens in the
+much slower <code>DBCol::State</code>. If we assume small values are the common case, we
+would thus expect huge performance improvements for the average case.</p>
+<p>It is not clear yet, if we can also optimize large lookups somehow. If not, we
+could at least charge them at a higher rate than we do today, to reflect the
+real DB cost better.</p>
+<h1 id="code-guide"><a class="header" href="#code-guide">Code guide</a></h1>
+<p>Here we describe structures used for flat storage implementation.</p>
+<h2 id="flatstorage"><a class="header" href="#flatstorage">FlatStorage</a></h2>
+<p>This is the main structure which owns information about ValueRefs for all keys from some fixed 
+shard for some set of blocks. It is shared by multiple threads, so it is guarded by RwLock:</p>
+<ul>
+<li>Chain thread, because it sends queries like:
+<ul>
+<li>&quot;new block B was processed by chain&quot; - supported by add_block</li>
+<li>&quot;flat storage head can be moved forward to block B&quot; - supported by update_flat_head</li>
+</ul>
+</li>
+<li>Thread that applies a chunk, because it sends read queries &quot;what is the ValueRef for key for block B&quot;</li>
+<li>View client (not fully decided)</li>
+</ul>
+<p>Requires ChainAccessForFlatStorage on creation because it needs to know the tree of blocks after
+the flat storage head, to support get queries correctly.</p>
+<h2 id="flatstoragemanager"><a class="header" href="#flatstoragemanager">FlatStorageManager</a></h2>
+<p>It holds all FlatStorages which NightshadeRuntime knows about and:</p>
+<ul>
+<li>provides views for flat storage for some fixed block - supported by new_flat_state_for_shard</li>
+<li>sets initial flat storage state for genesis block - set_flat_storage_for_genesis</li>
+<li>adds/removes/gets flat storage if we started/stopped tracking a shard or need to create a view - create_flat_storage_for_shard, etc.</li>
+</ul>
+<h2 id="flatstoragechunkview"><a class="header" href="#flatstoragechunkview">FlatStorageChunkView</a></h2>
+<p>Interface for getting ValueRefs from flat storage for some shard for some fixed block, supported
+by get_ref method.</p>
+<h2 id="flatstoragecreator"><a class="header" href="#flatstoragecreator">FlatStorageCreator</a></h2>
+<p>Creates flat storages for all tracked shards or initiates process of background flat storage creation if for some shard we have only Trie but not FlatStorage. Supports update_status which checks background job results and updates creation statuses and should create flat storage when all jobs are finished.</p>
+<h2 id="other-notes"><a class="header" href="#other-notes">Other notes</a></h2>
+<h3 id="chain-dependency"><a class="header" href="#chain-dependency">Chain dependency</a></h3>
+<p>If storage is fully empty, then we need to create flat storage from scratch. FlatStorage is stored
+inside NightshadeRuntime, and it itself is stored inside Chain, so we need to create them in the same order
+and dependency hierarchy should be the same. But at the same time, we parse genesis file only during Chain
+creation. That’s why FlatStorageManager has set_flat_storage_for_genesis method which is called 
+during Chain creation.</p>
+<h3 id="regular-block-processing-vs-catchups"><a class="header" href="#regular-block-processing-vs-catchups">Regular block processing vs. catchups</a></h3>
+<p>For these two usecases we have two different flows: first one is handled in Chain.postprocess_block,
+the second one in Chain.block_catch_up_postprocess. Both, when results of applying chunk are ready,
+should call Chain.process_apply_chunk_result → RuntimeAdapter.get_flat_storage_for_shard → 
+FlatStorage.add_block, and when results of applying ALL processed/postprocessed chunks are ready,
+should call RuntimeAdapter.get_flat_storage_for_shard → FlatStorage.update_flat_head.</p>
+<p>(because applying some chunk may result in error and we may need to exit there without updating flat head - ?)</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../architecture/storage/database.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../../architecture/network.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../architecture/storage/database.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../../architecture/network.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
